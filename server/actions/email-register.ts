@@ -78,6 +78,6 @@ export const emailRegister = actionClient
     } catch (error) {
       return { error: error };
     } finally {
-      redirect(urlPath);
+      return redirect(urlPath);
     }
   });
