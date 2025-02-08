@@ -1,0 +1,75 @@
+import { ArrowLeft, ArrowRight } from "lucide-react";
+import { Button } from "../ui/button";
+import MotionWrapper from "../wrappers/motion-wrapper";
+import { easings } from "@/constants/animations";
+import { Form, FormControl, FormField, FormItem } from "../ui/form";
+import { useForm } from "react-hook-form";
+import { Input } from "../ui/input";
+import Link from "next/link";
+
+type LoginFormProps = {
+  setStep: (step: number) => void;
+};
+
+const LoginForm = ({ setStep }: LoginFormProps) => {
+  const form = useForm();
+
+  return (
+    <MotionWrapper
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5, ease: easings.easeOutExpo }}
+      className="flex flex-col items-center w-full gap-8"
+    >
+      <div>
+        <h1 className="font-semibold text-2xl text-center">Welcome back!</h1>
+        <p className="text-muted-foreground w-2/3 text-center mx-auto text-sm">
+          Log in to your account to continue using Nestling
+        </p>
+      </div>
+      <Form {...form}>
+        <form className="w-full max-w-[300px] flex flex-col gap-4">
+          <FormField
+            control={form.control}
+            name="..."
+            render={() => (
+              <FormItem>
+                <Input placeholder="Email address" />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="..."
+            render={() => (
+              <FormItem>
+                <Input placeholder="Password" type="password" />
+                <Link href="/forgot-password">
+                  <Button
+                    variant="link"
+                    className="text-muted-foreground hover:text-primary text-xs px-3"
+                  >
+                    Forgot password?
+                  </Button>
+                </Link>
+              </FormItem>
+            )}
+          />
+        </form>
+      </Form>
+      <div className="max-w-[300px] w-full flex gap-4">
+        <Button
+          className="w-full"
+          onClick={() => setStep(1)}
+          variant="secondary"
+        >
+          Go back
+        </Button>
+        <Button className="w-full">Login</Button>
+      </div>
+    </MotionWrapper>
+  );
+};
+
+export default LoginForm;
