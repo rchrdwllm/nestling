@@ -1,6 +1,7 @@
 import { signOut } from "@/auth";
 import { Button } from "@/components/ui/button";
 import { getCurrentUser } from "@/lib/user";
+import { toast } from "sonner";
 
 const Dashboard = async () => {
   const user = await getCurrentUser();

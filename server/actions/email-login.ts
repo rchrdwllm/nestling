@@ -12,18 +12,19 @@ export const emailLogin = actionClient
   .schema(LoginSchema)
   .action(async ({ parsedInput }) => {
     const { email, password, role } = parsedInput;
+    let redirectUrl = "/login";
 
     try {
       const usersRef = db.collection("users").where("email", "==", email);
       const users = await usersRef.get();
 
       if (users.empty) {
-        throw new Error("User not found");
+        return { error: "User not found" };
       }
 
       const user = users.docs[0].data() as User;
 
-      const passwordMatch = bcrypt.compare(password, user.password);
+      const passwordMatch = await bcrypt.compare(password, user.password);
 
       if (!passwordMatch) {
         return { error: "Incorrect password" };
@@ -40,9 +41,15 @@ export const emailLogin = actionClient
         redirectTo: "/",
         redirect: false,
       });
+
+      redirectUrl = `/${role}-dashboard`;
     } catch (error) {
+      redirectUrl = "/login";
+
+      console.log(error);
+
       return { error };
-    } finally {
-      return redirect(`/${role}-dashboard`);
     }
+
+    return redirect(redirectUrl);
   });

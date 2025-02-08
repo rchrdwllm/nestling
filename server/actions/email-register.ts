@@ -77,7 +77,7 @@ export const emailRegister = actionClient
       }
     } catch (error) {
       return { error: error };
-    } finally {
-      return redirect(urlPath);
     }
+
+    return redirect(urlPath);
   });

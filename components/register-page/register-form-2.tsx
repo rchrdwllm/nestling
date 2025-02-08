@@ -10,6 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useAction } from "next-safe-action/hooks";
 import { emailRegister } from "@/server/actions/email-register";
 import { Role } from "@/types";
+import { toast } from "sonner";
 
 type RegisterForm2Props = {
   setStep: (step: number) => void;
@@ -37,11 +38,22 @@ const RegisterForm2 = ({ setStep, role, details }: RegisterForm2Props) => {
     resolver: zodResolver(RegisterSchema),
   });
   const { execute } = useAction(emailRegister, {
+    onExecute: () => {
+      toast.loading("Creating account...");
+    },
     onSuccess: ({ data }) => {
-      console.log(data);
+      toast.dismiss();
+
+      if (data?.error) {
+        toast.error(data?.error as string);
+      } else {
+        toast.success("Account created successfully");
+      }
     },
     onError: (error) => {
       console.log({ error });
+      toast.dismiss();
+      toast.error(JSON.stringify(error.error));
     },
   });
 

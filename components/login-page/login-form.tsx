@@ -11,6 +11,7 @@ import * as z from "zod";
 import { useAction } from "next-safe-action/hooks";
 import { emailLogin } from "@/server/actions/email-login";
 import { Role } from "@/types";
+import { toast } from "sonner";
 
 type LoginFormProps = {
   setStep: (step: number) => void;
@@ -27,11 +28,21 @@ const LoginForm = ({ role, setStep }: LoginFormProps) => {
     },
   });
   const { execute } = useAction(emailLogin, {
+    onExecute: () => {
+      toast.loading("Logging in...");
+    },
     onSuccess: ({ data }) => {
-      console.log(data);
+      toast.dismiss();
+
+      if (data?.error) {
+        toast.error(JSON.stringify(data?.error));
+      } else {
+        toast.success("Logged in successfully");
+      }
     },
     onError: (error) => {
-      console.log({ error });
+      toast.dismiss();
+      toast.error(JSON.stringify(error.error));
     },
   });
 
