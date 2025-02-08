@@ -1,6 +1,10 @@
 import { signOut } from "@/auth";
+import { Button } from "@/components/ui/button";
+import { getCurrentUser } from "@/lib/user";
 
-const Dashboard = () => {
+const Dashboard = async () => {
+  const user = await getCurrentUser();
+
   return (
     <form
       action={async () => {
@@ -8,8 +12,20 @@ const Dashboard = () => {
 
         await signOut({ redirectTo: "/login" });
       }}
+      className="h-screen flex w-full justify-center items-center"
     >
-      <button type="submit">Sign out</button>
+      <div className="flex flex-col gap-4 justify-center items-center">
+        <h1 className="text-3xl font-semibold">
+          Welcome to Nestling, instructor {user.firstName}!
+        </h1>
+        <Button
+          variant="secondary"
+          className="hover:bg-primary hover:text-primary-foreground"
+          type="submit"
+        >
+          Sign out
+        </Button>
+      </div>
     </form>
   );
 };
