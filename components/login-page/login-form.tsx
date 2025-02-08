@@ -1,8 +1,7 @@
-import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Button } from "../ui/button";
 import MotionWrapper from "../wrappers/motion-wrapper";
 import { easings } from "@/constants/animations";
-import { Form, FormControl, FormField, FormItem } from "../ui/form";
+import { Form, FormField, FormItem } from "../ui/form";
 import { useForm } from "react-hook-form";
 import { Input } from "../ui/input";
 import Link from "next/link";
