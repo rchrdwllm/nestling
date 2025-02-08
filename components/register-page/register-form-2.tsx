@@ -4,13 +4,50 @@ import { easings } from "@/constants/animations";
 import { Form, FormField, FormItem } from "../ui/form";
 import { useForm } from "react-hook-form";
 import { Input } from "../ui/input";
+import * as z from "zod";
+import { RegisterSchema } from "@/schemas/RegisterSchema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useAction } from "next-safe-action/hooks";
+import { emailRegister } from "@/server/actions/email-register";
+import { Role } from "@/types";
 
 type RegisterForm2Props = {
   setStep: (step: number) => void;
+  role: Role;
+  details: {
+    firstName: string;
+    middleName?: string;
+    lastName: string;
+    contactNumber: string;
+  };
 };
 
-const RegisterForm2 = ({ setStep }: RegisterForm2Props) => {
-  const form = useForm();
+const RegisterForm2 = ({ setStep, role, details }: RegisterForm2Props) => {
+  const form = useForm<z.infer<typeof RegisterSchema>>({
+    defaultValues: {
+      email: "",
+      password: "",
+      confirmPassword: "",
+      role: role,
+      firstName: details.firstName,
+      middleName: details.middleName,
+      lastName: details.lastName,
+      contactNumber: details.contactNumber,
+    },
+    resolver: zodResolver(RegisterSchema),
+  });
+  const { execute } = useAction(emailRegister, {
+    onSuccess: ({ data }) => {
+      console.log(data);
+    },
+    onError: (error) => {
+      console.log({ error });
+    },
+  });
+
+  const handleSubmit = (data: z.infer<typeof RegisterSchema>) => {
+    execute(data);
+  };
 
   return (
     <MotionWrapper
@@ -29,46 +66,55 @@ const RegisterForm2 = ({ setStep }: RegisterForm2Props) => {
         </p>
       </div>
       <Form {...form}>
-        <form className="w-full max-w-[300px] flex flex-col gap-4">
+        <form
+          onSubmit={form.handleSubmit(handleSubmit)}
+          className="w-full max-w-[300px] flex flex-col gap-4"
+        >
           <FormField
             control={form.control}
-            name="..."
-            render={() => (
+            name="email"
+            render={({ field }) => (
               <FormItem>
-                <Input placeholder="Email" />
+                <Input placeholder="Email" {...field} />
               </FormItem>
             )}
           />
           <FormField
             control={form.control}
-            name="..."
-            render={() => (
+            name="password"
+            render={({ field }) => (
               <FormItem>
-                <Input type="password" placeholder="Password" />
+                <Input type="password" placeholder="Password" {...field} />
               </FormItem>
             )}
           />
           <FormField
             control={form.control}
-            name="..."
-            render={() => (
+            name="confirmPassword"
+            render={({ field }) => (
               <FormItem>
-                <Input type="password" placeholder="Confirm password" />
+                <Input
+                  type="password"
+                  placeholder="Confirm password"
+                  {...field}
+                />
               </FormItem>
             )}
           />
+          <div className="max-w-[300px] w-full flex gap-4">
+            <Button
+              className="w-full"
+              onClick={() => setStep(2)}
+              variant="secondary"
+            >
+              Go back
+            </Button>
+            <Button type="submit" className="w-full">
+              Create account
+            </Button>
+          </div>
         </form>
       </Form>
-      <div className="max-w-[300px] w-full flex gap-4">
-        <Button
-          className="w-full"
-          onClick={() => setStep(2)}
-          variant="secondary"
-        >
-          Go back
-        </Button>
-        <Button className="w-full">Create account</Button>
-      </div>
     </MotionWrapper>
   );
 };

@@ -12,7 +12,13 @@ import RegisterForm2 from "./register-form-2";
 
 const RegisterSteps = () => {
   const [step, setStep] = useState(1);
-  const [role, setRole] = useState<Role>();
+  const [role, setRole] = useState<Role>("student");
+  const [details, setDetails] = useState({
+    firstName: "",
+    middleName: "",
+    lastName: "",
+    contactNumber: "",
+  });
 
   return (
     <section className="flex flex-col items-center justify-between pb-8 h-full w-full overflow-x-hidden">
@@ -24,11 +30,15 @@ const RegisterSteps = () => {
             </div>
           ) : step === 2 ? (
             <div key="form-1" className="w-full">
-              <RegisterForm1 setStep={setStep} />
+              <RegisterForm1
+                details={details}
+                setDetails={setDetails}
+                setStep={setStep}
+              />
             </div>
           ) : (
             <div key="form-2" className="w-full">
-              <RegisterForm2 setStep={setStep} />
+              <RegisterForm2 details={details} role={role} setStep={setStep} />
             </div>
           )}
         </AnimatePresence>

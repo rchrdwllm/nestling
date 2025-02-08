@@ -5,13 +5,26 @@ import { Form, FormField, FormItem } from "../ui/form";
 import { useForm } from "react-hook-form";
 import { Input } from "../ui/input";
 import Link from "next/link";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { LoginSchema } from "@/schemas/LoginSchema";
+import * as z from "zod";
 
 type LoginFormProps = {
   setStep: (step: number) => void;
 };
 
 const LoginForm = ({ setStep }: LoginFormProps) => {
-  const form = useForm();
+  const form = useForm<z.infer<typeof LoginSchema>>({
+    resolver: zodResolver(LoginSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+
+  const handleSubmit = (data: z.infer<typeof LoginSchema>) => {
+    console.log(data);
+  };
 
   return (
     <MotionWrapper
@@ -28,22 +41,25 @@ const LoginForm = ({ setStep }: LoginFormProps) => {
         </p>
       </div>
       <Form {...form}>
-        <form className="w-full max-w-[300px] flex flex-col gap-4">
+        <form
+          onSubmit={form.handleSubmit(handleSubmit)}
+          className="w-full max-w-[300px] flex flex-col gap-4"
+        >
           <FormField
             control={form.control}
-            name="..."
-            render={() => (
+            name="email"
+            render={({ field }) => (
               <FormItem>
-                <Input placeholder="Email address" />
+                <Input placeholder="Email address" {...field} />
               </FormItem>
             )}
           />
           <FormField
             control={form.control}
-            name="..."
-            render={() => (
+            name="password"
+            render={({ field }) => (
               <FormItem>
-                <Input placeholder="Password" type="password" />
+                <Input placeholder="Password" type="password" {...field} />
                 <Link href="/forgot-password">
                   <Button
                     variant="link"
@@ -55,18 +71,20 @@ const LoginForm = ({ setStep }: LoginFormProps) => {
               </FormItem>
             )}
           />
+          <div className="max-w-[300px] w-full flex gap-4">
+            <Button
+              className="w-full"
+              onClick={() => setStep(1)}
+              variant="secondary"
+            >
+              Go back
+            </Button>
+            <Button type="submit" className="w-full">
+              Login
+            </Button>
+          </div>
         </form>
       </Form>
-      <div className="max-w-[300px] w-full flex gap-4">
-        <Button
-          className="w-full"
-          onClick={() => setStep(1)}
-          variant="secondary"
-        >
-          Go back
-        </Button>
-        <Button className="w-full">Login</Button>
-      </div>
     </MotionWrapper>
   );
 };

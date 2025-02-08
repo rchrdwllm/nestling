@@ -19,7 +19,13 @@ const LoginPage = () => {
       <div className="z-[1] h-screen flex flex-col items-center p-12">
         <div className="flex flex-col gap-2 items-center">
           <Image src={logoText} className="w-48" alt="Logo Text" />
-          <Image src={nestling} alt="Nestling logo" className="w-[500px]" />
+          <div>
+            <Image
+              src={nestling}
+              alt="Nestling logo"
+              className="h-[100px] object-contain"
+            />
+          </div>
         </div>
         <LoginSteps />
         <Link href="/register" className="mt-4">

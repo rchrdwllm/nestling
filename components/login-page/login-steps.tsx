@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import RoleSelector from "./role-selector";
-import Step from "../ui/step";
+import Step from "@/components/ui/step";
 import { Role } from "@/types";
 import { AnimatePresence } from "motion/react";
 import LoginForm from "./login-form";
@@ -14,7 +14,7 @@ const LoginSteps = () => {
   useEffect(() => {}, [role]);
 
   return (
-    <section className="flex flex-col justify-between h-full w-full">
+    <section className="flex flex-col justify-between h-full">
       <div className="h-full flex items-center w-full">
         <AnimatePresence mode="popLayout" initial={false}>
           {step === 1 ? (

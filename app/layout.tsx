@@ -34,7 +34,7 @@ export default function RootLayout({
         suppressHydrationWarning
         className={`${geistSans.variable} ${geistMono.variable} ${montserrat.className} antialiased overflow-x-hidden`}
       >
-        <NextTopLoader color="#df1514" />
+        <NextTopLoader showSpinner={false} color="#df1514" />
         {children}
       </body>
     </html>

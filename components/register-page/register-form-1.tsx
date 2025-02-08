@@ -8,9 +8,25 @@ import { Input } from "../ui/input";
 
 type RegisterForm1Props = {
   setStep: (step: number) => void;
+  details: {
+    firstName: string;
+    middleName: string;
+    lastName: string;
+    contactNumber: string;
+  };
+  setDetails: (details: {
+    firstName: string;
+    middleName: string;
+    lastName: string;
+    contactNumber: string;
+  }) => void;
 };
 
-const RegisterForm1 = ({ setStep }: RegisterForm1Props) => {
+const RegisterForm1 = ({
+  setStep,
+  details,
+  setDetails,
+}: RegisterForm1Props) => {
   const form = useForm();
 
   return (
@@ -36,7 +52,13 @@ const RegisterForm1 = ({ setStep }: RegisterForm1Props) => {
             name="..."
             render={() => (
               <FormItem>
-                <Input placeholder="First name" />
+                <Input
+                  placeholder="First name"
+                  value={details.firstName}
+                  onChange={(e) =>
+                    setDetails({ ...details, firstName: e.target.value })
+                  }
+                />
               </FormItem>
             )}
           />
@@ -45,7 +67,13 @@ const RegisterForm1 = ({ setStep }: RegisterForm1Props) => {
             name="..."
             render={() => (
               <FormItem>
-                <Input placeholder="Middle name" />
+                <Input
+                  placeholder="Middle name"
+                  value={details.middleName}
+                  onChange={(e) =>
+                    setDetails({ ...details, middleName: e.target.value })
+                  }
+                />
               </FormItem>
             )}
           />
@@ -54,7 +82,13 @@ const RegisterForm1 = ({ setStep }: RegisterForm1Props) => {
             name="..."
             render={() => (
               <FormItem>
-                <Input placeholder="Last name" />
+                <Input
+                  value={details.lastName}
+                  onChange={(e) =>
+                    setDetails({ ...details, lastName: e.target.value })
+                  }
+                  placeholder="Last name"
+                />
               </FormItem>
             )}
           />
@@ -63,7 +97,13 @@ const RegisterForm1 = ({ setStep }: RegisterForm1Props) => {
             name="..."
             render={() => (
               <FormItem>
-                <Input placeholder="Contact number" />
+                <Input
+                  value={details.contactNumber}
+                  onChange={(e) =>
+                    setDetails({ ...details, contactNumber: e.target.value })
+                  }
+                  placeholder="Contact number"
+                />
               </FormItem>
             )}
           />
