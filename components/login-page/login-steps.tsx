@@ -9,9 +9,7 @@ import LoginForm from "./login-form";
 
 const LoginSteps = () => {
   const [step, setStep] = useState(1);
-  const [role, setRole] = useState<Role>();
-
-  useEffect(() => {}, [role]);
+  const [role, setRole] = useState<Role>("student");
 
   return (
     <section className="flex flex-col justify-between h-full">
@@ -23,7 +21,7 @@ const LoginSteps = () => {
             </div>
           ) : (
             <div key="form" className="w-full">
-              <LoginForm setStep={setStep} />
+              <LoginForm role={role} setStep={setStep} />
             </div>
           )}
         </AnimatePresence>

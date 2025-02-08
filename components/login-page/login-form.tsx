@@ -8,22 +8,35 @@ import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoginSchema } from "@/schemas/LoginSchema";
 import * as z from "zod";
+import { useAction } from "next-safe-action/hooks";
+import { emailLogin } from "@/server/actions/email-login";
+import { Role } from "@/types";
 
 type LoginFormProps = {
   setStep: (step: number) => void;
+  role: Role;
 };
 
-const LoginForm = ({ setStep }: LoginFormProps) => {
+const LoginForm = ({ role, setStep }: LoginFormProps) => {
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
       email: "",
       password: "",
+      role,
+    },
+  });
+  const { execute } = useAction(emailLogin, {
+    onSuccess: ({ data }) => {
+      console.log(data);
+    },
+    onError: (error) => {
+      console.log({ error });
     },
   });
 
   const handleSubmit = (data: z.infer<typeof LoginSchema>) => {
-    console.log(data);
+    execute(data);
   };
 
   return (

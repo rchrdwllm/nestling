@@ -7,4 +7,5 @@ export const LoginSchema = z.object({
   password: z.string().min(8, {
     message: "Enter at least 8 characters",
   }),
+  role: z.enum(["student", "instructor", "admin"]),
 });

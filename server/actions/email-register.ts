@@ -28,27 +28,23 @@ export const emailRegister = actionClient
       const users = await usersRef.get();
 
       if (!users.empty) {
-        throw new Error("User already exists");
+        return { error: "User already exists" };
       }
 
       const hashedPassword = bcrypt.hashSync(password, 10);
       const id = crypto.randomUUID();
 
-      try {
-        await db.collection("users").add({
-          email,
-          password: hashedPassword,
-          role,
-          image: null,
-          id,
-          firstName,
-          middleName,
-          lastName,
-          contactNumber,
-        });
-      } catch (error) {
-        throw error;
-      }
+      await db.collection("users").add({
+        email,
+        password: hashedPassword,
+        role,
+        image: null,
+        id,
+        firstName,
+        middleName,
+        lastName,
+        contactNumber,
+      });
 
       try {
         await signIn("credentials", {
@@ -69,15 +65,15 @@ export const emailRegister = actionClient
         if (error instanceof AuthError) {
           switch (error.type) {
             case "CredentialsSignin":
-              return "Invalid credentials.";
+              return { error: "Invalid credentials" };
             default:
-              return "Something went wrong.";
+              return { error: "Something went wrong" };
           }
         }
 
         urlPath = "/register";
 
-        throw error;
+        return { error: error };
       }
     } catch (error) {
       return { error: error };

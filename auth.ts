@@ -3,8 +3,8 @@ import { authConfig } from "./auth.config";
 import Credentials from "next-auth/providers/credentials";
 import { FirestoreAdapter } from "@auth/firebase-adapter";
 import { db } from "./lib/firebase";
-import { RegisterSchema } from "./schemas/RegisterSchema";
 import bcrypt from "bcrypt";
+import { LoginSchema } from "./schemas/LoginSchema";
 
 export const { auth, signIn, signOut } = NextAuth({
   ...authConfig,
@@ -58,9 +58,7 @@ export const { auth, signIn, signOut } = NextAuth({
   providers: [
     Credentials({
       async authorize(credentials) {
-        const parsedCredentials = RegisterSchema.safeParse(credentials);
-
-        console.log(parsedCredentials);
+        const parsedCredentials = LoginSchema.safeParse(credentials);
 
         if (parsedCredentials.success) {
           const { email, password } = parsedCredentials.data;
