@@ -11,6 +11,7 @@ export const { auth, signIn, signOut } = NextAuth({
   session: {
     strategy: "jwt",
   },
+  trustHost: true,
   callbacks: {
     async jwt({ token }) {
       if (!token.sub) return token;
