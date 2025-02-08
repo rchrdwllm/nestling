@@ -34,17 +34,21 @@ export const emailRegister = actionClient
       const hashedPassword = bcrypt.hashSync(password, 10);
       const id = crypto.randomUUID();
 
-      await db.collection("users").add({
-        email,
-        password: hashedPassword,
-        role,
-        image: null,
-        id,
-        firstName,
-        middleName,
-        lastName,
-        contactNumber,
-      });
+      try {
+        await db.collection("users").add({
+          email,
+          password: hashedPassword,
+          role,
+          image: null,
+          id,
+          firstName,
+          middleName,
+          lastName,
+          contactNumber,
+        });
+      } catch (error) {
+        throw error;
+      }
 
       try {
         await signIn("credentials", {
