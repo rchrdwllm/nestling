@@ -100,6 +100,7 @@ const LoginForm = ({ role, setStep }: LoginFormProps) => {
               className="w-full"
               onClick={() => setStep(1)}
               variant="secondary"
+              type="button"
             >
               Go back
             </Button>
