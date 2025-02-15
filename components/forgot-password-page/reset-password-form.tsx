@@ -11,8 +11,10 @@ import Link from "next/link";
 import { useAction } from "next-safe-action/hooks";
 import { emailResetToken } from "@/server/actions/email-reset-token";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const ResetPasswordForm = () => {
+  const router = useRouter();
   const form = useForm<z.infer<typeof ResetPasswordSchema>>({
     resolver: zodResolver(ResetPasswordSchema),
     defaultValues: {
@@ -75,7 +77,12 @@ const ResetPasswordForm = () => {
           />
           <div className="flex flex-col items-center gap-2 mt-auto">
             <div className="max-w-[300px] w-full flex gap-4">
-              <Button className="w-full" variant="secondary">
+              <Button
+                onClick={() => router.push("/login")}
+                type="button"
+                className="w-full"
+                variant="secondary"
+              >
                 Go back
               </Button>
               <Button type="submit" className="w-full" disabled={isExecuting}>

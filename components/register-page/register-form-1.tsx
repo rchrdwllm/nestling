@@ -113,7 +113,20 @@ const RegisterForm1 = ({
         <Button onClick={() => setStep(1)} variant="secondary">
           <ArrowLeft />
         </Button>
-        <Button onClick={() => setStep(3)}>
+        <Button
+          onClick={() => {
+            if (
+              !details.firstName ||
+              !details.lastName ||
+              !details.contactNumber ||
+              !details.middleName
+            ) {
+              return;
+            }
+
+            setStep(3);
+          }}
+        >
           <ArrowRight />
         </Button>
       </div>
