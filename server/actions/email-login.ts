@@ -46,8 +46,6 @@ export const emailLogin = actionClient
     } catch (error) {
       redirectUrl = "/login";
 
-      console.log(error);
-
       return { error };
     }
 

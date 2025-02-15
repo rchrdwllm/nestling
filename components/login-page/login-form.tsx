@@ -27,7 +27,7 @@ const LoginForm = ({ role, setStep }: LoginFormProps) => {
       role,
     },
   });
-  const { execute } = useAction(emailLogin, {
+  const { execute, isExecuting } = useAction(emailLogin, {
     onExecute: () => {
       toast.loading("Logging in...");
     },
@@ -101,10 +101,11 @@ const LoginForm = ({ role, setStep }: LoginFormProps) => {
               onClick={() => setStep(1)}
               variant="secondary"
               type="button"
+              disabled={isExecuting}
             >
               Go back
             </Button>
-            <Button type="submit" className="w-full">
+            <Button type="submit" className="w-full" disabled={isExecuting}>
               Login
             </Button>
           </div>
