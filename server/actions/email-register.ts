@@ -34,7 +34,7 @@ export const emailRegister = actionClient
       const hashedPassword = bcrypt.hashSync(password, 10);
       const id = crypto.randomUUID();
 
-      await db.collection("users").add({
+      await db.collection("users").doc(id).set({
         email,
         password: hashedPassword,
         role,

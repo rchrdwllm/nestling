@@ -4,28 +4,34 @@ import { useForm } from "react-hook-form";
 import { Form, FormField, FormItem } from "../ui/form";
 import { Input } from "../ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ResetPasswordSchema } from "@/schemas/ResetPasswordSchema";
+import { NewPasswordSchema } from "@/schemas/NewPasswordSchema";
 import * as z from "zod";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { useAction } from "next-safe-action/hooks";
-import { emailResetToken } from "@/server/actions/email-reset-token";
 import { toast } from "sonner";
+import { resetPassword } from "@/server/actions/reset-password";
+import { useRouter } from "next/navigation";
 
-const ResetPasswordForm = () => {
-  const form = useForm<z.infer<typeof ResetPasswordSchema>>({
-    resolver: zodResolver(ResetPasswordSchema),
+const NewPasswordForm = ({ email }: { email: string }) => {
+  const router = useRouter();
+  const form = useForm<z.infer<typeof NewPasswordSchema>>({
+    resolver: zodResolver(NewPasswordSchema),
     defaultValues: {
-      email: "",
+      password: "",
+      confirmPassword: "",
+      email,
     },
   });
-  const { execute, isExecuting } = useAction(emailResetToken, {
+  const { execute, isExecuting } = useAction(resetPassword, {
     onSuccess: ({ data }) => {
       if (data) {
         toast.dismiss();
 
         if (data.success) {
           toast.success(data.success);
+
+          router.replace("/login");
 
           return;
         }
@@ -40,11 +46,11 @@ const ResetPasswordForm = () => {
       toast.error(JSON.stringify(error));
     },
     onExecute: () => {
-      toast.loading("Sending email...");
+      toast.loading("Resetting password...");
     },
   });
 
-  const handleEmailSubmit = (data: z.infer<typeof ResetPasswordSchema>) => {
+  const handlePasswordReset = (data: z.infer<typeof NewPasswordSchema>) => {
     execute(data);
   };
 
@@ -61,15 +67,28 @@ const ResetPasswordForm = () => {
       </div>
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit(handleEmailSubmit)}
+          onSubmit={form.handleSubmit(handlePasswordReset)}
           className="w-full max-w-[300px] flex flex-col gap-4 h-full"
         >
           <FormField
             control={form.control}
-            name="email"
+            name="password"
             render={({ field }) => (
               <FormItem>
-                <Input placeholder="Email" type="email" {...field} />
+                <Input type="password" placeholder="New password" {...field} />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="confirmPassword"
+            render={({ field }) => (
+              <FormItem>
+                <Input
+                  type="password"
+                  placeholder="Confirm new password"
+                  {...field}
+                />
               </FormItem>
             )}
           />
@@ -79,7 +98,7 @@ const ResetPasswordForm = () => {
                 Go back
               </Button>
               <Button type="submit" className="w-full" disabled={isExecuting}>
-                Send email
+                Reset password
               </Button>
             </div>
             <Link href="/login">
@@ -98,4 +117,4 @@ const ResetPasswordForm = () => {
   );
 };
 
-export default ResetPasswordForm;
+export default NewPasswordForm;
