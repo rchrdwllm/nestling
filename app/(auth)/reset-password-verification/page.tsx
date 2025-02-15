@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import ResetTokenVerifier from "@/components/reset-password-verifier-page/reset-token-verifier";
 
 type ResetPasswordVerificationPageProps = {
-  searchParams: { token: string };
+  searchParams: Promise<{ token: string }>;
 };
 
 const ResetPasswordVerificationPage = async ({
