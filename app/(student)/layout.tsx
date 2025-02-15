@@ -6,13 +6,15 @@ import { useRouter } from "next/navigation";
 import { ReactNode, useEffect } from "react";
 
 const Layout = ({ children }: { children: ReactNode }) => {
-  const { data: session, status } = useSession();
+  const { data: session, status } = useSession({ required: true });
   const router = useRouter();
 
   useEffect(() => {
     if (!session) {
       router.push("/api/auth/signin");
     }
+
+    console.log(session);
   }, [session, status]);
 
   if (status === "loading") return null;

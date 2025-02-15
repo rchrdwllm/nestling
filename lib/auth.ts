@@ -21,26 +21,32 @@ export const authOptions = {
       async authorize(credentials) {
         const parsedCredentials = LoginSchema.safeParse(credentials);
 
-        console.log({
-          parsedCredentials,
-          success: parsedCredentials.success,
-        });
-
         if (parsedCredentials.success) {
           const { email, password } = parsedCredentials.data;
 
           const usersRef = db.collection("users").where("email", "==", email);
           const users = await usersRef.get();
 
-          if (users.empty) return null;
+          if (users.empty) {
+            console.log("User not found in Firestore");
+            return null;
+          }
 
           const user = users.docs[0].data() as User;
+          console.log("User data from Firestore:", user); // Debugging
 
           const passwordsMatch = await bcrypt.compare(password, user.password);
 
-          if (passwordsMatch) return user;
+          if (passwordsMatch) {
+            console.log("Passwords match, returning user:", user);
+            return user;
+          } else {
+            console.log("Passwords do not match");
+            return null;
+          }
         }
 
+        console.log("Invalid credentials");
         return null;
       },
     }),
@@ -73,17 +79,21 @@ export const authOptions = {
       return token;
     },
     async session({ token, session }) {
-      if (session && token.sub) {
+      const userRef = db.collection("users").where("id", "==", token.sub);
+      const userDoc = await userRef.get();
+      const user = userDoc.docs[0].data() as User;
+
+      if (token.sub) {
         session.user.id = token.sub;
       }
 
       if (session.user) {
-        session.user.name = token.name;
-        session.user.email = token.email as string;
-        session.user.role = token.role as string;
-        session.user.firstName = token.firstName as string;
-        session.user.middleName = token.middleName as string;
-        session.user.lastName = token.lastName as string;
+        session.user.name = `${user.firstName} ${user.lastName}`;
+        session.user.email = user.email as string;
+        session.user.role = user.role as string;
+        session.user.firstName = user.firstName as string;
+        session.user.middleName = user.middleName as string;
+        session.user.lastName = user.lastName as string;
 
         if (token.image) {
           session.user.image = token.image as string;
