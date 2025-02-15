@@ -1,25 +1,26 @@
-import { auth } from "@/auth";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Button } from "./button";
+import { getCurrentUser } from "@/lib/user";
 
 const Unauthorized = async () => {
-  const session = await auth();
+  const user = await getCurrentUser();
+
   let redirectLink = "/dashboard";
 
-  if (!session) {
-    return redirect("/login");
+  if (!user) {
+    return redirect("/api/auth/signin");
   }
 
-  if (session.user.role === "student") {
+  if (user.role === "student") {
     redirectLink = "/student-dashboard";
   }
 
-  if (session.user.role === "instructor") {
+  if (user.role === "instructor") {
     redirectLink = "/instructor-dashboard";
   }
 
-  if (session.user.role === "admin") {
+  if (user.role === "admin") {
     redirectLink = "/admin-dashboard";
   }
 

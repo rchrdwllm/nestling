@@ -1,17 +1,26 @@
-import { auth } from "@/auth";
+"use client";
+
 import Unauthorized from "@/components/ui/unauthorized";
-import { redirect } from "next/navigation";
-import { ReactNode } from "react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { ReactNode, useEffect } from "react";
 
-const Layout = async ({ children }: { children: ReactNode }) => {
-  const session = await auth();
+const Layout = ({ children }: { children: ReactNode }) => {
+  const { data: session, status } = useSession();
+  const router = useRouter();
 
-  if (!session) {
-    return redirect("/login");
-  }
+  useEffect(() => {
+    if (!session) {
+      router.push("/api/auth/signin");
+    }
+  }, [session, status]);
 
-  if (session.user.role !== "student") {
-    return <Unauthorized />;
+  if (status === "loading") return null;
+
+  if (session) {
+    if (session.user.role !== "student") {
+      return <Unauthorized />;
+    }
   }
 
   return <>{children}</>;

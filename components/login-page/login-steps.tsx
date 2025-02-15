@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import RoleSelector from "./role-selector";
 import Step from "@/components/ui/step";
 import { Role } from "@/types";

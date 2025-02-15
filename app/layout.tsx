@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Montserrat } from "next/font/google";
 import NextTopLoader from "nextjs-toploader";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
+import SessionWrapper from "@/components/wrappers/session-wrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,9 +36,11 @@ export default function RootLayout({
         suppressHydrationWarning
         className={`${geistSans.variable} ${geistMono.variable} ${montserrat.className} antialiased overflow-x-hidden`}
       >
-        <NextTopLoader showSpinner={false} color="#df1514" />
-        {children}
-        <Toaster />
+        <SessionWrapper>
+          <NextTopLoader showSpinner={false} color="#df1514" />
+          {children}
+          <Toaster />
+        </SessionWrapper>
       </body>
     </html>
   );

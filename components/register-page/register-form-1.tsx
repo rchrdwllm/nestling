@@ -5,6 +5,7 @@ import { easings } from "@/constants/animations";
 import { Form, FormField, FormItem } from "../ui/form";
 import { useForm } from "react-hook-form";
 import { Input } from "../ui/input";
+import { toast } from "sonner";
 
 type RegisterForm1Props = {
   setStep: (step: number) => void;
@@ -121,6 +122,8 @@ const RegisterForm1 = ({
               !details.contactNumber ||
               !details.middleName
             ) {
+              toast.error("Please fill in all fields");
+
               return;
             }
 

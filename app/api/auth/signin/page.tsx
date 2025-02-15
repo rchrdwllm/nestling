@@ -28,7 +28,7 @@ const LoginPage = () => {
           </div>
         </div>
         <LoginSteps />
-        <Link href="/register" className="mt-4">
+        <Link href="/api/auth/signup" className="mt-4">
           <Button
             variant="link"
             className="text-muted-foreground hover:text-primary"

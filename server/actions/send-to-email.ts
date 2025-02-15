@@ -9,7 +9,7 @@ export const sendPasswordResetToken = async (email: string, token: string) => {
     to: [email],
     subject: "Nestling - Password Reset",
     html: `<h1>Reset your password</h1>
-      <p>Click <a href="${getBaseUrl()}/reset-password-verification?token=${token}">here</a> to reset your password.</p>`,
+      <p>Click <a href="${getBaseUrl()}/api/auth/reset-password-verification?token=${token}">here</a> to reset your password.</p>`,
   });
 
   return {

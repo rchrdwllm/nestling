@@ -48,7 +48,7 @@ const RegisterSteps = () => {
         <Step step={2} currentStep={step} />
         <Step step={3} currentStep={step} />
       </div>
-      <Link href="/login" className="mt-4">
+      <Link href="/api/auth/signin" className="mt-4">
         <Button
           variant="link"
           className="text-muted-foreground hover:text-primary"
