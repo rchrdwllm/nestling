@@ -13,8 +13,6 @@ const CourseCard = async ({ name, id, courseCode, description }: Course) => {
     return <p>Loading...</p>;
   }
 
-  console.log({ enrolledStudents });
-
   return (
     <article>
       <h1>
