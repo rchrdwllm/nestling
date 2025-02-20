@@ -15,7 +15,7 @@ export const verifyResetToken = async (token: string) => {
 
   const tokenData = existingToken.docs[0].data() as PasswordResetToken;
 
-  if (tokenData.expires.toDate() < new Date()) {
+  if (tokenData.expires < new Date()) {
     return { error: "Token expired" };
   }
 
