@@ -35,3 +35,24 @@ export type EnrollmentData = {
   studentId: string;
   createdAt: Date;
 };
+
+export type Module = {
+  id: string;
+  title: string;
+  moduleNumber: number;
+  courseId: string;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+export type Content = {
+  id: string;
+  title: string;
+  content: string;
+  contentType: "lesson" | "assignment";
+  isLocked: boolean;
+  startDate?: Date;
+  endDate?: Date;
+  createdAt: Date;
+  updatedAt: Date;
+};
