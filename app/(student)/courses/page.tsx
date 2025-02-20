@@ -1,10 +1,10 @@
-import AllCourses from "@/components/student-courses-page/all-courses";
+import AvailableCourses from "@/components/student-courses-page/available-courses";
 import EnrolledCourses from "@/components/student-courses-page/enrolled-courses";
 
 const CoursesPage = () => {
   return (
     <main>
-      <AllCourses />
+      <AvailableCourses />
       <EnrolledCourses />
     </main>
   );

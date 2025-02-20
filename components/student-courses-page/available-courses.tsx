@@ -1,8 +1,8 @@
-import { getAllCourses } from "@/lib/course";
+import { getAvailableCourses } from "@/lib/course";
 import CourseCard from "./course-card/course-card";
 
-const AllCourses = async () => {
-  const { success: courses, error } = await getAllCourses();
+const AvailableCourses = async () => {
+  const { success: courses, error } = await getAvailableCourses();
 
   if (error) {
     return <p>{error}</p>;
@@ -24,4 +24,4 @@ const AllCourses = async () => {
   );
 };
 
-export default AllCourses;
+export default AvailableCourses;
