@@ -31,7 +31,7 @@ const NewPasswordForm = ({ email }: { email: string }) => {
         if (data.success) {
           toast.success(data.success);
 
-          router.replace("/login");
+          router.replace("/api/auth/signin");
 
           return;
         }
@@ -94,14 +94,19 @@ const NewPasswordForm = ({ email }: { email: string }) => {
           />
           <div className="flex flex-col items-center gap-2 mt-auto">
             <div className="max-w-[300px] w-full flex gap-4">
-              <Button className="w-full" variant="secondary">
+              <Button
+                type="button"
+                onClick={() => router.push("/api/auth/signin")}
+                className="w-full"
+                variant="secondary"
+              >
                 Go back
               </Button>
               <Button type="submit" className="w-full" disabled={isExecuting}>
                 Reset password
               </Button>
             </div>
-            <Link href="/login">
+            <Link href="/api/auth/signin">
               <Button
                 variant="link"
                 className="text-muted-foreground hover:text-primary"

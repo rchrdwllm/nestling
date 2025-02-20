@@ -2,8 +2,14 @@ import Image from "next/image";
 import registerBg from "@/assets/register-bg.jpg";
 import logoTextReversed from "@/assets/logo-text-reversed.png";
 import RegisterSteps from "@/components/register-page/register-steps";
+import { getCurrentUser } from "@/lib/user";
+import { redirect } from "next/navigation";
 
-const RegisterPage = () => {
+const RegisterPage = async () => {
+  const user = await getCurrentUser();
+
+  if (user) return redirect(`/${user.role}-dashboard`);
+
   return (
     <main className="h-screen grid grid-cols-2 overflow-x-hidden">
       <Image

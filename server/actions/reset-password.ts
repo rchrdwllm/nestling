@@ -32,7 +32,7 @@ export const resetPassword = actionClient
         password: hashedPassword,
       });
 
-      return { success: "Password reset successfully" };
+      return { success: "Password reset successfully! You can login again" };
     } catch (error) {
       return { error };
     }

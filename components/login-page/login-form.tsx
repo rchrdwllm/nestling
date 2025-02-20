@@ -8,10 +8,12 @@ import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoginSchema } from "@/schemas/LoginSchema";
 import * as z from "zod";
-import { useAction } from "next-safe-action/hooks";
-import { emailLogin } from "@/server/actions/email-login";
+import { checkEmailLogin } from "@/server/actions/check-email-login";
 import { Role } from "@/types";
 import { toast } from "sonner";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 type LoginFormProps = {
   setStep: (step: number) => void;
@@ -19,35 +21,55 @@ type LoginFormProps = {
 };
 
 const LoginForm = ({ role, setStep }: LoginFormProps) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
       email: "",
       password: "",
-      role,
     },
   });
-  const { execute, isExecuting } = useAction(emailLogin, {
-    onExecute: () => {
-      toast.loading("Logging in...");
-    },
-    onSuccess: ({ data }) => {
-      toast.dismiss();
 
-      if (data?.error) {
-        toast.error(JSON.stringify(data?.error));
-      } else {
-        toast.success("Logged in successfully");
+  const handleSubmit = async (data: z.infer<typeof LoginSchema>) => {
+    setIsLoading(true);
+
+    toast.dismiss();
+    toast.loading("Logging in...");
+
+    const { success, error } = await checkEmailLogin(data);
+
+    if (success) {
+      if (success.role !== role) {
+        toast.dismiss();
+        toast.error("Role mismatch");
+        setIsLoading(false);
+
+        return;
       }
-    },
-    onError: (error) => {
-      toast.dismiss();
-      toast.error(JSON.stringify(error.error));
-    },
-  });
 
-  const handleSubmit = (data: z.infer<typeof LoginSchema>) => {
-    execute(data);
+      signIn("credentials", {
+        email: data.email,
+        password: data.password,
+        redirectTo: "/",
+        redirect: false,
+      })
+        .then(() => {
+          toast.dismiss();
+          toast.success("Login successful");
+          router.push(`/${success.role}-dashboard`);
+          setIsLoading(false);
+        })
+        .catch((error) => {
+          toast.dismiss();
+          toast.error(error);
+          setIsLoading(false);
+        });
+    } else if (error) {
+      toast.dismiss();
+      toast.error(error as string);
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -84,7 +106,7 @@ const LoginForm = ({ role, setStep }: LoginFormProps) => {
             render={({ field }) => (
               <FormItem>
                 <Input placeholder="Password" type="password" {...field} />
-                <Link href="/forgot-password">
+                <Link href="/api/auth/forgot-password">
                   <Button
                     variant="link"
                     className="text-muted-foreground hover:text-primary text-xs px-3"
@@ -101,11 +123,11 @@ const LoginForm = ({ role, setStep }: LoginFormProps) => {
               onClick={() => setStep(1)}
               variant="secondary"
               type="button"
-              disabled={isExecuting}
+              disabled={isLoading}
             >
               Go back
             </Button>
-            <Button type="submit" className="w-full" disabled={isExecuting}>
+            <Button type="submit" className="w-full" disabled={isLoading}>
               Login
             </Button>
           </div>

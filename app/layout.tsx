@@ -3,6 +3,9 @@ import { Geist, Geist_Mono, Montserrat } from "next/font/google";
 import NextTopLoader from "nextjs-toploader";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
+import SessionWrapper from "@/components/wrappers/session-wrapper";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,20 +27,24 @@ export const metadata: Metadata = {
   description: "A Web-based Learning Management System for Leave a Nest",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await getServerSession(authOptions);
+
   return (
     <html lang="en">
       <body
         suppressHydrationWarning
         className={`${geistSans.variable} ${geistMono.variable} ${montserrat.className} antialiased overflow-x-hidden`}
       >
-        <NextTopLoader showSpinner={false} color="#df1514" />
-        {children}
-        <Toaster />
+        <SessionWrapper session={session}>
+          <NextTopLoader showSpinner={false} color="#df1514" />
+          {children}
+          <Toaster />
+        </SessionWrapper>
       </body>
     </html>
   );

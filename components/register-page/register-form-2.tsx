@@ -7,10 +7,12 @@ import { Input } from "../ui/input";
 import * as z from "zod";
 import { RegisterSchema } from "@/schemas/RegisterSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useAction } from "next-safe-action/hooks";
-import { emailRegister } from "@/server/actions/email-register";
+import { checkEmailRegister } from "@/server/actions/check-email-register";
 import { Role } from "@/types";
 import { toast } from "sonner";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 type RegisterForm2Props = {
   setStep: (step: number) => void;
@@ -24,6 +26,8 @@ type RegisterForm2Props = {
 };
 
 const RegisterForm2 = ({ setStep, role, details }: RegisterForm2Props) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
   const form = useForm<z.infer<typeof RegisterSchema>>({
     defaultValues: {
       email: "",
@@ -37,28 +41,38 @@ const RegisterForm2 = ({ setStep, role, details }: RegisterForm2Props) => {
     },
     resolver: zodResolver(RegisterSchema),
   });
-  const { execute } = useAction(emailRegister, {
-    onExecute: () => {
-      toast.loading("Creating account...");
-    },
-    onSuccess: ({ data }) => {
-      toast.dismiss();
 
-      if (data?.error) {
-        toast.error(data?.error as string);
-      } else {
-        toast.success("Account created successfully");
-      }
-    },
-    onError: (error) => {
-      console.log({ error });
-      toast.dismiss();
-      toast.error(JSON.stringify(error.error));
-    },
-  });
+  const handleSubmit = async (data: z.infer<typeof RegisterSchema>) => {
+    setIsLoading(true);
 
-  const handleSubmit = (data: z.infer<typeof RegisterSchema>) => {
-    execute(data);
+    toast.dismiss();
+    toast.loading("Creating account...");
+
+    const { success, error } = await checkEmailRegister(data);
+
+    if (success) {
+      signIn("credentials", {
+        email: data.email,
+        password: data.password,
+        redirectTo: "/",
+        redirect: false,
+      })
+        .then(() => {
+          toast.dismiss();
+          toast.success("Account created successfully");
+          router.push(`/${success.role}-dashboard`);
+          setIsLoading(false);
+        })
+        .catch((error) => {
+          toast.dismiss();
+          toast.error(error);
+          setIsLoading(false);
+        });
+    } else if (error) {
+      toast.dismiss();
+      toast.error(error as string);
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -118,10 +132,11 @@ const RegisterForm2 = ({ setStep, role, details }: RegisterForm2Props) => {
               className="w-full"
               onClick={() => setStep(2)}
               variant="secondary"
+              disabled={isLoading}
             >
               Go back
             </Button>
-            <Button type="submit" className="w-full">
+            <Button type="submit" className="w-full" disabled={isLoading}>
               Create account
             </Button>
           </div>
