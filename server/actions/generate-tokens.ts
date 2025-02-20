@@ -1,4 +1,5 @@
 import { db } from "@/lib/firebase";
+import { Timestamp } from "firebase-admin/firestore";
 
 export const generatePasswordResetToken = async (email: string) => {
   const newToken = crypto.randomUUID();
@@ -18,6 +19,7 @@ export const generatePasswordResetToken = async (email: string) => {
         email,
         token: newToken,
         expires,
+        createdAt: new Date(),
       });
 
       return {
@@ -34,6 +36,7 @@ export const generatePasswordResetToken = async (email: string) => {
     email,
     token: newToken,
     expires,
+    createdAt: new Date(),
   });
 
   return {

@@ -13,8 +13,6 @@ const Layout = ({ children }: { children: ReactNode }) => {
     if (!session) {
       router.push("/api/auth/signin");
     }
-
-    console.log(session);
   }, [session, status]);
 
   if (status === "loading") return null;

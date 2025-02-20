@@ -5,6 +5,7 @@ import { db } from "@/lib/firebase";
 import bcrypt from "bcrypt";
 import { signIn } from "next-auth/react";
 import * as z from "zod";
+import { Timestamp } from "firebase-admin/firestore";
 
 export const checkEmailRegister = async (
   data: z.infer<typeof RegisterSchema>
@@ -40,6 +41,8 @@ export const checkEmailRegister = async (
       middleName,
       lastName,
       contactNumber,
+      createdAt: new Date(),
+      updatedAt: new Date(),
     };
 
     await db.collection("users").doc(id).set(newUser);

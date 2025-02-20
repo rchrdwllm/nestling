@@ -1,5 +1,3 @@
-import { Timestamp } from "firebase-admin/firestore";
-
 export type Role = "student" | "instructor" | "admin";
 
 export type User = {
@@ -12,10 +10,28 @@ export type User = {
   middleName: string;
   lastName: string;
   contactNumber: string;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 export type PasswordResetToken = {
   token: string;
   email: string;
-  expires: Timestamp;
+  expires: Date;
+  createdAt: Date;
+};
+
+export type Course = {
+  id: string;
+  name: string;
+  courseCode: string;
+  description: string;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+export type EnrollmentData = {
+  courseId: string;
+  studentId: string;
+  createdAt: Date;
 };
