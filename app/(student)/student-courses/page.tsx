@@ -1,5 +1,5 @@
-import AvailableCourses from "@/components/student/courses-page/available-courses";
-import EnrolledCourses from "@/components/student/courses-page/enrolled-courses";
+import AvailableCourses from "@/components/student-access/courses-page/available-courses";
+import EnrolledCourses from "@/components/student-access/courses-page/enrolled-courses";
 
 const CoursesPage = () => {
   return (

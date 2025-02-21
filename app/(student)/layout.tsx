@@ -1,6 +1,6 @@
 "use client";
 
-import Sidebar from "@/components/student/sidebar/sidebar";
+import Sidebar from "@/components/student-access/sidebar/sidebar";
 import Unauthorized from "@/components/ui/unauthorized";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
