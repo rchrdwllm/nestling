@@ -2,9 +2,10 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Button } from "./button";
 import { getCurrentUser } from "@/lib/user";
+import { useCurrentUser } from "@/hooks/use-current-user";
 
-const Unauthorized = async () => {
-  const user = await getCurrentUser();
+const Unauthorized = () => {
+  const { user } = useCurrentUser();
 
   let redirectLink = "/dashboard";
 
