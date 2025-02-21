@@ -1,8 +1,10 @@
 import { getEnrolledCourses } from "@/lib/course";
 import CourseCard from "./course-card/course-card";
+import { getCurrentUser } from "@/lib/user";
 
 const EnrolledCourses = async () => {
-  const { success: courses, error } = await getEnrolledCourses();
+  const user = await getCurrentUser();
+  const { success: courses, error } = await getEnrolledCourses(user!.id);
 
   if (error) {
     return <p>{error}</p>;

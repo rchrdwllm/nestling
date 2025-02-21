@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "NEXT_DEBUG_CACHE=1 next dev --turbopack",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -13,6 +13,7 @@
     "@hookform/resolvers": "^3.10.0",
     "@radix-ui/react-label": "^2.1.2",
     "@radix-ui/react-slot": "^1.1.2",
+    "@radix-ui/react-tooltip": "^1.1.8",
     "@types/bcrypt": "^5.0.2",
     "bcrypt": "^5.1.1",
     "class-variance-authority": "^0.7.1",
