@@ -1,3 +1,5 @@
+"use client";
+
 const Dashboard = () => {
   return (
     <div className="h-screen flex w-full justify-center items-center">
