@@ -7,12 +7,14 @@ import {
 import { SidebarItem } from "@/constants/sidebar-items";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useMemo } from "react";
 
 const SidebarLink = ({ Icon, href, label }: SidebarItem) => {
   const pathname = usePathname();
-  const isActive = useMemo(() => pathname === href, [pathname, href]);
+  const isActive = useMemo(() => {
+    return pathname === href || pathname.startsWith(href);
+  }, [pathname, href]);
 
   return (
     <TooltipProvider>
