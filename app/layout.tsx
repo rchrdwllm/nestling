@@ -6,6 +6,7 @@ import { Toaster } from "@/components/ui/sonner";
 import SessionWrapper from "@/components/wrappers/session-wrapper";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import CacheRefresherWrapper from "@/components/wrappers/cache-refresher-wrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -42,7 +43,7 @@ export default async function RootLayout({
       >
         <SessionWrapper session={session}>
           <NextTopLoader showSpinner={false} color="#df1514" />
-          {children}
+          <CacheRefresherWrapper>{children}</CacheRefresherWrapper>
           <Toaster />
         </SessionWrapper>
       </body>

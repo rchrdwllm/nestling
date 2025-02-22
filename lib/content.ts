@@ -1,37 +1,46 @@
 import { Content } from "@/types";
 import { db } from "./firebase";
+import { unstable_cache } from "next/cache";
 
-export const getModuleContents = async (moduleId: string) => {
-  try {
-    const snapshot = await db
-      .collection("modules")
-      .doc(moduleId)
-      .collection("contents")
-      .get();
-    const contentIds = snapshot.docs.map((doc) => doc.id);
+export const getModuleContents = unstable_cache(
+  async (moduleId: string) => {
+    try {
+      const snapshot = await db
+        .collection("modules")
+        .doc(moduleId)
+        .collection("contents")
+        .get();
+      const contentIds = snapshot.docs.map((doc) => doc.id);
 
-    const contents = await Promise.all(
-      contentIds.map(async (contentId) => {
-        const contentSnapshot = await db
-          .collection("contents")
-          .doc(contentId)
-          .get();
-        return contentSnapshot.data() as Content;
-      })
-    );
+      const contents = await Promise.all(
+        contentIds.map(async (contentId) => {
+          const contentSnapshot = await db
+            .collection("contents")
+            .doc(contentId)
+            .get();
+          return contentSnapshot.data() as Content;
+        })
+      );
 
-    return { success: contents };
-  } catch (error) {
-    return { error: "Error fetching contents" };
-  }
-};
+      return { success: contents };
+    } catch (error) {
+      return { error: "Error fetching contents" };
+    }
+  },
+  ["contents"],
+  { revalidate: 3600 }
+);
 
-export const getModuleContent = async (contentId: string) => {
-  try {
-    const snapshot = await db.collection("contents").doc(contentId).get();
+export const getModuleContent = unstable_cache(
+  async (contentId: string) => {
+    try {
+      const snapshot = await db.collection("contents").doc(contentId).get();
 
-    return { success: snapshot.data() as Content };
-  } catch (error) {
-    return { error: "Error fetching content" };
-  }
-};
+      return { success: snapshot.data() as Content };
+    } catch (error) {
+      return { error: "Error fetching content" };
+    }
+  },
+  ["content"],
+  { revalidate: 3600 }
+);
