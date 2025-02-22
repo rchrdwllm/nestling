@@ -7,27 +7,23 @@ const CacheRefresherWrapper = ({ children }: { children: ReactNode }) => {
   const pathname = usePathname();
   const router = useRouter();
 
-  const handleRevalidate = async () => {
-    const res = await fetch(`/api/revalidate`, {
-      method: "POST",
-      body: JSON.stringify({ pathname }),
-    });
-    const data = await res.json();
-
-    if (data.error) {
-      console.error(data.error);
-    } else if (data.success) {
-      router.refresh();
-    }
-  };
-
   useEffect(() => {
-    if (
-      (performance.getEntriesByType("navigation")[0] as any).type === "reload"
-    ) {
-      handleRevalidate();
+    if (typeof window !== "undefined") {
+      const navEntries = performance.getEntriesByType("navigation");
+      if (navEntries.length > 0 && (navEntries[0] as any).type === "reload") {
+        fetch(`/api/revalidate`, {
+          method: "POST",
+          body: JSON.stringify({ pathname }),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.success) router.refresh();
+            else console.error(data.error);
+          })
+          .catch(console.error);
+      }
     }
-  }, []);
+  }, [pathname]);
 
   return <>{children}</>;
 };
