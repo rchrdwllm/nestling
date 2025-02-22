@@ -9,13 +9,13 @@ export const getModuleContents = async (moduleId: string) => {
       .collection("contents")
       .get();
     const contentIds = snapshot.docs.map((doc) => doc.id);
+
     const contents = await Promise.all(
       contentIds.map(async (contentId) => {
         const contentSnapshot = await db
           .collection("contents")
           .doc(contentId)
           .get();
-
         return contentSnapshot.data() as Content;
       })
     );
@@ -23,5 +23,15 @@ export const getModuleContents = async (moduleId: string) => {
     return { success: contents };
   } catch (error) {
     return { error: "Error fetching contents" };
+  }
+};
+
+export const getModuleContent = async (contentId: string) => {
+  try {
+    const snapshot = await db.collection("contents").doc(contentId).get();
+
+    return { success: snapshot.data() as Content };
+  } catch (error) {
+    return { error: "Error fetching content" };
   }
 };

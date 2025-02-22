@@ -47,6 +47,8 @@ export type Module = {
 
 export type Content = {
   id: string;
+  moduleId: string;
+  courseId: string;
   title: string;
   content: string;
   contentType: "lesson" | "assignment";
