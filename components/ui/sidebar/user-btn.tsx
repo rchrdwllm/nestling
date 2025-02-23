@@ -23,7 +23,7 @@ const UserBtn = () => {
           <Avatar className="size-10">
             <AvatarImage src={user?.image} />
             <AvatarFallback>
-              <div className="rounded-full bg-primary size-10 flex justify-center items-center">
+              <div className="rounded-full bg-primary size-10 flex justify-center items-center transition-all filter hover:brightness-125">
                 <p className="text-white font-semibold">
                   {user?.name && user?.name[0]}
                 </p>

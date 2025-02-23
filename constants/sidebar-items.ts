@@ -5,6 +5,7 @@ import {
   Info,
   CircleHelp,
   LucideProps,
+  BookOpen,
 } from "lucide-react";
 import { ForwardRefExoticComponent, RefAttributes } from "react";
 
@@ -30,6 +31,34 @@ export const studentSidebarItems: SidebarItem[] = [
   {
     label: "Inbox",
     href: "/student-inbox",
+    Icon: Mail,
+  },
+  {
+    label: "About",
+    href: "/about",
+    Icon: Info,
+  },
+  {
+    label: "Help",
+    href: "/help",
+    Icon: CircleHelp,
+  },
+];
+
+export const instructorSidebarItems: SidebarItem[] = [
+  {
+    label: "Course Management",
+    href: "/instructor-courses",
+    Icon: BookOpen,
+  },
+  {
+    label: "Calendar",
+    href: "/instructor-calendar",
+    Icon: CalendarDays,
+  },
+  {
+    label: "Inbox",
+    href: "/instructor-inbox",
     Icon: Mail,
   },
   {
