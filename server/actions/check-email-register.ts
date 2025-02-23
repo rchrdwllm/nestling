@@ -3,9 +3,7 @@
 import { RegisterSchema } from "@/schemas/RegisterSchema";
 import { db } from "@/lib/firebase";
 import bcrypt from "bcrypt";
-import { signIn } from "next-auth/react";
 import * as z from "zod";
-import { Timestamp } from "firebase-admin/firestore";
 
 export const checkEmailRegister = async (
   data: z.infer<typeof RegisterSchema>

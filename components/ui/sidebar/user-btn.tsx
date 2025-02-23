@@ -12,9 +12,25 @@ import {
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useCurrentUser } from "@/hooks/use-current-user";
+import { toast } from "sonner";
 
 const UserBtn = () => {
   const { user } = useCurrentUser();
+
+  const handleSignOut = () => {
+    signOut()
+      .then(() => {
+        fetch("/api/revalidate", {
+          method: "POST",
+          body: JSON.stringify({
+            tags: ["courses", "students", "contents", "modules"],
+          }),
+        });
+      })
+      .catch((error) => {
+        toast.error(error);
+      });
+  };
 
   return (
     <div className="mt-auto">
@@ -34,7 +50,7 @@ const UserBtn = () => {
         <DropdownMenuContent>
           <DropdownMenuLabel>My Account</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => signOut()}>
+          <DropdownMenuItem onClick={() => handleSignOut()}>
             Sign out
           </DropdownMenuItem>
         </DropdownMenuContent>

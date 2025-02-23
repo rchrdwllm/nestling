@@ -24,6 +24,8 @@ const Layout = ({ children }: { children: ReactNode }) => {
     }
   }
 
+  if (!session) return null;
+
   return (
     <div className="h-screen flex bg-secondary p-2 gap-2">
       <Sidebar />

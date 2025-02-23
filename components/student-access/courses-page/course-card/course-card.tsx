@@ -2,8 +2,9 @@ import { Course } from "@/types";
 import EnrollBtn from "./enroll-btn";
 import { getEnrolledStudents } from "@/lib/course";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
-const CourseCard = async ({ name, id, courseCode, description }: Course) => {
+const CourseCard = async ({ name, id, courseCode }: Course) => {
   const { success: enrolledStudents, error } = await getEnrolledStudents(id);
 
   if (error) {
@@ -15,18 +16,21 @@ const CourseCard = async ({ name, id, courseCode, description }: Course) => {
   }
 
   return (
-    <Link href={`/student-courses/${id}`}>
-      <article>
-        <h1>
-          {courseCode} - {name}
-        </h1>
+    <article>
+      <h1>
+        {courseCode} - {name}
+      </h1>
+      <div className="flex gap-2">
         <EnrollBtn
           courseCode={courseCode}
           id={id}
           enrolledStudents={enrolledStudents}
         />
-      </article>
-    </Link>
+        <Link href={`/student-courses/${id}`}>
+          <Button variant="secondary">Visit course</Button>
+        </Link>
+      </div>
+    </article>
   );
 };
 

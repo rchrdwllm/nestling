@@ -41,6 +41,6 @@ export const getModuleContent = unstable_cache(
       return { error: "Error fetching content" };
     }
   },
-  ["content"],
+  ["contents"],
   { revalidate: 3600 }
 );

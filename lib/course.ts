@@ -17,6 +17,21 @@ export const getAllCourses = unstable_cache(
   { revalidate: 3600, tags: ["courses"] }
 );
 
+export const getCourse = unstable_cache(
+  async (courseId: string) => {
+    try {
+      const snapshot = await db.collection("courses").doc(courseId).get();
+      const course = snapshot.data() as Course;
+
+      return { success: course };
+    } catch (error) {
+      return { error: "Error fetching course" };
+    }
+  },
+  ["courses"],
+  { revalidate: 3600 }
+);
+
 export const getAvailableCourses = unstable_cache(
   async (studentId) => {
     try {
@@ -91,4 +106,33 @@ export const getEnrolledStudents = unstable_cache(
   },
   ["enrolledStudents"],
   { revalidate: 60, tags: ["students"] }
+);
+
+export const getInstructorCourses = unstable_cache(
+  async (instructorId: string) => {
+    try {
+      const snapshot = await db
+        .collection("users")
+        .doc(instructorId)
+        .collection("courses")
+        .get();
+      const courseIds = snapshot.docs.map((doc) => doc.id);
+      const courses = await Promise.all(
+        courseIds.map(async (courseId) => {
+          const courseSnapshot = await db
+            .collection("courses")
+            .doc(courseId)
+            .get();
+
+          return courseSnapshot.data() as Course;
+        })
+      );
+
+      return { success: courses };
+    } catch (error) {
+      return { error };
+    }
+  },
+  ["instructorCourses"],
+  { revalidate: 3600, tags: ["courses"] }
 );

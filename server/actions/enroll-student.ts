@@ -48,7 +48,7 @@ export const enrollStudent = actionClient
 
       await batch.commit();
 
-      revalidatePath("/courses");
+      revalidatePath("/student-courses");
 
       return { success: `Enrolled student in course ${courseId}` };
     } catch (error) {
