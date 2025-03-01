@@ -1,5 +1,5 @@
 import CreateModuleBtn from "@/components/instructor-access/courses-page/create-module-btn";
-import ModuleCard from "@/components/student-access/courses-page/module-card";
+import ModuleCard from "@/components/instructor-access/courses-page/module-card";
 import { getCourse } from "@/lib/course";
 import { getCourseModules } from "@/lib/module";
 

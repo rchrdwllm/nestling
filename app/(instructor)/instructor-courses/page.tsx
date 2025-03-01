@@ -1,10 +1,7 @@
 import CourseCard from "@/components/instructor-access/courses-page/course-card";
 import CreateCourseBtn from "@/components/instructor-access/courses-page/create-course-btn";
-import { Button } from "@/components/ui/button";
 import { getInstructorCourses } from "@/lib/course";
 import { getCurrentUser } from "@/lib/user";
-import { Plus } from "lucide-react";
-import Link from "next/link";
 
 const InstructorCoursesPage = async () => {
   const user = await getCurrentUser();

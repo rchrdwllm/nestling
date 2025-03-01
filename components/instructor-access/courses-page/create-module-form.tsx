@@ -20,7 +20,7 @@ const CreateModuleForm = ({ setIsOpen, courseId }: CreateModuleFormProps) => {
   const form = useForm<z.infer<typeof CreateModuleSchema>>({
     resolver: zodResolver(CreateModuleSchema),
     defaultValues: {
-      name: "",
+      title: "",
       courseId,
     },
   });
@@ -31,7 +31,7 @@ const CreateModuleForm = ({ setIsOpen, courseId }: CreateModuleFormProps) => {
         toast.success(data.success);
       } else if (data?.error) {
         toast.dismiss();
-        toast.error(data.error as string);
+        toast.error(JSON.stringify(data.error));
       }
 
       setIsOpen(false);
@@ -44,7 +44,7 @@ const CreateModuleForm = ({ setIsOpen, courseId }: CreateModuleFormProps) => {
     },
     onExecute: () => {
       toast.dismiss();
-      toast.loading("Creating course...");
+      toast.loading("Creating module...");
     },
   });
 
@@ -60,10 +60,10 @@ const CreateModuleForm = ({ setIsOpen, courseId }: CreateModuleFormProps) => {
       >
         <FormField
           control={form.control}
-          name="name"
+          name="title"
           render={({ field }) => (
             <FormItem>
-              <Input placeholder="Module name" {...field} />
+              <Input placeholder="Module title" {...field} />
             </FormItem>
           )}
         />

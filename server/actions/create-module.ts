@@ -9,7 +9,7 @@ import { revalidatePath } from "next/cache";
 export const createModule = actionClient
   .schema(CreateModuleSchema)
   .action(async ({ parsedInput }) => {
-    const { name, courseId } = parsedInput;
+    const { title, courseId } = parsedInput;
 
     try {
       const { success: existingModules, error } = await getCourseModules(
@@ -27,7 +27,7 @@ export const createModule = actionClient
       const id = crypto.randomUUID();
       const module = {
         id,
-        name,
+        title,
         courseId,
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -36,21 +36,37 @@ export const createModule = actionClient
 
       await db.collection("modules").doc(id).set(module);
 
+      const batch = db.batch();
+
       const courseModuleRef = db
         .collection("courses")
         .doc(courseId)
         .collection("modules")
         .doc(id);
+      const moduleCourseRef = db
+        .collection("modules")
+        .doc(id)
+        .collection("courses")
+        .doc(courseId);
 
-      await courseModuleRef.set({
+      const reference = {
         moduleId: id,
         courseId,
         createdAt: new Date(),
-      });
+      };
 
-      revalidatePath(`/instructor-courses/${courseId}`);
+      batch.set(courseModuleRef, reference);
+      batch.set(moduleCourseRef, reference);
 
-      return { success: `Module ${name} created` };
+      await batch.commit();
+
+      revalidatePath("/(instructor)/instructor-courses/[courseId]", "page");
+      revalidatePath(
+        "/(instructor)/instructor-courses/[courseId]/create",
+        "page"
+      );
+
+      return { success: `Module ${title} created` };
     } catch (error) {
       return { error };
     }

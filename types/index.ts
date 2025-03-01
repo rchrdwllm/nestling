@@ -51,7 +51,7 @@ export type Content = {
   courseId: string;
   title: string;
   content: string;
-  contentType: "lesson" | "assignment";
+  type: "lesson" | "assignment";
   isLocked: boolean;
   startDate?: Date;
   endDate?: Date;

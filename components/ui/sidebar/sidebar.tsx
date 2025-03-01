@@ -38,7 +38,7 @@ const Sidebar = () => {
   }, [user]);
 
   return (
-    <aside className="flex flex-col border border-border h-full bg-background rounded-xl p-3 pt-8">
+    <aside className="h-[calc(100vh-1rem)] sticky top-2 flex flex-col border border-border bg-background rounded-xl p-3 pt-8">
       <Link href={homeLink}>
         <Image src={logo} alt="Logo" className="size-10 object-contain" />
       </Link>

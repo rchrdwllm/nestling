@@ -5,22 +5,14 @@ import { unstable_cache } from "next/cache";
 export const getCourseModules = unstable_cache(
   async (courseId: string) => {
     try {
-      const snapshot = await db
-        .collection("courses")
-        .doc(courseId)
+      const modulesSnapshot = await db
         .collection("modules")
+        .where("courseId", "==", courseId)
+        .orderBy("createdAt", "asc")
         .get();
-      const moduleIds = snapshot.docs.map((doc) => doc.id);
-      const modules = await Promise.all(
-        moduleIds.map(async (moduleId) => {
-          const moduleSnapshot = await db
-            .collection("modules")
-            .doc(moduleId)
-            .get();
-
-          return moduleSnapshot.data() as Module;
-        })
-      );
+      const modules = modulesSnapshot.docs.map((doc) => {
+        return doc.data() as Module;
+      });
 
       return { success: modules };
     } catch (error) {
@@ -39,9 +31,37 @@ export const getModule = unstable_cache(
 
       return { success: module };
     } catch (error) {
-      return { error };
+      return { error: "Error fetching module" };
     }
   },
   ["module"],
+  { revalidate: 3600 }
+);
+
+export const getModuleTitles = unstable_cache(
+  async (courseId: string) => {
+    try {
+      const snapshot = await db
+        .collection("modules")
+        .where("courseId", "==", courseId)
+        .select("title", "moduleNumber", "id")
+        .get();
+      const modules = snapshot.docs.map(
+        (doc) =>
+          doc.data() as {
+            title: string;
+            moduleNumber: number;
+            id: string;
+          }
+      );
+
+      console.log(modules);
+
+      return { success: modules };
+    } catch (error) {
+      return { error: "Error fetching module names" };
+    }
+  },
+  ["moduleNames"],
   { revalidate: 3600 }
 );

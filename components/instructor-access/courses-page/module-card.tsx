@@ -18,9 +18,20 @@ const ModuleCard = async ({ id, title, moduleNumber, courseId }: Module) => {
 
   return (
     <article className="border border-border rounded-xl p-4 flex flex-col gap-4">
-      <h1 className="text-xl font-medium">
-        {moduleNumber}. {title}
-      </h1>
+      <div className="flex justify-between items-center">
+        <h1 className="text-xl font-medium">
+          {moduleNumber}. {title}
+        </h1>
+        <Link href={`/instructor-courses/${courseId}/create?moduleId=${id}`}>
+          <Button
+            variant="ghost"
+            className="text-muted-foreground hover:text-foreground"
+          >
+            <Plus className="size-4" />
+            New content
+          </Button>
+        </Link>
+      </div>
       <div className="flex flex-col gap-2">
         {contents.length ? (
           contents.map((content) => (
