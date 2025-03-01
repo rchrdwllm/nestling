@@ -11,7 +11,11 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
 
-const CreateCourseForm = () => {
+type CreateCourseFormProps = {
+  setIsOpen: (value: boolean) => void;
+};
+
+const CreateCourseForm = ({ setIsOpen }: CreateCourseFormProps) => {
   const form = useForm<z.infer<typeof CreateCourseSchema>>({
     resolver: zodResolver(CreateCourseSchema),
     defaultValues: {
@@ -29,10 +33,14 @@ const CreateCourseForm = () => {
         toast.dismiss();
         toast.error(data.error as string);
       }
+
+      setIsOpen(false);
     },
     onError: ({ error }) => {
       toast.dismiss();
       toast.error(JSON.stringify(error));
+
+      setIsOpen(false);
     },
     onExecute: () => {
       toast.dismiss();

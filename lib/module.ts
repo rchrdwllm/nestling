@@ -30,3 +30,18 @@ export const getCourseModules = unstable_cache(
   ["modules"],
   { revalidate: 3600 }
 );
+
+export const getModule = unstable_cache(
+  async (moduleId: string) => {
+    try {
+      const snapshot = await db.collection("modules").doc(moduleId).get();
+      const module = snapshot.data() as Module;
+
+      return { success: module };
+    } catch (error) {
+      return { error };
+    }
+  },
+  ["module"],
+  { revalidate: 3600 }
+);

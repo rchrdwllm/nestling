@@ -1,4 +1,5 @@
 import CourseCard from "@/components/instructor-access/courses-page/course-card";
+import CreateCourseBtn from "@/components/instructor-access/courses-page/create-course-btn";
 import { Button } from "@/components/ui/button";
 import { getInstructorCourses } from "@/lib/course";
 import { getCurrentUser } from "@/lib/user";
@@ -23,12 +24,7 @@ const InstructorCoursesPage = async () => {
       <div className="flex flex-col gap-3">
         <div className="flex justify-between items-center">
           <h1 className="text-3xl font-semibold">Manage courses</h1>
-          <Link href="/instructor-courses/create">
-            <Button>
-              <Plus className="size-4" />
-              New course
-            </Button>
-          </Link>
+          <CreateCourseBtn />
         </div>
         <hr />
       </div>
