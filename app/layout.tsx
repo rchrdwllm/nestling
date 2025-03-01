@@ -52,7 +52,7 @@ export default async function RootLayout({
           <NextTopLoader showSpinner={false} color="#df1514" />
           <CacheRefresherWrapper>{children}</CacheRefresherWrapper>
           <Toaster />
-          <Toolbar />
+          {/* <Toolbar /> */}
         </SessionWrapper>
       </body>
     </html>
