@@ -1,6 +1,8 @@
+import CourseCard from "@/components/instructor-access/courses-page/course-card";
 import { Button } from "@/components/ui/button";
 import { getInstructorCourses } from "@/lib/course";
 import { getCurrentUser } from "@/lib/user";
+import { Plus } from "lucide-react";
 import Link from "next/link";
 
 const InstructorCoursesPage = async () => {
@@ -17,16 +19,24 @@ const InstructorCoursesPage = async () => {
   if (!courses) return <div>Loading...</div>;
 
   return (
-    <div>
-      <h1>Your courses</h1>
-      <Link href="/instructor-courses/create">
-        <Button>New course</Button>
-      </Link>
-      {courses.map((course) => (
-        <Link href={`/instructor-courses/${course.id}`} key={course.id}>
-          <h2>{course.name}</h2>
-        </Link>
-      ))}
+    <div className="p-6 flex flex-col gap-10">
+      <div className="flex flex-col gap-3">
+        <div className="flex justify-between items-center">
+          <h1 className="text-3xl font-semibold">Manage courses</h1>
+          <Link href="/instructor-courses/create">
+            <Button>
+              <Plus className="size-4" />
+              New course
+            </Button>
+          </Link>
+        </div>
+        <hr />
+      </div>
+      <section className="grid grid-cols-4 gap-8">
+        {courses.map((course) => (
+          <CourseCard key={course.id} {...course} />
+        ))}
+      </section>
     </div>
   );
 };

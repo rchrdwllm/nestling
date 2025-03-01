@@ -14,15 +14,16 @@ const ModuleCard = async ({ id, title, moduleNumber }: Module) => {
   }
 
   return (
-    <div>
-      <h1>{title}</h1>
-      <p>Module Number: {moduleNumber}</p>
+    <article className="border border-border rounded-xl p-4 flex flex-col gap-4">
+      <h1 className="text-xl font-medium">
+        {moduleNumber}. {title}
+      </h1>
       <div>
         {contents.map((content) => (
           <ContentCard key={content.id} {...content} />
         ))}
       </div>
-    </div>
+    </article>
   );
 };
 

@@ -22,11 +22,13 @@ const CoursePage = async ({
   }
 
   return (
-    <div>
-      <h1>{course.name}</h1>
-      {modules.map((module) => (
-        <ModuleCard key={module.id} {...module} />
-      ))}
+    <div className="p-6 flex flex-col gap-8">
+      <h1 className="text-3xl font-semibold">{course.name}</h1>
+      <div className="grid grid-cols-1 gap-4">
+        {modules.map((module) => (
+          <ModuleCard key={module.id} {...module} />
+        ))}
+      </div>
     </div>
   );
 };

@@ -2,7 +2,7 @@ import CreateCourseForm from "@/components/instructor-access/courses-page/create
 
 const CreateCoursePage = () => {
   return (
-    <div>
+    <div className="p-6">
       <CreateCourseForm />
     </div>
   );
