@@ -6,4 +6,13 @@ export const CreateContentSchema = z.object({
   moduleId: z.string(),
   courseId: z.string(),
   content: z.string(),
+  points: z.number().optional(),
+  date: z
+    .object({
+      from: z.date(),
+      to: z.date(),
+    })
+    .optional(),
+  maxAttempts: z.number().optional(),
+  submissionType: z.enum(["file", "text"]).optional(),
 });

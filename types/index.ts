@@ -57,4 +57,7 @@ export type Content = {
   endDate?: Date;
   createdAt: Date;
   updatedAt: Date;
+  submissionType?: "file" | "text";
+  points?: number;
+  maxAttempts?: number;
 };

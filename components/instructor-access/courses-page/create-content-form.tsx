@@ -20,8 +20,16 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { createContent } from "@/server/actions/create-content";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 import RichTextEditor from "./rich-text-editor";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
+import { Calendar } from "@/components/ui/calendar";
 
 type CreateContentFormProps = {
   defaultModule?: string;
@@ -45,6 +53,8 @@ const CreateContentForm = ({
       title: "",
       moduleId: defaultModule || "",
       courseId,
+      points: 0,
+      maxAttempts: 0,
     },
   });
   const { execute, isExecuting } = useAction(createContent, {
@@ -133,6 +143,105 @@ const CreateContentForm = ({
             </FormItem>
           )}
         />
+        {form.getValues("type") === "assignment" && (
+          <>
+            <FormField
+              control={form.control}
+              name="points"
+              render={({ field }) => (
+                <FormItem>
+                  <Input
+                    placeholder="Points"
+                    type="number"
+                    {...field}
+                    onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                  />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="maxAttempts"
+              render={({ field }) => (
+                <FormItem>
+                  <Input
+                    placeholder="Allowed attempts"
+                    type="number"
+                    {...field}
+                    onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                  />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="date"
+              render={({ field }) => (
+                <FormItem className="flex flex-col">
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        notAnimated
+                        variant={"outline"}
+                        className={cn(
+                          "border-2 rounded-lg justify-start text-left font-normal",
+                          !field.value && "text-muted-foreground"
+                        )}
+                      >
+                        <CalendarIcon />
+                        {field.value?.from ? (
+                          field.value.to ? (
+                            <>
+                              {format(field.value.from, "LLL dd, y")} -{" "}
+                              {format(field.value.to, "LLL dd, y")}
+                            </>
+                          ) : (
+                            format(field.value.from, "LLL dd, y")
+                          )
+                        ) : (
+                          <span>Deadline</span>
+                        )}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        initialFocus
+                        mode="range"
+                        defaultMonth={field.value?.from}
+                        selected={field.value}
+                        onSelect={field.onChange}
+                        numberOfMonths={2}
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="submissionType"
+              render={({ field }) => (
+                <FormItem>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select submission type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectLabel>Submission type</SelectLabel>
+                        <SelectItem value="file">File</SelectItem>
+                        <SelectItem value="text">Text</SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </FormItem>
+              )}
+            />
+          </>
+        )}
         <FormField
           control={form.control}
           name="content"

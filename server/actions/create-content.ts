@@ -8,21 +8,49 @@ import { revalidatePath } from "next/cache";
 export const createContent = actionClient
   .schema(CreateContentSchema)
   .action(async ({ parsedInput }) => {
-    const { title, type, moduleId, courseId, content } = parsedInput;
+    const {
+      title,
+      type,
+      moduleId,
+      courseId,
+      content,
+      date,
+      submissionType,
+      points,
+      maxAttempts,
+    } = parsedInput;
 
     try {
       const id = crypto.randomUUID();
-      const newContent = {
-        title,
-        type,
-        moduleId,
-        id,
-        courseId,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        content,
-        isLocked: false,
-      };
+      const newContent =
+        type === "lesson"
+          ? {
+              title,
+              type,
+              moduleId,
+              id,
+              courseId,
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              content,
+              isLocked: false,
+            }
+          : {
+              title,
+              type,
+              moduleId,
+              id,
+              courseId,
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              startDate: date?.from,
+              endDate: date?.to,
+              submissionType,
+              points,
+              maxAttempts,
+              isLocked: false,
+              content,
+            };
 
       await db.collection("contents").doc(id).set(newContent);
 
