@@ -1,4 +1,4 @@
-import CreateContentForm from "@/components/instructor-access/courses-page/create-content-form";
+import CreateContentForm from "@/components/instructor-access/courses-page/create-content/create-content-form";
 import { getModuleTitles } from "@/lib/module";
 
 const CreatePage = async ({

@@ -51,7 +51,7 @@ export type Content = {
   courseId: string;
   title: string;
   content: string;
-  type: "lesson" | "assignment";
+  type: "lesson" | "assignment" | "file";
   isLocked: boolean;
   startDate?: Date;
   endDate?: Date;
@@ -60,4 +60,66 @@ export type Content = {
   submissionType?: "file" | "text";
   points?: number;
   maxAttempts?: number;
+};
+
+export type CloudinaryImage = {
+  asset_id: string;
+  public_id: string;
+  version: number;
+  version_id: string;
+  signature: string;
+  width: number;
+  height: number;
+  format: string;
+  resource_type: string;
+  created_at: string;
+  tags: string[];
+  bytes: number;
+  type: string;
+  etag: string;
+  url: string;
+  secure_url: string;
+  asset_folder: string;
+  display_name: string;
+  original_filename: string;
+};
+
+export type CloudinaryFile = {
+  asset_id: string;
+  public_id: string;
+  version: number;
+  version_id: string;
+  signature: string;
+  format: string;
+  resource_type: string;
+  created_at: string;
+  tags: string[];
+  bytes: number;
+  type: string;
+  etag: string;
+  placeholder: boolean;
+  url: string;
+  secure_url: string;
+  asset_folder: string;
+  display_name: string;
+  original_filename: string;
+};
+
+export type Image = {
+  asset_id: string;
+  content_id: string;
+  public_id: string;
+  created_at: string;
+  secure_url: string;
+  url: string;
+};
+
+export type File = {
+  asset_id: string;
+  content_id: string;
+  public_id: string;
+  created_at: string;
+  secure_url: string;
+  url: string;
+  type: string;
 };

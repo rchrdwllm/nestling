@@ -18,10 +18,10 @@ export const createContent = actionClient
       submissionType,
       points,
       maxAttempts,
+      id,
     } = parsedInput;
 
     try {
-      const id = crypto.randomUUID();
       const newContent =
         type === "lesson"
           ? {
@@ -35,7 +35,8 @@ export const createContent = actionClient
               content,
               isLocked: false,
             }
-          : {
+          : type === "assignment"
+          ? {
               title,
               type,
               moduleId,
@@ -50,6 +51,17 @@ export const createContent = actionClient
               maxAttempts,
               isLocked: false,
               content,
+            }
+          : {
+              title,
+              type,
+              moduleId,
+              id,
+              courseId,
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              content,
+              isLocked: false,
             };
 
       await db.collection("contents").doc(id).set(newContent);
@@ -80,7 +92,7 @@ export const createContent = actionClient
 
       revalidatePath("/(instructor)/instructor-courses/[courseId]", "page");
 
-      return { success: `Content ${title} created` };
+      return { success: newContent };
     } catch (error) {
       return { error };
     }

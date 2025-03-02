@@ -1,11 +1,11 @@
 import * as z from "zod";
 
 export const CreateContentSchema = z.object({
-  type: z.enum(["lesson", "assignment"]),
+  type: z.enum(["lesson", "assignment", "file"]),
   title: z.string(),
   moduleId: z.string(),
   courseId: z.string(),
-  content: z.string(),
+  content: z.string().optional(),
   points: z.number().optional(),
   date: z
     .object({
@@ -15,4 +15,6 @@ export const CreateContentSchema = z.object({
     .optional(),
   maxAttempts: z.number().optional(),
   submissionType: z.enum(["file", "text"]).optional(),
+  id: z.string(),
+  fileUrl: z.string().optional(),
 });

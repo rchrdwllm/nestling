@@ -55,8 +55,6 @@ export const getModuleTitles = unstable_cache(
           }
       );
 
-      console.log(modules);
-
       return { success: modules };
     } catch (error) {
       return { error: "Error fetching module names" };
