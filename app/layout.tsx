@@ -29,12 +29,6 @@ export const metadata: Metadata = {
   description: "A Web-based Learning Management System for Leave a Nest",
 };
 
-let Toolbar: React.ComponentType = () => null;
-
-if (process.env.NODE_ENV === "development") {
-  Toolbar = dynamic(() => import("@/components/ui/cache-toolbar"));
-}
-
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -52,7 +46,6 @@ export default async function RootLayout({
           <NextTopLoader showSpinner={false} color="#df1514" />
           <CacheRefresherWrapper>{children}</CacheRefresherWrapper>
           <Toaster />
-          {/* <Toolbar /> */}
         </SessionWrapper>
       </body>
     </html>

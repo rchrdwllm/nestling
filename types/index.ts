@@ -1,3 +1,10 @@
+import { Timestamp as FSTimestamp } from "firebase-admin/firestore";
+
+export type Timestamp = FSTimestamp & {
+  _seconds: number;
+  _nanoseconds: number;
+};
+
 export type Role = "student" | "instructor" | "admin";
 
 export type User = {
@@ -10,15 +17,15 @@ export type User = {
   middleName: string;
   lastName: string;
   contactNumber: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: Timestamp;
+  updatedAt: Timestamp;
 };
 
 export type PasswordResetToken = {
   token: string;
   email: string;
-  expires: Date;
-  createdAt: Date;
+  expires: Timestamp;
+  createdAt: Timestamp;
 };
 
 export type Course = {
@@ -26,14 +33,14 @@ export type Course = {
   name: string;
   courseCode: string;
   description: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: Timestamp;
+  updatedAt: Timestamp;
 };
 
 export type EnrollmentData = {
   courseId: string;
   studentId: string;
-  createdAt: Date;
+  createdAt: Timestamp;
 };
 
 export type Module = {
@@ -41,8 +48,8 @@ export type Module = {
   title: string;
   moduleNumber: number;
   courseId: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: Timestamp;
+  updatedAt: Timestamp;
 };
 
 export type Content = {
@@ -53,10 +60,10 @@ export type Content = {
   content: string;
   type: "lesson" | "assignment" | "file";
   isLocked: boolean;
-  startDate?: Date;
-  endDate?: Date;
-  createdAt: Date;
-  updatedAt: Date;
+  startDate?: Timestamp;
+  endDate?: Timestamp;
+  createdAt: Timestamp;
+  updatedAt: Timestamp;
   submissionType?: "file" | "text";
   points?: number;
   maxAttempts?: number;

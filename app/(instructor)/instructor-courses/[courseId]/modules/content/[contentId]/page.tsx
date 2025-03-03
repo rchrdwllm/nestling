@@ -1,4 +1,4 @@
-import PdfViewer from "@/components/instructor-access/content-page/pdf-viewer";
+import PdfViewer from "@/components/shared/content-page/pdf-viewer";
 import { getContentFile, getModuleContent } from "@/lib/content";
 
 const ContentPage = async ({
