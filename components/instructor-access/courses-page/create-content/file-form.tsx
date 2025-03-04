@@ -5,6 +5,7 @@ import { uploadFile } from "@/server/actions/upload-file";
 import { uploadFileToCloudinary } from "@/server/actions/upload-to-cloudinary";
 import { File as FirestoreFile } from "@/types";
 import { Paperclip, X } from "lucide-react";
+import { useAction } from "next-safe-action/hooks";
 import { ChangeEvent, useCallback, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { toast } from "sonner";
@@ -13,6 +14,20 @@ const FileForm = () => {
   const { getValues } = useFormContext();
   const [file, setFile] = useState<File | undefined>(undefined);
   const [uploadedFile, setUploadedFile] = useState<FirestoreFile | null>(null);
+  const { execute } = useAction(uploadFile, {
+    onSuccess: () => {
+      toast.dismiss();
+      toast.success("File uploaded successfully");
+    },
+    onError: (error) => {
+      toast.dismiss();
+      toast.error(JSON.stringify(error));
+    },
+    onExecute: () => {
+      toast.dismiss();
+      toast.loading("Uploading file...");
+    },
+  });
 
   const addFile = useCallback(async (e: ChangeEvent) => {
     const target = e.target as HTMLInputElement;
@@ -26,25 +41,11 @@ const FileForm = () => {
       );
 
       if (uploadedFile) {
-        try {
-          await uploadFile({
-            ...uploadedFile,
-            type: file.type,
-            content_id: getValues("id"),
-          }).then((data) => {
-            if (data && data.data) {
-              const { success: uploadedFile, error } = data.data;
-
-              if (uploadedFile) {
-                setUploadedFile(uploadedFile);
-              } else {
-                toast.error(JSON.stringify(error));
-              }
-            }
-          });
-        } catch (error) {
-          console.error(error);
-        }
+        execute({
+          ...uploadedFile,
+          type: file.type,
+          content_id: getValues("id"),
+        });
       } else {
         toast.error(JSON.stringify(error));
       }
