@@ -43,7 +43,7 @@ export const submitAssignment = actionClient
         type,
         contentId: content_id,
         fileId: public_id,
-        submissionId,
+        id: submissionId,
         createdAt: created_at,
         secureUrl: secure_url,
         isGraded: false,

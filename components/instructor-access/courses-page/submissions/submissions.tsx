@@ -14,6 +14,8 @@ const Submissions = async ({ contentId }: { contentId: string }) => {
     return <div>Loading...</div>;
   }
 
+  console.log(submissions);
+
   return (
     <div>
       <h1 className="font-semibold">Submissions</h1>
