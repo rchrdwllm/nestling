@@ -10,6 +10,6 @@ export const getFile = async (public_id: string) => {
   } catch (error) {
     console.error("File retrieval failed:", error);
 
-    return { error };
+    return { error: JSON.stringify(error) };
   }
 };
