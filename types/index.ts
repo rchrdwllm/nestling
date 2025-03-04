@@ -129,4 +129,17 @@ export type File = {
   secure_url: string;
   url: string;
   type: string;
+  submission_id?: string;
+};
+
+export type Submission = {
+  userId: string;
+  type: string;
+  contentId: string;
+  fileId: string;
+  id: string;
+  createdAt: string;
+  secureUrl: string;
+  isGraded: boolean;
+  grade: number | null;
 };

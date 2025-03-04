@@ -24,13 +24,15 @@ const SidebarLink = ({ Icon, href, label }: SidebarItem) => {
             href={href}
             className={cn(
               "flex items-center justify-center rounded-lg border border-background p-2 transition-all group hover:border-border",
-              isActive ? "shadow-md border-border" : null
+              isActive ? "bg-primary" : null
             )}
           >
             <Icon
               className={cn(
                 "size-6 transition-colors text-muted-foreground/65 group-hover:text-foreground",
-                isActive ? "text-foreground" : null
+                isActive
+                  ? "text-primary-foreground group-hover:text-primary-foreground"
+                  : null
               )}
             />
           </Link>

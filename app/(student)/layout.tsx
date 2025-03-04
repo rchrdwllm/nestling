@@ -27,7 +27,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
   if (!session) return null;
 
   return (
-    <div className="h-screen overflow-y-auto flex bg-secondary p-2 gap-2">
+    <div className="min-h-screen flex items-stretch bg-secondary p-2 gap-2">
       <Sidebar />
       <div className="w-full bg-background border border-border rounded-xl">
         {children}

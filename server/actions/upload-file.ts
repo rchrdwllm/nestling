@@ -3,6 +3,7 @@
 import { UploadFileSchema } from "@/schemas/UploadFileSchema";
 import { actionClient } from "../action-client";
 import { db } from "@/lib/firebase";
+import { getOptimisticUser } from "@/lib/user";
 
 export const uploadFile = actionClient
   .schema(UploadFileSchema)
@@ -16,6 +17,7 @@ export const uploadFile = actionClient
       content_id,
       type,
     } = parsedInput;
+    const user = await getOptimisticUser();
 
     try {
       const fileRef = db.collection("files").doc(public_id);
@@ -27,6 +29,7 @@ export const uploadFile = actionClient
         secure_url,
         content_id,
         type,
+        user_id: user.id,
       };
 
       await fileRef.set(newFile);

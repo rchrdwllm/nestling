@@ -7,7 +7,7 @@ import SessionWrapper from "@/components/wrappers/session-wrapper";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import CacheRefresherWrapper from "@/components/wrappers/cache-refresher-wrapper";
-import dynamic from "next/dynamic";
+import ThemeWrapper from "@/components/wrappers/theme-wrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,15 +37,17 @@ export default async function RootLayout({
   const session = await getServerSession(authOptions);
 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         suppressHydrationWarning
         className={`${geistSans.variable} ${geistMono.variable} ${montserrat.className} antialiased overflow-x-hidden`}
       >
         <SessionWrapper session={session}>
-          <NextTopLoader showSpinner={false} color="#df1514" />
-          <CacheRefresherWrapper>{children}</CacheRefresherWrapper>
-          <Toaster />
+          <ThemeWrapper attribute="class" defaultTheme="light">
+            <NextTopLoader showSpinner={false} color="#df1514" />
+            <CacheRefresherWrapper>{children}</CacheRefresherWrapper>
+            <Toaster />
+          </ThemeWrapper>
         </SessionWrapper>
       </body>
     </html>

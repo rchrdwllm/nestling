@@ -1,5 +1,7 @@
 import PdfViewer from "@/components/shared/content-page/pdf-viewer";
+import SubmitAssignmentBtn from "@/components/student-access/courses-page/assignment-content/submit-assignment-btn";
 import AssignmentDetails from "@/components/student-access/courses-page/assignment-details";
+import { Button } from "@/components/ui/button";
 import { getContentFile, getModuleContent } from "@/lib/content";
 
 const ContentPage = async ({
@@ -23,7 +25,12 @@ const ContentPage = async ({
   return (
     <main className="p-6">
       <div className="flex flex-col gap-3">
-        <h1 className="text-3xl font-semibold">{content.title}</h1>
+        <div className="flex justify-between items-center">
+          <h1 className="text-3xl font-semibold">{content.title}</h1>
+          {content.type === "assignment" && (
+            <SubmitAssignmentBtn contentId={contentId} />
+          )}
+        </div>
         <hr />
       </div>
       {content.type === "assignment" && <AssignmentDetails {...content} />}

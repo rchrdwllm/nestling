@@ -8,3 +8,9 @@ export const getCurrentUser = async () => {
 
   return user?.user;
 };
+
+export const getOptimisticUser = async () => {
+  const user = await getServerSession(authOptions);
+
+  return user!.user!;
+};
