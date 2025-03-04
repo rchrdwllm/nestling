@@ -20,5 +20,7 @@ export const getAssignmentSubmissions = unstable_cache(
 
       return { error: "Error fetching submissions" };
     }
-  }
+  },
+  ["submissions"],
+  { revalidate: 3600 }
 );

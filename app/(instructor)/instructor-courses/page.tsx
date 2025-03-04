@@ -1,21 +1,8 @@
-import CourseCard from "@/components/instructor-access/courses-page/course-card";
+import Courses from "@/components/instructor-access/courses-page/courses";
 import CreateCourseBtn from "@/components/instructor-access/courses-page/create-course-btn";
-import { getInstructorCourses } from "@/lib/course";
-import { getCurrentUser } from "@/lib/user";
+import { Suspense } from "react";
 
-const InstructorCoursesPage = async () => {
-  const user = await getCurrentUser();
-  const { success: courses, error } = await getInstructorCourses(user!.id);
-
-  if (error)
-    return (
-      <div>
-        <h1>Error fetching courses</h1>
-      </div>
-    );
-
-  if (!courses) return <div>Loading...</div>;
-
+const InstructorCoursesPage = () => {
   return (
     <div className="p-6 flex flex-col gap-10">
       <div className="flex flex-col gap-3">
@@ -25,11 +12,9 @@ const InstructorCoursesPage = async () => {
         </div>
         <hr />
       </div>
-      <section className="grid grid-cols-4 gap-8">
-        {courses.map((course) => (
-          <CourseCard key={course.id} {...course} />
-        ))}
-      </section>
+      <Suspense fallback={<div>Loading...</div>}>
+        <Courses />
+      </Suspense>
     </div>
   );
 };
