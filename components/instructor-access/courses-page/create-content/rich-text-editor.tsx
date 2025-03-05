@@ -9,6 +9,7 @@ import {
   List,
   ListOrdered,
   Strikethrough,
+  Heading as HeadingIcon,
 } from "lucide-react";
 import React, { ChangeEvent, useCallback, useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
@@ -18,6 +19,7 @@ import { toast } from "sonner";
 import { uploadImage } from "@/server/actions/upload-image";
 import { deleteImgFromCloudinary } from "@/server/actions/delete-from-cloudinary";
 import { deleteImage } from "@/server/actions/delete-image";
+import Heading from "@tiptap/extension-heading";
 
 type RichTextEditorProps = {
   content: string;
@@ -52,6 +54,11 @@ const RichTextEditor = ({ content }: RichTextEditorProps) => {
         bulletList: {
           HTMLAttributes: {
             class: "list-disc pl-4",
+          },
+        },
+        heading: {
+          HTMLAttributes: {
+            class: "text-2xl font-semibold",
           },
         },
       }),
@@ -179,6 +186,15 @@ const RichTextEditor = ({ content }: RichTextEditorProps) => {
               size="sm"
             >
               <List className="w-4 h-4" />
+            </Toggle>
+            <Toggle
+              pressed={editor.isActive("heading")}
+              onPressedChange={() => {
+                editor.chain().focus().toggleHeading({ level: 2 }).run();
+              }}
+              size="sm"
+            >
+              <HeadingIcon className="w-4 h-4" />
             </Toggle>
             <button
               type="button"
