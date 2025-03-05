@@ -1,6 +1,7 @@
 import Submissions from "@/components/instructor-access/courses-page/submissions/submissions";
 import PdfViewer from "@/components/shared/content-page/pdf-viewer";
 import { getContentFile, getModuleContent } from "@/lib/content";
+import { Suspense } from "react";
 
 const ContentPage = async ({
   params,
@@ -33,7 +34,16 @@ const ContentPage = async ({
         />
         {file && <PdfViewer pdfUrl={file.success?.secure_url!} />}
       </div>
-      {content.type === "assignment" && <Submissions contentId={contentId} />}
+      {content.type === "assignment" && (
+        <div>
+          <h1 className="font-semibold">Submissions</h1>
+          <div className="mt-4">
+            <Suspense fallback="Loading...">
+              <Submissions contentId={contentId} />
+            </Suspense>
+          </div>
+        </div>
+      )}
     </main>
   );
 };

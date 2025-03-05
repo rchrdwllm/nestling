@@ -14,16 +14,11 @@ const Submissions = async ({ contentId }: { contentId: string }) => {
     return <div>Loading...</div>;
   }
 
-  console.log(submissions);
-
   return (
-    <div>
-      <h1 className="font-semibold">Submissions</h1>
-      <div className="mt-4 flex flex-col gap-2">
-        {submissions.map((submission) => (
-          <SubmissionCard key={submission.id} {...submission} />
-        ))}
-      </div>
+    <div className="mt-4 flex flex-col gap-2">
+      {submissions.map((submission) => (
+        <SubmissionCard key={submission.id} {...submission} />
+      ))}
     </div>
   );
 };

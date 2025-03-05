@@ -1,26 +1,21 @@
-import { unstable_cache } from "next/cache";
 import { db } from "./firebase";
 import { Submission } from "@/types";
 
-export const getAssignmentSubmissions = unstable_cache(
-  async (contentId: string) => {
-    try {
-      const submissionsSnapshot = await db
-        .collection("submissions")
-        .where("contentId", "==", contentId)
-        .get();
+export const getAssignmentSubmissions = async (contentId: string) => {
+  try {
+    const submissionsSnapshot = await db
+      .collection("submissions")
+      .where("contentId", "==", contentId)
+      .get();
 
-      const submissions = submissionsSnapshot.docs.map((doc) => {
-        return doc.data() as Submission;
-      });
+    const submissions = submissionsSnapshot.docs.map((doc) => {
+      return doc.data() as Submission;
+    });
 
-      return { success: submissions };
-    } catch (error) {
-      console.error(error);
+    return { success: submissions };
+  } catch (error) {
+    console.error(error);
 
-      return { error: "Error fetching submissions" };
-    }
-  },
-  ["submissions"],
-  { revalidate: 3600 }
-);
+    return { error: "Error fetching submissions" };
+  }
+};
