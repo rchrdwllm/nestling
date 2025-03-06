@@ -1,12 +1,9 @@
-import { getModuleContents } from "@/lib/content";
 import { Module } from "@/types";
 import ContentCard from "./content-card";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { getPublishedModuleContents } from "@/lib/content";
 
-const ModuleCard = async ({ id, title, moduleNumber, courseId }: Module) => {
-  const { success: contents, error } = await getModuleContents(id);
+const ModuleCard = async ({ id, title, moduleNumber }: Module) => {
+  const { success: contents, error } = await getPublishedModuleContents(id);
 
   if (error) {
     return <div>{error}</div>;

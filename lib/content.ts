@@ -21,6 +21,28 @@ export const getModuleContents = unstable_cache(
   { revalidate: 3600 }
 );
 
+export const getPublishedModuleContents = unstable_cache(
+  async (moduleId: string) => {
+    try {
+      const snapshot = await db
+        .collection("contents")
+        .where("moduleId", "==", moduleId)
+        .where("isPublished", "==", true)
+        .orderBy("createdAt", "asc")
+        .get();
+      const contents = snapshot.docs.map((doc) => doc.data() as Content);
+
+      return { success: contents };
+    } catch (error) {
+      console.error(error);
+
+      return { error: JSON.stringify(error) };
+    }
+  },
+  ["contents"],
+  { revalidate: 3600 }
+);
+
 export const getContentFile = unstable_cache(
   async (contentId: string) => {
     try {
@@ -33,6 +55,8 @@ export const getContentFile = unstable_cache(
 
       return { success: file };
     } catch (error) {
+      console.error(error);
+
       return { error: "Error fetching file" };
     }
   },
@@ -48,6 +72,8 @@ export const getModuleContent = unstable_cache(
 
       return { success: content };
     } catch (error) {
+      console.error(error);
+
       return { error: "Error fetching content" };
     }
   },

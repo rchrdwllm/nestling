@@ -67,6 +67,7 @@ export type Content = {
   submissionType?: "file" | "text";
   points?: number;
   maxAttempts?: number;
+  isPublished: boolean;
 };
 
 export type CloudinaryImage = {

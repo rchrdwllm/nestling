@@ -1,6 +1,6 @@
 import { getModuleContents } from "@/lib/content";
 import { Module } from "@/types";
-import ContentCard from "./content-card";
+import ContentCard from "./content-card/content-card";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
