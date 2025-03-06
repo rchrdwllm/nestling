@@ -1,6 +1,12 @@
 "use client";
 
-import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+} from "@/components/ui/form";
 import { CreateContentSchema } from "@/schemas/CreateContentSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAction } from "next-safe-action/hooks";
@@ -23,6 +29,7 @@ import { useRouter } from "next/navigation";
 import RichTextEditor from "./rich-text-editor";
 import AssignmentForm from "./assignment-form";
 import FileForm from "./file-form";
+import { Switch } from "@/components/ui/switch";
 
 type CreateContentFormProps = {
   defaultModule?: string;
@@ -51,6 +58,7 @@ const CreateContentForm = ({
       maxAttempts: 0,
       id,
       content: "",
+      isPublished: true,
     },
   });
   const { execute, isExecuting } = useAction(createContent, {
@@ -139,6 +147,22 @@ const CreateContentForm = ({
                   </SelectGroup>
                 </SelectContent>
               </Select>
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="isPublished"
+          render={({ field }) => (
+            <FormItem className="flex items-center gap-8">
+              <FormLabel>Publish by default?</FormLabel>
+              <FormControl>
+                <Switch
+                  defaultChecked={field.value}
+                  onCheckedChange={field.onChange}
+                  className="[margin-top:_0_!important]"
+                />
+              </FormControl>
             </FormItem>
           )}
         />

@@ -19,6 +19,7 @@ export const createContent = actionClient
       points,
       maxAttempts,
       id,
+      isPublished,
     } = parsedInput;
 
     try {
@@ -34,7 +35,7 @@ export const createContent = actionClient
               updatedAt: new Date(),
               content,
               isLocked: false,
-              isPublished: true,
+              isPublished,
             }
           : type === "assignment"
           ? {
@@ -52,7 +53,7 @@ export const createContent = actionClient
               maxAttempts,
               isLocked: false,
               content,
-              isPublished: true,
+              isPublished,
             }
           : {
               title,
@@ -64,7 +65,7 @@ export const createContent = actionClient
               updatedAt: new Date(),
               content,
               isLocked: false,
-              isPublished: true,
+              isPublished,
             };
 
       await db.collection("contents").doc(id).set(newContent);

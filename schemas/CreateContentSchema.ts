@@ -5,6 +5,7 @@ export const CreateContentSchema = z.object({
   title: z.string(),
   moduleId: z.string(),
   courseId: z.string(),
+  isPublished: z.boolean(),
   content: z.string().optional(),
   points: z.number().optional(),
   date: z
