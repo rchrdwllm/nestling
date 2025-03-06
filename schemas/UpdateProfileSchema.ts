@@ -22,15 +22,7 @@ export const UpdateProfileSchema = z.object({
   email: z.string().email({
     message: "Invalid email format",
   }),
-  currentPassword: z.optional(
-    z.string().min(6, {
-      message: "Password must be at least 6 characters long",
-    })
-  ),
-  newPassword: z.optional(
-    z.string().min(6, {
-      message: "Password must be at least 6 characters long",
-    })
-  ),
+  currentPassword: z.optional(z.string()),
+  newPassword: z.optional(z.string()),
   image: z.optional(z.string()),
 });

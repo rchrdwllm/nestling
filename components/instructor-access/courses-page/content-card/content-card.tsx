@@ -14,10 +14,13 @@ const ContentCard = ({ id, courseId, title, type, isPublished }: Content) => {
 
   return (
     <article className="flex justify-between items-center">
-      <Link href={`/instructor-courses/${courseId}/modules/content/${id}`}>
+      <Link
+        className="flex-1 block"
+        href={`/instructor-courses/${courseId}/modules/content/${id}`}
+      >
         <Button
           variant="link"
-          className="text-left inline-flex justify-start items-center gap-3 p-0 w-full"
+          className="text-left inline-flex justify-start items-center gap-3 p-0 w-full flex-1"
         >
           <span>
             <Icon className="size-4" />

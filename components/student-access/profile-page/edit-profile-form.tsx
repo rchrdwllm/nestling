@@ -5,11 +5,12 @@ import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { UpdateProfileSchema } from "@/schemas/UpdateProfileSchema";
-import { updateProfile } from "@/server/actions/update-profile";
+import { updateStudentProfile } from "@/server/actions/update-profile";
+import { uploadImgToCloudinary } from "@/server/actions/upload-to-cloudinary";
 import { User } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAction } from "next-safe-action/hooks";
-import { useEffect } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
@@ -19,6 +20,8 @@ type EditProfileFormProps = {
 };
 
 const EditProfileForm = ({ user }: EditProfileFormProps) => {
+  const [img, setImg] = useState<File | undefined>(undefined);
+  const [isLoading, setIsLoading] = useState(false);
   const form = useForm<z.infer<typeof UpdateProfileSchema>>({
     defaultValues: {
       email: user.email,
@@ -33,10 +36,9 @@ const EditProfileForm = ({ user }: EditProfileFormProps) => {
     },
     resolver: zodResolver(UpdateProfileSchema),
   });
-  const { execute, isExecuting } = useAction(updateProfile, {
+  const { execute, isExecuting } = useAction(updateStudentProfile, {
     onExecute: () => {
-      toast.dismiss();
-      toast.loading("Updating profile...");
+      setIsLoading(true);
     },
     onSuccess: ({ data }) => {
       toast.dismiss();
@@ -46,10 +48,14 @@ const EditProfileForm = ({ user }: EditProfileFormProps) => {
       } else if (data?.error) {
         toast.error(JSON.stringify(data.error));
       }
+
+      setIsLoading(false);
     },
     onError: (error) => {
       toast.dismiss();
       toast.error(JSON.stringify(error));
+
+      setIsLoading(false);
     },
   });
 
@@ -62,8 +68,43 @@ const EditProfileForm = ({ user }: EditProfileFormProps) => {
     form.setValue("image", user.image ?? undefined);
   }, []);
 
-  const handleSubmit = (data: z.infer<typeof UpdateProfileSchema>) => {
+  const handleSubmit = async (data: z.infer<typeof UpdateProfileSchema>) => {
+    setIsLoading(true);
+    toast.dismiss();
+    toast.loading("Updating profile...");
+
+    if (img) {
+      const { success: uploadedImg, error } = await uploadImgToCloudinary(img);
+
+      if (uploadedImg) {
+        execute({
+          ...data,
+          image: uploadedImg.secure_url,
+        });
+      } else if (error) {
+        toast.error(JSON.stringify(error));
+      }
+
+      return;
+    }
+
     execute(data);
+  };
+
+  const handleImageChange = (e: ChangeEvent) => {
+    const target = e.target as HTMLInputElement;
+    const file = target.files?.[0];
+
+    if (file) {
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        form.setValue("image", reader.result as string);
+      };
+
+      reader.readAsDataURL(file);
+      setImg(file);
+    }
   };
 
   return (
@@ -75,7 +116,7 @@ const EditProfileForm = ({ user }: EditProfileFormProps) => {
         >
           <FormField
             name="image"
-            render={() => (
+            render={({ field }) => (
               <FormItem>
                 <FormControl>
                   <div className="flex flex-col items-center justify-center gap-4">
@@ -107,7 +148,7 @@ const EditProfileForm = ({ user }: EditProfileFormProps) => {
                       accept="image/*"
                       className="hidden"
                       id="image"
-                      {...form.register("image")}
+                      onChange={handleImageChange}
                     />
                   </div>
                 </FormControl>
@@ -184,7 +225,11 @@ const EditProfileForm = ({ user }: EditProfileFormProps) => {
           />
 
           <div className="w-full flex gap-4">
-            <Button disabled={isExecuting} type="submit" className="w-full">
+            <Button
+              disabled={isExecuting || isLoading}
+              type="submit"
+              className="w-full"
+            >
               Save
             </Button>
           </div>

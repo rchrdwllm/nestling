@@ -7,7 +7,7 @@ import { User } from "@/types";
 import bcrypt from "bcrypt";
 import { revalidatePath } from "next/cache";
 
-export const updateProfile = actionClient
+export const updateStudentProfile = actionClient
   .schema(UpdateProfileSchema)
   .action(async ({ parsedInput }) => {
     try {
@@ -45,7 +45,8 @@ export const updateProfile = actionClient
           password: hashedPassword,
         });
 
-        revalidatePath(`/(${user.role})/${user.role}-profile`, "page");
+        revalidatePath("/(student)/student-profile", "page");
+        revalidatePath("/(student)", "layout");
 
         return { success: "Profile updated" };
       }
@@ -54,7 +55,7 @@ export const updateProfile = actionClient
         ...updates,
       });
 
-      revalidatePath(`/(${user.role})/${user.role}-profile`, "page");
+      revalidatePath("/(student)/student-profile", "page");
 
       return { success: "Profile updated" };
     } catch (error) {
