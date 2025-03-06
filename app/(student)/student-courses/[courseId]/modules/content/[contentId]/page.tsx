@@ -1,7 +1,6 @@
 import PdfViewer from "@/components/shared/content-page/pdf-viewer";
 import SubmitAssignmentBtn from "@/components/student-access/courses-page/assignment-content/submit-assignment-btn";
 import AssignmentDetails from "@/components/student-access/courses-page/assignment-details";
-import { Button } from "@/components/ui/button";
 import { getContentFile, getModuleContent } from "@/lib/content";
 
 const ContentPage = async ({

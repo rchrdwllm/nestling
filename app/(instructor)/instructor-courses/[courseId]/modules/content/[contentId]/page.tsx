@@ -1,7 +1,7 @@
-import Submissions from "@/components/instructor-access/courses-page/submissions/submissions";
 import PdfViewer from "@/components/shared/content-page/pdf-viewer";
+import { Button } from "@/components/ui/button";
 import { getContentFile, getModuleContent } from "@/lib/content";
-import { Suspense } from "react";
+import Link from "next/link";
 
 const ContentPage = async ({
   params,
@@ -35,14 +35,11 @@ const ContentPage = async ({
         {file && <PdfViewer pdfUrl={file.success?.secure_url!} />}
       </div>
       {content.type === "assignment" && (
-        <div>
-          <h1 className="font-semibold">Submissions</h1>
-          <div className="mt-4">
-            <Suspense fallback="Loading...">
-              <Submissions contentId={contentId} />
-            </Suspense>
-          </div>
-        </div>
+        <Link
+          href={`/instructor-courses/${content.courseId}/modules/content/${contentId}/submissions`}
+        >
+          <Button variant="link">View submissions</Button>
+        </Link>
       )}
     </main>
   );

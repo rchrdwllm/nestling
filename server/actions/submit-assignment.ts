@@ -40,6 +40,7 @@ export const submitAssignment = actionClient
 
       const newSubmission = {
         userId: user.id,
+        studentName: user.name,
         type,
         contentId: content_id,
         fileId: public_id,

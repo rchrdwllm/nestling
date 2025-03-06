@@ -1,6 +1,5 @@
-import { Content } from "@/types";
+import { Content, Timestamp } from "@/types";
 import { format } from "date-fns";
-import { Timestamp } from "firebase-admin/firestore";
 
 const AssignmentDetails = ({
   startDate,

@@ -1,5 +1,6 @@
 import { getAssignmentSubmissions } from "@/lib/submission";
-import SubmissionCard from "./submission-card";
+import SubmissionGrid from "./submission-grid";
+import { getUserById } from "@/lib/user";
 
 const Submissions = async ({ contentId }: { contentId: string }) => {
   const { success: submissions, error } = await getAssignmentSubmissions(
@@ -14,13 +15,15 @@ const Submissions = async ({ contentId }: { contentId: string }) => {
     return <div>Loading...</div>;
   }
 
-  return (
-    <div className="mt-4 flex flex-col gap-2">
-      {submissions.map((submission) => (
-        <SubmissionCard key={submission.id} {...submission} />
-      ))}
-    </div>
+  const asdf = await Promise.all(
+    submissions.map(async (submission) => {
+      const user = await getUserById(submission.userId);
+
+      return user;
+    })
   );
+
+  return <SubmissionGrid submissions={submissions} />;
 };
 
 export default Submissions;

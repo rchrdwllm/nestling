@@ -1,24 +1,36 @@
-import { getFile } from "@/lib/file";
-import { getUserById } from "@/lib/user";
+"use client";
+
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { Submission } from "@/types";
-import SubmissionDialog from "./submission-dialog";
+import { useMemo } from "react";
 
-const SubmissionCard = async ({ userId, fileId }: Submission) => {
-  const { success: user, error: userError } = await getUserById(userId);
-  const { success: file, error: fileError } = await getFile(fileId);
+type SubmissionCardProps = {
+  submission: Submission;
+  selectedSubmission: Submission;
+  setSelectedSubmission: (submission: Submission) => void;
+};
 
-  if (userError || fileError) {
-    return <div>{userError || fileError}</div>;
-  }
-
-  if (!user || !file) {
-    return <div>Loading...</div>;
-  }
+const SubmissionCard = ({
+  submission,
+  selectedSubmission,
+  setSelectedSubmission,
+}: SubmissionCardProps) => {
+  const isActive = useMemo(() => {
+    return selectedSubmission.id === submission.id;
+  }, [selectedSubmission, submission]);
 
   return (
-    <article>
-      <SubmissionDialog user={user} fileUrl={file.secure_url} />
-    </article>
+    <Button
+      variant="link"
+      onClick={() => setSelectedSubmission(submission)}
+      className={cn(
+        isActive && "text-primary underline",
+        "p-0 text-left block w-full"
+      )}
+    >
+      {submission.studentName}
+    </Button>
   );
 };
 

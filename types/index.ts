@@ -134,6 +134,7 @@ export type File = {
 
 export type Submission = {
   userId: string;
+  studentName: string;
   type: string;
   contentId: string;
   fileId: string;
