@@ -31,6 +31,7 @@ export const createModule = actionClient
         courseId,
         createdAt: new Date(),
         updatedAt: new Date(),
+        isPublished: true,
         moduleNumber: existingModules.length + 1,
       };
 

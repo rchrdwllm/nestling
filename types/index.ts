@@ -50,6 +50,7 @@ export type Module = {
   courseId: string;
   createdAt: Timestamp;
   updatedAt: Timestamp;
+  isPublished: boolean;
 };
 
 export type Content = {

@@ -1,11 +1,18 @@
 import { getModuleContents } from "@/lib/content";
 import { Module } from "@/types";
-import ContentCard from "./content-card/content-card";
+import ContentCard from "../content-card/content-card";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
+import PublishModuleSwitch from "./publish-module-switch";
 
-const ModuleCard = async ({ id, title, moduleNumber, courseId }: Module) => {
+const ModuleCard = async ({
+  id,
+  title,
+  moduleNumber,
+  courseId,
+  isPublished,
+}: Module) => {
   const { success: contents, error } = await getModuleContents(id);
 
   if (error) {
@@ -18,8 +25,8 @@ const ModuleCard = async ({ id, title, moduleNumber, courseId }: Module) => {
 
   return (
     <article className="border border-border rounded-xl p-4 flex flex-col gap-4">
-      <div className="flex justify-between items-center">
-        <h1 className="text-xl font-medium">
+      <div className="flex justify-between items-center gap-4">
+        <h1 className="text-xl flex-1 font-medium">
           {moduleNumber}. {title}
         </h1>
         <Link href={`/instructor-courses/${courseId}/create?moduleId=${id}`}>
@@ -31,6 +38,7 @@ const ModuleCard = async ({ id, title, moduleNumber, courseId }: Module) => {
             New content
           </Button>
         </Link>
+        <PublishModuleSwitch defaultPublished={isPublished} moduleId={id} />
       </div>
       <div className="flex flex-col gap-2">
         {contents.length ? (

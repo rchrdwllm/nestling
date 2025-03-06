@@ -16,6 +16,32 @@ export const getCourseModules = unstable_cache(
 
       return { success: modules };
     } catch (error) {
+      console.error(error);
+
+      return { error: "Error fetching modules" };
+    }
+  },
+  ["modules"],
+  { revalidate: 3600 }
+);
+
+export const getPublishedCourseModules = unstable_cache(
+  async (courseId: string) => {
+    try {
+      const modulesSnapshot = await db
+        .collection("modules")
+        .where("courseId", "==", courseId)
+        .where("isPublished", "==", true)
+        .orderBy("createdAt", "asc")
+        .get();
+      const modules = modulesSnapshot.docs.map((doc) => {
+        return doc.data() as Module;
+      });
+
+      return { success: modules };
+    } catch (error) {
+      console.error(error);
+
       return { error: "Error fetching modules" };
     }
   },
@@ -31,6 +57,8 @@ export const getModule = unstable_cache(
 
       return { success: module };
     } catch (error) {
+      console.error(error);
+
       return { error: "Error fetching module" };
     }
   },
@@ -57,6 +85,8 @@ export const getModuleTitles = unstable_cache(
 
       return { success: modules };
     } catch (error) {
+      console.error(error);
+
       return { error: "Error fetching module names" };
     }
   },
