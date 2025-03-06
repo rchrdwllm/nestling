@@ -39,6 +39,7 @@ export const checkEmailRegister = async (
       middleName,
       lastName,
       contactNumber,
+      name: `${firstName} ${middleName} ${lastName}`,
       createdAt: new Date(),
       updatedAt: new Date(),
     };

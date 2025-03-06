@@ -19,6 +19,7 @@ export type User = {
   contactNumber: string;
   createdAt: Timestamp;
   updatedAt: Timestamp;
+  name?: string;
 };
 
 export type PasswordResetToken = {

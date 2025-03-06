@@ -1,3 +1,6 @@
+import EditProfileForm from "@/components/student-access/profile-page/edit-profile-form";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Form } from "@/components/ui/form";
 import { getUserById } from "@/lib/user";
 
 const ProfilePage = async ({
@@ -16,7 +19,11 @@ const ProfilePage = async ({
     return <div>Loading...</div>;
   }
 
-  return <div>{userId}</div>;
+  return (
+    <main className="p-8">
+      <EditProfileForm user={user} />
+    </main>
+  );
 };
 
 export default ProfilePage;
