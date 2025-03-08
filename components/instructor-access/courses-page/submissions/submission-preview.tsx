@@ -37,7 +37,7 @@ const SubmissionPreview = async ({
   return (
     <div className="flex-1">
       <div className="flex flex-col gap-2">
-        {content.maxAttempts! > 0
+        {content.maxAttempts! > 0 && studentSubmissions.length > 1
           ? studentSubmissions.map((submission, index) => (
               <SubmissionAttempt key={submission.id} index={index} />
             ))
