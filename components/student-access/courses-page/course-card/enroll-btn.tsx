@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { EnrollSchema } from "@/schemas/EnrollSchema";
 import { enrollStudent } from "@/server/actions/enroll-student";
+import { User } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAction } from "next-safe-action/hooks";
 import { useMemo } from "react";
@@ -14,13 +15,13 @@ import * as z from "zod";
 type EnrollBtnProps = {
   courseCode: string;
   id: string;
-  enrolledStudents: string[];
+  enrolledStudents: User[];
 };
 
 const EnrollBtn = ({ courseCode, id, enrolledStudents }: EnrollBtnProps) => {
   const { user } = useCurrentUser();
   const isEnrolled = useMemo(() => {
-    return enrolledStudents.includes(user?.id as string);
+    return enrolledStudents.some((student) => student.id === user?.id);
   }, [enrolledStudents, user?.id]);
   const form = useForm<z.infer<typeof EnrollSchema>>({
     resolver: zodResolver(EnrollSchema),
