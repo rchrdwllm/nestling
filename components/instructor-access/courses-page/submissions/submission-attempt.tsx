@@ -13,7 +13,6 @@ const SubmissionAttempt = ({ index }: SubmissionAttemptProps) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const stringIndex = index.toString();
 
   const createQueryString = useCallback(
     (name: string, value: string) => {
@@ -26,14 +25,16 @@ const SubmissionAttempt = ({ index }: SubmissionAttemptProps) => {
   );
 
   const isActive = useMemo(() => {
-    return stringIndex === (searchParams.get("attempt") ?? "0");
+    return (index + 1).toString() === (searchParams.get("attempt") ?? "1");
   }, [index, searchParams]);
 
   return (
     <Button
       variant="link"
       onClick={() =>
-        router.push(`${pathname}?${createQueryString("attempt", stringIndex)}`)
+        router.push(
+          `${pathname}?${createQueryString("attempt", (index + 1).toString())}`
+        )
       }
       className={cn(
         isActive && "text-primary underline",

@@ -31,7 +31,7 @@ const SubmissionPreview = async ({
   }
 
   const selectedAttempt = attempt
-    ? studentSubmissions[parseInt(attempt)]
+    ? studentSubmissions[parseInt(attempt) - 1]
     : studentSubmissions[0];
 
   return (
