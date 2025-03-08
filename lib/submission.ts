@@ -1,3 +1,4 @@
+import { unstable_cache } from "next/cache";
 import { db } from "./firebase";
 import { Submission } from "@/types";
 
@@ -37,25 +38,26 @@ export const getSubmission = async (submissionId: string) => {
   }
 };
 
-export const getStudentAssignmentSubmission = async (
-  contentId: string,
-  studentId: string
-) => {
-  try {
-    const submissionSnapshot = await db
-      .collection("submissions")
-      .where("contentId", "==", contentId)
-      .where("studentId", "==", studentId)
-      .get();
+export const getStudentAssignmentSubmission = unstable_cache(
+  async (contentId: string, studentId: string) => {
+    try {
+      const submissionSnapshot = await db
+        .collection("submissions")
+        .where("contentId", "==", contentId)
+        .where("studentId", "==", studentId)
+        .get();
 
-    const submissions = submissionSnapshot.docs.map((doc) => {
-      return doc.data() as Submission;
-    });
+      const submissions = submissionSnapshot.docs.map((doc) => {
+        return doc.data() as Submission;
+      });
 
-    return { success: submissions };
-  } catch (error) {
-    console.error(error);
+      return { success: submissions };
+    } catch (error) {
+      console.error(error);
 
-    return { error: "Error fetching submissions" };
-  }
-};
+      return { error: "Error fetching submissions" };
+    }
+  },
+  ["getStudentAssignmentSubmission"],
+  { revalidate: 3600 }
+);

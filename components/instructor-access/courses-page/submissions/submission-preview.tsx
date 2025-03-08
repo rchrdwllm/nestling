@@ -46,7 +46,7 @@ const SubmissionPreview = async ({
       <div className="p-6 border border-border rounded-xl mt-6">
         {submissionType === "text" ? (
           <div
-            className="flex flex-col gap-4 rounded-xl border border-border p-6 mt-6"
+            className="flex flex-col gap-4"
             dangerouslySetInnerHTML={{ __html: selectedAttempt.content }}
           />
         ) : (
