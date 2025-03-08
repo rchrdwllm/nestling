@@ -1,13 +1,19 @@
-import Submissions from "@/components/instructor-access/courses-page/submissions/submissions";
+import SubmissionGrid from "@/components/instructor-access/courses-page/submissions/submission-grid";
 import { getModuleContent } from "@/lib/content";
 import { Suspense } from "react";
 
 const SubmissionsPage = async ({
   params,
+  searchParams,
 }: {
   params: Promise<{ contentId: string }>;
+  searchParams: Promise<{
+    studentId: string | undefined;
+    attempt: string | undefined;
+  }>;
 }) => {
   const { contentId } = await params;
+  const { studentId, attempt } = await searchParams;
   const { success: content, error: contentError } = await getModuleContent(
     contentId
   );
@@ -29,9 +35,10 @@ const SubmissionsPage = async ({
         <hr />
       </div>
       <Suspense fallback={<div>Loading...</div>}>
-        <Submissions
-          submissionType={content.submissionType!}
+        <SubmissionGrid
           contentId={contentId}
+          studentId={studentId}
+          attempt={attempt}
         />
       </Suspense>
     </main>

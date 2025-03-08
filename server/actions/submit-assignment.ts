@@ -7,6 +7,7 @@ import { getOptimisticUser } from "@/lib/user";
 import { uploadFile } from "./upload-file";
 import { SubmitAssignmentSchema } from "@/schemas/SubmitAssignmentSchema";
 import * as z from "zod";
+import { revalidatePath } from "next/cache";
 
 export const submitAssignment = actionClient
   .schema(SubmitAssignmentSchema)
@@ -16,7 +17,7 @@ export const submitAssignment = actionClient
     });
   })
   .action(async ({ parsedInput }) => {
-    const { content, contentId, submissionType, file } = parsedInput;
+    const { content, contentId, file } = parsedInput;
     const user = await getOptimisticUser();
 
     try {
@@ -42,7 +43,7 @@ export const submitAssignment = actionClient
         } = file;
 
         const newFileSubmission = {
-          userId: user.id,
+          studentId: user.id,
           studentName: user.name,
           type,
           contentId: content_id,
@@ -60,7 +61,7 @@ export const submitAssignment = actionClient
           fileId: public_id,
           secureUrl: secure_url,
           contentId: content_id,
-          userId: user.id,
+          studentId: user.id,
         };
 
         try {
@@ -89,7 +90,7 @@ export const submitAssignment = actionClient
       }
 
       const newSubmission = {
-        userId: user.id,
+        studentId: user.id,
         studentName: user.name,
         content,
         id: submissionId,
@@ -104,10 +105,15 @@ export const submitAssignment = actionClient
         submissionId,
         createdAt: newSubmission.createdAt,
         contentId,
-        userId: user.id,
+        studentId: user.id,
       });
 
       await batch.commit();
+
+      revalidatePath(
+        "/(student)/student-courses/[courseId]/modules/content/[contentId]",
+        "page"
+      );
 
       return { success: "Assignment submitted successfully" };
     } catch (error) {

@@ -2,6 +2,8 @@ import PdfViewer from "@/components/shared/content-page/pdf-viewer";
 import SubmitAssignmentBtn from "@/components/student-access/courses-page/assignment-content/submit-assignment-btn";
 import AssignmentDetails from "@/components/student-access/courses-page/assignment-details";
 import { getContentFile, getModuleContent } from "@/lib/content";
+import { getStudentAssignmentSubmission } from "@/lib/submission";
+import { getOptimisticUser } from "@/lib/user";
 
 const ContentPage = async ({
   params,
@@ -9,10 +11,13 @@ const ContentPage = async ({
   params: Promise<{ contentId: string }>;
 }) => {
   const { contentId } = await params;
-  const { success: content, error } = await getModuleContent(contentId);
+  const { success: content, error: contentError } = await getModuleContent(
+    contentId
+  );
+  const user = await getOptimisticUser();
 
-  if (error) {
-    return <div>{error}</div>;
+  if (contentError) {
+    return <div>{contentError}</div>;
   }
 
   if (!content) {
@@ -20,6 +25,10 @@ const ContentPage = async ({
   }
 
   const file = content.type === "file" ? await getContentFile(contentId) : null;
+  const { success: submissions } =
+    content.type === "assignment"
+      ? await getStudentAssignmentSubmission(contentId, user.id)
+      : { success: null };
 
   return (
     <main className="p-6">
@@ -30,12 +39,19 @@ const ContentPage = async ({
             <SubmitAssignmentBtn
               submissionType={content.submissionType!}
               contentId={contentId}
+              submissionsLength={submissions!.length}
+              maxAttempts={content.maxAttempts}
             />
           )}
         </div>
         <hr />
       </div>
-      {content.type === "assignment" && <AssignmentDetails {...content} />}
+      {content.type === "assignment" && (
+        <AssignmentDetails
+          {...content}
+          submissionsLength={submissions!.length}
+        />
+      )}
       <div
         className="flex flex-col gap-4 mt-6"
         dangerouslySetInnerHTML={{ __html: content.content }}

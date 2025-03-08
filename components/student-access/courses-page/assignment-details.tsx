@@ -1,13 +1,35 @@
-import { Content, Timestamp } from "@/types";
+import { getStudentAssignmentSubmission } from "@/lib/submission";
+import { getOptimisticUser } from "@/lib/user";
+import { Content } from "@/types";
 import { format } from "date-fns";
 
-const AssignmentDetails = ({
+type AssignmentDetailsProps = Content & {
+  submissionsLength: number;
+};
+
+const AssignmentDetails = async ({
   startDate,
   endDate,
   points,
   maxAttempts,
   submissionType,
-}: Content) => {
+  id,
+  submissionsLength,
+}: AssignmentDetailsProps) => {
+  const user = await getOptimisticUser();
+  const { success: submissions, error } = await getStudentAssignmentSubmission(
+    id,
+    user.id
+  );
+
+  if (error) {
+    return <div>{error}</div>;
+  }
+
+  if (!submissions) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <section className="border-b py-8 grid grid-cols-3">
       <div>
@@ -33,6 +55,12 @@ const AssignmentDetails = ({
         </p>
       </div>
       <div>
+        <p className="text-muted-foreground">
+          Attempts done:{" "}
+          <span className="text-foreground">
+            {submissionsLength ? submissionsLength : 0}
+          </span>
+        </p>
         <p className="text-muted-foreground">
           Submission type:{" "}
           <span className="text-foreground">

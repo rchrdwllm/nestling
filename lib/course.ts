@@ -1,4 +1,4 @@
-import { Course } from "@/types";
+import { Course, User } from "@/types";
 import { db } from "./firebase";
 import { unstable_cache } from "next/cache";
 import { getImage } from "./image";
@@ -99,8 +99,18 @@ export const getEnrolledStudents = unstable_cache(
         .collection("enrolledStudents")
         .get();
       const studentIds = snapshot.docs.map((doc) => doc.id);
+      const students = await Promise.all(
+        studentIds.map(async (studentId) => {
+          const studentSnapshot = await db
+            .collection("users")
+            .doc(studentId)
+            .get();
 
-      return { success: studentIds };
+          return studentSnapshot.data() as User;
+        })
+      );
+
+      return { success: students };
     } catch (error) {
       return { error: "Error fetching students" };
     }

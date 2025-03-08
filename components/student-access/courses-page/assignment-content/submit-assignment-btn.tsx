@@ -26,11 +26,15 @@ import * as z from "zod";
 type SubmitAssignmentBtnProps = {
   contentId: string;
   submissionType: string;
+  submissionsLength: number;
+  maxAttempts?: number;
 };
 
 const SubmitAssignmentBtn = ({
   contentId,
   submissionType,
+  submissionsLength,
+  maxAttempts,
 }: SubmitAssignmentBtnProps) => {
   const form = useForm<z.infer<typeof SubmitAssignmentSchema>>({
     resolver: zodResolver(SubmitAssignmentSchema),
@@ -106,13 +110,23 @@ const SubmitAssignmentBtn = ({
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button>Submit assignment</Button>
+        <Button
+          disabled={
+            maxAttempts
+              ? submissionsLength >= maxAttempts
+              : submissionsLength > 0
+          }
+        >
+          {submissionsLength > 0 ? "New attempt" : "Submit assignment"}
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Submit assignment</DialogTitle>
           <DialogDescription>
-            Upload a file to submit your assignment
+            {submissionType === "file"
+              ? "Upload a file to submit your assignment"
+              : "Write your assignment below"}
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -159,11 +173,7 @@ const SubmitAssignmentBtn = ({
               />
             )}
             <div className="mt-4 flex flex-col gap-4">
-              <Button
-                onClick={() => console.log(form.getValues("content"))}
-                type="submit"
-                disabled={isExecuting}
-              >
+              <Button type="submit" disabled={isExecuting || isLoading}>
                 Submit
               </Button>
               <Button

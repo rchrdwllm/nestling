@@ -2,26 +2,18 @@
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { User } from "@/types";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useMemo } from "react";
 
-type SubmissionCardProps = User & {
-  noSubmission: boolean;
+type SubmissionAttemptProps = {
+  index: number;
 };
 
-const SubmissionCard = ({
-  id: studentId,
-  name,
-  noSubmission,
-}: SubmissionCardProps) => {
+const SubmissionAttempt = ({ index }: SubmissionAttemptProps) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-
-  const isActive = useMemo(() => {
-    return studentId === searchParams.get("studentId");
-  }, [studentId, searchParams]);
+  const stringIndex = index.toString();
 
   const createQueryString = useCallback(
     (name: string, value: string) => {
@@ -33,21 +25,24 @@ const SubmissionCard = ({
     [searchParams]
   );
 
+  const isActive = useMemo(() => {
+    return stringIndex === (searchParams.get("attempt") ?? "0");
+  }, [index, searchParams]);
+
   return (
     <Button
       variant="link"
       onClick={() =>
-        router.push(`${pathname}?${createQueryString("studentId", studentId)}`)
+        router.push(`${pathname}?${createQueryString("attempt", stringIndex)}`)
       }
       className={cn(
         isActive && "text-primary underline",
         "p-0 text-left block w-full"
       )}
-      disabled={noSubmission}
     >
-      {name}
+      Attempt {index + 1}
     </Button>
   );
 };
 
-export default SubmissionCard;
+export default SubmissionAttempt;
