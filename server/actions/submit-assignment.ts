@@ -4,6 +4,7 @@ import { db } from "@/lib/firebase";
 import { actionClient } from "../action-client";
 import { UploadFileSchema } from "@/schemas/UploadFileSchema";
 import { getOptimisticUser } from "@/lib/user";
+import { uploadFile } from "./upload-file";
 
 export const submitAssignment = actionClient
   .schema(UploadFileSchema)
@@ -20,24 +21,9 @@ export const submitAssignment = actionClient
     const user = await getOptimisticUser();
 
     try {
-      const submissionId = crypto.randomUUID();
-
-      const newFile = {
-        url,
-        asset_id,
-        created_at,
-        public_id,
-        secure_url,
-        content_id,
-        type,
-        user_id: user.id,
-        submission_id: submissionId,
-      };
-
       const batch = db.batch();
 
-      const fileRef = db.collection("files").doc(public_id);
-
+      const submissionId = crypto.randomUUID();
       const newSubmission = {
         userId: user.id,
         studentName: user.name,
@@ -55,7 +41,7 @@ export const submitAssignment = actionClient
 
       const contentSubmissionRef = db
         .collection("contents")
-        .doc(content_id)
+        .doc(content_id!)
         .collection("submissions")
         .doc(submissionId);
 
@@ -68,13 +54,29 @@ export const submitAssignment = actionClient
         userId: user.id,
       };
 
-      batch.set(fileRef, newFile);
-      batch.set(submissionRef, newSubmission);
-      batch.set(contentSubmissionRef, reference);
+      try {
+        await uploadFile({
+          asset_id,
+          content_id,
+          created_at,
+          public_id,
+          secure_url,
+          type,
+          url,
+          submission_id: submissionId,
+        });
 
-      await batch.commit();
+        batch.set(submissionRef, newSubmission);
+        batch.set(contentSubmissionRef, reference);
 
-      return { success: "Assignment submitted successfully" };
+        await batch.commit();
+
+        return { success: "Assignment submitted successfully" };
+      } catch (error) {
+        console.error("File upload failed:", error);
+
+        return { error };
+      }
     } catch (error) {
       console.error("Assignment submission failed:", error);
 

@@ -16,6 +16,7 @@ export const uploadFile = actionClient
       secure_url,
       content_id,
       type,
+      submission_id,
     } = parsedInput;
     const user = await getOptimisticUser();
 
@@ -34,20 +35,39 @@ export const uploadFile = actionClient
 
       await fileRef.set(newFile);
 
-      const contentFileRef = db
-        .collection("contents")
-        .doc(content_id)
-        .collection("files")
-        .doc(public_id);
+      if (content_id) {
+        const contentFileRef = db
+          .collection("contents")
+          .doc(content_id)
+          .collection("files")
+          .doc(public_id);
 
-      const reference = {
-        public_id,
-        created_at,
-        content_id,
-        secure_url,
-      };
+        const reference = {
+          public_id,
+          created_at,
+          content_id,
+          secure_url,
+        };
 
-      await contentFileRef.set(reference);
+        await contentFileRef.set(reference);
+      }
+
+      if (submission_id) {
+        const submissionFileRef = db
+          .collection("submissions")
+          .doc(submission_id)
+          .collection("files")
+          .doc(public_id);
+
+        const reference = {
+          public_id,
+          created_at,
+          submission_id,
+          secure_url,
+        };
+
+        await submissionFileRef.set(reference);
+      }
 
       return { success: newFile };
     } catch (error) {

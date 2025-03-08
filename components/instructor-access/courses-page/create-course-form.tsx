@@ -5,8 +5,12 @@ import { Form, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { CreateCourseSchema } from "@/schemas/CreateCourseSchema";
 import { createCourse } from "@/server/actions/create-course";
+import { uploadImgToCloudinary } from "@/server/actions/upload-to-cloudinary";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Paperclip } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
+import Image from "next/image";
+import { ChangeEvent, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
@@ -16,12 +20,15 @@ type CreateCourseFormProps = {
 };
 
 const CreateCourseForm = ({ setIsOpen }: CreateCourseFormProps) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [img, setImg] = useState<File | null>(null);
   const form = useForm<z.infer<typeof CreateCourseSchema>>({
     resolver: zodResolver(CreateCourseSchema),
     defaultValues: {
       name: "",
       courseCode: "",
       description: "",
+      image: "",
     },
   });
   const { execute, isExecuting } = useAction(createCourse, {
@@ -42,14 +49,48 @@ const CreateCourseForm = ({ setIsOpen }: CreateCourseFormProps) => {
 
       setIsOpen(false);
     },
-    onExecute: () => {
-      toast.dismiss();
-      toast.loading("Creating course...");
-    },
   });
 
-  const handleSubmit = (data: z.infer<typeof CreateCourseSchema>) => {
-    execute(data);
+  const handleSubmit = async (data: z.infer<typeof CreateCourseSchema>) => {
+    if (img) {
+      setIsLoading(true);
+      toast.dismiss();
+      toast.loading("Creating course...");
+
+      const { success: uploadedImg, error } = await uploadImgToCloudinary(img);
+
+      if (uploadedImg) {
+        execute({
+          ...data,
+          image: {
+            ...uploadedImg,
+          },
+        });
+      } else if (error) {
+        toast.error(JSON.stringify(error));
+      }
+
+      return;
+    } else {
+      toast.dismiss();
+      toast.error("Please select a course image");
+    }
+  };
+
+  const handleImageChange = (e: ChangeEvent) => {
+    const target = e.target as HTMLInputElement;
+    const file = target.files?.[0];
+
+    if (file) {
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        form.setValue("image", reader.result as string);
+      };
+
+      reader.readAsDataURL(file);
+      setImg(file);
+    }
   };
 
   return (
@@ -85,7 +126,44 @@ const CreateCourseForm = ({ setIsOpen }: CreateCourseFormProps) => {
             </FormItem>
           )}
         />
-        <Button type="submit" disabled={isExecuting}>
+        <FormField
+          control={form.control}
+          name="image"
+          render={() => (
+            <FormItem>
+              {form.getValues("image") && img ? (
+                <label
+                  className="block border-border border-2 cursor-pointer relative h-48 w-full rounded-md overflow-hidden"
+                  htmlFor="img"
+                >
+                  <Image
+                    src={form.getValues("image")}
+                    fill
+                    className="object-cover"
+                    alt={img.name}
+                  />
+                </label>
+              ) : (
+                <label
+                  htmlFor="img"
+                  className="flex justify-center items-center flex-col gap-2 border-2 border-input bg-background rounded-md text-muted-foreground cursor-pointer py-4 hover:bg-accent hover:text-accent-foreground transition-colors"
+                >
+                  <Paperclip className="size-6" />
+                  <p className="text-sm">Upload image</p>
+                </label>
+              )}
+              <input
+                type="file"
+                id="img"
+                name="img"
+                accept="image/*"
+                className="hidden"
+                onChange={handleImageChange}
+              />
+            </FormItem>
+          )}
+        />
+        <Button type="submit" disabled={isExecuting || isLoading}>
           Create course
         </Button>
       </form>

@@ -10,4 +10,5 @@ export const CreateCourseSchema = z.object({
   description: z
     .string()
     .min(8, { message: "Description must be at least 8 characters long" }),
+  image: z.string().nonempty({ message: "Please upload a course image" }),
 });

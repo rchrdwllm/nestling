@@ -1,6 +1,7 @@
 import { Course } from "@/types";
 import { db } from "./firebase";
 import { unstable_cache } from "next/cache";
+import { getImage } from "./image";
 
 export const getAllCourses = unstable_cache(
   async () => {
@@ -135,4 +136,27 @@ export const getInstructorCourses = unstable_cache(
   },
   ["instructorCourses"],
   { revalidate: 3600, tags: ["courses"] }
+);
+
+export const getCourseImage = unstable_cache(
+  async (courseId: string) => {
+    try {
+      const snapshot = await db
+        .collection("courses")
+        .doc(courseId)
+        .collection("images")
+        .get();
+      const courseImg = snapshot.docs.map((doc) => doc.data())[0];
+
+      const { success, error } = await getImage(courseImg.public_id);
+
+      if (error) return { error: "Error fetching course image" };
+
+      return { success };
+    } catch (error) {
+      return { error: "Error fetching course image" };
+    }
+  },
+  ["courseImage"],
+  { revalidate: 3600 }
 );

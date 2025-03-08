@@ -6,6 +6,7 @@ export const UploadFileSchema = z.object({
   created_at: z.string(),
   asset_id: z.string(),
   secure_url: z.string(),
-  content_id: z.string(),
   type: z.string(),
+  content_id: z.optional(z.string()),
+  submission_id: z.optional(z.string()),
 });

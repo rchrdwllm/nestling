@@ -6,5 +6,6 @@ export const UploadImageSchema = z.object({
   created_at: z.string(),
   asset_id: z.string(),
   secure_url: z.string(),
-  content_id: z.string(),
+  content_id: z.optional(z.string()),
+  course_id: z.optional(z.string()),
 });

@@ -5,11 +5,18 @@ import { actionClient } from "../action-client";
 import { CreateCourseSchema } from "@/schemas/CreateCourseSchema";
 import { db } from "@/lib/firebase";
 import { revalidatePath } from "next/cache";
+import { UploadImageSchema } from "@/schemas/UploadImageSchema";
+import { uploadImage } from "./upload-image";
 
 export const createCourse = actionClient
   .schema(CreateCourseSchema)
+  .schema(async (prevSchema) => {
+    return prevSchema.extend({
+      image: UploadImageSchema,
+    });
+  })
   .action(async ({ parsedInput }) => {
-    const { name, description, courseCode } = parsedInput;
+    const { name, description, courseCode, image } = parsedInput;
     const user = await getCurrentUser();
 
     if (!user) {
@@ -50,6 +57,22 @@ export const createCourse = actionClient
         createdAt: new Date(),
         updatedAt: new Date(),
       });
+
+      const data = await uploadImage({ ...image, course_id: id });
+
+      if (!data) {
+        console.error("Error uploading image");
+
+        return { error: "Error uploading image" };
+      }
+
+      if (data.data?.error) {
+        return { error: data.data.error };
+      }
+
+      if (!data.data?.success) {
+        return { error: "Error uploading image" };
+      }
 
       const courseInstructorRef = db
         .collection("courses")

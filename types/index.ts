@@ -122,6 +122,7 @@ export type Image = {
   created_at: string;
   secure_url: string;
   url: string;
+  user_id: string;
 };
 
 export type File = {
