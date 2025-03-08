@@ -147,4 +147,5 @@ export type Submission = {
   secureUrl: string;
   isGraded: boolean;
   grade: number | null;
+  content: string;
 };

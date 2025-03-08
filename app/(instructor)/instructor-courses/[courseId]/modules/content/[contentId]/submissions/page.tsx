@@ -29,7 +29,10 @@ const SubmissionsPage = async ({
         <hr />
       </div>
       <Suspense fallback={<div>Loading...</div>}>
-        <Submissions contentId={contentId} />
+        <Submissions
+          submissionType={content.submissionType!}
+          contentId={contentId}
+        />
       </Suspense>
     </main>
   );

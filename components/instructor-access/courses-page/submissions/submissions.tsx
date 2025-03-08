@@ -1,8 +1,12 @@
 import { getAssignmentSubmissions } from "@/lib/submission";
 import SubmissionGrid from "./submission-grid";
-import { getUserById } from "@/lib/user";
 
-const Submissions = async ({ contentId }: { contentId: string }) => {
+type SubmissionsProps = {
+  contentId: string;
+  submissionType: "file" | "text";
+};
+
+const Submissions = async ({ contentId, submissionType }: SubmissionsProps) => {
   const { success: submissions, error } = await getAssignmentSubmissions(
     contentId
   );
@@ -15,15 +19,9 @@ const Submissions = async ({ contentId }: { contentId: string }) => {
     return <div>Loading...</div>;
   }
 
-  const asdf = await Promise.all(
-    submissions.map(async (submission) => {
-      const user = await getUserById(submission.userId);
-
-      return user;
-    })
+  return (
+    <SubmissionGrid submissionType={submissionType} submissions={submissions} />
   );
-
-  return <SubmissionGrid submissions={submissions} />;
 };
 
 export default Submissions;

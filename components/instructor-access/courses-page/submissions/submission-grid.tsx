@@ -7,16 +7,23 @@ import SubmissionCard from "./submission-card";
 
 type SubmissionGridProps = {
   submissions: Submission[];
+  submissionType: "file" | "text";
 };
 
-const SubmissionGrid = ({ submissions }: SubmissionGridProps) => {
+const SubmissionGrid = ({
+  submissions,
+  submissionType,
+}: SubmissionGridProps) => {
   const [selectedSubmission, setSelectedSubmission] = useState<Submission>(
     submissions[0]
   );
 
   return (
     <div className="flex gap-8">
-      <SubmissionPreview submission={selectedSubmission} />
+      <SubmissionPreview
+        submissionType={submissionType}
+        submission={selectedSubmission}
+      />
       <div className="min-w-64">
         <h1 className="font-semibold">Student submissions</h1>
         <div className="flex flex-col items-start gap-2 mt-4">

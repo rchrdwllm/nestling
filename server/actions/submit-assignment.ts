@@ -5,57 +5,33 @@ import { actionClient } from "../action-client";
 import { UploadFileSchema } from "@/schemas/UploadFileSchema";
 import { getOptimisticUser } from "@/lib/user";
 import { uploadFile } from "./upload-file";
+import { SubmitAssignmentSchema } from "@/schemas/SubmitAssignmentSchema";
+import * as z from "zod";
 
 export const submitAssignment = actionClient
-  .schema(UploadFileSchema)
+  .schema(SubmitAssignmentSchema)
+  .schema(async (prevSchema) => {
+    return prevSchema.extend({
+      file: z.optional(UploadFileSchema),
+    });
+  })
   .action(async ({ parsedInput }) => {
-    const {
-      asset_id,
-      content_id,
-      created_at,
-      public_id,
-      secure_url,
-      type,
-      url,
-    } = parsedInput;
+    const { content, contentId, submissionType, file } = parsedInput;
     const user = await getOptimisticUser();
 
     try {
       const batch = db.batch();
-
       const submissionId = crypto.randomUUID();
-      const newSubmission = {
-        userId: user.id,
-        studentName: user.name,
-        type,
-        contentId: content_id,
-        fileId: public_id,
-        id: submissionId,
-        createdAt: created_at,
-        secureUrl: secure_url,
-        isGraded: false,
-        grade: null,
-      };
-
       const submissionRef = db.collection("submissions").doc(submissionId);
 
       const contentSubmissionRef = db
         .collection("contents")
-        .doc(content_id!)
+        .doc(contentId)
         .collection("submissions")
         .doc(submissionId);
 
-      const reference = {
-        submissionId,
-        createdAt: created_at,
-        fileId: public_id,
-        secureUrl: secure_url,
-        contentId: content_id,
-        userId: user.id,
-      };
-
-      try {
-        await uploadFile({
+      if (file) {
+        const {
           asset_id,
           content_id,
           created_at,
@@ -63,20 +39,77 @@ export const submitAssignment = actionClient
           secure_url,
           type,
           url,
-          submission_id: submissionId,
-        });
+        } = file;
 
-        batch.set(submissionRef, newSubmission);
-        batch.set(contentSubmissionRef, reference);
+        const newFileSubmission = {
+          userId: user.id,
+          studentName: user.name,
+          type,
+          contentId: content_id,
+          fileId: public_id,
+          id: submissionId,
+          createdAt: created_at,
+          secureUrl: secure_url,
+          isGraded: false,
+          grade: null,
+        };
 
-        await batch.commit();
+        const reference = {
+          submissionId,
+          createdAt: created_at,
+          fileId: public_id,
+          secureUrl: secure_url,
+          contentId: content_id,
+          userId: user.id,
+        };
 
-        return { success: "Assignment submitted successfully" };
-      } catch (error) {
-        console.error("File upload failed:", error);
+        try {
+          await uploadFile({
+            asset_id,
+            content_id,
+            created_at,
+            public_id,
+            secure_url,
+            type,
+            url,
+            submission_id: submissionId,
+          });
 
-        return { error };
+          batch.set(submissionRef, newFileSubmission);
+          batch.set(contentSubmissionRef, reference);
+
+          await batch.commit();
+
+          return { success: "Assignment submitted successfully" };
+        } catch (error) {
+          console.error("File upload failed:", error);
+
+          return { error };
+        }
       }
+
+      const newSubmission = {
+        userId: user.id,
+        studentName: user.name,
+        content,
+        id: submissionId,
+        contentId,
+        createdAt: Date.now(),
+        isGraded: false,
+        grade: null,
+      };
+
+      batch.set(submissionRef, newSubmission);
+      batch.set(contentSubmissionRef, {
+        submissionId,
+        createdAt: newSubmission.createdAt,
+        contentId,
+        userId: user.id,
+      });
+
+      await batch.commit();
+
+      return { success: "Assignment submitted successfully" };
     } catch (error) {
       console.error("Assignment submission failed:", error);
 

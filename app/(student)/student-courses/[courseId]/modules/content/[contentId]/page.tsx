@@ -27,7 +27,10 @@ const ContentPage = async ({
         <div className="flex justify-between items-center">
           <h1 className="text-3xl font-semibold">{content.title}</h1>
           {content.type === "assignment" && (
-            <SubmitAssignmentBtn contentId={contentId} />
+            <SubmitAssignmentBtn
+              submissionType={content.submissionType!}
+              contentId={contentId}
+            />
           )}
         </div>
         <hr />
