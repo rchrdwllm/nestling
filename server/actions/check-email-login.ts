@@ -25,6 +25,9 @@ export const checkEmailLogin = async (data: z.infer<typeof LoginSchema>) => {
       return { error: "Incorrect password" };
     }
 
+    user.updatedAt = JSON.stringify(user.updatedAt);
+    user.createdAt = JSON.stringify(user.createdAt);
+
     return { success: user };
   } catch (error) {
     return { error };

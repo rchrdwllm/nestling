@@ -17,8 +17,8 @@ export type User = {
   middleName: string;
   lastName: string;
   contactNumber: string;
-  createdAt: Timestamp;
-  updatedAt: Timestamp;
+  createdAt: Timestamp | string;
+  updatedAt: Timestamp | string;
   name?: string;
 };
 
