@@ -14,6 +14,7 @@ import { toast } from "sonner";
 import Link from "next/link";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { useMemo } from "react";
+import ThemeToggler from "../theme-toggler";
 
 const UserBtn = () => {
   const { user } = useCurrentUser();
@@ -93,9 +94,9 @@ const UserBtn = () => {
               <span>Profile</span>
             </DropdownMenuItem>
           </Link>
-          {/* <DropdownMenuItem className="cursor-pointer">
-          <ThemeToggler />
-        </DropdownMenuItem> */}
+          <DropdownMenuItem className="cursor-pointer">
+            <ThemeToggler />
+          </DropdownMenuItem>
           <DropdownMenuItem
             className="flex gap-2 cursor-pointer"
             onClick={handleSignOut}
