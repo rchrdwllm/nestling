@@ -8,6 +8,7 @@ import { uploadFile } from "./upload-file";
 import { SubmitAssignmentSchema } from "@/schemas/SubmitAssignmentSchema";
 import * as z from "zod";
 import { revalidatePath } from "next/cache";
+import { Content } from "@/types";
 
 export const submitAssignment = actionClient
   .schema(SubmitAssignmentSchema)
@@ -24,6 +25,8 @@ export const submitAssignment = actionClient
       const batch = db.batch();
       const submissionId = crypto.randomUUID();
       const submissionRef = db.collection("submissions").doc(submissionId);
+      const contentObj = await db.collection("contents").doc(contentId).get();
+      const { courseId } = contentObj.data() as Content;
 
       const contentSubmissionRef = db
         .collection("contents")
@@ -49,7 +52,7 @@ export const submitAssignment = actionClient
           contentId: content_id,
           fileId: public_id,
           id: submissionId,
-          createdAt: created_at,
+          createdAt: new Date(),
           secureUrl: secure_url,
           isGraded: false,
           grade: null,
@@ -57,7 +60,7 @@ export const submitAssignment = actionClient
 
         const reference = {
           submissionId,
-          createdAt: created_at,
+          createdAt: new Date(),
           fileId: public_id,
           secureUrl: secure_url,
           contentId: content_id,
@@ -113,6 +116,9 @@ export const submitAssignment = actionClient
       revalidatePath(
         "/(student)/student-courses/[courseId]/modules/content/[contentId]",
         "page"
+      );
+      revalidatePath(
+        `/(student)/student-courses/${courseId}/modules/content/${contentId}`
       );
 
       return { success: "Assignment submitted successfully" };

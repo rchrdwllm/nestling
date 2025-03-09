@@ -45,6 +45,7 @@ export const getStudentAssignmentSubmission = unstable_cache(
         .collection("submissions")
         .where("contentId", "==", contentId)
         .where("studentId", "==", studentId)
+        .orderBy("createdAt", "desc")
         .get();
 
       const submissions = submissionSnapshot.docs.map((doc) => {

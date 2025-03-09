@@ -3,7 +3,12 @@ import SubmissionPreview from "./submission-preview";
 import { getEnrolledStudents } from "@/lib/course";
 import { getModuleContent } from "@/lib/content";
 import SubmissionCard from "./submission-card";
-import { getAssignmentSubmissions } from "@/lib/submission";
+import {
+  getAssignmentSubmissions,
+  getStudentAssignmentSubmission,
+} from "@/lib/submission";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import GradeSubmissionForm from "./grade-submission-form";
 
 type SubmissionGridProps = {
   studentId: string | undefined;
@@ -41,6 +46,12 @@ const SubmissionGrid = async ({
     return <div>Loading...</div>;
   }
 
+  const { success: studentSubmissions } = studentId
+    ? await getStudentAssignmentSubmission(contentId, studentId)
+    : { success: undefined };
+
+  const latestAttempt = studentSubmissions ? studentSubmissions[0] : null;
+
   return (
     <div className="flex gap-8">
       {studentId ? (
@@ -53,23 +64,39 @@ const SubmissionGrid = async ({
       ) : (
         <div className="flex-1"></div>
       )}
-      <div className="min-w-64">
-        <h1 className="font-semibold">Student submissions</h1>
-        <div className="flex flex-col items-start gap-2 mt-4">
-          {enrolledStudents.map((student) => {
-            const studentSubmissions = submissions.some(
-              (submission: Submission) => submission.studentId === student.id
-            );
+      <div className="flex flex-col gap-4">
+        <div className="min-w-64">
+          <h1 className="font-semibold">Student submissions</h1>
+          <ScrollArea>
+            <div className="flex flex-col items-start gap-2 mt-4">
+              {enrolledStudents.map((student) => {
+                const studentSubmissions = submissions.some(
+                  (submission: Submission) =>
+                    submission.studentId === student.id
+                );
 
-            return (
-              <SubmissionCard
-                noSubmission={!studentSubmissions}
-                key={student.id}
-                {...student}
-              />
-            );
-          })}
+                return (
+                  <SubmissionCard
+                    noSubmission={!studentSubmissions}
+                    key={student.id}
+                    {...student}
+                  />
+                );
+              })}
+            </div>
+          </ScrollArea>
         </div>
+        {latestAttempt && studentId && (
+          <GradeSubmissionForm
+            studentId={studentId}
+            contentId={contentId}
+            submissionId={latestAttempt.id}
+            points={content.points!}
+            isGraded={latestAttempt.isGraded}
+            grade={latestAttempt.grade?.toString()}
+            isMultipleAttempts={content.maxAttempts! > 1}
+          />
+        )}
       </div>
     </div>
   );

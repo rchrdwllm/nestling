@@ -148,4 +148,5 @@ export type Submission = {
   isGraded: boolean;
   grade: number | null;
   content: string;
+  feedback: string | undefined;
 };

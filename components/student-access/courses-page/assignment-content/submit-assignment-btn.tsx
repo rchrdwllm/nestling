@@ -18,6 +18,7 @@ import { uploadFileToCloudinary } from "@/server/actions/upload-to-cloudinary";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Paperclip } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
+import { useRouter } from "next/navigation";
 import { ChangeEvent, useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -36,6 +37,7 @@ const SubmitAssignmentBtn = ({
   submissionsLength,
   maxAttempts,
 }: SubmitAssignmentBtnProps) => {
+  const router = useRouter();
   const form = useForm<z.infer<typeof SubmitAssignmentSchema>>({
     resolver: zodResolver(SubmitAssignmentSchema),
     defaultValues: {
@@ -55,6 +57,7 @@ const SubmitAssignmentBtn = ({
 
       toast.dismiss();
       toast.success("Assignment submitted successfully");
+      router.refresh();
     },
     onError: (error) => {
       toast.dismiss();

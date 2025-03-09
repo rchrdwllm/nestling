@@ -7,9 +7,15 @@ import { useCallback, useMemo } from "react";
 
 type SubmissionAttemptProps = {
   index: number;
+  isLatest: boolean;
+  indexLabel: number;
 };
 
-const SubmissionAttempt = ({ index }: SubmissionAttemptProps) => {
+const SubmissionAttempt = ({
+  index,
+  isLatest,
+  indexLabel,
+}: SubmissionAttemptProps) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -41,7 +47,7 @@ const SubmissionAttempt = ({ index }: SubmissionAttemptProps) => {
         "p-0 text-left block w-full"
       )}
     >
-      Attempt {index + 1}
+      Attempt {indexLabel + 1} {isLatest && "(Latest)"}
     </Button>
   );
 };

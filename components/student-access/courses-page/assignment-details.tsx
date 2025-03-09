@@ -1,5 +1,6 @@
 import { getStudentAssignmentSubmission } from "@/lib/submission";
 import { getOptimisticUser } from "@/lib/user";
+import { cn } from "@/lib/utils";
 import { Content } from "@/types";
 import { format } from "date-fns";
 
@@ -30,8 +31,15 @@ const AssignmentDetails = async ({
     return <div>Loading...</div>;
   }
 
+  const latestSubmission = submissions[0];
+
   return (
-    <section className="border-b py-8 grid grid-cols-3">
+    <section
+      className={cn(
+        "border-b py-8 grid grid-cols-3",
+        latestSubmission.isGraded ? "grid-cols-4" : null
+      )}
+    >
       <div>
         <p className="text-muted-foreground">
           Start date:{" "}
@@ -69,6 +77,14 @@ const AssignmentDetails = async ({
           </span>
         </p>
       </div>
+      {latestSubmission.isGraded ? (
+        <div>
+          <p className="text-muted-foreground">
+            Grade:{" "}
+            <span className="text-foreground">{latestSubmission.grade}</span>
+          </p>
+        </div>
+      ) : null}
     </section>
   );
 };
