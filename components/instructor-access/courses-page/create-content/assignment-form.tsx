@@ -16,6 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { TimePicker } from "@/components/ui/time-picker";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
@@ -73,11 +74,11 @@ const AssignmentForm = () => {
                   {field.value?.from ? (
                     field.value.to ? (
                       <>
-                        {format(field.value.from, "LLL dd, y")} -{" "}
-                        {format(field.value.to, "LLL dd, y")}
+                        {format(field.value.from, "LLL dd, y p")} -{" "}
+                        {format(field.value.to, "LLL dd, y p")}
                       </>
                     ) : (
-                      format(field.value.from, "LLL dd, y")
+                      format(field.value.from, "LLL dd, y p")
                     )
                   ) : (
                     <span>Deadline</span>
@@ -93,6 +94,24 @@ const AssignmentForm = () => {
                   onSelect={field.onChange}
                   numberOfMonths={2}
                 />
+                <div className="flex items-center justify-between p-4 pt-0">
+                  <TimePicker
+                    setDate={(date) => {
+                      field.onChange({ ...field.value, from: date });
+
+                      console.log({ from: date });
+                    }}
+                    date={field.value?.from}
+                  />
+                  <TimePicker
+                    setDate={(date) => {
+                      field.onChange({ ...field.value, to: date });
+
+                      console.log({ to: date });
+                    }}
+                    date={field.value?.to}
+                  />
+                </div>
               </PopoverContent>
             </Popover>
           </FormItem>

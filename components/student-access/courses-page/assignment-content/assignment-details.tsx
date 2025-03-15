@@ -5,7 +5,7 @@ import { Content } from "@/types";
 import { format } from "date-fns";
 
 type AssignmentDetailsProps = Content & {
-  submissionsLength: number;
+  submissionsLength?: number;
 };
 
 const AssignmentDetails = async ({
@@ -37,20 +37,24 @@ const AssignmentDetails = async ({
     <section
       className={cn(
         "border-b py-8 grid grid-cols-3",
-        latestSubmission.isGraded ? "grid-cols-4" : null
+        latestSubmission
+          ? latestSubmission.isGraded
+            ? "grid-cols-4"
+            : null
+          : null
       )}
     >
       <div>
         <p className="text-muted-foreground">
           Start date:{" "}
           <span className="text-foreground">
-            {format(new Date(startDate!._seconds * 1000), "LLLL dd, y")}
+            {format(new Date(startDate!._seconds * 1000), "LLLL dd, y p")}
           </span>
         </p>
         <p className="text-muted-foreground">
           End date:{" "}
           <span className="text-foreground">
-            {format(new Date(endDate!._seconds * 1000), "LLLL dd, y")}
+            {format(new Date(endDate!._seconds * 1000), "LLLL dd, y p")}
           </span>
         </p>
       </div>
@@ -77,7 +81,7 @@ const AssignmentDetails = async ({
           </span>
         </p>
       </div>
-      {latestSubmission.isGraded ? (
+      {latestSubmission && latestSubmission.isGraded ? (
         <div>
           <p className="text-muted-foreground">
             Grade:{" "}

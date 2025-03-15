@@ -17,13 +17,13 @@ const AssignmentDetails = async ({
         <p className="text-muted-foreground">
           Start date:{" "}
           <span className="text-foreground">
-            {format(new Date(startDate!._seconds * 1000), "LLLL dd, y")}
+            {format(new Date(startDate!._seconds * 1000), "LLLL dd, y p")}
           </span>
         </p>
         <p className="text-muted-foreground">
           End date:{" "}
           <span className="text-foreground">
-            {format(new Date(endDate!._seconds * 1000), "LLLL dd, y")}
+            {format(new Date(endDate!._seconds * 1000), "LLLL dd, y p")}
           </span>
         </p>
       </div>

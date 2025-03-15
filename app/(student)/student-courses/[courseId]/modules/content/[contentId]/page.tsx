@@ -1,6 +1,6 @@
 import PdfViewer from "@/components/shared/content-page/pdf-viewer";
 import SubmitAssignmentBtn from "@/components/student-access/courses-page/assignment-content/submit-assignment-btn";
-import AssignmentDetails from "@/components/student-access/courses-page/assignment-details";
+import AssignmentDetails from "@/components/student-access/courses-page/assignment-content/assignment-details";
 import { getContentFile, getModuleContent } from "@/lib/content";
 import { getStudentAssignmentSubmission } from "@/lib/submission";
 import { getOptimisticUser } from "@/lib/user";
