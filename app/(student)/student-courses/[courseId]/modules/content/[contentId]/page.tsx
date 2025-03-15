@@ -30,6 +30,33 @@ const ContentPage = async ({
       ? await getStudentAssignmentSubmission(contentId, user.id)
       : { success: null };
 
+  const startDate = new Date(content.startDate!._seconds * 1000);
+  const endDate = new Date(content.endDate!._seconds * 1000);
+  const currentDate = new Date();
+
+  const isLocked = currentDate < startDate || currentDate > endDate;
+
+  if (isLocked) {
+    return (
+      <div className="p-6">
+        <div className="flex flex-col gap-3">
+          <h1 className="text-3xl font-semibold">{content.title}</h1>
+          <hr />
+        </div>
+        {content.type === "assignment" && (
+          <AssignmentDetails
+            {...content}
+            submissionsLength={submissions!.length}
+          />
+        )}
+        <p className="mt-4">
+          This content is locked. Please check the start and end dates to see
+          when it will be available.
+        </p>
+      </div>
+    );
+  }
+
   return (
     <main className="p-6">
       <div className="flex flex-col gap-3">
