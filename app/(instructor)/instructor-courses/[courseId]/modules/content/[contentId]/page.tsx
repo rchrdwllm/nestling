@@ -1,3 +1,4 @@
+import AssignmentDetails from "@/components/instructor-access/courses-page/assignment-content/assignment-details";
 import PdfViewer from "@/components/shared/content-page/pdf-viewer";
 import { Button } from "@/components/ui/button";
 import { getContentFile, getModuleContent } from "@/lib/content";
@@ -28,6 +29,7 @@ const ContentPage = async ({
           <h1 className="text-3xl font-semibold">{content.title}</h1>
           <hr />
         </div>
+        {content.type === "assignment" && <AssignmentDetails {...content} />}
         <div
           className="flex flex-col gap-4 mt-6"
           dangerouslySetInnerHTML={{ __html: content.content }}
