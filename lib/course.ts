@@ -158,6 +158,8 @@ export const getCourseImage = unstable_cache(
         .get();
       const courseImg = snapshot.docs.map((doc) => doc.data())[0];
 
+      console.log(courseImg);
+
       const { success, error } = await getImage(courseImg.public_id);
 
       if (error) return { error: "Error fetching course image" };

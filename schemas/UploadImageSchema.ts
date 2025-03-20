@@ -8,4 +8,5 @@ export const UploadImageSchema = z.object({
   secure_url: z.string(),
   content_id: z.optional(z.string()),
   course_id: z.optional(z.string()),
+  isEdit: z.optional(z.boolean()),
 });

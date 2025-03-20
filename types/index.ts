@@ -36,6 +36,7 @@ export type Course = {
   description: string;
   createdAt: Timestamp;
   updatedAt: Timestamp;
+  image: string;
 };
 
 export type EnrollmentData = {

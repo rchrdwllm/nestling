@@ -6,29 +6,41 @@ import { Input } from "@/components/ui/input";
 import { CreateCourseSchema } from "@/schemas/CreateCourseSchema";
 import { createCourse } from "@/server/actions/create-course";
 import { uploadImgToCloudinary } from "@/server/actions/upload-to-cloudinary";
+import { Course } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Paperclip } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
 import Image from "next/image";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
 
 type CreateCourseFormProps = {
   setIsOpen: (value: boolean) => void;
-};
+  isEdit?: boolean;
+} & (Course | undefined);
 
-const CreateCourseForm = ({ setIsOpen }: CreateCourseFormProps) => {
+const CreateCourseForm = ({
+  setIsOpen,
+  isEdit,
+  name,
+  image,
+  courseCode,
+  description,
+  id,
+}: CreateCourseFormProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [img, setImg] = useState<File | null>(null);
   const form = useForm<z.infer<typeof CreateCourseSchema>>({
     resolver: zodResolver(CreateCourseSchema),
     defaultValues: {
-      name: "",
-      courseCode: "",
-      description: "",
-      image: "",
+      name: name ?? "",
+      courseCode: courseCode ?? "",
+      description: description ?? "",
+      image: image ?? "",
+      isEdit: isEdit ?? false,
+      courseId: id ?? undefined,
     },
   });
   const { execute, isExecuting } = useAction(createCourse, {
@@ -51,6 +63,15 @@ const CreateCourseForm = ({ setIsOpen }: CreateCourseFormProps) => {
     },
   });
 
+  useEffect(() => {
+    form.setValue("name", name ?? "");
+    form.setValue("courseCode", courseCode ?? "");
+    form.setValue("description", description ?? "");
+    form.setValue("image", image ?? "");
+    form.setValue("isEdit", isEdit ?? false);
+    form.setValue("courseId", id ?? undefined);
+  }, []);
+
   const handleSubmit = async (data: z.infer<typeof CreateCourseSchema>) => {
     if (img) {
       setIsLoading(true);
@@ -69,6 +90,20 @@ const CreateCourseForm = ({ setIsOpen }: CreateCourseFormProps) => {
       } else if (error) {
         toast.error(JSON.stringify(error));
       }
+
+      return;
+    } else if (!img && isEdit) {
+      setIsLoading(true);
+      toast.dismiss();
+      toast.loading("Editing course...");
+
+      execute({
+        name: data.name,
+        courseCode: data.courseCode,
+        description: data.description,
+        isEdit: true,
+        courseId: data.courseId,
+      });
 
       return;
     } else {
@@ -131,7 +166,7 @@ const CreateCourseForm = ({ setIsOpen }: CreateCourseFormProps) => {
           name="image"
           render={() => (
             <FormItem>
-              {form.getValues("image") && img ? (
+              {form.getValues("image") ? (
                 <label
                   className="block border-border border-2 cursor-pointer relative h-48 w-full rounded-md overflow-hidden"
                   htmlFor="img"
@@ -140,7 +175,7 @@ const CreateCourseForm = ({ setIsOpen }: CreateCourseFormProps) => {
                     src={form.getValues("image")}
                     fill
                     className="object-cover"
-                    alt={img.name}
+                    alt={img?.name ?? "Course image"}
                   />
                 </label>
               ) : (
@@ -164,7 +199,7 @@ const CreateCourseForm = ({ setIsOpen }: CreateCourseFormProps) => {
           )}
         />
         <Button type="submit" disabled={isExecuting || isLoading}>
-          Create course
+          {isEdit ? "Edit course" : "Create course"}
         </Button>
       </form>
     </Form>
