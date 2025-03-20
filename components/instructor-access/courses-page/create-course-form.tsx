@@ -19,28 +19,26 @@ import * as z from "zod";
 type CreateCourseFormProps = {
   setIsOpen: (value: boolean) => void;
   isEdit?: boolean;
-} & (Course | undefined);
+} & {
+  course?: Course;
+};
 
 const CreateCourseForm = ({
   setIsOpen,
   isEdit,
-  name,
-  image,
-  courseCode,
-  description,
-  id,
+  course,
 }: CreateCourseFormProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [img, setImg] = useState<File | null>(null);
   const form = useForm<z.infer<typeof CreateCourseSchema>>({
     resolver: zodResolver(CreateCourseSchema),
     defaultValues: {
-      name: name ?? "",
-      courseCode: courseCode ?? "",
-      description: description ?? "",
-      image: image ?? "",
+      name: course?.name ?? "",
+      courseCode: course?.courseCode ?? "",
+      description: course?.description ?? "",
+      image: course?.image ?? "",
       isEdit: isEdit ?? false,
-      courseId: id ?? undefined,
+      courseId: course?.id ?? undefined,
     },
   });
   const { execute, isExecuting } = useAction(createCourse, {
@@ -64,12 +62,12 @@ const CreateCourseForm = ({
   });
 
   useEffect(() => {
-    form.setValue("name", name ?? "");
-    form.setValue("courseCode", courseCode ?? "");
-    form.setValue("description", description ?? "");
-    form.setValue("image", image ?? "");
+    form.setValue("name", course?.name ?? "");
+    form.setValue("courseCode", course?.courseCode ?? "");
+    form.setValue("description", course?.description ?? "");
+    form.setValue("image", course?.image ?? "");
     form.setValue("isEdit", isEdit ?? false);
-    form.setValue("courseId", id ?? undefined);
+    form.setValue("courseId", course?.id ?? undefined);
   }, []);
 
   const handleSubmit = async (data: z.infer<typeof CreateCourseSchema>) => {

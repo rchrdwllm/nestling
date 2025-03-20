@@ -33,7 +33,11 @@ const EditCourseBtn = ({ course }: EditCourseBtnProps) => {
           <DialogTitle>Edit course</DialogTitle>
           <DialogDescription>Edit course details below</DialogDescription>
         </DialogHeader>
-        <CreateCourseForm isEdit setIsOpen={setIsOpen} {...courseData} />
+        <CreateCourseForm
+          isEdit
+          setIsOpen={setIsOpen}
+          course={{ ...courseData }}
+        />
       </DialogContent>
     </Dialog>
   );
