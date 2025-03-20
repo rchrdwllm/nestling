@@ -31,11 +31,17 @@ const ContentPage = async ({
       ? await getStudentAssignmentSubmission(contentId, user.id)
       : { success: null };
 
-  const startDate = new Date(content.startDate!._seconds * 1000);
-  const endDate = new Date(content.endDate!._seconds * 1000);
-  const currentDate = new Date();
+  const startDate =
+    content.type === "assignment"
+      ? new Date(content.startDate!._seconds * 1000)
+      : new Date();
+  const endDate =
+    content.type === "assignment"
+      ? new Date(content.endDate!._seconds * 1000)
+      : new Date();
+  const currentDate = content.type === "assignment" ? new Date() : new Date();
 
-  const isLocked = currentDate < startDate || currentDate > endDate;
+  const isLocked = currentDate < startDate || currentDate > endDate || false;
 
   if (isLocked) {
     return (
