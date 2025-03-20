@@ -36,7 +36,7 @@ const AssignmentDetails = async ({
   return (
     <section
       className={cn(
-        "border-b py-8 grid grid-cols-3",
+        "border-b py-8 grid grid-cols-3 gap-8",
         latestSubmission
           ? latestSubmission.isGraded
             ? "grid-cols-4"

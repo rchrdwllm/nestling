@@ -4,6 +4,7 @@ import AssignmentDetails from "@/components/student-access/courses-page/assignme
 import { getContentFile, getModuleContent } from "@/lib/content";
 import { getStudentAssignmentSubmission } from "@/lib/submission";
 import { getOptimisticUser } from "@/lib/user";
+import StudentSubmission from "@/components/student-access/courses-page/student-submission";
 
 const ContentPage = async ({
   params,
@@ -58,32 +59,37 @@ const ContentPage = async ({
   }
 
   return (
-    <main className="p-6">
-      <div className="flex flex-col gap-3">
-        <div className="flex justify-between items-center">
-          <h1 className="text-3xl font-semibold">{content.title}</h1>
-          {content.type === "assignment" && (
-            <SubmitAssignmentBtn
-              submissionType={content.submissionType!}
-              contentId={contentId}
-              submissionsLength={submissions!.length}
-              maxAttempts={content.maxAttempts}
-            />
-          )}
+    <main className="p-6 flex gap-8">
+      <div>
+        <div className="flex flex-col gap-3">
+          <div className="flex justify-between items-center">
+            <h1 className="text-3xl font-semibold">{content.title}</h1>
+            {content.type === "assignment" && (
+              <SubmitAssignmentBtn
+                submissionType={content.submissionType!}
+                contentId={contentId}
+                submissionsLength={submissions!.length}
+                maxAttempts={content.maxAttempts}
+              />
+            )}
+          </div>
+          <hr />
         </div>
-        <hr />
-      </div>
-      {content.type === "assignment" && (
-        <AssignmentDetails
-          {...content}
-          submissionsLength={submissions!.length}
+        {content.type === "assignment" && (
+          <AssignmentDetails
+            {...content}
+            submissionsLength={submissions!.length}
+          />
+        )}
+        <div
+          className="flex flex-col gap-4 mt-6"
+          dangerouslySetInnerHTML={{ __html: content.content }}
         />
-      )}
-      <div
-        className="flex flex-col gap-4 mt-6"
-        dangerouslySetInnerHTML={{ __html: content.content }}
-      />
-      {file && <PdfViewer pdfUrl={file.success?.secure_url!} />}
+        {file && <PdfViewer pdfUrl={file.success?.secure_url!} />}
+      </div>
+      {submissions?.length ? (
+        <StudentSubmission submissions={submissions} />
+      ) : null}
     </main>
   );
 };
