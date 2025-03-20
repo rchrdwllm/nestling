@@ -66,7 +66,6 @@ const ContentPage = async ({
           <StudentSubmission
             courseId={content.courseId}
             contentId={content.id}
-            submissions={submissions}
           />
         ) : null}
       </div>
@@ -75,7 +74,7 @@ const ContentPage = async ({
 
   return (
     <main className="p-6 flex gap-8">
-      <div>
+      <div className="flex-1">
         <div className="flex flex-col gap-3">
           <div className="flex justify-between items-center">
             <h1 className="text-3xl font-semibold">{content.title}</h1>
@@ -103,11 +102,7 @@ const ContentPage = async ({
         {file && <PdfViewer pdfUrl={file.success?.secure_url!} />}
       </div>
       {submissions?.length ? (
-        <StudentSubmission
-          courseId={content.courseId}
-          contentId={content.id}
-          submissions={submissions}
-        />
+        <StudentSubmission courseId={content.courseId} contentId={content.id} />
       ) : null}
     </main>
   );

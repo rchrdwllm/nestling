@@ -22,8 +22,6 @@ const SubmissionPreview = async ({
     contentId
   );
 
-  console.log({ studentId, contentId, attempt });
-
   if (studentSubmissionsError || contentError) {
     return <div>{studentSubmissionsError}</div>;
   }

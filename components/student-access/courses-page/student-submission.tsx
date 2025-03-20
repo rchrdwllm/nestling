@@ -1,18 +1,12 @@
 import { Button } from "@/components/ui/button";
-import { Submission } from "@/types";
 import Link from "next/link";
 
 type StudentSubmissionProps = {
-  submissions: Submission[];
   courseId: string;
   contentId: string;
 };
 
-const StudentSubmission = ({
-  submissions,
-  contentId,
-  courseId,
-}: StudentSubmissionProps) => {
+const StudentSubmission = ({ contentId, courseId }: StudentSubmissionProps) => {
   return (
     <div>
       <Link
