@@ -1,5 +1,5 @@
 import { Submission } from "@/types";
-import SubmissionPreview from "./submission-preview";
+import SubmissionPreview from "../../../shared/content-page/submission-preview";
 import { getEnrolledStudents } from "@/lib/course";
 import { getModuleContent } from "@/lib/content";
 import SubmissionCard from "./submission-card";

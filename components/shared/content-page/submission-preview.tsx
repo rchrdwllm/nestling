@@ -1,5 +1,5 @@
 import { getStudentAssignmentSubmission } from "@/lib/submission";
-import SubmissionAttempt from "./submission-attempt";
+import SubmissionAttempt from "../../instructor-access/courses-page/submissions/submission-attempt";
 import PdfViewer from "@/components/shared/content-page/pdf-viewer";
 import { getModuleContent } from "@/lib/content";
 
@@ -21,6 +21,8 @@ const SubmissionPreview = async ({
   const { success: content, error: contentError } = await getModuleContent(
     contentId
   );
+
+  console.log({ studentId, contentId, attempt });
 
   if (studentSubmissionsError || contentError) {
     return <div>{studentSubmissionsError}</div>;

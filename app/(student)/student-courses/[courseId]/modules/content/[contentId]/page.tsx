@@ -45,21 +45,30 @@ const ContentPage = async ({
 
   if (isLocked) {
     return (
-      <div className="p-6">
-        <div className="flex flex-col gap-3">
-          <h1 className="text-3xl font-semibold">{content.title}</h1>
-          <hr />
+      <div className="flex gap-8 p-6">
+        <div>
+          <div className="flex flex-col gap-3">
+            <h1 className="text-3xl font-semibold">{content.title}</h1>
+            <hr />
+          </div>
+          {content.type === "assignment" && (
+            <AssignmentDetails
+              {...content}
+              submissionsLength={submissions!.length}
+            />
+          )}
+          <p className="mt-4">
+            This content is locked. Please check the start and end dates to see
+            when it will be available.
+          </p>
         </div>
-        {content.type === "assignment" && (
-          <AssignmentDetails
-            {...content}
-            submissionsLength={submissions!.length}
+        {submissions?.length ? (
+          <StudentSubmission
+            courseId={content.courseId}
+            contentId={content.id}
+            submissions={submissions}
           />
-        )}
-        <p className="mt-4">
-          This content is locked. Please check the start and end dates to see
-          when it will be available.
-        </p>
+        ) : null}
       </div>
     );
   }
@@ -94,7 +103,11 @@ const ContentPage = async ({
         {file && <PdfViewer pdfUrl={file.success?.secure_url!} />}
       </div>
       {submissions?.length ? (
-        <StudentSubmission submissions={submissions} />
+        <StudentSubmission
+          courseId={content.courseId}
+          contentId={content.id}
+          submissions={submissions}
+        />
       ) : null}
     </main>
   );
