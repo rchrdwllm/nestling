@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { EllipsisVertical } from "lucide-react";
 import EditCourseBtn from "./edit-course-btn";
+import ArchiveCourseBtn from "./archive-course-btn";
 
 type CourseDetailsBtnProps = {
   course: string;
@@ -23,7 +24,9 @@ const CourseDetailsBtn = ({ course }: CourseDetailsBtnProps) => {
         <DropdownMenuItem asChild>
           <EditCourseBtn course={course} />
         </DropdownMenuItem>
-        <DropdownMenuItem>Archive course</DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <ArchiveCourseBtn course={course} />
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

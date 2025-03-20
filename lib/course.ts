@@ -148,6 +148,66 @@ export const getInstructorCourses = unstable_cache(
   { revalidate: 3600, tags: ["courses"] }
 );
 
+export const getUnarchivedInstructorCourses = unstable_cache(
+  async (instructorId: string) => {
+    try {
+      const snapshot = await db
+        .collection("users")
+        .doc(instructorId)
+        .collection("courses")
+        .get();
+      const courseIds = snapshot.docs.map((doc) => doc.id);
+      const courses = await Promise.all(
+        courseIds.map(async (courseId) => {
+          const courseSnapshot = await db
+            .collection("courses")
+            .doc(courseId)
+            .get();
+
+          return courseSnapshot.data() as Course;
+        })
+      );
+      const unarchivedCourses = courses.filter((course) => !course.isArchived);
+
+      return { success: unarchivedCourses };
+    } catch (error) {
+      return { error };
+    }
+  },
+  ["instructorCourses"],
+  { revalidate: 3600, tags: ["courses"] }
+);
+
+export const getArchivedInstructorCourses = unstable_cache(
+  async (instructorId: string) => {
+    try {
+      const snapshot = await db
+        .collection("users")
+        .doc(instructorId)
+        .collection("courses")
+        .get();
+      const courseIds = snapshot.docs.map((doc) => doc.id);
+      const courses = await Promise.all(
+        courseIds.map(async (courseId) => {
+          const courseSnapshot = await db
+            .collection("courses")
+            .doc(courseId)
+            .get();
+
+          return courseSnapshot.data() as Course;
+        })
+      );
+      const archivedCourses = courses.filter((course) => course.isArchived);
+
+      return { success: archivedCourses };
+    } catch (error) {
+      return { error };
+    }
+  },
+  ["instructorCourses"],
+  { revalidate: 3600, tags: ["courses"] }
+);
+
 export const getCourseImage = unstable_cache(
   async (courseId: string) => {
     try {

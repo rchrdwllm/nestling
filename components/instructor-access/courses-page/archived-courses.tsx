@@ -1,10 +1,10 @@
-import { getUnarchivedInstructorCourses } from "@/lib/course";
+import { getArchivedInstructorCourses } from "@/lib/course";
 import { getCurrentUser } from "@/lib/user";
 import CourseCard from "./course-card";
 
-const Courses = async () => {
+const ArchivedCourses = async () => {
   const user = await getCurrentUser();
-  const { success: courses, error } = await getUnarchivedInstructorCourses(
+  const { success: courses, error } = await getArchivedInstructorCourses(
     user!.id
   );
 
@@ -20,7 +20,7 @@ const Courses = async () => {
   if (!courses.length) {
     return (
       <div>
-        <h1>You have no courses</h1>
+        <h1>No archived courses</h1>
       </div>
     );
   }
@@ -34,4 +34,4 @@ const Courses = async () => {
   );
 };
 
-export default Courses;
+export default ArchivedCourses;

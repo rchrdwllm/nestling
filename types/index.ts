@@ -37,6 +37,8 @@ export type Course = {
   createdAt: Timestamp;
   updatedAt: Timestamp;
   image: string;
+  isArchived: boolean;
+  archivedAt: Timestamp | null;
 };
 
 export type EnrollmentData = {
