@@ -25,6 +25,54 @@ export const getCourseModules = unstable_cache(
   { revalidate: 3600 }
 );
 
+export const getUnarchivedCourseModules = unstable_cache(
+  async (courseId: string) => {
+    try {
+      const modulesSnapshot = await db
+        .collection("modules")
+        .where("courseId", "==", courseId)
+        .where("isArchived", "==", false)
+        .orderBy("createdAt", "asc")
+        .get();
+      const modules = modulesSnapshot.docs.map((doc) => {
+        return doc.data() as Module;
+      });
+
+      return { success: modules };
+    } catch (error) {
+      console.error(error);
+
+      return { error: "Error fetching modules" };
+    }
+  },
+  ["modules"],
+  { revalidate: 3600 }
+);
+
+export const getArchivedCourseModules = unstable_cache(
+  async (courseId: string) => {
+    try {
+      const modulesSnapshot = await db
+        .collection("modules")
+        .where("courseId", "==", courseId)
+        .where("isArchived", "==", true)
+        .orderBy("createdAt", "asc")
+        .get();
+      const modules = modulesSnapshot.docs.map((doc) => {
+        return doc.data() as Module;
+      });
+
+      return { success: modules };
+    } catch (error) {
+      console.error(error);
+
+      return { error: "Error fetching modules" };
+    }
+  },
+  ["modules"],
+  { revalidate: 3600 }
+);
+
 export const getPublishedCourseModules = unstable_cache(
   async (courseId: string) => {
     try {

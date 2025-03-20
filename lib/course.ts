@@ -49,7 +49,7 @@ export const getAvailableCourses = unstable_cache(
       );
 
       const availableCourses = courses.filter(
-        (course) => !enrolledCourseIds.includes(course.id)
+        (course) => !enrolledCourseIds.includes(course.id) && !course.isArchived
       );
 
       return { success: availableCourses };
@@ -81,7 +81,9 @@ export const getEnrolledCourses = unstable_cache(
         })
       );
 
-      return { success: courses };
+      const enrolledCourses = courses.filter((course) => !course.isArchived);
+
+      return { success: enrolledCourses };
     } catch (error) {
       return { error: "Error fetching courses" };
     }

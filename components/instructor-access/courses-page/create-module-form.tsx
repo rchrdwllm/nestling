@@ -5,8 +5,10 @@ import { Form, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { CreateModuleSchema } from "@/schemas/CreateModuleSchema";
 import { createModule } from "@/server/actions/create-module";
+import { Module } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAction } from "next-safe-action/hooks";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
@@ -14,14 +16,23 @@ import * as z from "zod";
 type CreateModuleFormProps = {
   setIsOpen: (isOpen: boolean) => void;
   courseId: string;
+  isEdit?: boolean;
+  module?: Module;
 };
 
-const CreateModuleForm = ({ setIsOpen, courseId }: CreateModuleFormProps) => {
+const CreateModuleForm = ({
+  setIsOpen,
+  courseId,
+  module,
+  isEdit,
+}: CreateModuleFormProps) => {
   const form = useForm<z.infer<typeof CreateModuleSchema>>({
     resolver: zodResolver(CreateModuleSchema),
     defaultValues: {
-      title: "",
+      title: module?.title || "",
       courseId,
+      isEdit: isEdit || false,
+      moduleId: module?.id || "",
     },
   });
   const { execute, isExecuting } = useAction(createModule, {
@@ -44,13 +55,21 @@ const CreateModuleForm = ({ setIsOpen, courseId }: CreateModuleFormProps) => {
     },
     onExecute: () => {
       toast.dismiss();
-      toast.loading("Creating module...");
+      toast.loading(`${isEdit ? "Editing" : "Creating"} module...`);
     },
   });
 
   const handleSubmit = (data: z.infer<typeof CreateModuleSchema>) => {
     execute(data);
   };
+
+  useEffect(() => {
+    if (isEdit && module) {
+      form.setValue("title", module.title);
+      form.setValue("isEdit", isEdit);
+      form.setValue("moduleId", module.id);
+    }
+  }, [isEdit, module]);
 
   return (
     <Form {...form}>
@@ -72,7 +91,7 @@ const CreateModuleForm = ({ setIsOpen, courseId }: CreateModuleFormProps) => {
             Back
           </Button>
           <Button type="submit" disabled={isExecuting}>
-            Create module
+            {isEdit ? "Edit" : "Create"} module
           </Button>
         </div>
       </form>

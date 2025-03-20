@@ -5,6 +5,8 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import PublishModuleSwitch from "./publish-module-switch";
+import ModuleDetailsBtn from "./module-details-btn";
+import { getModule } from "@/lib/module";
 
 const ModuleCard = async ({
   id,
@@ -14,12 +16,13 @@ const ModuleCard = async ({
   isPublished,
 }: Module) => {
   const { success: contents, error } = await getModuleContents(id);
+  const { success: module, error: moduleError } = await getModule(id);
 
-  if (error) {
+  if (error || moduleError) {
     return <div>{error}</div>;
   }
 
-  if (!contents) {
+  if (!contents || !module) {
     return <div>Loading...</div>;
   }
 
@@ -39,6 +42,7 @@ const ModuleCard = async ({
           </Button>
         </Link>
         <PublishModuleSwitch defaultPublished={isPublished} moduleId={id} />
+        <ModuleDetailsBtn module={JSON.stringify(module)} />
       </div>
       <div className="flex flex-col gap-2">
         {contents.length ? (

@@ -55,6 +55,8 @@ export type Module = {
   createdAt: Timestamp;
   updatedAt: Timestamp;
   isPublished: boolean;
+  isArchived: boolean;
+  archivedAt: Timestamp | null;
 };
 
 export type Content = {

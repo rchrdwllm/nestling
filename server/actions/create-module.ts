@@ -2,14 +2,14 @@
 
 import { CreateModuleSchema } from "@/schemas/CreateModuleSchema";
 import { actionClient } from "../action-client";
-import { getCourseModules } from "@/lib/module";
+import { getCourseModules, getModule } from "@/lib/module";
 import { db } from "@/lib/firebase";
 import { revalidatePath } from "next/cache";
 
 export const createModule = actionClient
   .schema(CreateModuleSchema)
   .action(async ({ parsedInput }) => {
-    const { title, courseId } = parsedInput;
+    const { title, courseId, isEdit, moduleId } = parsedInput;
 
     try {
       const { success: existingModules, error } = await getCourseModules(
@@ -22,6 +22,18 @@ export const createModule = actionClient
 
       if (!existingModules) {
         return { error: "Course not found" };
+      }
+
+      if (isEdit && moduleId) {
+        await db.collection("modules").doc(moduleId).update({
+          title,
+          updatedAt: new Date(),
+        });
+
+        revalidatePath("/(instructor)/instructor-courses/[courseId]", "page");
+        revalidatePath(`/(instructor)/instructor-courses/${courseId}`);
+
+        return { success: `Module updated successfully` };
       }
 
       const id = crypto.randomUUID();
@@ -66,6 +78,7 @@ export const createModule = actionClient
         "/(instructor)/instructor-courses/[courseId]/create",
         "page"
       );
+      revalidatePath(`/(instructor)/instructor-courses/${courseId}`);
 
       return { success: `Module ${title} created` };
     } catch (error) {
