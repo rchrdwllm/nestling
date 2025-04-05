@@ -1,5 +1,6 @@
 "use client";
 
+import SearchBar from "@/components/instructor-access/search-bar/search-bar";
 import { Button } from "@/components/ui/button";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { signOut, useSession } from "next-auth/react";
@@ -23,8 +24,11 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="h-screen flex w-full justify-center items-center">
-      <div className="flex flex-col gap-4 justify-center items-center">
+    <div className="h-screen w-full p-6 pt-8">
+      <div>
+        <SearchBar />
+      </div>
+      <div className="h-full flex flex-col gap-4 justify-center items-center">
         <h1 className="text-3xl font-semibold">
           Welcome to Nestling, instructor {user.firstName}!
         </h1>
