@@ -14,7 +14,7 @@ const SearchForm = () => {
     }} exit={{
       opacity: 0,
       y: 10
-    }} className='absolute bg-card w-full mt-2 shadow-sm border border-border rounded-md p-4'>
+    }} className='absolute h-96 bg-card w-full mt-2 shadow-sm border border-border rounded-md p-4'>
       <Tabs defaultValue="students" className="w-full">
         <TabsList className="w-full">
           <TabsTrigger className="w-full" value="students">Students</TabsTrigger>
