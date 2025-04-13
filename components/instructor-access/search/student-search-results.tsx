@@ -79,7 +79,9 @@ const StudentSearchResults = () => {
             <StudentCard key={student.id} {...student} />
           ))
         ) : (
-          <p>No students found</p>
+          <p className="py-32 text-muted-foreground text-center">
+            No students found
+          </p>
         )}
       </ScrollArea>
       {totalPages > 1 && (

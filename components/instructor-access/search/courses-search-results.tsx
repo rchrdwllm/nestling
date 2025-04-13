@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/pagination";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import CourseCard from "./course-card";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const CoursesSearchResults = () => {
   const pathname = usePathname();
@@ -71,15 +72,17 @@ const CoursesSearchResults = () => {
 
   return (
     <div>
-      <div className="flex h-72 flex-col gap-1 items-start">
+      <ScrollArea className="flex h-72 flex-col gap-1 items-start">
         {searchResults.courses.length > 0 ? (
           searchResults.courses.map((course: Course) => (
             <CourseCard key={course.id} {...course} />
           ))
         ) : (
-          <p>No courses found</p>
+          <p className="py-32 text-muted-foreground text-center">
+            No courses found
+          </p>
         )}
-      </div>
+      </ScrollArea>
       {totalPages > 1 && (
         <Pagination className="mt-4">
           <PaginationContent>
