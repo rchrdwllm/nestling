@@ -3,6 +3,8 @@
 import MotionWrapper from "@/components/wrappers/motion-wrapper";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Course, User } from "@/types";
+import StudentCard from "./student-card";
+import CourseCard from "./course-card";
 
 type SearchResultsProps = {
   results: {
@@ -41,23 +43,21 @@ const SearchResults = ({ results }: SearchResultsProps) => {
           </TabsTrigger>
         </TabsList>
         <TabsContent value="students">
-          {results.students.length > 0 ? (
-            <ul>
-              {results.students.map((student: User) => (
-                <li key={student.id}>{student.name}</li>
-              ))}
-            </ul>
-          ) : (
-            <p>No students found</p>
-          )}
+          <div className="flex flex-col gap-1 items-start">
+            {results.students.length > 0 ? (
+              results.students.map((student: User) => (
+                <StudentCard key={student.id} {...student} />
+              ))
+            ) : (
+              <p>No students found</p>
+            )}
+          </div>
         </TabsContent>
         <TabsContent value="courses">
           {results.courses.length > 0 ? (
-            <ul>
-              {results.courses.map((course: Course) => (
-                <li key={course.id}>{course.name}</li>
-              ))}
-            </ul>
+            results.courses.map((course: Course) => (
+              <CourseCard key={course.id} {...course} />
+            ))
           ) : (
             <p>No courses found</p>
           )}
