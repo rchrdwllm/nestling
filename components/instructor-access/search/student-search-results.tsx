@@ -24,9 +24,11 @@ const StudentSearchResults = () => {
   const [currentPage, setCurrentPage] = useState(
     parseInt(searchParams.get("page") || "1", 10)
   );
+  const [isLoading, setIsLoading] = useState(false);
   const itemsPerPage = 10;
 
   const search = async (page: number) => {
+    setIsLoading(true);
     const query = searchParams.get("query") || "";
 
     const { students, totalStudents } = await searchStudents(
@@ -39,6 +41,7 @@ const StudentSearchResults = () => {
       students: students.map((student) => JSON.parse(student)),
       totalStudents,
     });
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -66,6 +69,10 @@ const StudentSearchResults = () => {
   };
 
   const totalPages = Math.ceil(searchResults.totalStudents / itemsPerPage);
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
 
   if (!searchResults.students) {
     return <p>Loading...</p>;
