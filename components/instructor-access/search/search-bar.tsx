@@ -1,59 +1,77 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Input } from "../../ui/input";
 import { Search } from "lucide-react";
 import SearchResults from "./search-results";
 import { AnimatePresence } from "motion/react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
-import { searchStudentsAndCourses } from "@/lib/search";
-import { Course, User } from "@/types";
-import { useCurrentUser } from "@/hooks/use-current-user";
+
+type SearchBarProps = {
+  query: string;
+  currentPage: number;
+  tab: "students" | "courses" | "projects";
+};
 
 const SearchBar = () => {
   const [isClicked, setIsClicked] = useState(false);
-  const [searchResults, setSearchResults] = useState<{
-    students: User[];
-    courses: Course[];
-  }>({ students: [], courses: [] });
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
-  const user = useCurrentUser();
+  const searchBarRef = useRef<HTMLDivElement>(null);
 
-  const handleSearch = useDebouncedCallback(async (term: string) => {
-    const params = new URLSearchParams(searchParams);
-    if (term) {
-      params.set("query", term);
-      const { students, courses } = await searchStudentsAndCourses(
-        user.user.id,
-        term
-      );
-      setSearchResults({
-        students: students.map((student) => JSON.parse(student)),
-        courses: courses.map((course) => JSON.parse(course)),
-      });
-    } else {
-      params.delete("query");
-      setSearchResults({ students: [], courses: [] });
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        searchBarRef.current &&
+        !searchBarRef.current.contains(event.target as Node)
+      ) {
+        setIsClicked(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const handleSearch = useDebouncedCallback(
+    async (term: string, page: number = 1) => {
+      const params = new URLSearchParams(searchParams);
+
+      if (term) {
+        params.set("query", term);
+        params.set("page", page.toString());
+      } else {
+        params.delete("query");
+        params.delete("page");
+      }
+
+      replace(`${pathname}?${params.toString()}`);
+    },
+    300
+  );
+
+  useEffect(() => {
+    const query = searchParams.get("query");
+
+    if (query && isClicked) {
+      handleSearch(query);
     }
-
-    replace(`${pathname}?${params.toString()}`);
-  }, 300);
+  }, [isClicked]);
 
   return (
-    <div className="relative">
+    <div className="relative" ref={searchBarRef}>
       <Input
         Icon={Search}
         placeholder="Search"
         onChange={(e) => handleSearch(e.target.value)}
         onClick={() => setIsClicked(true)}
-        defaultValue={searchParams.get("query")?.toString()}
+        defaultValue={searchParams.get("query") || ""}
       />
-      <AnimatePresence>
-        {isClicked && <SearchResults results={searchResults} />}
-      </AnimatePresence>
+      <AnimatePresence>{isClicked && <SearchResults />}</AnimatePresence>
     </div>
   );
 };

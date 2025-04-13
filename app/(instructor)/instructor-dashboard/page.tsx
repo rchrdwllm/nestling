@@ -1,4 +1,4 @@
-import Search from "@/components/instructor-access/search/search";
+import SearchBar from "@/components/instructor-access/search/search-bar";
 import { getOptimisticUser } from "@/lib/user";
 
 type DashboardProps = {
@@ -11,14 +11,10 @@ type DashboardProps = {
 
 const Dashboard = async ({ searchParams }: DashboardProps) => {
   const user = await getOptimisticUser();
-  const params = await searchParams;
-  const query = params?.query || "";
-  const currentPage = Number(params?.page) || 1;
-  const tab = params?.tab || "students";
 
   return (
-    <div className="h-screen w-full p-6 pt-8">
-      <Search query={query} currentPage={currentPage} tab={tab} />
+    <div className="relative h-screen w-full p-6 pt-8">
+      <SearchBar />
       <div className="h-full flex flex-col gap-4 justify-center items-center">
         <h1 className="text-3xl font-semibold">
           Welcome to Nestling, instructor {user.firstName}!

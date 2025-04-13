@@ -2,8 +2,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { User } from "@/types";
 import Link from "next/link";
+import { memo } from "react";
 
-const StudentCard = ({ id, name, email, image }: User) => {
+const StudentCard = memo(({ id, name, email, image }: User) => {
   return (
     <Link href={`/instructor-search/user/${id}`} className="w-full">
       <Button
@@ -31,6 +32,6 @@ const StudentCard = ({ id, name, email, image }: User) => {
       </Button>
     </Link>
   );
-};
+});
 
 export default StudentCard;

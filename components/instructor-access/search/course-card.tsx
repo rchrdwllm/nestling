@@ -2,8 +2,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Course } from "@/types";
 import Link from "next/link";
+import { memo } from "react";
 
-const CourseCard = ({ courseCode, id, image, name }: Course) => {
+const CourseCard = memo(({ courseCode, id, image, name }: Course) => {
   return (
     <Link href={`/instructor-courses/${id}`} className="w-full">
       <Button
@@ -27,6 +28,6 @@ const CourseCard = ({ courseCode, id, image, name }: Course) => {
       </Button>
     </Link>
   );
-};
+});
 
 export default CourseCard;
