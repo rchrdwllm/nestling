@@ -1,3 +1,5 @@
+"use server";
+
 import { Course, User } from "@/types";
 import { db } from "./firebase";
 import { unstable_cache } from "next/cache";
