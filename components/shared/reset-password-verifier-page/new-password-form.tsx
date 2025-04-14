@@ -1,12 +1,12 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { Form, FormField, FormItem } from "../ui/form";
-import { Input } from "../ui/input";
+import { Form, FormField, FormItem } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { NewPasswordSchema } from "@/schemas/NewPasswordSchema";
 import * as z from "zod";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useAction } from "next-safe-action/hooks";
 import { toast } from "sonner";

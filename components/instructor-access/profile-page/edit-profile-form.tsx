@@ -5,10 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { UpdateProfileSchema } from "@/schemas/UpdateProfileSchema";
-import {
-  updateInstructorProfile,
-  updateStudentProfile,
-} from "@/server/actions/update-profile";
+import { updateInstructorProfile } from "@/server/actions/update-profile";
 import { uploadImgToCloudinary } from "@/server/actions/upload-to-cloudinary";
 import { User } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";

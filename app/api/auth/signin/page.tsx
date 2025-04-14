@@ -2,7 +2,7 @@ import Image from "next/image";
 import loginBg from "@/assets/login-bg.jpg";
 import logoText from "@/assets/logo-text.png";
 import nestling from "@/assets/nestling.png";
-import LoginSteps from "@/components/login-page/login-steps";
+import LoginSteps from "@/components/shared/login-page/login-steps";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 

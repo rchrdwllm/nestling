@@ -1,7 +1,7 @@
 import Image from "next/image";
 import registerBg from "@/assets/register-bg.jpg";
 import logoTextReversed from "@/assets/logo-text-reversed.png";
-import ResetPasswordForm from "@/components/forgot-password-page/reset-password-form";
+import ResetPasswordForm from "@/components/shared/forgot-password-page/reset-password-form";
 import { getCurrentUser } from "@/lib/user";
 import { redirect } from "next/navigation";
 

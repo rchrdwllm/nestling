@@ -6,7 +6,7 @@ import Step from "@/components/ui/step";
 import { Role } from "@/types";
 import { AnimatePresence } from "motion/react";
 import Link from "next/link";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import RegisterForm1 from "./register-form-1";
 import RegisterForm2 from "./register-form-2";
 

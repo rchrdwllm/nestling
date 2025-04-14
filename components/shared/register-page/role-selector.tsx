@@ -1,7 +1,7 @@
 import { GraduationCap, BookOpen, Code } from "lucide-react";
 import RegisterRoleBtn from "./register-role-btn";
 import { Role } from "@/types";
-import MotionWrapper from "../wrappers/motion-wrapper";
+import MotionWrapper from "@/components/wrappers/motion-wrapper";
 import { easings } from "@/constants/animations";
 
 type RoleSelectorProps = {

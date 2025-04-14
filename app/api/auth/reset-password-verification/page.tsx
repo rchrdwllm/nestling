@@ -2,7 +2,7 @@ import Image from "next/image";
 import registerBg from "@/assets/register-bg.jpg";
 import logoTextReversed from "@/assets/logo-text-reversed.png";
 import { redirect } from "next/navigation";
-import ResetTokenVerifier from "@/components/reset-password-verifier-page/reset-token-verifier";
+import ResetTokenVerifier from "@/components/shared/reset-password-verifier-page/reset-token-verifier";
 
 type ResetPasswordVerificationPageProps = {
   searchParams: Promise<{ token: string }>;

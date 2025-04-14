@@ -1,20 +1,20 @@
 import { ReactNode } from "react";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 import { Role } from "@/types";
 
-type RegisterRoleBtnProps = {
+type LoginRoleBtnProps = {
   role: Role;
   setRole: (role: Role) => void;
   children: ReactNode;
   onClick: () => void;
 };
 
-const RegisterRoleBtn = ({
+const LoginRoleBtn = ({
   role,
   setRole,
   children,
   onClick,
-}: RegisterRoleBtnProps) => {
+}: LoginRoleBtnProps) => {
   return (
     <Button
       onClick={() => {
@@ -22,7 +22,7 @@ const RegisterRoleBtn = ({
         onClick();
       }}
       whileTap={{ scale: 0.95 }}
-      className="relative flex rounded-xl px-8 border-2 py-4 gap-2 h-auto items-center w-auto transition-colors group hover:bg-primary hover:text-primary-foreground"
+      className="relative flex rounded-xl flex-col border-2 gap-3 h-auto items-center aspect-square w-[150px] transition-colors group hover:bg-primary hover:text-primary-foreground"
       variant="outline"
     >
       {children}
@@ -30,4 +30,4 @@ const RegisterRoleBtn = ({
   );
 };
 
-export default RegisterRoleBtn;
+export default LoginRoleBtn;

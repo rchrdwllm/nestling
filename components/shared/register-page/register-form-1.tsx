@@ -1,10 +1,10 @@
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import { Button } from "../ui/button";
-import MotionWrapper from "../wrappers/motion-wrapper";
+import { Button } from "@/components/ui/button";
+import MotionWrapper from "@/components/wrappers/motion-wrapper";
 import { easings } from "@/constants/animations";
-import { Form, FormField, FormItem } from "../ui/form";
+import { Form, FormField, FormItem } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
-import { Input } from "../ui/input";
+import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 
 type RegisterForm1Props = {

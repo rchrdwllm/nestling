@@ -31,6 +31,34 @@ export const searchStudents = async (
   return { students: paginatedStudents, totalStudents };
 };
 
+export const searchInstructors = async (
+  query: string,
+  page: number = 1,
+  itemsPerPage: number = 10
+): Promise<{ instructors: string[]; totalInstructors: number }> => {
+  const instructorsSnapshot = await db
+    .collection("users")
+    .where("role", "==", "instructor")
+    .get();
+
+  const allInstructors = instructorsSnapshot.docs
+    .map((doc) => doc.data() as User)
+    .filter(
+      (instructor) =>
+        instructor.name?.toLowerCase().includes(query.toLowerCase()) ||
+        instructor.email?.toLowerCase().includes(query.toLowerCase()) ||
+        instructor.id?.toLowerCase().includes(query.toLowerCase())
+    );
+
+  const totalInstructors = allInstructors.length;
+
+  const paginatedInstructors = allInstructors
+    .slice((page - 1) * itemsPerPage, page * itemsPerPage)
+    .map((instructor) => JSON.stringify(instructor));
+
+  return { instructors: paginatedInstructors, totalInstructors };
+};
+
 export const searchCourses = async (
   instructorId: string,
   query: string,
