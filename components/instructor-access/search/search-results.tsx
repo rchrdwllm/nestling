@@ -3,10 +3,18 @@
 import MotionWrapper from "@/components/wrappers/motion-wrapper";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import StudentSearchResults from "./student-search-results";
-import { Suspense } from "react";
 import CoursesSearchResults from "./courses-search-results";
+import InstructorSearchResults from "./instructor-search-results";
 
-const SearchResults = () => {
+type SearchResultsProps = {
+  isInbox?: boolean;
+  entities?: string[];
+};
+
+const SearchResults = ({
+  entities = ["students", "instructors", "courses", "projects"],
+  isInbox = false,
+}: SearchResultsProps) => {
   return (
     <MotionWrapper
       initial={{
@@ -23,27 +31,49 @@ const SearchResults = () => {
       }}
       className="absolute w-full min-h-96 bg-card mt-2 shadow-sm border border-border rounded-md p-4"
     >
-      <Tabs defaultValue="students" className="w-full">
+      <Tabs defaultValue={entities[0]} className="w-full">
         <TabsList className="w-full">
-          <TabsTrigger className="w-full" value="students">
-            Students
-          </TabsTrigger>
-          <TabsTrigger className="w-full" value="courses">
-            Courses
-          </TabsTrigger>
-          <TabsTrigger className="w-full" value="projects">
-            Projects
-          </TabsTrigger>
+          {entities.includes("students") && (
+            <TabsTrigger className="w-full" value="students">
+              Students
+            </TabsTrigger>
+          )}
+          {entities.includes("instructors") && (
+            <TabsTrigger className="w-full" value="instructors">
+              Instructors
+            </TabsTrigger>
+          )}
+          {entities.includes("courses") && (
+            <TabsTrigger className="w-full" value="courses">
+              Courses
+            </TabsTrigger>
+          )}
+          {entities.includes("projects") && (
+            <TabsTrigger className="w-full" value="projects">
+              Projects
+            </TabsTrigger>
+          )}
         </TabsList>
-        <TabsContent value="students">
-          <StudentSearchResults />
-        </TabsContent>
-        <TabsContent value="courses">
-          <CoursesSearchResults />
-        </TabsContent>
-        <TabsContent value="projects">
-          <p>To do: Projects</p>
-        </TabsContent>
+        {entities.includes("students") && (
+          <TabsContent value="students">
+            <StudentSearchResults isInbox={isInbox} />
+          </TabsContent>
+        )}
+        {entities.includes("instructors") && (
+          <TabsContent value="instructors">
+            <InstructorSearchResults />
+          </TabsContent>
+        )}
+        {entities.includes("courses") && (
+          <TabsContent value="courses">
+            <CoursesSearchResults />
+          </TabsContent>
+        )}
+        {entities.includes("projects") && (
+          <TabsContent value="projects">
+            <p>To do: Projects</p>
+          </TabsContent>
+        )}
       </Tabs>
     </MotionWrapper>
   );

@@ -9,12 +9,14 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
 
 type SearchBarProps = {
-  query: string;
-  currentPage: number;
-  tab: "students" | "courses" | "projects";
+  entities?: string[];
+  isInbox?: boolean;
 };
 
-const SearchBar = () => {
+const SearchBar = ({
+  entities = ["students", "instructors", "courses", "projects"],
+  isInbox = false,
+}: SearchBarProps) => {
   const [isClicked, setIsClicked] = useState(false);
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -71,7 +73,9 @@ const SearchBar = () => {
         onClick={() => setIsClicked(true)}
         defaultValue={searchParams.get("query") || ""}
       />
-      <AnimatePresence>{isClicked && <SearchResults />}</AnimatePresence>
+      <AnimatePresence>
+        {isClicked && <SearchResults isInbox={isInbox} entities={entities} />}
+      </AnimatePresence>
     </div>
   );
 };

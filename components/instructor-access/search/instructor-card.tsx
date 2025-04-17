@@ -4,12 +4,12 @@ import { User } from "@/types";
 import Link from "next/link";
 import { memo } from "react";
 
-type StudentCardProps = {
+type InstructorCardProps = {
   isInbox?: boolean;
 } & User;
 
-const StudentCard = memo(
-  ({ id, name, email, image, isInbox }: StudentCardProps) => {
+const InstructorCard = memo(
+  ({ id, name, email, image, isInbox }: InstructorCardProps) => {
     return (
       <Link href={`/instructor-search/user/${id}`} className="w-full">
         <Button
@@ -40,4 +40,4 @@ const StudentCard = memo(
   }
 );
 
-export default StudentCard;
+export default InstructorCard;

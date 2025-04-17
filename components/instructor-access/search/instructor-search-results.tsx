@@ -1,9 +1,10 @@
+"use client";
+
 import { ScrollArea } from "@/components/ui/scroll-area";
 import React, { useEffect, useState } from "react";
 import { User } from "@/types";
-import StudentCard from "./student-card";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
-import { searchStudents } from "@/lib/search";
+import { searchInstructors } from "@/lib/search";
 import {
   Pagination,
   PaginationContent,
@@ -12,18 +13,19 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import InstructorCard from "./instructor-card";
 
-type StudentSearchResultsProps = {
+type InstructorSearchResultsProps = {
   isInbox?: boolean;
 };
 
-const StudentSearchResults = ({ isInbox }: StudentSearchResultsProps) => {
+const InstructorSearchResults = ({ isInbox }: InstructorSearchResultsProps) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const router = useRouter();
   const [searchResults, setSearchResults] = useState({
-    students: [] as User[],
-    totalStudents: 0,
+    instructors: [] as User[],
+    totalInstructors: 0,
   });
   const [currentPage, setCurrentPage] = useState(
     parseInt(searchParams.get("page") || "1", 10)
@@ -35,15 +37,15 @@ const StudentSearchResults = ({ isInbox }: StudentSearchResultsProps) => {
     setIsLoading(true);
     const query = searchParams.get("query") || "";
 
-    const { students, totalStudents } = await searchStudents(
+    const { instructors, totalInstructors } = await searchInstructors(
       query,
       page,
       itemsPerPage
     );
 
     setSearchResults({
-      students: students.map((student) => JSON.parse(student)),
-      totalStudents,
+      instructors: instructors.map((instructor) => JSON.parse(instructor)),
+      totalInstructors,
     });
     setIsLoading(false);
   };
@@ -54,7 +56,7 @@ const StudentSearchResults = ({ isInbox }: StudentSearchResultsProps) => {
     if (query) {
       search(currentPage);
     } else {
-      setSearchResults({ students: [], totalStudents: 0 });
+      setSearchResults({ instructors: [], totalInstructors: 0 });
     }
   }, [searchParams]);
 
@@ -72,26 +74,26 @@ const StudentSearchResults = ({ isInbox }: StudentSearchResultsProps) => {
     router.replace(`${pathname}?${params.toString()}`);
   };
 
-  const totalPages = Math.ceil(searchResults.totalStudents / itemsPerPage);
+  const totalPages = Math.ceil(searchResults.totalInstructors / itemsPerPage);
 
   if (isLoading) {
     return <p>Loading...</p>;
   }
 
-  if (!searchResults.students) {
+  if (!searchResults.instructors) {
     return <p>Loading...</p>;
   }
 
   return (
     <div>
       <ScrollArea className="flex h-72 flex-col gap-1 items-start">
-        {searchResults.students.length > 0 ? (
-          searchResults.students.map((student: User) => (
-            <StudentCard isInbox key={student.id} {...student} />
+        {searchResults.instructors.length > 0 ? (
+          searchResults.instructors.map((instructor: User) => (
+            <InstructorCard key={instructor.id} {...instructor} />
           ))
         ) : (
           <p className="py-32 text-muted-foreground text-center">
-            No students found
+            No instructors found
           </p>
         )}
       </ScrollArea>
@@ -125,4 +127,4 @@ const StudentSearchResults = ({ isInbox }: StudentSearchResultsProps) => {
   );
 };
 
-export default StudentSearchResults;
+export default InstructorSearchResults;
