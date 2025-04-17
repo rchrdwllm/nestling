@@ -1,4 +1,4 @@
-import SearchBar from "@/components/instructor-access/search/search-bar";
+import SearchBar from "@/components/shared/search/search-bar";
 import { getOptimisticUser } from "@/lib/user";
 
 type DashboardProps = {

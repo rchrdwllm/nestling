@@ -1,6 +1,6 @@
 import SearchBar from "@/components/shared/search/search-bar";
 
-const InstructorInboxPage = () => {
+const InstructorInbox = () => {
   return (
     <main className="grid grid-cols-8 h-full">
       <aside className="col-span-2 border-r border-border p-6 pt-8">
@@ -11,4 +11,4 @@ const InstructorInboxPage = () => {
   );
 };
 
-export default InstructorInboxPage;
+export default InstructorInbox;
