@@ -1,5 +1,5 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
-import React, { useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { User } from "@/types";
 import StudentCard from "./student-card";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
@@ -17,7 +17,7 @@ type StudentSearchResultsProps = {
   isInbox?: boolean;
 };
 
-const StudentSearchResults = ({ isInbox }: StudentSearchResultsProps) => {
+const StudentSearchResults = memo(({ isInbox }: StudentSearchResultsProps) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -87,7 +87,7 @@ const StudentSearchResults = ({ isInbox }: StudentSearchResultsProps) => {
       <ScrollArea className="flex h-72 flex-col gap-1 items-start">
         {searchResults.students.length > 0 ? (
           searchResults.students.map((student: User) => (
-            <StudentCard isInbox key={student.id} {...student} />
+            <StudentCard isInbox={isInbox} key={student.id} {...student} />
           ))
         ) : (
           <p className="py-32 text-muted-foreground text-center">
@@ -123,6 +123,6 @@ const StudentSearchResults = ({ isInbox }: StudentSearchResultsProps) => {
       )}
     </div>
   );
-};
+});
 
 export default StudentSearchResults;

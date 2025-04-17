@@ -1,5 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { useInboxStore } from "@/context/inbox-context";
+import { useCurrentUser } from "@/hooks/use-current-user";
 import { User } from "@/types";
 import Link from "next/link";
 import { memo } from "react";
@@ -10,6 +12,37 @@ type StudentCardProps = {
 
 const StudentCard = memo(
   ({ id, name, email, image, isInbox }: StudentCardProps) => {
+    const { handleUserClick } = useInboxStore();
+    const { user } = useCurrentUser();
+
+    if (isInbox)
+      return (
+        <Button
+          variant="ghost"
+          className="flex text-left items-center justify-start gap-2 w-full"
+          onClick={() => handleUserClick(user.id, id)}
+        >
+          {image ? (
+            <Avatar className="size-10">
+              <AvatarImage src={image} className="object-cover" />
+              <AvatarFallback>
+                <div className="group flex items-center justify-center size-10 bg-muted rounded-full">
+                  <p className="text-sm font-semibold">{name![0]}</p>
+                </div>
+              </AvatarFallback>
+            </Avatar>
+          ) : (
+            <div className="group flex items-center justify-center size-10 bg-muted rounded-full">
+              <p className="text-sm font-semibold">{name![0]}</p>
+            </div>
+          )}
+          <div className="flex text-left flex-col">
+            <p className="text-sm font-medium">{name}</p>
+            <p className="text-xs text-muted-foreground">{email}</p>
+          </div>
+        </Button>
+      );
+
     return (
       <Link href={`/instructor-search/user/${id}`} className="w-full">
         <Button
