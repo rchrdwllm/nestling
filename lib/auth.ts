@@ -33,15 +33,12 @@ export const authOptions = {
           }
 
           const user = users.docs[0].data() as User;
-          console.log("User data from Firestore:", user); // Debugging
 
           const passwordsMatch = await bcrypt.compare(password, user.password);
 
           if (passwordsMatch) {
-            console.log("Passwords match, returning user:", user);
             return user;
           } else {
-            console.log("Passwords do not match");
             return null;
           }
         }
