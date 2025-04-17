@@ -1,15 +1,41 @@
 "use client";
 
 import { useInboxStore } from "@/context/inbox-context";
+import { getUserById } from "@/lib/user";
+import { User } from "@/types";
+import { useEffect, useState } from "react";
 
 const ChatWindow = () => {
   const { selectedUserId } = useInboxStore();
+  const [receiver, setReceiver] = useState<User | null>(null);
+
+  const fetchUser = async (userId: string) => {
+    const { success, error } = await getUserById(userId);
+
+    if (success) {
+      setReceiver(success);
+    } else {
+      console.error("Error fetching user:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (selectedUserId) {
+      fetchUser(selectedUserId);
+    } else {
+      setReceiver(null);
+    }
+  }, [selectedUserId]);
+
+  if (!receiver) {
+    return <div>No user selected</div>;
+  }
 
   return (
     <div>
-      {selectedUserId
-        ? `Selected User ID: ${selectedUserId}`
-        : "No user selected"}
+      <header className="p-4 border-b border-border">
+        <h1 className="font-semibold">Chat with {receiver.name}</h1>
+      </header>
     </div>
   );
 };
