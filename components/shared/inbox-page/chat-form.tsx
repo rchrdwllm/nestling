@@ -5,17 +5,58 @@ import { Form, FormField, FormItem } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
 import { SendHorizontal } from "lucide-react";
 import { useForm } from "react-hook-form";
+import { sendMessage } from "@/server/actions/send-message";
+import { useAction } from "next-safe-action/hooks";
+import { InboxSchema } from "@/schemas/InboxSchema";
+import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useCurrentUser } from "@/hooks/use-current-user";
+import { toast } from "sonner";
 
-const ChatForm = () => {
-  const form = useForm();
+type ChatFormProps = {
+  receiverId: string;
+};
+
+const ChatForm = ({ receiverId }: ChatFormProps) => {
+  const { user } = useCurrentUser();
+  const form = useForm<z.infer<typeof InboxSchema>>({
+    defaultValues: {
+      message: "",
+      senderId: user.id,
+      receiverId,
+    },
+    resolver: zodResolver(InboxSchema),
+  });
+  const { execute, isExecuting } = useAction(sendMessage, {
+    onExecute: () => {
+      toast.loading("Sending message...");
+    },
+    onSuccess: (data) => {
+      toast.dismiss();
+      toast.success("Message sent successfully!");
+    },
+    onError: () => {
+      toast.dismiss();
+      toast.error("Failed to send message.");
+    },
+  });
+
+  const handleSubmit = (data: z.infer<typeof InboxSchema>) => {
+    execute(data);
+
+    form.reset();
+  };
 
   return (
     <div className="p-4 border-t border-border">
       <Form {...form}>
-        <form className="flex items-end gap-2">
+        <form
+          onSubmit={form.handleSubmit(handleSubmit)}
+          className="flex items-end gap-2"
+        >
           <FormField
             control={form.control}
-            name="email"
+            name="message"
             render={({ field }) => (
               <FormItem className="flex-1">
                 <Textarea
@@ -26,7 +67,7 @@ const ChatForm = () => {
               </FormItem>
             )}
           />
-          <Button type="submit">
+          <Button type="submit" disabled={isExecuting}>
             <SendHorizontal />
           </Button>
         </form>

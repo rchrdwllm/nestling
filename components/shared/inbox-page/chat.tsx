@@ -1,11 +1,13 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import ChatBubble from "./chat-bubble";
 import { useCurrentUser } from "@/hooks/use-current-user";
+import { pusherClient } from "@/lib/pusher";
+import { useEffect, useState } from "react";
+import { Message } from "@/types";
 
 const Chat = () => {
   const { user } = useCurrentUser();
-
-  const chatData = [
+  const [chatData, setChatData] = useState([
     { message: "Hello! How are you?", sender: user.id, timestamp: "10:00 AM" },
     {
       message: "I'm good, thanks! How about you?",
@@ -94,7 +96,26 @@ const Chat = () => {
     },
     { message: "Thanks!", sender: "user2", timestamp: "10:26 AM" },
     { message: "You're welcome!", sender: user.id, timestamp: "10:27 AM" },
-  ];
+  ]);
+
+  useEffect(() => {
+    const channel = pusherClient.subscribe("chat-channel");
+
+    channel.bind("new-message", (data: Message) => {
+      console.log("Received new-message event with data:", data);
+      console.log(data);
+      setChatData((prev) => [...prev, data]);
+    });
+
+    return () => {
+      channel.unbind_all();
+      channel.unsubscribe();
+    };
+  }, []);
+
+  useEffect(() => {
+    console.log(chatData);
+  }, [chatData]);
 
   return (
     <ScrollArea className="h-[calc(100vh-1rem-56.8px-64.8px)] w-full px-4">

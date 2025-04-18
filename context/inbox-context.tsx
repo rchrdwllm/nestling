@@ -12,9 +12,6 @@ export const useInboxStore = create<InboxState>((set, get) => ({
   selectedUserId: null,
   setSelectedUserId: (userId: string) => set({ selectedUserId: userId }),
   handleUserClick: (senderId: string, receiverId: string) => {
-    const { selectedUserId } = get();
-
-    console.log({ sender: senderId, receiver: receiverId }); // Updated to use senderId
     set({ selectedUserId: receiverId });
   },
 }));

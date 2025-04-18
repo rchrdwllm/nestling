@@ -155,3 +155,10 @@ export type Submission = {
   content: string;
   feedback: string | undefined;
 };
+
+export type Message = {
+  message: string;
+  sender: string;
+  receiver: string;
+  timestamp: string;
+};

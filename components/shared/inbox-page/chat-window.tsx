@@ -39,7 +39,7 @@ const ChatWindow = () => {
         <h1 className="font-semibold">Chat with {receiver.name}</h1>
       </header>
       <Chat />
-      <ChatForm />
+      <ChatForm receiverId={receiver.id} />
     </div>
   );
 };
