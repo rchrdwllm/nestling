@@ -44,8 +44,8 @@ const Dashboard = () => {
           <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-6">
             <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
               <img
-                src="/assets/images/notificationbell.png"
-                alt="Notification Icon"
+                src="https://hollyandivy.com.au/cdn/shop/files/DCH009.jpg?v=1712093551&width=1946"
+                alt="Notification Bell"
                 className="w-6 h-6 mr-2" // You can adjust the size using width (w-6) and height (h-6)
               />
               Notifications
