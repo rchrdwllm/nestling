@@ -62,12 +62,12 @@ const LoginForm = ({ role, setStep }: LoginFormProps) => {
         })
         .catch((error) => {
           toast.dismiss();
-          toast.error(error);
+          toast.error(JSON.stringify(error));
           setIsLoading(false);
         });
     } else if (error) {
       toast.dismiss();
-      toast.error(error as string);
+      toast.error(JSON.stringify(error));
       setIsLoading(false);
     }
   };
