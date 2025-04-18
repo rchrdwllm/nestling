@@ -24,7 +24,7 @@ const Dashboard = () => {
   return (
     <div
       ref={scrollContainerRef}
-      className="bg-[#EDE9DA] py-24 sm:py-0 overflow-y-auto max-h-screen"
+      className="bg-[#EDE9DA] py-24 sm:py-0 max-h-screen"
     >
       <div className="sticky top-0 z-50 bg-gray-50 py-6 shadow-md">
         <div className="mx-auto max-w-2xl px-6 lg:max-w-7xl lg:px-8 flex flex-col justify-center items-center h-full">
@@ -44,9 +44,9 @@ const Dashboard = () => {
           <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-6">
             <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
               <img
-                src="https://hollyandivy.com.au/cdn/shop/files/DCH009.jpg?v=1712093551&width=1946"
+                src="/assets/notification-bell.png" 
                 alt="Notification Bell"
-                className="w-6 h-6 mr-2" // You can adjust the size using width (w-6) and height (h-6)
+                className="w-6 h-6 mr-2" 
               />
               Notifications
             </h3>
@@ -232,6 +232,8 @@ const Dashboard = () => {
         </div>
       </div>
       {/* ANNOUNCEMENT WRAPPER END */}
+
+      
     </div>
   );
 };
