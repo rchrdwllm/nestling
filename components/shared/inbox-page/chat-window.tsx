@@ -4,6 +4,8 @@ import { useInboxStore } from "@/context/inbox-context";
 import { getUserById } from "@/lib/user";
 import { User } from "@/types";
 import { useEffect, useState } from "react";
+import ChatForm from "./chat-form";
+import Chat from "./chat";
 
 const ChatWindow = () => {
   const { selectedUserId } = useInboxStore();
@@ -32,10 +34,12 @@ const ChatWindow = () => {
   }
 
   return (
-    <div>
+    <div className="h-full flex flex-col">
       <header className="p-4 border-b border-border">
         <h1 className="font-semibold">Chat with {receiver.name}</h1>
       </header>
+      <Chat />
+      <ChatForm />
     </div>
   );
 };
