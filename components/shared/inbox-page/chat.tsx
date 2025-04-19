@@ -4,24 +4,41 @@ import { useCurrentUser } from "@/hooks/use-current-user";
 import { pusherClient } from "@/lib/pusher";
 import { useEffect, useRef, useState } from "react";
 import { Message } from "@/types";
+import { generateChatChannelName } from "@/lib/utils";
 
-const Chat = () => {
+type ChatProps = {
+  receiverId: string;
+};
+
+const Chat = ({ receiverId }: ChatProps) => {
   const { user } = useCurrentUser();
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const [chatData, setChatData] = useState<Message[]>([]);
 
   useEffect(() => {
-    pusherClient.subscribe("chat-channel");
+    if (user && receiverId) {
+      const channelName = generateChatChannelName(user.id, receiverId);
 
-    pusherClient.bind("new-message", (data: Message) => {
-      setChatData((prev) => [...prev, data]);
-    });
+      const existingSubscription = pusherClient
+        .allChannels()
+        .find((channel) => {
+          return channel.name === channelName;
+        });
 
-    return () => {
-      pusherClient.unbind_all();
-      pusherClient.unsubscribe("chat-channel");
-    };
-  }, []);
+      if (!existingSubscription) {
+        pusherClient.subscribe(channelName);
+      }
+
+      pusherClient.bind("new-message", (data: Message) => {
+        setChatData((prev) => [...prev, data]);
+      });
+
+      return () => {
+        pusherClient.unbind_all();
+        pusherClient.unsubscribe(channelName);
+      };
+    }
+  }, [user, receiverId]);
 
   useEffect(() => {
     if (chatContainerRef.current) {
