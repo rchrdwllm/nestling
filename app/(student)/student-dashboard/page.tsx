@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useRef } from "react";
-import FeatureCard from "@/components/ui/FeatureCard";
 import "./styles.css";
 
 const Dashboard = () => {

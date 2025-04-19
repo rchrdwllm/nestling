@@ -1,6 +1,5 @@
 "use client";
 
-import ReactScan from "@/components/ui/react-scan";
 import Sidebar from "@/components/ui/sidebar/sidebar";
 import Unauthorized from "@/components/ui/unauthorized";
 import { useSession } from "next-auth/react";
@@ -30,7 +29,6 @@ const Layout = ({ children }: { children: ReactNode }) => {
   return (
     <div className="min-h-screen flex items-stretch bg-secondary p-2 gap-2">
       <Sidebar />
-      <ReactScan />
       <div className="w-full bg-background border border-border rounded-xl">
         {children}
       </div>

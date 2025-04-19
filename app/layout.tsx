@@ -8,6 +8,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import CacheRefresherWrapper from "@/components/wrappers/cache-refresher-wrapper";
 import ThemeWrapper from "@/components/wrappers/theme-wrapper";
+import ReactScan from "@/components/ui/react-scan";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -45,6 +46,7 @@ export default async function RootLayout({
         <SessionWrapper session={session}>
           <ThemeWrapper attribute="class" defaultTheme="light">
             <NextTopLoader showSpinner={false} color="#df1514" />
+            <ReactScan />
             <CacheRefresherWrapper>{children}</CacheRefresherWrapper>
             <Toaster />
           </ThemeWrapper>
