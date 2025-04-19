@@ -19,15 +19,7 @@ const Chat = ({ receiverId }: ChatProps) => {
     if (user && receiverId) {
       const channelName = generateChatChannelName(user.id, receiverId);
 
-      const existingSubscription = pusherClient
-        .allChannels()
-        .find((channel) => {
-          return channel.name === channelName;
-        });
-
-      if (!existingSubscription) {
-        pusherClient.subscribe(channelName);
-      }
+      pusherClient.subscribe(channelName);
 
       pusherClient.bind("new-message", (data: Message) => {
         setChatData((prev) => [...prev, data]);
