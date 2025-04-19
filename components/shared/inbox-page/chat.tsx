@@ -16,17 +16,21 @@ const Chat = ({ receiverId }: ChatProps) => {
   const [chatData, setChatData] = useState<Message[]>([]);
 
   useEffect(() => {
-    pusherClient.subscribe("chat-channel");
+    if (user && receiverId) {
+      const channelName = generateChatChannelName(user.id, receiverId);
 
-    pusherClient.bind("new-message", (data: Message) => {
-      setChatData((prev) => [...prev, data]);
-    });
+      pusherClient.subscribe(channelName);
 
-    return () => {
-      pusherClient.unbind_all();
-      pusherClient.unsubscribe("chat-channel");
-    };
-  }, []);
+      pusherClient.bind("new-message", (data: Message) => {
+        setChatData((prev) => [...prev, data]);
+      });
+
+      return () => {
+        pusherClient.unbind_all();
+        pusherClient.unsubscribe(channelName);
+      };
+    }
+  }, [user, receiverId]);
 
   useEffect(() => {
     if (chatContainerRef.current) {

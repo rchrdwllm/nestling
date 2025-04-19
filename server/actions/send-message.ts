@@ -3,6 +3,7 @@
 import { pusherServer } from "@/lib/pusher";
 import { actionClient } from "../action-client";
 import { InboxSchema } from "@/schemas/InboxSchema";
+import { generateChatChannelName } from "@/lib/utils";
 
 export const sendMessage = actionClient
   .schema(InboxSchema)
@@ -17,7 +18,8 @@ export const sendMessage = actionClient
         timestamp: new Date().toISOString(),
       };
 
-      await pusherServer.trigger("chat-channel", "new-message", messageData);
+      const channelName = generateChatChannelName(senderId, receiverId);
+      await pusherServer.trigger(channelName, "new-message", messageData);
 
       return { success: messageData };
     } catch (error) {
