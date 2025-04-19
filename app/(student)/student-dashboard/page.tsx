@@ -44,9 +44,9 @@ const Dashboard = () => {
           <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-6">
             <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
               <img
-                src="/assets/notification-bell.png" 
+                src="/assets/notification-bell.png"
                 alt="Notification Bell"
-                className="w-6 h-6 mr-2" 
+                className="w-6 h-6 mr-2"
               />
               Notifications
             </h3>
@@ -232,8 +232,6 @@ const Dashboard = () => {
         </div>
       </div>
       {/* ANNOUNCEMENT WRAPPER END */}
-
-      
     </div>
   );
 };
