@@ -4,5 +4,6 @@ export const InboxSchema = z.object({
   message: z.string().min(1, "Message cannot be empty"),
   senderId: z.string().uuid("Invalid sender ID"),
   receiverId: z.string().uuid("Invalid receiver ID"),
+  channelName: z.string(),
   timestamp: z.string().optional(),
 });

@@ -12,6 +12,7 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { toast } from "sonner";
+import { generateChatChannelName } from "@/lib/utils";
 
 type ChatFormProps = {
   receiverId: string;
@@ -24,6 +25,7 @@ const ChatForm = ({ receiverId }: ChatFormProps) => {
       message: "",
       senderId: user.id,
       receiverId,
+      channelName: generateChatChannelName(user.id, receiverId),
     },
     resolver: zodResolver(InboxSchema),
   });

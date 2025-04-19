@@ -161,5 +161,6 @@ export type Message = {
   message: string;
   senderId: string;
   receiverId: string;
+  channelName: string;
   timestamp: string;
 };

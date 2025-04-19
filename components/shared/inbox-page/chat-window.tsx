@@ -30,7 +30,11 @@ const ChatWindow = () => {
   }, [selectedUserId]);
 
   if (!receiver) {
-    return <div>No user selected</div>;
+    return (
+      <div className="h-full flex justify-center items-center">
+        <h1 className="text-muted-foreground">Start chatting with someone</h1>
+      </div>
+    );
   }
 
   return (
