@@ -26,7 +26,7 @@ const Chat = ({ receiverId }: ChatProps) => {
       pusherClient.unbind_all();
       pusherClient.unsubscribe("chat-channel");
     };
-  }, [user, receiverId]);
+  }, []);
 
   useEffect(() => {
     if (chatContainerRef.current) {
