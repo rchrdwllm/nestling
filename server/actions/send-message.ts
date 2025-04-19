@@ -19,7 +19,7 @@ export const sendMessage = actionClient
       };
 
       const channelName = generateChatChannelName(senderId, receiverId);
-      await pusherServer.trigger(channelName, "new-message", messageData);
+      await pusherServer.trigger("chat-channel", "new-message", messageData);
 
       return { success: messageData };
     } catch (error) {
