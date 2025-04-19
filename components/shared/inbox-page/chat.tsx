@@ -4,20 +4,21 @@ import { useCurrentUser } from "@/hooks/use-current-user";
 import { pusherClient } from "@/lib/pusher";
 import { useEffect, useRef, useState } from "react";
 import { Message } from "@/types";
-import { generateChatChannelName } from "@/lib/utils";
+import { generateChannelId } from "@/lib/utils";
 
 type ChatProps = {
   receiverId: string;
+  prevMessages?: Message[];
 };
 
-const Chat = ({ receiverId }: ChatProps) => {
+const Chat = ({ receiverId, prevMessages }: ChatProps) => {
   const { user } = useCurrentUser();
   const chatContainerRef = useRef<HTMLDivElement>(null);
-  const [chatData, setChatData] = useState<Message[]>([]);
+  const [chatData, setChatData] = useState<Message[]>(prevMessages || []);
 
   useEffect(() => {
     if (user && receiverId) {
-      const channelName = generateChatChannelName(user.id, receiverId);
+      const channelName = generateChannelId(user.id, receiverId);
 
       pusherClient.subscribe(channelName);
 

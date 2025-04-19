@@ -1,15 +1,27 @@
 "use client";
 
-import { useInboxStore } from "@/context/inbox-context";
 import { getUserById } from "@/lib/user";
-import { User } from "@/types";
+import { Message, User } from "@/types";
 import { useEffect, useState } from "react";
-import ChatForm from "./chat-form";
-import Chat from "./chat";
+import ChatForm from "@/components/shared/inbox-page/chat-form";
+import Chat from "@/components/shared/inbox-page/chat";
+import { useSearchParams } from "next/navigation";
 
-const ChatWindow = () => {
-  const { selectedUserId } = useInboxStore();
+type ChatWindowProps = {
+  messages: string;
+};
+
+const ChatWindow = ({ messages }: ChatWindowProps) => {
   const [receiver, setReceiver] = useState<User | null>(null);
+  const searchParams = useSearchParams();
+  const receiverId = searchParams.get("receiverId");
+  const prevMessagesData = JSON.parse(messages) as Message[];
+
+  useEffect(() => {
+    if (receiverId) {
+      fetchUser(receiverId);
+    }
+  }, [receiverId]);
 
   const fetchUser = async (userId: string) => {
     const { success, error } = await getUserById(userId);
@@ -20,14 +32,6 @@ const ChatWindow = () => {
       console.error("Error fetching user:", error);
     }
   };
-
-  useEffect(() => {
-    if (selectedUserId) {
-      fetchUser(selectedUserId);
-    } else {
-      setReceiver(null);
-    }
-  }, [selectedUserId]);
 
   if (!receiver) {
     return (
@@ -42,7 +46,7 @@ const ChatWindow = () => {
       <header className="p-4 border-b border-border">
         <h1 className="font-semibold">Chat with {receiver.name}</h1>
       </header>
-      <Chat receiverId={receiver.id} />
+      <Chat prevMessages={prevMessagesData} receiverId={receiver.id} />
       <ChatForm receiverId={receiver.id} />
     </div>
   );

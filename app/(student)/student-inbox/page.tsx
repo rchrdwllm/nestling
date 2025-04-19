@@ -1,15 +1,7 @@
-import ChatWindow from "@/components/shared/inbox-page/chat-window";
-import SearchBar from "@/components/shared/search/search-bar";
-
 const StudentInbox = () => {
   return (
-    <main className="grid grid-cols-8 h-[calc(100vh-1.1rem)]">
-      <aside className="flex flex-col col-span-2 border-r border-border p-4">
-        <SearchBar isInbox entities={["students", "instructors"]} />
-      </aside>
-      <div className="col-span-6">
-        <ChatWindow />
-      </div>
+    <main className="h-full flex justify-center items-center">
+      <h1 className="text-muted-foreground">Start chatting with someone</h1>
     </main>
   );
 };

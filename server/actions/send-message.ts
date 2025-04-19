@@ -8,7 +8,7 @@ import { db } from "@/lib/firebase";
 export const sendMessage = actionClient
   .schema(InboxSchema)
   .action(async ({ parsedInput }) => {
-    const { message, senderId, receiverId, channelName } = parsedInput;
+    const { message, senderId, receiverId, channelId } = parsedInput;
 
     try {
       const id = crypto.randomUUID();
@@ -16,12 +16,12 @@ export const sendMessage = actionClient
         message,
         senderId,
         receiverId,
-        channelName,
+        channelId,
         id,
         timestamp: new Date().toISOString(),
       };
 
-      await pusherServer.trigger(channelName, "new-message", messageData);
+      await pusherServer.trigger(channelId, "new-message", messageData);
       await db.collection("messages").doc(id).set(messageData);
 
       return { success: messageData };

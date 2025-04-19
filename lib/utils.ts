@@ -5,7 +5,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function generateChatChannelName(
+export function generateChannelId(
   senderId: string,
   receiverId: string
 ): string {
