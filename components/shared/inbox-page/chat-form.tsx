@@ -35,7 +35,6 @@ const ChatForm = ({ receiverId }: ChatFormProps) => {
   });
 
   const handleSubmit = (data: z.infer<typeof InboxSchema>) => {
-    console.log(user.id);
     execute({ ...data, senderId: user.id });
 
     form.reset();
