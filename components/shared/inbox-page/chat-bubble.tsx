@@ -2,19 +2,19 @@
 
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { cn } from "@/lib/utils";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 
 type ChatBubbleProps = {
   message: string;
-  sender: string;
+  senderId: string;
   timestamp: string;
 };
 
-const ChatBubble = ({ message, sender, timestamp }: ChatBubbleProps) => {
+const ChatBubble = ({ message, senderId, timestamp }: ChatBubbleProps) => {
   const { user } = useCurrentUser();
   const isSender = useMemo(() => {
-    return sender === user.id;
-  }, [user, sender]);
+    return senderId === user.id;
+  }, [user, senderId]);
 
   return (
     <article
@@ -23,7 +23,7 @@ const ChatBubble = ({ message, sender, timestamp }: ChatBubbleProps) => {
         isSender ? "ml-auto bg-primary text-primary-foreground" : "bg-secondary"
       )}
     >
-      {sender}: {message} at {timestamp}
+      {senderId}: {message} at {timestamp}
     </article>
   );
 };

@@ -28,13 +28,6 @@ const ChatForm = ({ receiverId }: ChatFormProps) => {
     resolver: zodResolver(InboxSchema),
   });
   const { execute, isExecuting } = useAction(sendMessage, {
-    onExecute: () => {
-      toast.loading("Sending message...");
-    },
-    onSuccess: (data) => {
-      toast.dismiss();
-      toast.success("Message sent successfully!");
-    },
     onError: () => {
       toast.dismiss();
       toast.error("Failed to send message.");
@@ -42,7 +35,8 @@ const ChatForm = ({ receiverId }: ChatFormProps) => {
   });
 
   const handleSubmit = (data: z.infer<typeof InboxSchema>) => {
-    execute(data);
+    console.log(user.id);
+    execute({ ...data, senderId: user.id });
 
     form.reset();
   };

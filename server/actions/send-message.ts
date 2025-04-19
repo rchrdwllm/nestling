@@ -10,22 +10,16 @@ export const sendMessage = actionClient
     const { message, senderId, receiverId } = parsedInput;
 
     try {
-      const data = {
+      const messageData = {
         message,
         senderId,
         receiverId,
         timestamp: new Date().toISOString(),
       };
 
-      const adsf = await pusherServer.trigger(
-        "chat-channel",
-        "new-message",
-        data
-      );
+      await pusherServer.trigger("chat-channel", "new-message", messageData);
 
-      console.log(adsf);
-
-      return { success: data };
+      return { success: messageData };
     } catch (error) {
       console.error("Error sending message:", error);
 

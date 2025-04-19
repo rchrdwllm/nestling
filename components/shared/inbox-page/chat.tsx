@@ -2,131 +2,238 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import ChatBubble from "./chat-bubble";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { pusherClient } from "@/lib/pusher";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Message } from "@/types";
 
 const Chat = () => {
   const { user } = useCurrentUser();
+  const chatContainerRef = useRef<HTMLDivElement>(null);
   const [chatData, setChatData] = useState([
-    { message: "Hello! How are you?", sender: user.id, timestamp: "10:00 AM" },
     {
+      id: "550e8400-e29b-41d4-a716-446655440000",
+      message: "Hello! How are you?",
+      senderId: user.id,
+      receiverId: "user2",
+      timestamp: "10:00 AM",
+    },
+    {
+      id: "550e8400-e29b-41d4-a716-446655440001",
       message: "I'm good, thanks! How about you?",
-      sender: "user2",
+      senderId: "user2",
+      receiverId: user.id,
       timestamp: "10:01 AM",
     },
     {
+      id: "550e8400-e29b-41d4-a716-446655440002",
       message: "Doing well, just working on a project.",
-      sender: user.id,
+      senderId: user.id,
+      receiverId: "user2",
       timestamp: "10:02 AM",
     },
     {
+      id: "550e8400-e29b-41d4-a716-446655440003",
       message: "That's great to hear!",
-      sender: "user2",
+      senderId: "user2",
+      receiverId: user.id,
       timestamp: "10:03 AM",
     },
-    { message: "What about you?", sender: user.id, timestamp: "10:04 AM" },
     {
+      id: "550e8400-e29b-41d4-a716-446655440004",
+      message: "What about you?",
+      senderId: user.id,
+      receiverId: "user2",
+      timestamp: "10:04 AM",
+    },
+    {
+      id: "550e8400-e29b-41d4-a716-446655440005",
       message: "Just finished a meeting.",
-      sender: "user2",
+      senderId: "user2",
+      receiverId: user.id,
       timestamp: "10:05 AM",
     },
-    { message: "Sounds productive!", sender: user.id, timestamp: "10:06 AM" },
-    { message: "Indeed!", sender: "user2", timestamp: "10:07 AM" },
-    { message: "Are you free later?", sender: user.id, timestamp: "10:08 AM" },
     {
+      id: "550e8400-e29b-41d4-a716-446655440006",
+      message: "Sounds productive!",
+      senderId: user.id,
+      receiverId: "user2",
+      timestamp: "10:06 AM",
+    },
+    {
+      id: "550e8400-e29b-41d4-a716-446655440007",
+      message: "Indeed!",
+      senderId: "user2",
+      receiverId: user.id,
+      timestamp: "10:07 AM",
+    },
+    {
+      id: "550e8400-e29b-41d4-a716-446655440008",
+      message: "Are you free later?",
+      senderId: user.id,
+      receiverId: "user2",
+      timestamp: "10:08 AM",
+    },
+    {
+      id: "550e8400-e29b-41d4-a716-446655440009",
       message: "Yes, I am. What's up?",
-      sender: "user2",
+      senderId: "user2",
+      receiverId: user.id,
       timestamp: "10:09 AM",
     },
-    { message: "Want to grab coffee?", sender: user.id, timestamp: "10:10 AM" },
-    { message: "Sure, sounds good!", sender: "user2", timestamp: "10:11 AM" },
     {
+      id: "550e8400-e29b-41d4-a716-44665544000a",
+      message: "Want to grab coffee?",
+      senderId: user.id,
+      receiverId: "user2",
+      timestamp: "10:10 AM",
+    },
+    {
+      id: "550e8400-e29b-41d4-a716-44665544000b",
+      message: "Sure, sounds good!",
+      senderId: "user2",
+      receiverId: user.id,
+      timestamp: "10:11 AM",
+    },
+    {
+      id: "550e8400-e29b-41d4-a716-44665544000c",
       message: "Great, see you at 3 PM?",
-      sender: user.id,
+      senderId: user.id,
+      receiverId: "user2",
       timestamp: "10:12 AM",
     },
-    { message: "Perfect!", sender: "user2", timestamp: "10:13 AM" },
     {
+      id: "550e8400-e29b-41d4-a716-44665544000d",
+      message: "Perfect!",
+      senderId: "user2",
+      receiverId: user.id,
+      timestamp: "10:13 AM",
+    },
+    {
+      id: "550e8400-e29b-41d4-a716-44665544000e",
       message: "By the way, did you finish the report?",
-      sender: "user2",
+      senderId: "user2",
+      receiverId: user.id,
       timestamp: "10:14 AM",
     },
     {
+      id: "550e8400-e29b-41d4-a716-44665544000f",
       message: "Yes, I sent it this morning.",
-      sender: user.id,
+      senderId: user.id,
+      receiverId: "user2",
       timestamp: "10:15 AM",
     },
-    { message: "Awesome, thanks!", sender: "user2", timestamp: "10:16 AM" },
-    { message: "No problem!", sender: user.id, timestamp: "10:17 AM" },
     {
+      id: "550e8400-e29b-41d4-a716-446655440010",
+      message: "Awesome, thanks!",
+      senderId: "user2",
+      receiverId: user.id,
+      timestamp: "10:16 AM",
+    },
+    {
+      id: "550e8400-e29b-41d4-a716-446655440011",
+      message: "No problem!",
+      senderId: user.id,
+      receiverId: "user2",
+      timestamp: "10:17 AM",
+    },
+    {
+      id: "550e8400-e29b-41d4-a716-446655440012",
       message: "Do you need help with anything?",
-      sender: user.id,
+      senderId: user.id,
+      receiverId: "user2",
       timestamp: "10:18 AM",
     },
     {
+      id: "550e8400-e29b-41d4-a716-446655440013",
       message: "Not at the moment, but I'll let you know.",
-      sender: "user2",
+      senderId: "user2",
+      receiverId: user.id,
       timestamp: "10:19 AM",
     },
     {
+      id: "550e8400-e29b-41d4-a716-446655440014",
       message: "Alright, just let me know.",
-      sender: user.id,
+      senderId: user.id,
+      receiverId: "user2",
       timestamp: "10:20 AM",
     },
-    { message: "Will do!", sender: "user2", timestamp: "10:21 AM" },
     {
+      id: "550e8400-e29b-41d4-a716-446655440015",
+      message: "Will do!",
+      senderId: "user2",
+      receiverId: user.id,
+      timestamp: "10:21 AM",
+    },
+    {
+      id: "550e8400-e29b-41d4-a716-446655440016",
       message: "Have you seen the latest updates?",
-      sender: "user2",
+      senderId: "user2",
+      receiverId: user.id,
       timestamp: "10:22 AM",
     },
     {
+      id: "550e8400-e29b-41d4-a716-446655440017",
       message: "Not yet, are they important?",
-      sender: user.id,
+      senderId: user.id,
+      receiverId: "user2",
       timestamp: "10:23 AM",
     },
     {
+      id: "550e8400-e29b-41d4-a716-446655440018",
       message: "Yes, you should check them out.",
-      sender: "user2",
+      senderId: "user2",
+      receiverId: user.id,
       timestamp: "10:24 AM",
     },
     {
+      id: "550e8400-e29b-41d4-a716-446655440019",
       message: "Alright, I'll take a look.",
-      sender: user.id,
+      senderId: user.id,
+      receiverId: "user2",
       timestamp: "10:25 AM",
     },
-    { message: "Thanks!", sender: "user2", timestamp: "10:26 AM" },
-    { message: "You're welcome!", sender: user.id, timestamp: "10:27 AM" },
+    {
+      id: "550e8400-e29b-41d4-a716-44665544001a",
+      message: "Thanks!",
+      senderId: "user2",
+      receiverId: user.id,
+      timestamp: "10:26 AM",
+    },
+    {
+      id: "550e8400-e29b-41d4-a716-44665544001b",
+      message: "You're welcome!",
+      senderId: user.id,
+      receiverId: "user2",
+      timestamp: "10:27 AM",
+    },
   ]);
 
   useEffect(() => {
-    const channel = pusherClient.subscribe("chat-channel");
+    pusherClient.subscribe("chat-channel");
 
-    channel.bind("new-message", (data: Message) => {
-      console.log("Received new-message event with data:", data);
-      console.log(data);
+    pusherClient.bind("new-message", (data: Message) => {
       setChatData((prev) => [...prev, data]);
     });
 
     return () => {
-      channel.unbind_all();
-      channel.unsubscribe();
+      pusherClient.unbind_all();
+      pusherClient.unsubscribe("chat-channel");
     };
   }, []);
 
   useEffect(() => {
-    console.log(chatData);
-  }, [chatData]);
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "end",
+      });
+    }
+  }, [chatData, chatContainerRef]);
 
   return (
     <ScrollArea className="h-[calc(100vh-1rem-56.8px-64.8px)] w-full px-4">
-      <div className="flex flex-col gap-4 py-4">
+      <div ref={chatContainerRef} className="flex flex-col gap-4 py-4">
         {chatData.map((chat, index) => (
-          <ChatBubble
-            key={index}
-            message={chat.message}
-            sender={chat.sender}
-            timestamp={chat.timestamp}
-          />
+          <ChatBubble key={index} {...chat} />
         ))}
       </div>
     </ScrollArea>

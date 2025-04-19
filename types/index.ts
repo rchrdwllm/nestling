@@ -157,8 +157,9 @@ export type Submission = {
 };
 
 export type Message = {
+  id: string;
   message: string;
-  sender: string;
-  receiver: string;
+  senderId: string;
+  receiverId: string;
   timestamp: string;
 };
