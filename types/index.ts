@@ -164,3 +164,11 @@ export type Message = {
   channelId: string;
   timestamp: string;
 };
+
+export type Thread = {
+  id: string;
+  channelId: string;
+  userIds: string[];
+  createdAt: Timestamp;
+  updatedAt: Timestamp;
+};

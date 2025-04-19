@@ -36,7 +36,7 @@ const ChatWindow = ({ messages }: ChatWindowProps) => {
   if (!receiver) {
     return (
       <div className="h-full flex justify-center items-center">
-        <h1 className="text-muted-foreground">Start chatting with someone</h1>
+        <h1 className="text-muted-foreground">Loading...</h1>
       </div>
     );
   }

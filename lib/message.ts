@@ -11,7 +11,7 @@ export const getChannelMessages = async (channelId: string) => {
     const snapshot = await messagesRef.get();
 
     if (snapshot.empty) {
-      return { error: "No messages found" };
+      return { success: [] };
     }
 
     const messages = snapshot.docs.map((doc) => ({
