@@ -26,7 +26,6 @@ export const createThread = actionClient
         channelId,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-
         userIds,
       };
 

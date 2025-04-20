@@ -28,8 +28,6 @@ export const sendMessage = actionClient
         const data = await createThread({
           channelId,
           userIds: [senderId, receiverId],
-          senderId,
-          receiverId,
         });
 
         if (data?.data?.success) {
