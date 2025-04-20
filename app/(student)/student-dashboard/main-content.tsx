@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef } from "react";
 import "./styles.css";
+import SidePanel from "./side-panel";
 
 const Dashboard = () => {
   // Reference for the container to scroll
@@ -14,7 +15,7 @@ const Dashboard = () => {
           top: scrollContainerRef.current.scrollHeight,
           behavior: "smooth",
         });
-     }
+      }
     }, 3000);
 
     return () => clearTimeout(timeout);
@@ -36,7 +37,14 @@ const Dashboard = () => {
         </div>
       </div>
 
-
+      <div className="flex">
+        <div className="sticky top-0 right-0 h-screen w-64">
+          <SidePanel />
+          <div className="flex-1">
+            {/* Main content goes here */}
+          </div>
+        </div>
+      </div>
 
       {/* ANNOUNCEMENT WRAPPER */}
       <div className="w-full max-w-7xl mx-auto space-y-10 mb-12 pr-[22px] bg-white rounded-xl p-8 shadow-2xl ml-10 mt-4 z-0 relative">
