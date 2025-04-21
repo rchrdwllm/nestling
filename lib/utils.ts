@@ -10,7 +10,8 @@ export function generateChannelId(
   receiverId: string
 ): string {
   const sortedIds = [senderId, receiverId].sort();
-  return `presence-chat-channel-${sortedIds[0]}-${sortedIds[1]}`;
+
+  return `chat-channel-${sortedIds[0]}-${sortedIds[1]}`;
 }
 
 export async function streamToString(stream: any) {

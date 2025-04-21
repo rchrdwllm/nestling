@@ -5,7 +5,6 @@ import { pusherClient } from "@/lib/pusher";
 import { useEffect, useRef, useState } from "react";
 import { Message } from "@/types";
 import { generateChannelId } from "@/lib/utils";
-import { Channel } from "pusher-js";
 
 type ChatProps = {
   receiverId: string;
@@ -18,14 +17,11 @@ const Chat = ({ receiverId, prevMessages }: ChatProps) => {
   const [chatData, setChatData] = useState<Message[]>(prevMessages || []);
 
   useEffect(() => {
-    pusherClient.signin();
-  }, []);
-
-  useEffect(() => {
     if (user && receiverId) {
       const channelName = generateChannelId(user.id, receiverId);
 
       pusherClient.subscribe(channelName);
+
       pusherClient.bind("new-message", (data: Message) => {
         setChatData((prev) => [...prev, data]);
       });

@@ -4,7 +4,7 @@ import { ReactNode } from "react";
 
 const Layout = ({ children }: { children: ReactNode }) => {
   return (
-    <main className="grid grid-cols-8 gap-x-2 bg-secondary h-[calc(100vh-1rem)]">
+    <main className="grid grid-cols-8 gap-x-2 bg-secondary h-[calc(100vh-1.1rem)]">
       <aside className="flex flex-col col-span-2 border rounded-xl border-border bg-background">
         <div className="p-4 border-b border-border">
           <SearchBar isInbox entities={["students", "instructors"]} />

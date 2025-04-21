@@ -58,6 +58,12 @@ const ChatForm = ({ receiverId }: ChatFormProps) => {
                   className="min-h-8 h-8 py-1 text-sm"
                   placeholder="Send a message"
                   {...field}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && !e.shiftKey) {
+                      e.preventDefault();
+                      form.handleSubmit(handleSubmit)();
+                    }
+                  }}
                 />
               </FormItem>
             )}
