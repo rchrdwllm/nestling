@@ -4,10 +4,10 @@ import "./styles.css";
 import SidePanel from "./side-panel";
 
 const Dashboard = () => {
-  // Reference for the container to scroll
+
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
 
-  // Auto-scroll effect after a certain delay
+  {/* Autoscroll Effect */}
   useEffect(() => {
     const timeout = setTimeout(() => {
       if (scrollContainerRef.current) {
@@ -24,8 +24,7 @@ const Dashboard = () => {
   return (
     <div
       ref={scrollContainerRef}
-      className="bg-[#EDE9DA] py-24 sm:py-0 max-h-screen"
-    >
+      className="bg-[#EDE9DA] py-24 sm:py-0 max-h-screen">
       <div className="sticky top-0 z-50 bg-gray-50 py-6 shadow-md">
         <div className="mx-auto max-w-2xl px-6 lg:max-w-7xl lg:px-8 flex flex-col justify-center items-center h-full">
           <h2 className="text-center text-base/7 font-semibold text-black sm:text-xl">
@@ -46,7 +45,7 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* ANNOUNCEMENT WRAPPER */}
+      {/* ANNOUNCEMENT WRAPPER */} {/* To be replaced with working functions */}
       <div className="w-full max-w-7xl mx-auto space-y-10 mb-12 pr-[22px] bg-white rounded-xl p-8 shadow-2xl ml-10 mt-4 z-0 relative">
         {/* CARD #1 */}
         <div className="space-y-6 px-4 sm:px-8">
