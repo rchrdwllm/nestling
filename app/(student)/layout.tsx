@@ -2,13 +2,15 @@
 
 import Sidebar from "@/components/ui/sidebar/sidebar";
 import Unauthorized from "@/components/ui/unauthorized";
+import { cn } from "@/lib/utils";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSelectedLayoutSegment } from "next/navigation";
 import { ReactNode, useEffect } from "react";
 
 const Layout = ({ children }: { children: ReactNode }) => {
   const { data: session, status } = useSession({ required: true });
   const router = useRouter();
+  const segment = useSelectedLayoutSegment();
 
   useEffect(() => {
     if (!session) {
@@ -29,7 +31,12 @@ const Layout = ({ children }: { children: ReactNode }) => {
   return (
     <div className="min-h-screen flex items-stretch bg-secondary p-2 gap-2">
       <Sidebar />
-      <div className="w-full bg-background border border-border rounded-xl">
+      <div
+        className={cn(
+          "w-full h-[calc(100vh-1rem)] bg-background",
+          segment !== "student-inbox" ? "border border-border rounded-xl" : null
+        )}
+      >
         {children}
       </div>
     </div>

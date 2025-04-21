@@ -5,6 +5,7 @@ import { pusherClient } from "@/lib/pusher";
 import { useEffect, useRef, useState } from "react";
 import { Message } from "@/types";
 import { generateChannelId } from "@/lib/utils";
+import { Channel } from "pusher-js";
 
 type ChatProps = {
   receiverId: string;
@@ -17,11 +18,14 @@ const Chat = ({ receiverId, prevMessages }: ChatProps) => {
   const [chatData, setChatData] = useState<Message[]>(prevMessages || []);
 
   useEffect(() => {
+    pusherClient.signin();
+  }, []);
+
+  useEffect(() => {
     if (user && receiverId) {
       const channelName = generateChannelId(user.id, receiverId);
 
       pusherClient.subscribe(channelName);
-
       pusherClient.bind("new-message", (data: Message) => {
         setChatData((prev) => [...prev, data]);
       });
@@ -43,7 +47,7 @@ const Chat = ({ receiverId, prevMessages }: ChatProps) => {
   }, [chatData, chatContainerRef]);
 
   return (
-    <ScrollArea className="h-[calc(100vh-1rem-56.8px-64.8px)] w-full px-4">
+    <ScrollArea className="h-[calc(100vh-1rem-72.8px-64.8px)] w-full px-4">
       <div ref={chatContainerRef} className="flex flex-col gap-4 py-4">
         {chatData.map((chat, index) => (
           <ChatBubble key={index} {...chat} />

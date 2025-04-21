@@ -43,7 +43,7 @@ const ChannelPage = async ({
 
   if (!messages?.length && receiver) {
     return (
-      <div className="h-full flex flex-col">
+      <div className="flex flex-col">
         <header className="p-4 border-b border-border">
           <h1 className="font-semibold">Chat with {receiver.name}</h1>
         </header>

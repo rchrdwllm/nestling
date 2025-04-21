@@ -10,5 +10,15 @@ export function generateChannelId(
   receiverId: string
 ): string {
   const sortedIds = [senderId, receiverId].sort();
-  return `chat-channel-${sortedIds[0]}-${sortedIds[1]}`;
+  return `presence-chat-channel-${sortedIds[0]}-${sortedIds[1]}`;
+}
+
+export async function streamToString(stream: any) {
+  const chunks = [];
+
+  for await (const chunk of stream) {
+    chunks.push(chunk);
+  }
+
+  return Buffer.concat(chunks).toString("utf8");
 }
