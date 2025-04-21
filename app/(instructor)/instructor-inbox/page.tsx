@@ -1,14 +1,9 @@
-import SearchBar from "@/components/shared/search/search-bar";
-
-const InstructorInboxPage = () => {
+const InstructorInbox = () => {
   return (
-    <main className="grid grid-cols-8 h-full">
-      <aside className="col-span-2 border-r border-border p-6 pt-8">
-        <SearchBar isInbox entities={["students", "instructors"]} />
-      </aside>
-      <div></div>
+    <main className="h-full flex justify-center items-center">
+      <h1 className="text-muted-foreground">Start chatting with someone</h1>
     </main>
   );
 };
 
-export default InstructorInboxPage;
+export default InstructorInbox;
