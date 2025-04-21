@@ -89,7 +89,11 @@ const InstructorSearchResults = ({ isInbox }: InstructorSearchResultsProps) => {
       <ScrollArea className="flex h-72 flex-col gap-1 items-start">
         {searchResults.instructors.length > 0 ? (
           searchResults.instructors.map((instructor: User) => (
-            <InstructorCard key={instructor.id} {...instructor} />
+            <InstructorCard
+              isInbox={isInbox}
+              key={instructor.id}
+              {...instructor}
+            />
           ))
         ) : (
           <p className="py-32 text-muted-foreground text-center">

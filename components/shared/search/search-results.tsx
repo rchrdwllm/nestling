@@ -63,7 +63,7 @@ const SearchResults = memo(
           )}
           {entities.includes("instructors") && (
             <TabsContent value="instructors">
-              <InstructorSearchResults />
+              <InstructorSearchResults isInbox={isInbox} />
             </TabsContent>
           )}
           {entities.includes("courses") && (
