@@ -1,7 +1,7 @@
 import { Content } from "@/types";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { searchContents, searchCourses } from "@/lib/search";
+import { searchContents } from "@/lib/search";
 import {
   Pagination,
   PaginationContent,
@@ -11,7 +11,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import ContentCard from "@/components/student-access/courses-page/content-card";
+import ContentCard from "@/components/shared/search/content-card";
 import { useCurrentUser } from "@/hooks/use-current-user";
 
 const ContentsSearchResults = () => {
