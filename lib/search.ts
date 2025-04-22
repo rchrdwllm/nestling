@@ -61,7 +61,6 @@ export const searchInstructors = async (
 };
 
 export const searchCourses = async (
-  instructorId: string,
   query: string,
   page: number = 1,
   itemsPerPage: number = 10
@@ -126,63 +125,116 @@ export const searchCourses = async (
       .map((course) => JSON.stringify(course));
 
     return { courses: paginatedCourses, totalCourses };
+  } else {
+    const courseRefsSnapshot = await db.collection("courses").get();
+
+    const courses = courseRefsSnapshot.docs.map((doc) => doc.data() as Course);
+
+    const filteredCourses = courses.filter(
+      (course) =>
+        course.name?.toLowerCase().includes(query.toLowerCase()) ||
+        course.courseCode?.toLowerCase().includes(query.toLowerCase())
+    );
+
+    const totalCourses = filteredCourses.length;
+
+    const paginatedCourses = filteredCourses
+      .slice((page - 1) * itemsPerPage, page * itemsPerPage)
+      .map((course) => JSON.stringify(course));
+
+    return { courses: paginatedCourses, totalCourses };
   }
-
-  const courseRefsSnapshot = await db.collection("courses").get();
-
-  const courses = courseRefsSnapshot.docs.map((doc) => doc.data() as Course);
-
-  const filteredCourses = courses.filter(
-    (course) =>
-      course.name?.toLowerCase().includes(query.toLowerCase()) ||
-      course.courseCode?.toLowerCase().includes(query.toLowerCase())
-  );
-
-  const totalCourses = filteredCourses.length;
-
-  const paginatedCourses = filteredCourses
-    .slice((page - 1) * itemsPerPage, page * itemsPerPage)
-    .map((course) => JSON.stringify(course));
-
-  return { courses: paginatedCourses, totalCourses };
 };
 
 export const searchContents = async (
-  userId: string,
   query: string,
   page: number = 1,
   itemsPerPage: number = 10
 ) => {
-  const courseRefsSnapshot = await db
-    .collection("users")
-    .doc(userId)
-    .collection("enrolledCourses")
-    .get();
-  const courseIds = courseRefsSnapshot.docs.map((doc) => doc.data().courseId);
+  const user = await getOptimisticUser();
 
-  const contentPromises = courseIds.map(async (courseId) => {
-    const contentsRefSnapshot = await db
-      .collection("contents")
-      .where("courseId", "==", courseId)
+  if (user.role === "student") {
+    const courseRefsSnapshot = await db
+      .collection("users")
+      .doc(user.id)
+      .collection("enrolledCourses")
       .get();
+    const courseIds = courseRefsSnapshot.docs.map((doc) => doc.data().courseId);
 
-    const contents = contentsRefSnapshot.docs.map(
+    const contentPromises = courseIds.map(async (courseId) => {
+      const contentsRefSnapshot = await db
+        .collection("contents")
+        .where("courseId", "==", courseId)
+        .get();
+
+      const contents = contentsRefSnapshot.docs.map(
+        (doc) => doc.data() as Content
+      );
+
+      return contents.filter((content) =>
+        content.title?.toLowerCase().includes(query.toLowerCase())
+      );
+    });
+
+    const allContents = await Promise.all(contentPromises);
+
+    const flattenedContents = allContents.flat();
+    const totalContents = flattenedContents.length;
+
+    const paginatedContents = flattenedContents
+      .slice((page - 1) * itemsPerPage, page * itemsPerPage)
+      .map((content) => JSON.stringify(content));
+
+    return { contents: paginatedContents, totalContents };
+  } else if (user.role === "instructor") {
+    const courseRefsSnapshot = await db
+      .collection("users")
+      .doc(user.id)
+      .collection("courses")
+      .get();
+    const courseIds = courseRefsSnapshot.docs.map((doc) => doc.data().courseId);
+
+    const contentPromises = courseIds.map(async (courseId) => {
+      const contentsRefSnapshot = await db
+        .collection("contents")
+        .where("courseId", "==", courseId)
+        .get();
+
+      const contents = contentsRefSnapshot.docs.map(
+        (doc) => doc.data() as Content
+      );
+
+      return contents.filter((content) =>
+        content.title?.toLowerCase().includes(query.toLowerCase())
+      );
+    });
+
+    const allContents = await Promise.all(contentPromises);
+
+    const flattenedContents = allContents.flat();
+    const totalContents = flattenedContents.length;
+
+    const paginatedContents = flattenedContents
+      .slice((page - 1) * itemsPerPage, page * itemsPerPage)
+      .map((content) => JSON.stringify(content));
+
+    return { contents: paginatedContents, totalContents };
+  } else {
+    const contentsRefSnapshot = await db.collection("contents").get();
+    const allContents = contentsRefSnapshot.docs.map(
       (doc) => doc.data() as Content
     );
 
-    return contents.filter((content) =>
+    const filteredContents = allContents.filter((content) =>
       content.title?.toLowerCase().includes(query.toLowerCase())
     );
-  });
 
-  const allContents = await Promise.all(contentPromises);
+    const totalContents = filteredContents.length;
 
-  const flattenedContents = allContents.flat();
-  const totalContents = flattenedContents.length;
+    const paginatedContents = filteredContents
+      .slice((page - 1) * itemsPerPage, page * itemsPerPage)
+      .map((content) => JSON.stringify(content));
 
-  const paginatedContents = flattenedContents
-    .slice((page - 1) * itemsPerPage, page * itemsPerPage)
-    .map((content) => JSON.stringify(content));
-
-  return { contents: paginatedContents, totalContents };
+    return { contents: paginatedContents, totalContents };
+  }
 };

@@ -10,7 +10,6 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { useCurrentUser } from "@/hooks/use-current-user";
 import CourseCard from "./course-card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
@@ -27,14 +26,12 @@ const CoursesSearchResults = () => {
   );
   const [isLoading, setIsLoading] = useState(false);
   const itemsPerPage = 10;
-  const { user } = useCurrentUser();
 
   const search = async (page: number) => {
     setIsLoading(true);
     const query = searchParams.get("query") || "";
 
     const { courses, totalCourses } = await searchCourses(
-      user.id,
       query,
       page,
       itemsPerPage
