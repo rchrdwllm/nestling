@@ -1,7 +1,7 @@
-import { Course } from "@/types";
+import { Content } from "@/types";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { searchCourses } from "@/lib/search";
+import { searchContents, searchCourses } from "@/lib/search";
 import {
   Pagination,
   PaginationContent,
@@ -11,16 +11,16 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { useCurrentUser } from "@/hooks/use-current-user";
-import CourseCard from "./course-card";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import ContentCard from "@/components/student-access/courses-page/content-card";
 
-const CoursesSearchResults = () => {
+const ContentsSearchResults = () => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const router = useRouter();
   const [searchResults, setSearchResults] = useState({
-    courses: [] as Course[],
-    totalCourses: 0,
+    contents: [] as Content[],
+    totalContents: 0,
   });
   const [currentPage, setCurrentPage] = useState(
     parseInt(searchParams.get("page") || "1", 10)
@@ -33,7 +33,7 @@ const CoursesSearchResults = () => {
     setIsLoading(true);
     const query = searchParams.get("query") || "";
 
-    const { courses, totalCourses } = await searchCourses(
+    const { contents, totalContents } = await searchContents(
       user.id,
       query,
       page,
@@ -41,8 +41,8 @@ const CoursesSearchResults = () => {
     );
 
     setSearchResults({
-      courses: courses.map((course) => JSON.parse(course)),
-      totalCourses,
+      contents: contents.map((content) => JSON.parse(content)),
+      totalContents,
     });
     setIsLoading(false);
   };
@@ -53,7 +53,7 @@ const CoursesSearchResults = () => {
     if (query) {
       search(currentPage);
     } else {
-      setSearchResults({ courses: [], totalCourses: 0 });
+      setSearchResults({ contents: [], totalContents: 0 });
     }
   }, [searchParams, currentPage]);
 
@@ -71,7 +71,7 @@ const CoursesSearchResults = () => {
     router.replace(`${pathname}?${params.toString()}`);
   };
 
-  const totalPages = Math.ceil(searchResults.totalCourses / itemsPerPage);
+  const totalPages = Math.ceil(searchResults.totalContents / itemsPerPage);
 
   if (isLoading) {
     return <p>Loading...</p>;
@@ -80,10 +80,10 @@ const CoursesSearchResults = () => {
   return (
     <div>
       <ScrollArea className="flex h-72 flex-col gap-1 items-start">
-        {searchResults.courses.length > 0 ? (
+        {searchResults.contents.length > 0 ? (
           <div className="flex flex-col gap-1 pt-2">
-            {searchResults.courses.map((course) => (
-              <CourseCard key={course.id} {...course} />
+            {searchResults.contents.map((content) => (
+              <ContentCard key={content.id} {...content} />
             ))}
           </div>
         ) : (
@@ -122,4 +122,4 @@ const CoursesSearchResults = () => {
   );
 };
 
-export default CoursesSearchResults;
+export default ContentsSearchResults;

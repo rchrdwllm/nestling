@@ -1,24 +1,9 @@
 "use client";
-import "./styles.css";
+
 import Image from "next/image";
 import notifbell from "@/assets/notifbell.png";
 import pending from "@/assets/pending.png";
-
-// Define types for notifications and pending tasks
-type Notification = {
-  name: string;
-  message: string;
-  courseCode: string;
-  courseName: string;
-  timeAgo: string;
-};
-
-type PendingTask = {
-  name: string;
-  courseCode: string;
-  courseName: string;
-  timeAgo: string;
-};
+import { Notification, PendingTask } from "@/types";
 
 type SidePanelProps = {
   notifications: Notification[];
@@ -53,7 +38,9 @@ const SidePanel = ({ notifications, pendingTasks }: SidePanelProps) => {
                     <p className="text-xs text-gray-500">
                       {notification.courseCode} - {notification.courseName}
                     </p>
-                    <p className="text-xs text-gray-400">{notification.timeAgo}</p>
+                    <p className="text-xs text-gray-400">
+                      {notification.timeAgo}
+                    </p>
                   </div>
                 </li>
               ))}

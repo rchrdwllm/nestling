@@ -172,3 +172,18 @@ export type Thread = {
   createdAt: Timestamp;
   updatedAt: Timestamp;
 };
+
+export type Notification = {
+  name: string;
+  message: string;
+  courseCode: string;
+  courseName: string;
+  timeAgo: string;
+};
+
+export type PendingTask = {
+  name: string;
+  courseCode: string;
+  courseName: string;
+  timeAgo: string;
+};

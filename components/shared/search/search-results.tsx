@@ -6,6 +6,7 @@ import StudentSearchResults from "./student-search-results";
 import CoursesSearchResults from "./courses-search-results";
 import InstructorSearchResults from "./instructor-search-results";
 import { memo } from "react";
+import ContentsSearchResults from "./contents-search-results";
 
 type SearchResultsProps = {
   isInbox?: boolean;
@@ -50,6 +51,11 @@ const SearchResults = memo(
                 Courses
               </TabsTrigger>
             )}
+            {entities.includes("contents") && (
+              <TabsTrigger className="w-full" value="contents">
+                Contents
+              </TabsTrigger>
+            )}
             {entities.includes("projects") && (
               <TabsTrigger className="w-full" value="projects">
                 Projects
@@ -69,6 +75,11 @@ const SearchResults = memo(
           {entities.includes("courses") && (
             <TabsContent value="courses">
               <CoursesSearchResults />
+            </TabsContent>
+          )}
+          {entities.includes("contents") && (
+            <TabsContent value="contents">
+              <ContentsSearchResults />
             </TabsContent>
           )}
           {entities.includes("projects") && (
