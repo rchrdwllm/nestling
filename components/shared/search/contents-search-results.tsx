@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/pagination";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import ContentCard from "@/components/student-access/courses-page/content-card";
+import { useCurrentUser } from "@/hooks/use-current-user";
 
 const ContentsSearchResults = () => {
   const pathname = usePathname();
@@ -26,12 +27,15 @@ const ContentsSearchResults = () => {
   );
   const [isLoading, setIsLoading] = useState(false);
   const itemsPerPage = 10;
+  const { user } = useCurrentUser();
 
   const search = async (page: number) => {
     setIsLoading(true);
     const query = searchParams.get("query") || "";
 
     const { contents, totalContents } = await searchContents(
+      user.role,
+      user.id,
       query,
       page,
       itemsPerPage

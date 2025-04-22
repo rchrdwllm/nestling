@@ -1,8 +1,9 @@
 import NextAuth, { type DefaultSession } from "next-auth";
+import { Role } from ".";
 
 export type ExtendUser = DefaultSession["user"] & {
   id: string;
-  role: string;
+  role: Role;
   image: string;
   firstName: string;
   middleName: string;
