@@ -1,20 +1,46 @@
 import ChatForm from "@/components/shared/inbox-page/chat-form";
 import ChatWindow from "@/components/shared/inbox-page/chat-window";
 import { getChannelMessages } from "@/lib/message";
-import { getUserById } from "@/lib/user";
+import { getThreadByChannelId } from "@/lib/thread";
+import { getOptimisticUser, getUserById } from "@/lib/user";
 
 const ChannelPage = async ({
   params,
-  searchParams,
 }: {
   params: Promise<{ channelId: string }>;
-  searchParams: Promise<{ receiverId: string }>;
 }) => {
   const { channelId } = await params;
-  const { receiverId } = await searchParams;
+  const { success: thread, error: threadError } = await getThreadByChannelId(
+    channelId
+  );
   const { success: messages, error: messagesError } = await getChannelMessages(
     channelId
   );
+  const currentUser = await getOptimisticUser();
+
+  if (threadError) {
+    return (
+      <main className="h-full flex flex-col">
+        <div className="flex-1 flex justify-center items-center">
+          <h1 className="text-muted-foreground">
+            {JSON.stringify(threadError)}
+          </h1>
+        </div>
+      </main>
+    );
+  }
+
+  if (!thread) {
+    return (
+      <main className="h-full flex flex-col">
+        <div className="flex-1 flex justify-center items-center">
+          <h1 className="text-muted-foreground">No thread found</h1>
+        </div>
+      </main>
+    );
+  }
+
+  const receiverId = thread.userIds.find((id) => id !== currentUser.id)!;
   const { success: receiver, error: receiverError } = await getUserById(
     receiverId
   );
@@ -23,9 +49,20 @@ const ChannelPage = async ({
     return (
       <main className="h-full flex flex-col">
         <div className="flex-1 flex justify-center items-center">
-          <h1 className="text-muted-foreground">{receiverError}</h1>
+          <h1 className="text-muted-foreground">
+            {JSON.stringify(receiverError)}
+          </h1>
         </div>
-        <ChatForm receiverId={receiverId} />
+      </main>
+    );
+  }
+
+  if (!receiver) {
+    return (
+      <main className="h-full flex flex-col">
+        <div className="flex-1 flex justify-center items-center">
+          <h1 className="text-muted-foreground">No receiver found</h1>
+        </div>
       </main>
     );
   }
@@ -55,7 +92,12 @@ const ChannelPage = async ({
     );
   }
 
-  return <ChatWindow messages={JSON.stringify(messages)} />;
+  return (
+    <ChatWindow
+      messages={JSON.stringify(messages)}
+      receiver={JSON.stringify(receiver)}
+    />
+  );
 };
 
 export default ChannelPage;

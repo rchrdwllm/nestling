@@ -174,11 +174,17 @@ export type Thread = {
 };
 
 export type Notification = {
-  name: string;
+  id: string;
+  type: string;
+  title: string;
   message: string;
-  courseCode: string;
-  courseName: string;
-  timeAgo: string;
+  url: string;
+  senderId: string;
+  createdAt: Timestamp;
+  isRead: boolean;
+  isArchived: boolean;
+  archivedAt: Timestamp | null;
+  receiverIds: string[];
 };
 
 export type PendingTask = {

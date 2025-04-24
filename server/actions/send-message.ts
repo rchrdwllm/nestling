@@ -5,11 +5,14 @@ import { actionClient } from "../action-client";
 import { InboxSchema } from "@/schemas/InboxSchema";
 import { db } from "@/lib/firebase";
 import { createThread } from "./create-thread";
+import { createNotif } from "./create-notif";
+import { getOptimisticUser, getUserById } from "@/lib/user";
 
 export const sendMessage = actionClient
   .schema(InboxSchema)
   .action(async ({ parsedInput }) => {
     const { message, senderId, receiverId, channelId } = parsedInput;
+    const user = await getOptimisticUser();
 
     try {
       const id = crypto.randomUUID();
@@ -39,6 +42,17 @@ export const sendMessage = actionClient
           };
 
           await db.collection("messages").doc(id).set(dbMessageData);
+
+          const { success: receiver } = await getUserById(receiverId);
+
+          await createNotif({
+            type: "inbox",
+            senderId,
+            receiverIds: [receiver!.id],
+            message: message,
+            title: `From ${user.name}`,
+            url: `/${receiver!.role}-inbox/${channelId}`,
+          });
 
           return { success: dbMessageData };
         } else if (data?.data?.error) {

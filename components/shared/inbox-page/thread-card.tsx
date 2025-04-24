@@ -24,7 +24,7 @@ const ThreadCard = async ({ userIds, channelId }: Thread) => {
   }
 
   return (
-    <Link href={`/${user.role}-inbox/${channelId}?receiverId=${recipientId}`}>
+    <Link href={`/${user.role}-inbox/${channelId}`}>
       <div className="h-auto p-4 border-b border-border cursor-pointer transition-colors hover:bg-secondary">
         <h1 className="font-medium text-foreground">{recipient.name}</h1>
       </div>

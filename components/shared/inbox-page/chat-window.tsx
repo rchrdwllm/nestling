@@ -1,37 +1,20 @@
 "use client";
 
-import { getUserById } from "@/lib/user";
 import { Message, User } from "@/types";
-import { useEffect, useState } from "react";
 import ChatForm from "@/components/shared/inbox-page/chat-form";
 import Chat from "@/components/shared/inbox-page/chat";
 import { useSearchParams } from "next/navigation";
 
 type ChatWindowProps = {
   messages: string;
+  receiver: string;
 };
 
-const ChatWindow = ({ messages }: ChatWindowProps) => {
-  const [receiver, setReceiver] = useState<User | null>(null);
+const ChatWindow = ({ messages, receiver }: ChatWindowProps) => {
   const searchParams = useSearchParams();
   const receiverId = searchParams.get("receiverId");
   const prevMessagesData = JSON.parse(messages) as Message[];
-
-  useEffect(() => {
-    if (receiverId) {
-      fetchUser(receiverId);
-    }
-  }, [receiverId]);
-
-  const fetchUser = async (userId: string) => {
-    const { success, error } = await getUserById(userId);
-
-    if (success) {
-      setReceiver(success);
-    } else {
-      console.error("Error fetching user:", error);
-    }
-  };
+  const receiverData = JSON.parse(receiver) as User;
 
   if (!receiver) {
     return (
@@ -44,10 +27,10 @@ const ChatWindow = ({ messages }: ChatWindowProps) => {
   return (
     <div className="h-full flex flex-col">
       <header className="p-4 h-[72.8px] flex items-center border-b border-border">
-        <h1 className="font-semibold">Chat with {receiver.name}</h1>
+        <h1 className="font-semibold">Chat with {receiverData.name}</h1>
       </header>
-      <Chat prevMessages={prevMessagesData} receiverId={receiver.id} />
-      <ChatForm receiverId={receiver.id} />
+      <Chat prevMessages={prevMessagesData} receiverId={receiverData.id} />
+      <ChatForm receiverId={receiverData.id} />
     </div>
   );
 };

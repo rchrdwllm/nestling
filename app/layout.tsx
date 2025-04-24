@@ -9,6 +9,7 @@ import { authOptions } from "@/lib/auth";
 import CacheRefresherWrapper from "@/components/wrappers/cache-refresher-wrapper";
 import ThemeWrapper from "@/components/wrappers/theme-wrapper";
 import ReactScan from "@/components/ui/react-scan";
+import NotificationWrapper from "@/components/wrappers/notification-wrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -47,7 +48,9 @@ export default async function RootLayout({
           <ThemeWrapper attribute="class" defaultTheme="light">
             <NextTopLoader showSpinner={false} color="#df1514" />
             <ReactScan />
-            <CacheRefresherWrapper>{children}</CacheRefresherWrapper>
+            <CacheRefresherWrapper>
+              <NotificationWrapper>{children}</NotificationWrapper>
+            </CacheRefresherWrapper>
             <Toaster />
           </ThemeWrapper>
         </SessionWrapper>

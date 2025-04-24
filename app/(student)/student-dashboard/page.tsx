@@ -25,11 +25,17 @@ const Dashboard = () => {
           <SidePanel
             notifications={[
               {
-                name: "John Doe",
-                message: "Sent you a message",
-                courseCode: "CS101",
-                courseName: "Introduction to Computer Science",
-                timeAgo: "35 minutes ago",
+                id: "1234-asdfasdf",
+                type: "inbox",
+                title: "From John Doe",
+                message: "asdfalksdghsg",
+                senderId: "use-uiry2i3uhfs",
+                url: "/student-inbox",
+                createdAt: new Date() as any,
+                isRead: false,
+                isArchived: false,
+                archivedAt: null,
+                receiverIds: ["use-uiasdsdrew"],
               },
             ]}
             pendingTasks={[
