@@ -3,7 +3,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { db } from "@/lib/firebase";
 import { LoginSchema } from "@/schemas/LoginSchema";
 import bcrypt from "bcrypt";
-import { User } from "@/types";
+import { Role, User } from "@/types";
 
 export const authOptions = {
   providers: [
@@ -87,7 +87,7 @@ export const authOptions = {
       if (session.user) {
         session.user.name = `${user.firstName} ${user.lastName}`;
         session.user.email = user.email as string;
-        session.user.role = user.role as string;
+        session.user.role = user.role as Role;
         session.user.firstName = user.firstName as string;
         session.user.middleName = user.middleName as string;
         session.user.lastName = user.lastName as string;
