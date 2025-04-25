@@ -32,6 +32,7 @@ export const getUserThreads = async () => {
     const threadsSnapshot = await db
       .collection("threads")
       .where("userIds", "array-contains", currentUser.id)
+      .orderBy("updatedAt", "desc")
       .get();
     const threads = threadsSnapshot.docs.map((doc) => {
       const data = doc.data();
