@@ -19,7 +19,7 @@ const NotificationWrapper = ({ children }: { children: ReactNode }) => {
       collection(clientDb, "notifications"),
       and(
         where("receiverIds", "array-contains", user.id),
-        where("createdAt", ">", new Date(Date.now())) // last 24 hours
+        where("createdAt", ">", new Date(Date.now()))
       )
     );
 
