@@ -1,6 +1,5 @@
 "use client";
 
-import { useCurrentUser } from "@/hooks/use-current-user";
 import { ReactNode, useEffect } from "react";
 import { Notification } from "@/types";
 import { toast } from "sonner";
@@ -8,12 +7,14 @@ import { clientDb } from "@/lib/firebase-client";
 import { and, collection, onSnapshot, query, where } from "firebase/firestore";
 import { Button } from "../ui/button";
 import Link from "next/link";
-import { Mail } from "lucide-react";
+import { useUser } from "@/hooks/use-user";
 
 const NotificationWrapper = ({ children }: { children: ReactNode }) => {
-  const { user } = useCurrentUser();
+  const { user } = useUser();
 
   useEffect(() => {
+    if (!user) return;
+
     const q = query(
       collection(clientDb, "notifications"),
       and(
@@ -43,7 +44,7 @@ const NotificationWrapper = ({ children }: { children: ReactNode }) => {
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [user]);
 
   return <>{children}</>;
 };
