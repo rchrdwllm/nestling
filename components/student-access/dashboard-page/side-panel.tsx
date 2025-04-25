@@ -32,13 +32,15 @@ const SidePanel = ({ notifications, pendingTasks }: SidePanelProps) => {
                 <li key={index} className="flex items-start">
                   <div>
                     <p className="text-sm text-gray-900 font-semibold">
-                      <span className="text-red-600">{notification.title}</span>{" "}
+                      <span className="text-red-600">{notification.name}</span>{" "}
                       - {notification.message}
                     </p>
                     <p className="text-xs text-gray-500">
-                      CS 001 - Introduction to Computing
+                      {notification.courseCode} - {notification.courseName}
                     </p>
-                    <p className="text-xs text-gray-400">4h ago</p>
+                    <p className="text-xs text-gray-400">
+                      {notification.timeAgo}
+                    </p>
                   </div>
                 </li>
               ))}
