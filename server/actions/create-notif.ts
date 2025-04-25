@@ -26,8 +26,6 @@ export const createNotif = actionClient
 
       await db.collection("notifications").doc(id).set(notification);
 
-      console.log("Notification created:", notification);
-
       return { success: "Notification created" };
     } catch (error) {
       console.error("Error creating notification:", error);

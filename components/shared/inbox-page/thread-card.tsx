@@ -1,6 +1,7 @@
 import { getOptimisticUser, getUserById } from "@/lib/user";
 import { Thread } from "@/types";
 import Link from "next/link";
+import ThreadCardWrapper from "./thread-card-wrapper";
 
 const ThreadCard = async ({ userIds, channelId }: Thread) => {
   const user = await getOptimisticUser();
@@ -25,9 +26,9 @@ const ThreadCard = async ({ userIds, channelId }: Thread) => {
 
   return (
     <Link href={`/${user.role}-inbox/${channelId}`}>
-      <div className="h-auto p-4 border-b border-border cursor-pointer transition-colors hover:bg-secondary">
-        <h1 className="font-medium text-foreground">{recipient.name}</h1>
-      </div>
+      <ThreadCardWrapper channelId={channelId}>
+        <h1 className="font-medium text-inherit">{recipient.name}</h1>
+      </ThreadCardWrapper>
     </Link>
   );
 };

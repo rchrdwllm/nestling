@@ -29,6 +29,14 @@ const NotificationWrapper = ({ children }: { children: ReactNode }) => {
         if (change.type === "added") {
           const notification = change.doc.data() as Notification;
 
+          fetch("/api/revalidate", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ pathname: notification.url }),
+          });
+
           toast(`${notification.title}`, {
             description: notification.message,
             action: (
