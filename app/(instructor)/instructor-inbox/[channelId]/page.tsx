@@ -6,41 +6,22 @@ import { getOptimisticUser, getUserById } from "@/lib/user";
 
 const ChannelPage = async ({
   params,
+  searchParams,
 }: {
   params: Promise<{ channelId: string }>;
+  searchParams: Promise<{ receiverId?: string }>;
 }) => {
   const { channelId } = await params;
-  const { success: thread, error: threadError } = await getThreadByChannelId(
-    channelId
-  );
+  const { receiverId: searchReceiverId } = await searchParams;
+  const { success: thread } = await getThreadByChannelId(channelId);
   const { success: messages, error: messagesError } = await getChannelMessages(
     channelId
   );
   const currentUser = await getOptimisticUser();
 
-  if (threadError) {
-    return (
-      <main className="h-full flex flex-col">
-        <div className="flex-1 flex justify-center items-center">
-          <h1 className="text-muted-foreground">
-            {JSON.stringify(threadError)}
-          </h1>
-        </div>
-      </main>
-    );
-  }
-
-  if (!thread) {
-    return (
-      <main className="h-full flex flex-col">
-        <div className="flex-1 flex justify-center items-center">
-          <h1 className="text-muted-foreground">No thread found</h1>
-        </div>
-      </main>
-    );
-  }
-
-  const receiverId = thread.userIds.find((id) => id !== currentUser.id)!;
+  const receiverId = thread
+    ? thread.userIds.find((id) => id !== currentUser.id)!
+    : searchReceiverId!;
   const { success: receiver, error: receiverError } = await getUserById(
     receiverId
   );
