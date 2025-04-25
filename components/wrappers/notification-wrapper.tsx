@@ -8,6 +8,7 @@ import { clientDb } from "@/lib/firebase-client";
 import { and, collection, onSnapshot, query, where } from "firebase/firestore";
 import { Button } from "../ui/button";
 import Link from "next/link";
+import { Mail } from "lucide-react";
 
 const NotificationWrapper = ({ children }: { children: ReactNode }) => {
   const { user } = useCurrentUser();
@@ -17,7 +18,7 @@ const NotificationWrapper = ({ children }: { children: ReactNode }) => {
       collection(clientDb, "notifications"),
       and(
         where("receiverIds", "array-contains", user.id),
-        where("createdAt", ">", new Date(Date.now()))
+        where("createdAt", ">", new Date(Date.now())) // last 24 hours
       )
     );
 
