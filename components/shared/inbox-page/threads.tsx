@@ -1,8 +1,10 @@
 import { getUserThreads } from "@/lib/thread";
 import ThreadCard from "./thread-card";
+import { getOptimisticUser } from "@/lib/user";
 
 const Threads = async () => {
-  const { success: threads, error } = await getUserThreads();
+  const user = await getOptimisticUser();
+  const { success: threads, error } = await getUserThreads(user.id);
 
   if (error) {
     return (

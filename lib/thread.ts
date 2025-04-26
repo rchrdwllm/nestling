@@ -2,7 +2,7 @@
 
 import { Thread } from "@/types";
 import { db } from "./firebase";
-import { getOptimisticUser } from "./user";
+import { unstable_cache } from "next/cache";
 
 export const getThreadByChannelId = async (channelId: string) => {
   try {
@@ -25,27 +25,33 @@ export const getThreadByChannelId = async (channelId: string) => {
   }
 };
 
-export const getUserThreads = async () => {
-  const currentUser = await getOptimisticUser();
+export const getUserThreads = unstable_cache(
+  async (userId: string) => {
+    try {
+      const threadsSnapshot = await db
+        .collection("threads")
+        .where("userIds", "array-contains", userId)
+        .orderBy("updatedAt", "desc")
+        .get();
 
-  try {
-    const threadsSnapshot = await db
-      .collection("threads")
-      .where("userIds", "array-contains", currentUser.id)
-      .orderBy("updatedAt", "desc")
-      .get();
-    const threads = threadsSnapshot.docs.map((doc) => {
-      const data = doc.data();
-      return {
-        id: doc.id,
-        ...data,
-      };
-    }) as Thread[];
+      if (threadsSnapshot.empty) {
+        return { success: [] };
+      }
 
-    return { success: threads };
-  } catch (error) {
-    console.error("Error fetching user threads:", error);
+      const threads = threadsSnapshot.docs.map((doc) => {
+        const data = doc.data();
+        return {
+          id: doc.id,
+          ...data,
+        };
+      }) as Thread[];
 
-    return { error };
-  }
-};
+      return { success: threads };
+    } catch (error) {
+      console.error("Error fetching user threads:", error);
+
+      return { error };
+    }
+  },
+  ["userId"]
+);

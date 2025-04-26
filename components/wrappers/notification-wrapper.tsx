@@ -25,7 +25,6 @@ const NotificationWrapper = ({ children }: { children: ReactNode }) => {
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
       snapshot.docChanges().forEach((change) => {
-        console.log(change.doc.data());
         if (change.type === "added") {
           const notification = change.doc.data() as Notification;
 

@@ -36,6 +36,9 @@ export const createThread = actionClient
       revalidatePath("/(student)/student-inbox", "layout");
       revalidatePath("/(student)/student-inbox/[channelId]", "page");
       revalidatePath(`/student-inbox/${channelId}`);
+      revalidatePath("/(instructor)/instructor-inbox", "layout");
+      revalidatePath("/(instructor)/instructor-inbox/[channelId]", "page");
+      revalidatePath(`/instructor-inbox/${channelId}`);
 
       return { success: threadData };
     } catch (error) {
