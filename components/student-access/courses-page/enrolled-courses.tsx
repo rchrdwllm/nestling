@@ -16,8 +16,7 @@ const EnrolledCourses = async () => {
 
   return (
     <section>
-      <h1>Enrolled courses</h1>
-      <div>
+      <div className="grid grid-cols-4 gap-8">
         {courses.map((course) => (
           <CourseCard key={course.id} {...course} />
         ))}

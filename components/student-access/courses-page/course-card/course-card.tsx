@@ -3,8 +3,9 @@ import EnrollBtn from "./enroll-btn";
 import { getEnrolledStudents } from "@/lib/course";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
-const CourseCard = async ({ name, id, courseCode }: Course) => {
+const CourseCard = async ({ name, id, courseCode, image }: Course) => {
   const { success: enrolledStudents, error } = await getEnrolledStudents(id);
 
   if (error) {
@@ -16,19 +17,29 @@ const CourseCard = async ({ name, id, courseCode }: Course) => {
   }
 
   return (
-    <article>
-      <h1>
-        {courseCode} - {name}
-      </h1>
-      <div className="flex gap-2">
-        <EnrollBtn
-          courseCode={courseCode}
-          id={id}
-          enrolledStudents={enrolledStudents}
-        />
-        <Link href={`/student-courses/${id}`}>
-          <Button variant="secondary">Visit course</Button>
-        </Link>
+    <article className="p-4 rounded-xl border border-border flex flex-col gap-4">
+      <Link
+        href={`/instructor-courses/${id}`}
+        className="block h-40 relative rounded-lg overflow-hidden"
+      >
+        <Image src={image} alt={image} className="w-full object-cover" fill />
+      </Link>
+      <div className="flex flex-col gap-2">
+        <div>
+          <div className="flex justify-between items-center">
+            <Link href={`/instructor-courses/${id}`} key={id}>
+              <h1 className="font-medium text-md">{name}</h1>
+            </Link>
+          </div>
+          <p className="text-muted-foreground">{courseCode}</p>
+        </div>
+        <div>
+          <EnrollBtn
+            courseCode={courseCode}
+            id={id}
+            enrolledStudents={enrolledStudents}
+          />
+        </div>
       </div>
     </article>
   );
