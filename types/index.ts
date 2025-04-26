@@ -156,6 +156,18 @@ export type Submission = {
   feedback: string | undefined;
 };
 
+export type Announcement = {
+  id: string;
+  title: string;
+  content: string;
+  courseId: string;
+  createdAt: Timestamp;
+  updatedAt: Timestamp;
+  isArchived: boolean;
+  archivedAt: Timestamp | null;
+  senderId: string;
+};
+
 export type Message = {
   id: string;
   message: string;

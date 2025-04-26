@@ -1,5 +1,4 @@
-import Announcements from "@/components/instructor-access/courses-page/announcements/announcements";
-import CreateAnnouncementBtn from "@/components/instructor-access/courses-page/announcements/create-announcement-btn";
+import Announcements from "@/components/student-access/courses-page/announcements/announcements";
 import { Suspense } from "react";
 
 const AnnouncementsPage = async ({
@@ -14,7 +13,6 @@ const AnnouncementsPage = async ({
       <header className="flex flex-col gap-3">
         <div className="flex justify-between items-center">
           <h1 className="text-3xl font-semibold">Announcements</h1>
-          <CreateAnnouncementBtn />
         </div>
         <hr />
       </header>

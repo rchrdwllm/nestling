@@ -10,16 +10,18 @@ import { ReactNode } from "react";
 type CourseSectionLinkProps = {
   href: string;
   children: ReactNode;
-  segment?: string;
+  segments?: string[];
 };
 
 const CourseSectionLink = ({
   href,
   children,
-  segment,
+  segments,
 }: CourseSectionLinkProps) => {
-  const segments = useSelectedLayoutSegments();
+  const layoutSegments = useSelectedLayoutSegments();
   const layoutSegment = useSelectedLayoutSegment();
+
+  console.log("layoutSegments", layoutSegments);
 
   return (
     <Link href={href}>
@@ -27,10 +29,11 @@ const CourseSectionLink = ({
         variant="link"
         className={cn(
           "h-unset p-0",
-          segments.includes(segment || "")
+          layoutSegments.every((segment) => segments?.includes(segment)) &&
+            segments?.every((segment) => layoutSegments.includes(segment))
             ? "text-primary underline"
             : "text-muted-foreground",
-          !layoutSegment && !segment && "text-primary underline"
+          !layoutSegment && !segments && "text-primary underline"
         )}
       >
         {children}

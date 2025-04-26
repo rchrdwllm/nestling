@@ -123,6 +123,25 @@ export const getEnrolledStudents = unstable_cache(
   { revalidate: 60, tags: ["students"] }
 );
 
+export const getEnrolledStudentIds = unstable_cache(
+  async (courseId: string) => {
+    try {
+      const snapshot = await db
+        .collection("courses")
+        .doc(courseId)
+        .collection("enrolledStudents")
+        .get();
+      const studentIds = snapshot.docs.map((doc) => doc.id);
+
+      return { success: studentIds };
+    } catch (error) {
+      return { error: "Error fetching students" };
+    }
+  },
+  ["courseId"],
+  { revalidate: 60, tags: ["students"] }
+);
+
 export const getInstructorCourses = unstable_cache(
   async (instructorId: string) => {
     try {

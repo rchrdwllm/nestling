@@ -10,26 +10,14 @@ const Layout = ({ children }: { children: ReactNode }) => {
   return (
     <section className="grid grid-cols-10 gap-x-2">
       <aside className="p-6 flex flex-col gap-2 col-span-2">
-        <CourseSectionLink href={`/instructor-courses/${courseId}`}>
+        <CourseSectionLink href={`/student-courses/${courseId}`}>
           Modules
         </CourseSectionLink>
         <CourseSectionLink
-          segments={["archive"]}
-          href={`/instructor-courses/${courseId}/archive`}
-        >
-          Archived Modules
-        </CourseSectionLink>
-        <CourseSectionLink
-          segments={["announcements"]}
-          href={`/instructor-courses/${courseId}/announcements`}
+          segment="announcements"
+          href={`/student-courses/${courseId}/announcements`}
         >
           Announcements
-        </CourseSectionLink>
-        <CourseSectionLink
-          segments={["announcements", "archive"]}
-          href={`/instructor-courses/${courseId}/announcements/archive`}
-        >
-          Archived Announcements
         </CourseSectionLink>
       </aside>
       <div className="col-span-8">{children}</div>
