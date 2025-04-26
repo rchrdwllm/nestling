@@ -7,6 +7,7 @@ import { db } from "@/lib/firebase";
 import { createThread } from "./create-thread";
 import { createNotif } from "./create-notif";
 import { getOptimisticUser, getUserById } from "@/lib/user";
+import { updateThread } from "./update-thread";
 
 export const sendMessage = actionClient
   .schema(InboxSchema)
@@ -53,6 +54,8 @@ export const sendMessage = actionClient
             title: `From ${user.name}`,
             url: `/${receiver!.role}-inbox/${channelId}`,
           });
+
+          await updateThread(threadId);
 
           return { success: dbMessageData };
         } else if (data?.data?.error) {
