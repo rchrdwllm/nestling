@@ -28,7 +28,7 @@ export const archiveModule = actionClient
 
       revalidatePath("/(instructor)/instructor-courses/[courseId]", "page");
       revalidatePath(`/instructor-courses/${courseId}`);
-      revalidatePath(`/instructor-courses/${courseId}/modules/archive`);
+      revalidatePath(`/instructor-courses/${courseId}/archive`);
 
       return {
         success: `Module ${module.isArchived ? "unarchived" : "archived"}`,
