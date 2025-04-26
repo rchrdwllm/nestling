@@ -21,8 +21,6 @@ const CourseSectionLink = ({
   const layoutSegments = useSelectedLayoutSegments();
   const layoutSegment = useSelectedLayoutSegment();
 
-  console.log("layoutSegments", layoutSegments);
-
   return (
     <Link href={href}>
       <Button
