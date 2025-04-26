@@ -3,7 +3,6 @@
 import { Message, User } from "@/types";
 import ChatForm from "@/components/shared/inbox-page/chat-form";
 import Chat from "@/components/shared/inbox-page/chat";
-import { useSearchParams } from "next/navigation";
 
 type ChatWindowProps = {
   messages: string;
@@ -11,8 +10,6 @@ type ChatWindowProps = {
 };
 
 const ChatWindow = ({ messages, receiver }: ChatWindowProps) => {
-  const searchParams = useSearchParams();
-  const receiverId = searchParams.get("receiverId");
   const prevMessagesData = JSON.parse(messages) as Message[];
   const receiverData = JSON.parse(receiver) as User;
 

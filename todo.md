@@ -6,8 +6,9 @@
 - [ ] Handler for pasting pics sa content form
 - [ ] Yung di agad nag uupdate pag binago yung content type sa create content form
 - [ ] Editing course content
-- [ ] Inboxing
 - [ ] Calendar
+- [x] New thread for new message
+- [x] Inboxing
 - [x] Search for instructor
 - [x] Editing course module
 - [x] Display student's submission to student

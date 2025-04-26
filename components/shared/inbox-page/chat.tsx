@@ -15,6 +15,7 @@ const Chat = ({ receiverId, prevMessages }: ChatProps) => {
   const { user } = useCurrentUser();
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const [chatData, setChatData] = useState<Message[]>(prevMessages || []);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   useEffect(() => {
     if (user && receiverId) {
@@ -36,20 +37,25 @@ const Chat = ({ receiverId, prevMessages }: ChatProps) => {
   useEffect(() => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollIntoView({
-        behavior: "smooth",
+        behavior: isInitialLoad ? "auto" : "smooth",
         block: "end",
       });
+
+      // After initial scroll, set isInitialLoad to false
+      if (isInitialLoad) {
+        setIsInitialLoad(false);
+      }
     }
-  }, [chatData, chatContainerRef]);
+  }, [chatData, chatContainerRef, isInitialLoad]);
 
   return (
-    <ScrollArea className="h-[calc(100vh-1rem-72.8px-64.8px)] w-full px-4">
+    <div className="no-scrollbar overflow-y-auto h-[calc(100vh-1rem-72.8px-64.8px)] w-full px-4">
       <div ref={chatContainerRef} className="flex flex-col gap-4 py-4">
         {chatData.map((chat, index) => (
           <ChatBubble key={index} {...chat} />
         ))}
       </div>
-    </ScrollArea>
+    </div>
   );
 };
 
