@@ -14,7 +14,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
           Modules
         </CourseSectionLink>
         <CourseSectionLink
-          segment="announcements"
+          segments={["announcements"]}
           href={`/student-courses/${courseId}/announcements`}
         >
           Announcements
