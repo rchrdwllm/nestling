@@ -1,9 +1,7 @@
 import CreateModuleBtn from "@/components/instructor-access/courses-page/create-module-btn";
 import ModuleCard from "@/components/instructor-access/courses-page/module-card/module-card";
-import { Button } from "@/components/ui/button";
 import { getCourse } from "@/lib/course";
 import { getUnarchivedCourseModules } from "@/lib/module";
-import Link from "next/link";
 
 const CoursePage = async ({
   params,
