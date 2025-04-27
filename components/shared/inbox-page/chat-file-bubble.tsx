@@ -35,7 +35,7 @@ const ChatFileBubble = ({ secure_url, public_id, resource_type }: File) => {
               <Skeleton className="h-full w-full" />
             </div>
             <Image
-              onLoadingComplete={() => setIsLoaded(true)}
+              onLoad={() => setIsLoaded(true)}
               className={cn(
                 "rounded-md object-cover opacity",
                 isLoaded ? "opacity-100" : "opacity-0"

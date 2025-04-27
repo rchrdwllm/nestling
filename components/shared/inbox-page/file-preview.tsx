@@ -1,22 +1,30 @@
+import { Skeleton } from "@/components/ui/skeleton";
+import { cn } from "@/lib/utils";
 import { CloudinaryFile } from "@/types";
 import { FileIcon } from "lucide-react";
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 
 const FilePreview = ({
   resource_type,
   secure_url,
   public_id,
 }: CloudinaryFile) => {
-  console.log(secure_url);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   if (resource_type === "image") {
     return (
-      <article
-        className="relative aspect-square size-36 cursor-pointer"
-        key={secure_url}
-      >
+      <article className="relative aspect-square size-36" key={secure_url}>
+        <div
+          className={cn(
+            "absolute top-0 left-0 h-full w-full z-10 transition-opacity",
+            isLoaded ? "opacity-0" : "opacity-100"
+          )}
+        >
+          <Skeleton className="h-full w-full" />
+        </div>
         <Image
+          onLoad={() => setIsLoaded(true)}
           className="rounded-md object-cover"
           fill
           src={secure_url}

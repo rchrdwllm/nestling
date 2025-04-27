@@ -58,14 +58,14 @@ const ChatForm = ({ receiverId }: ChatFormProps) => {
   }, [counter]);
 
   return (
-    <div className="p-4 border-t border-border">
-      {form.getValues("files") && form.getValues("files")!.length > 0 && (
-        <FilePreviews files={form.getValues("files")!} />
+    <div className="relative p-4 border-t border-border">
+      {form.watch("files") && form.watch("files")!.length > 0 && (
+        <FilePreviews files={form.watch("files")!} />
       )}
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(handleSubmit)}
-          className="flex items-stretch gap-2"
+          className="relative flex items-stretch gap-2 z-[1]"
         >
           <FormField
             control={form.control}
