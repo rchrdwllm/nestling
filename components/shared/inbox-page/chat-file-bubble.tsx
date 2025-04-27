@@ -11,18 +11,35 @@ import {
 } from "@/components/ui/dialog";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
+import { cn } from "@/lib/utils";
 
 const ChatFileBubble = ({ secure_url, public_id, resource_type }: File) => {
+  const [isLoaded, setIsLoaded] = useState(false);
+
   if (resource_type === "image") {
     return (
       <Dialog>
         <DialogTrigger asChild>
           <article
-            className="relative aspect-square size-36 cursor-pointer"
+            className="relative aspect-square size-36 cursor-pointer overflow-hidden"
             key={secure_url}
           >
+            <div
+              className={cn(
+                "absolute top-0 left-0 h-full w-full z-10 transition-opacity",
+                isLoaded ? "opacity-0" : "opacity-100"
+              )}
+            >
+              <Skeleton className="h-full w-full" />
+            </div>
             <Image
-              className="rounded-md object-cover"
+              onLoadingComplete={() => setIsLoaded(true)}
+              className={cn(
+                "rounded-md object-cover opacity",
+                isLoaded ? "opacity-100" : "opacity-0"
+              )}
               fill
               src={secure_url}
               alt={public_id}
