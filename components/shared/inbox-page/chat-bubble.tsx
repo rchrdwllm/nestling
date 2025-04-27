@@ -47,8 +47,8 @@ const ChatBubble = ({
       {type === "file" && (
         <div
           className={cn(
-            "max-w-[610px] justify-end",
-            isSender ? "ml-auto" : "",
+            "max-w-[610px]",
+            isSender ? "ml-auto justify-end" : "",
             "flex gap-1 flex-wrap"
           )}
         >
