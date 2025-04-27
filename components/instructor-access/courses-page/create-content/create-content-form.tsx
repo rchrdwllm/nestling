@@ -166,8 +166,8 @@ const CreateContentForm = ({
             </FormItem>
           )}
         />
-        {form.getValues("type") === "assignment" && <AssignmentForm />}
-        {form.getValues("type") === "file" ? (
+        {form.watch("type") === "assignment" && <AssignmentForm />}
+        {form.watch("type") === "file" ? (
           <FileForm />
         ) : (
           <FormField
