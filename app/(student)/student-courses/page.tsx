@@ -6,13 +6,9 @@ const CoursesPage = () => {
   return (
     <main className="p-6 flex flex-col gap-4">
       <h1 className="font-medium">Available Courses</h1>
-      <Suspense fallback={<p>Loading...</p>}>
-        <AvailableCourses />
-      </Suspense>
+      <AvailableCourses />
       <h1 className="font-medium">Enrolled Courses</h1>
-      <Suspense fallback={<p>Loading...</p>}>
-        <EnrolledCourses />
-      </Suspense>
+      <EnrolledCourses />
     </main>
   );
 };

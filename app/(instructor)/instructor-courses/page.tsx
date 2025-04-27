@@ -2,7 +2,6 @@ import Courses from "@/components/instructor-access/courses-page/courses";
 import CreateCourseBtn from "@/components/instructor-access/courses-page/create-course-btn";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { Suspense } from "react";
 
 const InstructorCoursesPage = () => {
   return (
@@ -17,9 +16,7 @@ const InstructorCoursesPage = () => {
       <Link href="/instructor-courses/archive">
         <Button variant="link">View archived courses</Button>
       </Link>
-      <Suspense fallback={<div>Loading...</div>}>
-        <Courses />
-      </Suspense>
+      <Courses />
     </div>
   );
 };
