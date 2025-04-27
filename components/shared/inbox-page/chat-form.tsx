@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Form, FormField, FormItem } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
-import { SendHorizontal } from "lucide-react";
+import { Paperclip, SendHorizontal } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { sendMessage } from "@/server/actions/send-message";
 import { useAction } from "next-safe-action/hooks";
@@ -13,6 +13,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { toast } from "sonner";
 import { generateChannelId } from "@/lib/utils";
+import AttachmentBtn from "./attachment-btn";
+import { useEffect, useMemo, useState } from "react";
 
 type ChatFormProps = {
   receiverId: string;
@@ -20,12 +22,15 @@ type ChatFormProps = {
 
 const ChatForm = ({ receiverId }: ChatFormProps) => {
   const { user } = useCurrentUser();
+  const [counter, setCounter] = useState(0);
+  const id = useMemo(() => crypto.randomUUID(), [counter]);
   const form = useForm<z.infer<typeof InboxSchema>>({
     defaultValues: {
       message: "",
       senderId: user.id,
       receiverId,
       channelId: generateChannelId(user.id, receiverId),
+      id,
     },
     resolver: zodResolver(InboxSchema),
   });
@@ -34,20 +39,29 @@ const ChatForm = ({ receiverId }: ChatFormProps) => {
       toast.dismiss();
       toast.error("Failed to send message.");
     },
+    onSuccess: () => {
+      setCounter((prev) => prev + 1);
+    },
   });
 
   const handleSubmit = (data: z.infer<typeof InboxSchema>) => {
-    execute({ ...data, senderId: user.id });
+    execute({ ...data, senderId: user.id, id });
 
     form.reset();
+    form.setValue("type", "text");
   };
+
+  useEffect(() => {
+    form.setValue("id", id);
+    form.setValue("type", "text");
+  }, [counter]);
 
   return (
     <div className="p-4 border-t border-border">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(handleSubmit)}
-          className="flex items-end gap-2"
+          className="flex items-stretch gap-2"
         >
           <FormField
             control={form.control}
@@ -68,6 +82,7 @@ const ChatForm = ({ receiverId }: ChatFormProps) => {
               </FormItem>
             )}
           />
+          <AttachmentBtn />
           <Button type="submit" disabled={isExecuting}>
             <SendHorizontal />
           </Button>

@@ -4,14 +4,16 @@ import { useCurrentUser } from "@/hooks/use-current-user";
 import { cn } from "@/lib/utils";
 import { useEffect, useMemo } from "react";
 import { format } from "date-fns";
+import { MessageWithFiles } from "@/types";
+import ChatFileBubble from "./chat-file-bubble";
 
-type ChatBubbleProps = {
-  message: string;
-  senderId: string;
-  timestamp: string;
-};
-
-const ChatBubble = ({ message, senderId, timestamp }: ChatBubbleProps) => {
+const ChatBubble = ({
+  message,
+  senderId,
+  timestamp,
+  type,
+  files,
+}: MessageWithFiles) => {
   const { user } = useCurrentUser();
   const isSender = useMemo(() => {
     return senderId === user.id;
@@ -23,22 +25,39 @@ const ChatBubble = ({ message, senderId, timestamp }: ChatBubbleProps) => {
   }, [timestamp]);
 
   return (
-    <article
-      className={cn(
-        "flex items-end gap-2 rounded-md p-2 w-max max-w-[55%] text-sm",
-        isSender ? "ml-auto bg-primary text-primary-foreground" : "bg-secondary"
-      )}
-    >
-      <p>{message}</p>
-      <span
+    <div className="flex flex-col gap-2">
+      <article
         className={cn(
-          "text-xs -mb-1",
-          isSender ? "text-white/50" : "text-foreground/50"
+          "flex items-end gap-2 rounded-md p-2 w-max max-w-[55%] text-sm",
+          isSender
+            ? "ml-auto bg-primary text-primary-foreground"
+            : "bg-secondary"
         )}
       >
-        {formattedTime}
-      </span>
-    </article>
+        <p>{message}</p>
+        <span
+          className={cn(
+            "text-xs -mb-1 text-nowrap",
+            isSender ? "text-white/50" : "text-foreground/50"
+          )}
+        >
+          {formattedTime}
+        </span>
+      </article>
+      {type === "file" && (
+        <div
+          className={cn(
+            "max-w-[610px] justify-end",
+            isSender ? "ml-auto" : "",
+            "flex gap-1 flex-wrap"
+          )}
+        >
+          {files.map((file) => (
+            <ChatFileBubble key={file.secure_url} {...file} />
+          ))}
+        </div>
+      )}
+    </div>
   );
 };
 

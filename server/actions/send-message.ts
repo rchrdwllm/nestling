@@ -12,11 +12,11 @@ import { updateThread } from "./update-thread";
 export const sendMessage = actionClient
   .schema(InboxSchema)
   .action(async ({ parsedInput }) => {
-    const { message, senderId, receiverId, channelId } = parsedInput;
+    const { message, senderId, receiverId, channelId, id, type, files } =
+      parsedInput;
     const user = await getOptimisticUser();
 
     try {
-      const id = crypto.randomUUID();
       const messageData = {
         message,
         senderId,
@@ -24,9 +24,14 @@ export const sendMessage = actionClient
         channelId,
         id,
         timestamp: new Date().toISOString(),
+        type,
       };
 
-      await pusherServer.trigger(channelId, "new-message", messageData);
+      await pusherServer.trigger(
+        channelId,
+        "new-message",
+        files ? { ...messageData, files } : messageData
+      );
 
       try {
         const data = await createThread({
@@ -50,7 +55,7 @@ export const sendMessage = actionClient
             type: "inbox",
             senderId,
             receiverIds: [receiver!.id],
-            message: message,
+            message,
             title: `From ${user.name}`,
             url: `/${receiver!.role}-inbox/${channelId}`,
           });

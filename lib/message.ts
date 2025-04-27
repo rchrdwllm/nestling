@@ -1,6 +1,6 @@
 "use server";
 
-import { Message } from "@/types";
+import { File, Message, MessageWithFiles } from "@/types";
 import { db } from "./firebase";
 import { unstable_cache } from "next/cache";
 
@@ -17,12 +17,28 @@ export const getChannelMessages = unstable_cache(
         return { success: [] };
       }
 
-      const messages = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
+      const messages = snapshot.docs.map((doc) => doc.data() as Message);
+      const withFiles: (Message | MessageWithFiles)[] = await Promise.all(
+        messages.map(async (message) => {
+          if (message.type === "file") {
+            const { success: files, error } = await getMessageFiles(message.id);
 
-      return { success: messages };
+            if (error) {
+              console.error("Error fetching message files:", error);
+
+              return { ...message, files: [] } as MessageWithFiles;
+            }
+
+            if (files) {
+              return { ...message, files } as MessageWithFiles;
+            }
+          }
+
+          return message;
+        })
+      );
+
+      return { success: withFiles };
     } catch (error) {
       console.error("Error fetching messages:", error);
 
@@ -52,5 +68,31 @@ export const getLatestMessage = async (channelId: string) => {
     console.error("Error fetching latest message:", error);
 
     return { error: "Failed to fetch latest message" };
+  }
+};
+
+export const getMessageFiles = async (messageId: string) => {
+  try {
+    const messageRef = await db
+      .collection("messages")
+      .doc(messageId)
+      .collection("files")
+      .orderBy("created_at", "desc")
+      .get();
+    const fileIds = messageRef.docs.map((doc) => doc.data()) as File[];
+    const files = await Promise.all(
+      fileIds.map(async (file) => {
+        const fileRef = await db.collection("files").doc(file.public_id).get();
+        const fileData = fileRef.data() as File;
+
+        return fileData;
+      })
+    );
+
+    return { success: files };
+  } catch (error) {
+    console.error("Error fetching message files:", error);
+
+    return { error: "Failed to fetch message files" };
   }
 };

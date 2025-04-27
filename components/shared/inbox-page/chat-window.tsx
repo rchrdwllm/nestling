@@ -1,6 +1,6 @@
 "use client";
 
-import { Message, User } from "@/types";
+import { Message, MessageWithFiles, User } from "@/types";
 import ChatForm from "@/components/shared/inbox-page/chat-form";
 import Chat from "@/components/shared/inbox-page/chat";
 
@@ -10,7 +10,7 @@ type ChatWindowProps = {
 };
 
 const ChatWindow = ({ messages, receiver }: ChatWindowProps) => {
-  const prevMessagesData = JSON.parse(messages) as Message[];
+  const prevMessagesData = JSON.parse(messages) as MessageWithFiles[];
   const receiverData = JSON.parse(receiver) as User;
 
   if (!receiver) {

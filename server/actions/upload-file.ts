@@ -15,8 +15,10 @@ export const uploadFile = actionClient
       public_id,
       secure_url,
       content_id,
+      message_id,
       type,
       submission_id,
+      resource_type,
     } = parsedInput;
     const user = await getOptimisticUser();
 
@@ -28,9 +30,9 @@ export const uploadFile = actionClient
         created_at,
         public_id,
         secure_url,
-        content_id,
         type,
         user_id: user.id,
+        resource_type,
       };
 
       await fileRef.set(newFile);
@@ -67,6 +69,23 @@ export const uploadFile = actionClient
         };
 
         await submissionFileRef.set(reference);
+      }
+
+      if (message_id) {
+        const messageFileRef = db
+          .collection("messages")
+          .doc(message_id)
+          .collection("files")
+          .doc(public_id);
+
+        const reference = {
+          public_id,
+          created_at,
+          message_id,
+          secure_url,
+        };
+
+        await messageFileRef.set(reference);
       }
 
       return { success: newFile };

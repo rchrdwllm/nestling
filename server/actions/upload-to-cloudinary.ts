@@ -31,11 +31,30 @@ export const uploadFileToCloudinary = async (file: File) => {
 
   formData.append("file", file);
   formData.append("upload_preset", "nestling");
-  formData.append("resource_type", "raw");
+  formData.append("resource_type", "auto");
+
+  if (file.type === "application/pdf") {
+    try {
+      const res = await fetch(
+        "https://api.cloudinary.com/v1_1/nestling-lan/raw/upload",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+      const data = (await res.json()) as CloudinaryFile;
+
+      return { success: data };
+    } catch (error) {
+      console.error("File upload failed:", error);
+
+      return { error };
+    }
+  }
 
   try {
     const res = await fetch(
-      "https://api.cloudinary.com/v1_1/nestling-lan/raw/upload",
+      "https://api.cloudinary.com/v1_1/nestling-lan/auto/upload",
       {
         method: "POST",
         body: formData,

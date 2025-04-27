@@ -139,6 +139,7 @@ export type File = {
   url: string;
   type: string;
   submission_id?: string;
+  resource_type: string;
 };
 
 export type Submission = {
@@ -170,11 +171,16 @@ export type Announcement = {
 
 export type Message = {
   id: string;
-  message: string;
+  message?: string;
   senderId: string;
   receiverId: string;
   channelId: string;
   timestamp: string;
+  type: "text" | "file";
+};
+
+export type MessageWithFiles = Message & {
+  files: File[];
 };
 
 export type Thread = {

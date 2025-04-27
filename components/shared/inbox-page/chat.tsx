@@ -3,18 +3,20 @@ import ChatBubble from "./chat-bubble";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { pusherClient } from "@/lib/pusher";
 import { useEffect, useRef, useState } from "react";
-import { Message } from "@/types";
+import { Message, MessageWithFiles } from "@/types";
 import { generateChannelId } from "@/lib/utils";
 
 type ChatProps = {
   receiverId: string;
-  prevMessages?: Message[];
+  prevMessages?: MessageWithFiles[];
 };
 
 const Chat = ({ receiverId, prevMessages }: ChatProps) => {
   const { user } = useCurrentUser();
   const chatContainerRef = useRef<HTMLDivElement>(null);
-  const [chatData, setChatData] = useState<Message[]>(prevMessages || []);
+  const [chatData, setChatData] = useState<MessageWithFiles[]>(
+    prevMessages || []
+  );
   const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   useEffect(() => {
@@ -23,7 +25,7 @@ const Chat = ({ receiverId, prevMessages }: ChatProps) => {
 
       pusherClient.subscribe(channelName);
 
-      pusherClient.bind("new-message", (data: Message) => {
+      pusherClient.bind("new-message", (data: MessageWithFiles) => {
         setChatData((prev) => [...prev, data]);
       });
 
@@ -41,7 +43,6 @@ const Chat = ({ receiverId, prevMessages }: ChatProps) => {
         block: "end",
       });
 
-      // After initial scroll, set isInitialLoad to false
       if (isInitialLoad) {
         setIsInitialLoad(false);
       }
