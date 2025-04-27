@@ -98,6 +98,7 @@ const SubmitAssignmentBtn = ({
               secure_url: uploadedFile.secure_url,
               type: file.type,
               url: uploadedFile.url,
+              resource_type: uploadedFile.resource_type,
             },
             content: "",
             submissionType,
