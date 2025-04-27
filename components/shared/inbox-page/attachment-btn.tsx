@@ -34,8 +34,6 @@ const AttachmentBtn = () => {
                 message_id: form.getValues("id"),
               });
 
-              console.log(uploadedFile);
-
               return { success: uploadedFile };
             } catch (err) {
               console.error("Error uploading file:", err);

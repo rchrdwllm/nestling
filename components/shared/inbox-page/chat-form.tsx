@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Form, FormField, FormItem } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
-import { Paperclip, SendHorizontal } from "lucide-react";
+import { SendHorizontal } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { sendMessage } from "@/server/actions/send-message";
 import { useAction } from "next-safe-action/hooks";
@@ -15,6 +15,7 @@ import { toast } from "sonner";
 import { generateChannelId } from "@/lib/utils";
 import AttachmentBtn from "./attachment-btn";
 import { useEffect, useMemo, useState } from "react";
+import FilePreviews from "./file-previews";
 
 type ChatFormProps = {
   receiverId: string;
@@ -58,6 +59,9 @@ const ChatForm = ({ receiverId }: ChatFormProps) => {
 
   return (
     <div className="p-4 border-t border-border">
+      {form.getValues("files") && form.getValues("files")!.length > 0 && (
+        <FilePreviews files={form.getValues("files")!} />
+      )}
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(handleSubmit)}
