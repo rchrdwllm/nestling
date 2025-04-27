@@ -1,6 +1,7 @@
 import Threads from "@/components/shared/inbox-page/threads";
 import SearchBar from "@/components/shared/search/search-bar";
-import { ReactNode } from "react";
+import { ReactNode, Suspense } from "react";
+import Loading from "./loading";
 
 const Layout = ({ children }: { children: ReactNode }) => {
   return (
@@ -9,7 +10,9 @@ const Layout = ({ children }: { children: ReactNode }) => {
         <div className="p-4 border-b border-border">
           <SearchBar isInbox entities={["students", "instructors"]} />
         </div>
-        <Threads />
+        <Suspense fallback={<Loading />}>
+          <Threads />
+        </Suspense>
       </aside>
       <div className="col-span-6 bg-background border border-border rounded-xl">
         {children}
