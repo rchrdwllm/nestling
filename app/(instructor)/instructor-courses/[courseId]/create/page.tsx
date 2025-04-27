@@ -1,4 +1,5 @@
 import CreateContentForm from "@/components/instructor-access/courses-page/create-content/create-content-form";
+import { getModuleContent } from "@/lib/content";
 import { getModuleTitles } from "@/lib/module";
 
 const CreatePage = async ({
@@ -6,10 +7,10 @@ const CreatePage = async ({
   searchParams,
 }: {
   params: Promise<{ courseId: string }>;
-  searchParams: Promise<{ moduleId?: string }>;
+  searchParams: Promise<{ moduleId?: string; contentId?: string }>;
 }) => {
   const { courseId } = await params;
-  const { moduleId } = await searchParams;
+  const { moduleId, contentId } = await searchParams;
   const { success: moduleTitles, error } = await getModuleTitles(courseId);
 
   if (error) {
@@ -20,11 +21,19 @@ const CreatePage = async ({
     return <div>Loading...</div>;
   }
 
+  const { success: content, error: contentError } = contentId
+    ? await getModuleContent(contentId)
+    : { success: null, error: null };
+
   return (
     <main className="p-6 flex flex-col gap-8">
       <div className="flex flex-col gap-3">
         <h1 className="text-3xl font-semibold">
-          {moduleId ? "Add content" : "Create content"}{" "}
+          {moduleId
+            ? "Add content"
+            : content
+            ? "Edit content"
+            : "Create content"}
         </h1>
         <hr />
       </div>
@@ -32,6 +41,7 @@ const CreatePage = async ({
         defaultModule={moduleId}
         courseId={courseId}
         modules={moduleTitles}
+        content={JSON.stringify(content)}
       />
     </main>
   );

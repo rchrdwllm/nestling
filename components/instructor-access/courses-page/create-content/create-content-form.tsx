@@ -30,6 +30,7 @@ import RichTextEditor from "./rich-text-editor";
 import AssignmentForm from "./assignment-form";
 import FileForm from "./file-form";
 import { Switch } from "@/components/ui/switch";
+import { useEffect } from "react";
 
 type CreateContentFormProps = {
   defaultModule?: string;
@@ -39,12 +40,14 @@ type CreateContentFormProps = {
     id: string;
   }[];
   courseId: string;
+  content?: string;
 };
 
 const CreateContentForm = ({
   defaultModule,
   modules,
   courseId,
+  content,
 }: CreateContentFormProps) => {
   const id = crypto.randomUUID();
   const router = useRouter();
@@ -59,13 +62,19 @@ const CreateContentForm = ({
       id,
       content: "",
       isPublished: true,
+      isEdit: content ? true : false,
     },
   });
   const { execute, isExecuting } = useAction(createContent, {
     onSuccess: ({ data }) => {
       if (data?.success) {
         toast.dismiss();
-        toast.success("Content created successfully");
+
+        if (content) {
+          toast.success("Content edited successfully");
+        } else {
+          toast.success("Content created successfully");
+        }
 
         router.push(
           `/instructor-courses/${courseId}/modules/content/${data.success.id}`
@@ -81,13 +90,46 @@ const CreateContentForm = ({
     },
     onExecute: () => {
       toast.dismiss();
-      toast.loading("Creating content...");
+
+      if (content) {
+        toast.loading("Editing content...");
+      } else {
+        toast.loading("Creating content...");
+      }
     },
   });
 
   const handleSubmit = (data: z.infer<typeof CreateContentSchema>) => {
     execute(data);
   };
+
+  useEffect(() => {
+    if (content) {
+      const contentData = JSON.parse(content);
+      form.setValue("content", contentData.content);
+      form.setValue("courseId", contentData.courseId);
+      form.setValue("id", contentData.id);
+      form.setValue("isPublished", contentData.isPublished);
+      form.setValue("title", contentData.title);
+      form.setValue("type", contentData.type);
+      form.setValue("isEdit", true);
+      form.setValue("moduleId", contentData.moduleId);
+
+      if (contentData.type === "assignment") {
+        form.setValue(
+          "date.from",
+          new Date(contentData.startDate!._seconds * 1000)
+        );
+        form.setValue(
+          "date.to",
+          new Date(contentData.endDate!._seconds * 1000)
+        );
+        form.setValue("points", contentData.points);
+        form.setValue("submissionType", contentData.submissionType);
+        form.setValue("maxAttempts", contentData.maxAttempts);
+      }
+    }
+  }, [content]);
 
   return (
     <Form {...form}>
@@ -183,7 +225,7 @@ const CreateContentForm = ({
           />
         )}
         <Button type="submit" disabled={isExecuting}>
-          Create
+          {content ? "Save" : "Crate"}
         </Button>
       </form>
     </Form>

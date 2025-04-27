@@ -3,7 +3,7 @@
 import { CreateContentSchema } from "@/schemas/CreateContentSchema";
 import { actionClient } from "../action-client";
 import { db } from "@/lib/firebase";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 export const createContent = actionClient
   .schema(CreateContentSchema)
@@ -20,7 +20,60 @@ export const createContent = actionClient
       maxAttempts,
       id,
       isPublished,
+      isEdit,
     } = parsedInput;
+
+    if (isEdit) {
+      if (type === "assignment") {
+        await db.collection("contents").doc(id).update({
+          title,
+          type,
+          moduleId,
+          courseId,
+          content,
+          date,
+          submissionType,
+          points,
+          maxAttempts,
+          id,
+          isPublished,
+          updatedAt: new Date(),
+        });
+
+        revalidatePath(
+          "/(instructor)/instructor-courses/[courseId]/modules/content/[contentId]",
+          "page"
+        );
+        revalidateTag("contents");
+        revalidateTag("modules");
+        revalidateTag("module");
+
+        return { success: parsedInput };
+      }
+
+      if (type === "lesson") {
+        await db.collection("contents").doc(id).update({
+          title,
+          type,
+          moduleId,
+          courseId,
+          content,
+          id,
+          isPublished,
+          updatedAt: new Date(),
+        });
+
+        revalidatePath(
+          "/(instructor)/instructor-courses/[courseId]/modules/content/[contentId]",
+          "page"
+        );
+        revalidateTag("contents");
+        revalidateTag("modules");
+        revalidateTag("module");
+
+        return { success: parsedInput };
+      }
+    }
 
     try {
       const newContent =

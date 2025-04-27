@@ -18,4 +18,5 @@ export const CreateContentSchema = z.object({
   submissionType: z.enum(["file", "text"]).optional(),
   id: z.string(),
   fileUrl: z.string().optional(),
+  isEdit: z.boolean(),
 });

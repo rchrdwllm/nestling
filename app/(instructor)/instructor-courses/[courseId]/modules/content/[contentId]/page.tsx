@@ -7,9 +7,9 @@ import Link from "next/link";
 const ContentPage = async ({
   params,
 }: {
-  params: Promise<{ contentId: string }>;
+  params: Promise<{ contentId: string; courseId: string }>;
 }) => {
-  const { contentId } = await params;
+  const { contentId, courseId } = await params;
   const { success: content, error } = await getModuleContent(contentId);
 
   if (error) {
@@ -26,7 +26,14 @@ const ContentPage = async ({
     <main className="p-6 flex gap-16">
       <div className="flex-1">
         <div className="flex flex-col gap-3">
-          <h1 className="text-3xl font-semibold">{content.title}</h1>
+          <div className="flex justify-between items-center">
+            <h1 className="text-3xl font-semibold">{content.title}</h1>
+            <Link
+              href={`/instructor-courses/${courseId}/create?moduleId=${content.moduleId}&contentId=${contentId}`}
+            >
+              <Button variant="outline">Edit content</Button>
+            </Link>
+          </div>
           <hr />
         </div>
         {content.type === "assignment" && <AssignmentDetails {...content} />}
