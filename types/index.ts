@@ -45,6 +45,7 @@ export type EnrollmentData = {
   courseId: string;
   studentId: string;
   createdAt: Timestamp;
+  accessEnabled: boolean;
 };
 
 export type Module = {

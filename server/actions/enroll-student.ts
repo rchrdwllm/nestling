@@ -39,6 +39,7 @@ export const enrollStudent = actionClient
         courseId,
         studentId,
         createdAt: new Date(),
+        accessEnabled: true,
       };
 
       const batch = db.batch();

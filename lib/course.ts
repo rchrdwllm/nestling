@@ -1,6 +1,6 @@
 "use server";
 
-import { Course, User } from "@/types";
+import { Course, EnrollmentData, User } from "@/types";
 import { db } from "./firebase";
 import { unstable_cache } from "next/cache";
 import { getImage } from "./image";
@@ -70,6 +70,7 @@ export const getEnrolledCourses = unstable_cache(
         .collection("users")
         .doc(studentId)
         .collection("enrolledCourses")
+        .where("accessEnabled", "==", true)
         .get();
       const courseIds = snapshot.docs.map((doc) => doc.id);
       const courses = await Promise.all(
@@ -254,4 +255,31 @@ export const getCourseImage = unstable_cache(
   },
   ["courseImage"],
   { revalidate: 3600 }
+);
+
+export const getEnrollmentDetails = unstable_cache(
+  async (courseId: string, studentId: string) => {
+    try {
+      const snapshot = await db
+        .collection("courses")
+        .doc(courseId)
+        .collection("enrolledStudents")
+        .doc(studentId)
+        .get();
+
+      if (!snapshot.exists) {
+        return { error: "Enrollment details not found" };
+      }
+
+      const enrollmentDetails = snapshot.data() as EnrollmentData;
+
+      return { success: JSON.stringify(enrollmentDetails) };
+    } catch (error) {
+      console.error("Error fetching enrollment details:", error);
+
+      return { error: "Error fetching enrollment details" };
+    }
+  },
+  ["courseId", "studentId"],
+  { revalidate: 60 * 60 * 24, tags: ["enrollmentDetails"] }
 );
