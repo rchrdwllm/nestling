@@ -31,6 +31,7 @@ const ChatFileBubble = ({ secure_url, public_id, resource_type }: File) => {
         </DialogTrigger>
         <DialogContent>
           <DialogTitle>{public_id}</DialogTitle>
+          <DialogDescription></DialogDescription>
           <div className="p-4 w-full h-96 flex flex-col gap-4">
             <div className="relative size-full">
               <Image
