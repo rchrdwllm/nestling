@@ -43,6 +43,7 @@ export const submitAssignment = actionClient
           secure_url,
           type,
           url,
+          resource_type,
         } = file;
 
         const newFileSubmission = {
@@ -77,6 +78,7 @@ export const submitAssignment = actionClient
             type,
             url,
             submission_id: submissionId,
+            resource_type,
           });
 
           batch.set(submissionRef, newFileSubmission);
