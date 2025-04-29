@@ -12,8 +12,38 @@ import { revalidatePath, revalidateTag } from "next/cache";
 export const createAnnouncement = actionClient
   .schema(CreateAnnouncementSchema)
   .action(async ({ parsedInput }) => {
-    const { title, content, courseId } = parsedInput;
+    const { title, content, courseId, id, isArchived } = parsedInput;
     const user = await getOptimisticUser();
+
+    if (id) {
+      try {
+        const announcementRef = db.collection("announcements").doc(id);
+        const announcementDoc = await announcementRef.get();
+
+        if (!announcementDoc.exists) {
+          return { error: "Announcement not found" };
+        }
+
+        const announcementData = announcementDoc.data() as Course;
+        const updatedAnnouncementData = {
+          ...announcementData,
+          title,
+          content,
+          updatedAt: new Date().toISOString(),
+          isArchived,
+        };
+
+        await announcementRef.update(updatedAnnouncementData);
+
+        revalidateTag("announcements");
+
+        return { success: "Announcement updated successfully" };
+      } catch (error) {
+        console.error("Error updating announcement:", error);
+
+        return { error: "Failed to update announcement" };
+      }
+    }
 
     try {
       const courseRef = await db.collection("courses").doc(courseId).get();

@@ -5,9 +5,11 @@ import { Form, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { CreateAnnouncementSchema } from "@/schemas/CreateAnnouncementSchema";
 import { createAnnouncement } from "@/server/actions/create-announcement";
+import { Announcement } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAction } from "next-safe-action/hooks";
 import { useParams } from "next/navigation";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
@@ -15,29 +17,38 @@ import * as z from "zod";
 type CreateAnnouncementFormProps = {
   setIsOpen: (value: boolean) => void;
   isEdit?: boolean;
+  announcement?: Announcement;
 };
 
 const CreateAnnouncementForm = ({
   setIsOpen,
   isEdit,
+  announcement,
 }: CreateAnnouncementFormProps) => {
   const { courseId } = useParams<{ courseId: string }>();
   const form = useForm<z.infer<typeof CreateAnnouncementSchema>>({
     resolver: zodResolver(CreateAnnouncementSchema),
     defaultValues: {
-      title: "",
-      content: "",
-      courseId,
+      title: announcement?.title || "",
+      content: announcement?.content || "",
+      isArchived: announcement?.isArchived || false,
+      courseId: courseId || "",
     },
   });
   const { execute, isExecuting } = useAction(createAnnouncement, {
     onExecute: () => {
       toast.dismiss();
-      toast.loading("Creating announcement...");
+      toast.loading(
+        isEdit ? "Updating announcement..." : "Creating announcement..."
+      );
     },
     onSuccess: () => {
       toast.dismiss();
-      toast.success("Announcement created successfully!");
+      toast.success(
+        isEdit
+          ? "Announcement updated successfully!"
+          : "Announcement created successfully!"
+      );
 
       setIsOpen(false);
     },
@@ -52,6 +63,18 @@ const CreateAnnouncementForm = ({
   ) => {
     execute(data);
   };
+
+  useEffect(() => {
+    if (isEdit && announcement) {
+      form.setValue("title", announcement.title);
+      form.setValue("content", announcement.content);
+      form.setValue("courseId", announcement.courseId);
+      form.setValue("isArchived", announcement.isArchived);
+      form.setValue("id", announcement.id);
+    } else {
+      form.reset();
+    }
+  }, [isEdit, announcement]);
 
   return (
     <Form {...form}>
@@ -78,7 +101,7 @@ const CreateAnnouncementForm = ({
           )}
         />
         <Button type="submit" disabled={isExecuting}>
-          Create announcement
+          {isEdit ? "Edit" : "Create"} announcement
         </Button>
       </form>
     </Form>

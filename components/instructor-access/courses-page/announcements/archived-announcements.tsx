@@ -22,7 +22,11 @@ const ArchivedAnnouncements = async ({
   return (
     <section className="flex flex-col gap-4">
       {announcements.map((announcement) => (
-        <AnnouncementCard key={announcement.id} {...announcement} />
+        <AnnouncementCard
+          key={announcement.id}
+          announcement={JSON.stringify(announcement)}
+          {...announcement}
+        />
       ))}
     </section>
   );
