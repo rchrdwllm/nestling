@@ -23,7 +23,7 @@ export const archiveModule = actionClient
 
       await moduleRef.update({
         isArchived: module.isArchived ? false : true,
-        archivedAt: new Date(),
+        archivedAt: new Date().toISOString(),
       });
 
       revalidatePath("/(instructor)/instructor-courses/[courseId]", "page");

@@ -36,16 +36,29 @@ const NotificationWrapper = ({ children }: { children: ReactNode }) => {
             body: JSON.stringify({ pathname: notification.url }),
           });
 
-          toast(`${notification.title}`, {
-            description: notification.message,
-            action: (
-              <Link href={notification.url}>
-                <Button variant="secondary">View message</Button>
-              </Link>
-            ),
-            duration: 100000,
-            className: "flex items-center justify-between gap-2",
-          });
+          if (notification.type === "inbox") {
+            toast(`${notification.title}`, {
+              description: notification.message,
+              action: (
+                <Link href={notification.url}>
+                  <Button variant="secondary">View message</Button>
+                </Link>
+              ),
+              duration: 100000,
+              className: "flex items-center justify-between gap-2",
+            });
+          } else {
+            toast(`${notification.title}`, {
+              description: notification.message,
+              action: (
+                <Link href={notification.url}>
+                  <Button variant="secondary">View</Button>
+                </Link>
+              ),
+              duration: 100000,
+              className: "flex items-center justify-between gap-2",
+            });
+          }
         }
       });
     });

@@ -29,6 +29,7 @@ export const authOptions = {
 
           if (users.empty) {
             console.log("User not found in Firestore");
+
             return null;
           }
 

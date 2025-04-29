@@ -32,13 +32,9 @@ const ContentPage = async ({
       : { success: null };
 
   const startDate =
-    content.type === "assignment"
-      ? new Date(content.startDate!._seconds * 1000)
-      : new Date();
+    content.type === "assignment" ? new Date(content.startDate!) : new Date();
   const endDate =
-    content.type === "assignment"
-      ? new Date(content.endDate!._seconds * 1000)
-      : new Date();
+    content.type === "assignment" ? new Date(content.endDate!) : new Date();
   const currentDate = content.type === "assignment" ? new Date() : new Date();
 
   const isLocked = currentDate < startDate || currentDate > endDate || false;

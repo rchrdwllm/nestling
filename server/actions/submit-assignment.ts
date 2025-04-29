@@ -7,7 +7,7 @@ import { getOptimisticUser } from "@/lib/user";
 import { uploadFile } from "./upload-file";
 import { SubmitAssignmentSchema } from "@/schemas/SubmitAssignmentSchema";
 import * as z from "zod";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { Content } from "@/types";
 
 export const submitAssignment = actionClient
@@ -53,7 +53,7 @@ export const submitAssignment = actionClient
           contentId: content_id,
           fileId: public_id,
           id: submissionId,
-          createdAt: new Date(),
+          createdAt: new Date().toISOString(),
           secureUrl: secure_url,
           isGraded: false,
           grade: null,
@@ -61,7 +61,7 @@ export const submitAssignment = actionClient
 
         const reference = {
           submissionId,
-          createdAt: new Date(),
+          createdAt: new Date().toISOString(),
           fileId: public_id,
           secureUrl: secure_url,
           contentId: content_id,
@@ -122,6 +122,7 @@ export const submitAssignment = actionClient
       revalidatePath(
         `/(student)/student-courses/${courseId}/modules/content/${contentId}`
       );
+      revalidateTag("submissions");
 
       return { success: "Assignment submitted successfully" };
     } catch (error) {

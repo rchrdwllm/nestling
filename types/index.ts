@@ -1,10 +1,3 @@
-import { Timestamp as FSTimestamp } from "firebase-admin/firestore";
-
-export type Timestamp = FSTimestamp & {
-  _seconds: number;
-  _nanoseconds: number;
-};
-
 export type Role = "student" | "instructor" | "admin";
 
 export type User = {
@@ -17,16 +10,16 @@ export type User = {
   middleName: string;
   lastName: string;
   contactNumber: string;
-  createdAt: Timestamp | string;
-  updatedAt: Timestamp | string;
+  createdAt: string;
+  updatedAt: string;
   name?: string;
 };
 
 export type PasswordResetToken = {
   token: string;
   email: string;
-  expires: Timestamp;
-  createdAt: Timestamp;
+  expires: string;
+  createdAt: string;
 };
 
 export type Course = {
@@ -34,17 +27,17 @@ export type Course = {
   name: string;
   courseCode: string;
   description: string;
-  createdAt: Timestamp;
-  updatedAt: Timestamp;
+  createdAt: string;
+  updatedAt: string;
   image: string;
   isArchived: boolean;
-  archivedAt: Timestamp | null;
+  archivedAt: string | null;
 };
 
 export type EnrollmentData = {
   courseId: string;
   studentId: string;
-  createdAt: Timestamp;
+  createdAt: string;
   accessEnabled: boolean;
 };
 
@@ -53,11 +46,11 @@ export type Module = {
   title: string;
   moduleNumber: number;
   courseId: string;
-  createdAt: Timestamp;
-  updatedAt: Timestamp;
+  createdAt: string;
+  updatedAt: string;
   isPublished: boolean;
   isArchived: boolean;
-  archivedAt: Timestamp | null;
+  archivedAt: string | null;
 };
 
 export type Content = {
@@ -68,10 +61,10 @@ export type Content = {
   content: string;
   type: "lesson" | "assignment" | "file";
   isLocked: boolean;
-  startDate?: Timestamp;
-  endDate?: Timestamp;
-  createdAt: Timestamp;
-  updatedAt: Timestamp;
+  startDate?: string;
+  endDate?: string;
+  createdAt: string;
+  updatedAt: string;
   submissionType?: "file" | "text";
   points?: number;
   maxAttempts?: number;
@@ -163,10 +156,10 @@ export type Announcement = {
   title: string;
   content: string;
   courseId: string;
-  createdAt: Timestamp;
-  updatedAt: Timestamp;
+  createdAt: string;
+  updatedAt: string;
   isArchived: boolean;
-  archivedAt: Timestamp | null;
+  archivedAt: string | null;
   senderId: string;
 };
 
@@ -176,7 +169,7 @@ export type Message = {
   senderId: string;
   receiverId: string;
   channelId: string;
-  timestamp: string;
+  string: string;
   type: "text" | "file";
 };
 
@@ -188,8 +181,8 @@ export type Thread = {
   id: string;
   channelId: string;
   userIds: string[];
-  createdAt: Timestamp;
-  updatedAt: Timestamp;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type Notification = {
@@ -199,10 +192,10 @@ export type Notification = {
   message: string;
   url: string;
   senderId: string;
-  createdAt: Timestamp;
+  createdAt: string;
   isRead: boolean;
   isArchived: boolean;
-  archivedAt: Timestamp | null;
+  archivedAt: string | null;
   receiverIds: string[];
 };
 

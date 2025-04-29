@@ -30,7 +30,7 @@ import RichTextEditor from "./rich-text-editor";
 import AssignmentForm from "./assignment-form";
 import FileForm from "./file-form";
 import { Switch } from "@/components/ui/switch";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 
 type CreateContentFormProps = {
   defaultModule?: string;
@@ -51,6 +51,10 @@ const CreateContentForm = ({
 }: CreateContentFormProps) => {
   const id = crypto.randomUUID();
   const router = useRouter();
+  const isEdit = useMemo(
+    () => content && content !== "" && content !== "{}" && content !== "null",
+    [content]
+  );
   const form = useForm<z.infer<typeof CreateContentSchema>>({
     resolver: zodResolver(CreateContentSchema),
     defaultValues: {
@@ -62,7 +66,7 @@ const CreateContentForm = ({
       id,
       content: "",
       isPublished: true,
-      isEdit: content ? true : false,
+      isEdit: isEdit ? true : false,
     },
   });
   const { execute, isExecuting } = useAction(createContent, {
@@ -70,7 +74,7 @@ const CreateContentForm = ({
       if (data?.success) {
         toast.dismiss();
 
-        if (content) {
+        if (isEdit) {
           toast.success("Content edited successfully");
         } else {
           toast.success("Content created successfully");
@@ -91,7 +95,7 @@ const CreateContentForm = ({
     onExecute: () => {
       toast.dismiss();
 
-      if (content) {
+      if (isEdit) {
         toast.loading("Editing content...");
       } else {
         toast.loading("Creating content...");
@@ -104,8 +108,8 @@ const CreateContentForm = ({
   };
 
   useEffect(() => {
-    if (content) {
-      const contentData = JSON.parse(content);
+    if (isEdit) {
+      const contentData = JSON.parse(content!);
       form.setValue("content", contentData.content);
       form.setValue("courseId", contentData.courseId);
       form.setValue("id", contentData.id);
@@ -116,14 +120,8 @@ const CreateContentForm = ({
       form.setValue("moduleId", contentData.moduleId);
 
       if (contentData.type === "assignment") {
-        form.setValue(
-          "date.from",
-          new Date(contentData.startDate!._seconds * 1000)
-        );
-        form.setValue(
-          "date.to",
-          new Date(contentData.endDate!._seconds * 1000)
-        );
+        form.setValue("date.from", new Date(contentData.startDate!));
+        form.setValue("date.to", new Date(contentData.endDate!));
         form.setValue("points", contentData.points);
         form.setValue("submissionType", contentData.submissionType);
         form.setValue("maxAttempts", contentData.maxAttempts);

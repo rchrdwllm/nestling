@@ -1,5 +1,6 @@
 import { Announcement } from "@/types";
 import AnnouncementDetailsBtn from "./announcement-details-btn";
+import { format } from "date-fns";
 
 type AnnouncementCardProps = {
   announcement: string;
@@ -20,7 +21,9 @@ const AnnouncementCard = ({ announcement }: AnnouncementCardProps) => {
           announcementId={id}
         />
       </div>
-      <p className="text-sm text-muted-foreground">date</p>
+      <p className="text-sm text-muted-foreground">
+        {format(new Date(createdAt), "LLLL dd, y p")}
+      </p>
       <p className="text-muted-foreground">{content}</p>
     </article>
   );

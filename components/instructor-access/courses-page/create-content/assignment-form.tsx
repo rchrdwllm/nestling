@@ -98,16 +98,12 @@ const AssignmentForm = () => {
                   <TimePicker
                     setDate={(date) => {
                       field.onChange({ ...field.value, from: date });
-
-                      console.log({ from: date });
                     }}
                     date={field.value?.from}
                   />
                   <TimePicker
                     setDate={(date) => {
                       field.onChange({ ...field.value, to: date });
-
-                      console.log({ to: date });
                     }}
                     date={field.value?.to}
                   />

@@ -40,8 +40,8 @@ export const checkEmailRegister = async (
       lastName,
       contactNumber,
       name: `${firstName} ${middleName} ${lastName}`,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
     };
 
     await db.collection("users").doc(id).set(newUser);

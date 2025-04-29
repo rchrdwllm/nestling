@@ -82,7 +82,7 @@ export const createAnnouncement = actionClient
           message: title,
           senderId: user.id,
           receiverIds: enrolledStudents,
-          url: `/student-courses/${courseId}/announcements/${id}`,
+          url: `/student-courses/${courseId}/announcements`,
         });
       }
 

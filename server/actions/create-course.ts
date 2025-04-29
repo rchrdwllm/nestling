@@ -47,21 +47,19 @@ export const createCourse = actionClient
         const course = existingCourse.data() as Course;
         const prevImage = await getCourseImage(course.id);
 
-        console.log(prevImage);
-
         const edits = image
           ? {
               name,
               description,
               courseCode,
-              updatedAt: new Date(),
+              updatedAt: new Date().toISOString(),
               image: image.secure_url,
             }
           : {
               name,
               description,
               courseCode,
-              updatedAt: new Date(),
+              updatedAt: new Date().toISOString(),
             };
 
         await db.collection("courses").doc(course.id).update(edits);
@@ -140,9 +138,10 @@ export const createCourse = actionClient
         description,
         courseCode,
         id,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
         image: image.secure_url,
+        isArchived: false,
       });
 
       const data = await uploadImage({ ...image, course_id: id });
@@ -176,7 +175,7 @@ export const createCourse = actionClient
       const courseInstructorData = {
         courseId: id,
         instructorId: user.id,
-        createdAt: new Date(),
+        createdAt: new Date().toISOString(),
       };
 
       batch.set(courseInstructorRef, courseInstructorData);

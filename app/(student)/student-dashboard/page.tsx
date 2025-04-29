@@ -31,7 +31,7 @@ const Dashboard = () => {
                 message: "asdfalksdghsg",
                 senderId: "use-uiry2i3uhfs",
                 url: "/student-inbox",
-                createdAt: new Date() as any,
+                createdAt: new Date().toISOString(),
                 isRead: false,
                 isArchived: false,
                 archivedAt: null,

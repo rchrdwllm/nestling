@@ -4,7 +4,7 @@ import { CreateModuleSchema } from "@/schemas/CreateModuleSchema";
 import { actionClient } from "../action-client";
 import { getCourseModules, getModule } from "@/lib/module";
 import { db } from "@/lib/firebase";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 export const createModule = actionClient
   .schema(CreateModuleSchema)
@@ -27,7 +27,7 @@ export const createModule = actionClient
       if (isEdit && moduleId) {
         await db.collection("modules").doc(moduleId).update({
           title,
-          updatedAt: new Date(),
+          updatedAt: new Date().toISOString(),
         });
 
         revalidatePath("/(instructor)/instructor-courses/[courseId]", "page");
@@ -41,10 +41,11 @@ export const createModule = actionClient
         id,
         title,
         courseId,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
         isPublished: true,
         moduleNumber: existingModules.length + 1,
+        isArchived: false,
       };
 
       await db.collection("modules").doc(id).set(module);
@@ -65,7 +66,7 @@ export const createModule = actionClient
       const reference = {
         moduleId: id,
         courseId,
-        createdAt: new Date(),
+        createdAt: new Date().toISOString(),
       };
 
       batch.set(courseModuleRef, reference);
@@ -79,6 +80,8 @@ export const createModule = actionClient
         "page"
       );
       revalidatePath(`/(instructor)/instructor-courses/${courseId}`);
+      revalidateTag("modules");
+      revalidateTag("courses");
 
       return { success: `Module ${title} created` };
     } catch (error) {

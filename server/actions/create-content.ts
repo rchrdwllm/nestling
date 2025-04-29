@@ -4,6 +4,9 @@ import { CreateContentSchema } from "@/schemas/CreateContentSchema";
 import { actionClient } from "../action-client";
 import { db } from "@/lib/firebase";
 import { revalidatePath, revalidateTag } from "next/cache";
+import { createNotif } from "./create-notif";
+import { getOptimisticUser } from "@/lib/user";
+import { getEnrolledStudentIds } from "@/lib/course";
 
 export const createContent = actionClient
   .schema(CreateContentSchema)
@@ -22,6 +25,7 @@ export const createContent = actionClient
       isPublished,
       isEdit,
     } = parsedInput;
+    const user = await getOptimisticUser();
 
     if (isEdit) {
       if (type === "assignment") {
@@ -37,7 +41,7 @@ export const createContent = actionClient
           maxAttempts,
           id,
           isPublished,
-          updatedAt: new Date(),
+          updatedAt: new Date().toISOString(),
         });
 
         revalidatePath(
@@ -60,7 +64,7 @@ export const createContent = actionClient
           content,
           id,
           isPublished,
-          updatedAt: new Date(),
+          updatedAt: new Date().toISOString(),
         });
 
         revalidatePath(
@@ -84,8 +88,8 @@ export const createContent = actionClient
               moduleId,
               id,
               courseId,
-              createdAt: new Date(),
-              updatedAt: new Date(),
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString(),
               content,
               isLocked: false,
               isPublished,
@@ -97,10 +101,10 @@ export const createContent = actionClient
               moduleId,
               id,
               courseId,
-              createdAt: new Date(),
-              updatedAt: new Date(),
-              startDate: date?.from,
-              endDate: date?.to,
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString(),
+              startDate: date?.from.toISOString(),
+              endDate: date?.to.toISOString(),
               submissionType,
               points,
               maxAttempts,
@@ -114,8 +118,8 @@ export const createContent = actionClient
               moduleId,
               id,
               courseId,
-              createdAt: new Date(),
-              updatedAt: new Date(),
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString(),
               content,
               isLocked: false,
               isPublished,
@@ -139,7 +143,7 @@ export const createContent = actionClient
       const reference = {
         moduleId: moduleId,
         contentId: id,
-        createdAt: new Date(),
+        createdAt: new Date().toISOString(),
       };
 
       batch.set(moduleContentRef, reference);
@@ -148,6 +152,29 @@ export const createContent = actionClient
       await batch.commit();
 
       revalidatePath("/(instructor)/instructor-courses/[courseId]", "page");
+      revalidateTag("contents");
+      revalidateTag("modules");
+      revalidateTag("module");
+
+      if (type === "assignment") {
+        const { success: enrolledStudentIds, error } =
+          await getEnrolledStudentIds(courseId);
+
+        if (error) {
+          console.error("Error fetching enrolled student IDs:", error);
+
+          return { error };
+        }
+
+        await createNotif({
+          title: `New assignment: ${title}`,
+          message: `A new assignment has been created!`,
+          senderId: user.id,
+          type: "assignment",
+          url: `/student-courses/${courseId}/modules/content/${id}`,
+          receiverIds: enrolledStudentIds,
+        });
+      }
 
       return { success: newContent };
     } catch (error) {

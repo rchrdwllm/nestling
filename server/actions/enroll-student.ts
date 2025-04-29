@@ -3,7 +3,7 @@
 import { db } from "@/lib/firebase";
 import { actionClient } from "../action-client";
 import { EnrollSchema } from "@/schemas/EnrollSchema";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 export const enrollStudent = actionClient
   .schema(EnrollSchema)
@@ -38,7 +38,7 @@ export const enrollStudent = actionClient
       const enrollmentData = {
         courseId,
         studentId,
-        createdAt: new Date(),
+        createdAt: new Date().toISOString(),
         accessEnabled: true,
       };
 
@@ -50,6 +50,7 @@ export const enrollStudent = actionClient
       await batch.commit();
 
       revalidatePath("/student-courses");
+      revalidateTag("students");
 
       return { success: `Enrolled student in course ${courseId}` };
     } catch (error) {

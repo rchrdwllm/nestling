@@ -27,7 +27,7 @@ export const archiveAnnouncement = actionClient
         .doc(announcementId)
         .update({
           isArchived: announcement?.isArchived ? false : true,
-          archivedAt: new Date(),
+          archivedAt: new Date().toISOString(),
         });
 
       revalidateTag("announcements");

@@ -59,6 +59,6 @@ export const getStudentAssignmentSubmission = unstable_cache(
       return { error: "Error fetching submissions" };
     }
   },
-  ["getStudentAssignmentSubmission"],
-  { revalidate: 3600 }
+  ["contentId", "studentId"],
+  { revalidate: 3600, tags: ["submissions"] }
 );
