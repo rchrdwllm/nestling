@@ -171,6 +171,7 @@ export type Message = {
   channelId: string;
   string: string;
   type: "text" | "file";
+  timestamp: string;
 };
 
 export type MessageWithFiles = Message & {
