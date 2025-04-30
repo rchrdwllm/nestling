@@ -2,6 +2,7 @@ import { getStudentAssignmentSubmission } from "@/lib/submission";
 import SubmissionAttempt from "../../instructor-access/courses-page/submissions/submission-attempt";
 import PdfViewer from "@/components/shared/content-page/pdf-viewer";
 import { getModuleContent } from "@/lib/content";
+import { getFile, verifyFileIntegrity } from "@/lib/file";
 
 type SubmissionPreviewProps = {
   studentId: string;
@@ -33,6 +34,19 @@ const SubmissionPreview = async ({
   const selectedAttempt = attempt
     ? studentSubmissions[parseInt(attempt) - 1]
     : studentSubmissions[0];
+  const { success: file, error: fileError } = await getFile(
+    selectedAttempt.fileId
+  );
+
+  if (fileError) {
+    return <div>{fileError}</div>;
+  }
+
+  if (!file) {
+    return <div>Loading...</div>;
+  }
+
+  const isVerified = false;
 
   return (
     <div className="flex-1">
@@ -48,16 +62,22 @@ const SubmissionPreview = async ({
             ))
           : null}
       </div>
-      <div className="p-6 border border-border rounded-xl mt-6">
-        {submissionType === "text" ? (
-          <div
-            className="flex flex-col gap-4"
-            dangerouslySetInnerHTML={{ __html: selectedAttempt.content }}
-          />
-        ) : (
-          <PdfViewer pdfUrl={selectedAttempt.secureUrl} />
-        )}
-      </div>
+      {isVerified ? (
+        <div className="p-6 border border-border rounded-xl mt-6">
+          {submissionType === "text" ? (
+            <div
+              className="flex flex-col gap-4"
+              dangerouslySetInnerHTML={{ __html: selectedAttempt.content }}
+            />
+          ) : (
+            <PdfViewer pdfUrl={selectedAttempt.secureUrl} />
+          )}
+        </div>
+      ) : (
+        <div className="mt-8 p-6 border border-border rounded-xl bg-red-50 dark:bg-red-950 text-red-800 dark:text-red-400">
+          <p>This file may have been tampered with</p>
+        </div>
+      )}
     </div>
   );
 };
