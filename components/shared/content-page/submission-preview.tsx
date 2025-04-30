@@ -46,7 +46,7 @@ const SubmissionPreview = async ({
     return <div>Loading...</div>;
   }
 
-  const isVerified = false;
+  const isVerified = await verifyFileIntegrity(file.secure_url, file.hash);
 
   return (
     <div className="flex-1">
