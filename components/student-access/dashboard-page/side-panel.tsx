@@ -12,12 +12,12 @@ type SidePanelProps = {
 
 const SidePanel = ({ notifications, pendingTasks }: SidePanelProps) => {
   return (
-    <div className="w-full lg:w-[400px] lg:sticky lg:top-10 relative bg-white lg:bg-transparent z-30 lg:z-0 p-4 lg:p-0 shadow-inner lg:shadow-none mt-6 lg:mt-4">
+    <div className="w-full lg:w-[400px] lg:sticky lg:top-10 relative bg-secondary lg:bg-transparent z-30 lg:z-0 p-4 lg:p-0 shadow-inner lg:shadow-none mt-6 lg:mt-4">
       <div className="space-y-6">
         {/* Notifications */}
         {notifications.length > 0 && (
-          <div className="bg-white rounded-lg shadow-xl border border-black-900 p-6">
-            <h3 className="text-4xl font-bold text-gray-900 mb-4 flex items-center justify-center">
+          <div className="bg-secondary rounded-lg shadow-xl border border-border p-6">
+            <h3 className="text-4xl font-bold text-foreground mb-4 flex items-center justify-center">
               <Image
                 src={notifbell}
                 alt="Notification Bell"
@@ -31,14 +31,14 @@ const SidePanel = ({ notifications, pendingTasks }: SidePanelProps) => {
               {notifications.map((notification, index) => (
                 <li key={index} className="flex items-start">
                   <div>
-                    <p className="text-sm text-gray-900 font-semibold">
-                      <span className="text-red-600">{notification.title}</span>{" "}
+                    <p className="text-sm text-foreground font-semibold">
+                      <span className="text-primary">{notification.title}</span>{" "}
                       - {notification.message}
                     </p>
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-muted-foreground">
                       CS 001 - Introduction to Computing
                     </p>
-                    <p className="text-xs text-gray-400">4h ago</p>
+                    <p className="text-xs text-muted-foreground">4h ago</p>
                   </div>
                 </li>
               ))}
@@ -48,8 +48,8 @@ const SidePanel = ({ notifications, pendingTasks }: SidePanelProps) => {
 
         {/* Pending Tasks */}
         {pendingTasks.length > 0 && (
-          <div className="bg-white rounded-lg shadow-xl border border-black-900 p-6">
-            <h3 className="text-4xl font-bold text-gray-900 mb-4 flex items-center justify-center">
+          <div className="bg-secondary rounded-lg shadow-xl border border-black-900 p-6">
+            <h3 className="text-4xl font-bold text-foreground mb-4 flex items-center justify-center">
               <Image
                 src={pending}
                 alt="Pending Tasks"
@@ -63,13 +63,15 @@ const SidePanel = ({ notifications, pendingTasks }: SidePanelProps) => {
               {pendingTasks.map((task, index) => (
                 <li key={index} className="flex items-start">
                   <div>
-                    <p className="text-sm text-gray-900 font-semibold">
+                    <p className="text-sm text-foreground font-semibold">
                       {task.name}
                     </p>
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-muted-foreground">
                       {task.courseCode} - {task.courseName}
                     </p>
-                    <p className="text-xs text-gray-400">{task.timeAgo}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {task.timeAgo}
+                    </p>
                   </div>
                 </li>
               ))}

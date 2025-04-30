@@ -4,8 +4,8 @@ import Announcements from "@/components/student-access/dashboard-page/announceme
 
 const Dashboard = () => {
   return (
-    <div className="bg-[#EDE9DA] min-h-screen flex flex-col">
-      <div className="sticky top-0 z-50 bg-gray-50 py-6 shadow-md">
+    <div className="bg-background min-h-screen flex flex-col">
+      <div className="sticky top-0 z-50 bg-background py-6 shadow-md">
         <div className="mx-auto max-w-2xl px-6 lg:max-w-7xl lg:px-8 flex flex-col justify-center items-center h-full">
           <p className="mx-auto mt-2 max-w-full text-center text-4xl font-bold tracking-tight text-[var(--nestling-color)] sm:text-7xl break-words">
             STUDENT DASHBOARD
@@ -21,7 +21,7 @@ const Dashboard = () => {
         <div className="w-full lg:w-3/4 flex justify-center items-center">
           <Announcements />
         </div>
-        <div className="w-full lg:w-1/4 lg:sticky lg:top-4 lg:bg-transparent bg-gray-50 rounded-lg shadow-md p-6 lg:p-0 lg:shadow-none lg:mt-0 mt-6">
+        <div className="w-full lg:w-1/4 lg:sticky lg:top-4 lg:bg-transparent bg-background rounded-lg shadow-md p-6 lg:p-0 lg:shadow-none lg:mt-0 mt-6">
           <SidePanel
             notifications={[
               {
