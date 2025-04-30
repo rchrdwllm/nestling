@@ -11,6 +11,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
+import { getSHA256 } from "@/lib/sha-256";
 import { SubmitAssignmentSchema } from "@/schemas/SubmitAssignmentSchema";
 import { UploadFileSchema } from "@/schemas/UploadFileSchema";
 import { submitAssignment } from "@/server/actions/submit-assignment";
@@ -84,6 +85,7 @@ const SubmitAssignmentBtn = ({
       execute({ content: data.content, contentId, submissionType });
     } else if (submissionType === "file") {
       if (file) {
+        const hash = await getSHA256(file);
         const { success: uploadedFile, error } = await uploadFileToCloudinary(
           file
         );
@@ -99,6 +101,7 @@ const SubmitAssignmentBtn = ({
               type: file.type,
               url: uploadedFile.url,
               resource_type: uploadedFile.resource_type,
+              hash,
             },
             content: "",
             submissionType,

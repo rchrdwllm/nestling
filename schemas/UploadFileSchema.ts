@@ -11,4 +11,5 @@ export const UploadFileSchema = z.object({
   submission_id: z.optional(z.string()),
   message_id: z.optional(z.string()),
   resource_type: z.string(),
+  hash: z.string(),
 });

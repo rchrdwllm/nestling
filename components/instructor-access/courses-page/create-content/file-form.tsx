@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { getSHA256 } from "@/lib/sha-256";
 import { deleteFile } from "@/server/actions/delete-file";
 import { deleteFileFromCloudinary } from "@/server/actions/delete-from-cloudinary";
 import { uploadFile } from "@/server/actions/upload-file";
@@ -36,6 +37,7 @@ const FileForm = () => {
     setFile(file);
 
     if (file) {
+      const hash = await getSHA256(file);
       const { success: uploadedFile, error } = await uploadFileToCloudinary(
         file
       );
@@ -45,6 +47,7 @@ const FileForm = () => {
           ...uploadedFile,
           type: file.type,
           content_id: getValues("id"),
+          hash,
         });
       } else {
         toast.error(JSON.stringify(error));

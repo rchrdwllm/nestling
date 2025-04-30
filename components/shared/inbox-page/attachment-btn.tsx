@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { getSHA256 } from "@/lib/sha-256";
 import { InboxSchema } from "@/schemas/InboxSchema";
 import { uploadFile } from "@/server/actions/upload-file";
 import { uploadFileToCloudinary } from "@/server/actions/upload-to-cloudinary";
@@ -23,6 +24,7 @@ const AttachmentBtn = () => {
 
       const successfulUploads = await Promise.all(
         Array.from(files).map(async (file) => {
+          const hash = await getSHA256(file);
           const { success: uploadedFile, error } = await uploadFileToCloudinary(
             file
           );
@@ -32,6 +34,7 @@ const AttachmentBtn = () => {
               await uploadFile({
                 ...uploadedFile,
                 message_id: form.getValues("id"),
+                hash,
               });
 
               return { success: uploadedFile };

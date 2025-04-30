@@ -134,6 +134,7 @@ export type File = {
   type: string;
   submission_id?: string;
   resource_type: string;
+  hash: string;
 };
 
 export type Submission = {

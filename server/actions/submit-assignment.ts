@@ -44,6 +44,7 @@ export const submitAssignment = actionClient
           type,
           url,
           resource_type,
+          hash,
         } = file;
 
         const newFileSubmission = {
@@ -79,12 +80,22 @@ export const submitAssignment = actionClient
             url,
             submission_id: submissionId,
             resource_type,
+            hash,
           });
 
           batch.set(submissionRef, newFileSubmission);
           batch.set(contentSubmissionRef, reference);
 
           await batch.commit();
+
+          revalidatePath(
+            "/(student)/student-courses/[courseId]/modules/content/[contentId]",
+            "page"
+          );
+          revalidatePath(
+            `/(student)/student-courses/${courseId}/modules/content/${contentId}`
+          );
+          revalidateTag("submissions");
 
           return { success: "Assignment submitted successfully" };
         } catch (error) {

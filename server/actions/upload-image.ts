@@ -16,6 +16,7 @@ export const uploadImage = actionClient
       secure_url,
       content_id,
       course_id,
+      hash,
     } = parsedInput;
     const user = await getOptimisticUser();
 
@@ -29,6 +30,7 @@ export const uploadImage = actionClient
         public_id,
         secure_url,
         user_id: user.id,
+        hash,
       });
 
       if (content_id) {
@@ -43,6 +45,7 @@ export const uploadImage = actionClient
           created_at,
           content_id,
           secure_url,
+          hash,
         };
 
         await contentImgRef.set(reference);
@@ -60,12 +63,15 @@ export const uploadImage = actionClient
           created_at,
           course_id,
           secure_url,
+          hash,
         };
 
         await courseImgRef.set(reference);
       }
 
-      return { success: { url, asset_id, created_at, public_id, secure_url } };
+      return {
+        success: { url, asset_id, created_at, public_id, secure_url, hash },
+      };
     } catch (error) {
       console.error("Image upload failed:", error);
 

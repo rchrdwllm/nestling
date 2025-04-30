@@ -19,6 +19,7 @@ export const uploadFile = actionClient
       type,
       submission_id,
       resource_type,
+      hash,
     } = parsedInput;
     const user = await getOptimisticUser();
 
@@ -33,6 +34,7 @@ export const uploadFile = actionClient
         type,
         user_id: user.id,
         resource_type,
+        hash,
       };
 
       await fileRef.set(newFile);
@@ -49,6 +51,7 @@ export const uploadFile = actionClient
           created_at,
           content_id,
           secure_url,
+          hash,
         };
 
         await contentFileRef.set(reference);
@@ -66,6 +69,7 @@ export const uploadFile = actionClient
           created_at,
           submission_id,
           secure_url,
+          hash,
         };
 
         await submissionFileRef.set(reference);
@@ -83,6 +87,7 @@ export const uploadFile = actionClient
           created_at,
           message_id,
           secure_url,
+          hash,
         };
 
         await messageFileRef.set(reference);

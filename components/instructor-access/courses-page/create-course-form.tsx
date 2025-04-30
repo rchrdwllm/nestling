@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Form, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { getSHA256 } from "@/lib/sha-256";
 import { CreateCourseSchema } from "@/schemas/CreateCourseSchema";
 import { createCourse } from "@/server/actions/create-course";
 import { uploadImgToCloudinary } from "@/server/actions/upload-to-cloudinary";
@@ -76,6 +77,7 @@ const CreateCourseForm = ({
       toast.dismiss();
       toast.loading("Creating course...");
 
+      const hash = await getSHA256(img);
       const { success: uploadedImg, error } = await uploadImgToCloudinary(img);
 
       if (uploadedImg) {
@@ -83,6 +85,7 @@ const CreateCourseForm = ({
           ...data,
           image: {
             ...uploadedImg,
+            hash,
           },
         });
       } else if (error) {

@@ -20,6 +20,7 @@ import { uploadImage } from "@/server/actions/upload-image";
 import { deleteImgFromCloudinary } from "@/server/actions/delete-from-cloudinary";
 import { deleteImage } from "@/server/actions/delete-image";
 import Heading from "@tiptap/extension-heading";
+import { getSHA256 } from "@/lib/sha-256";
 
 type RichTextEditorProps = {
   content: string;
@@ -107,6 +108,7 @@ const RichTextEditor = ({ content }: RichTextEditorProps) => {
       const file = target.files?.[0];
 
       if (file) {
+        const hash = await getSHA256(file);
         const { success: uploadedImg, error } = await uploadImgToCloudinary(
           file
         );
@@ -116,6 +118,7 @@ const RichTextEditor = ({ content }: RichTextEditorProps) => {
             await uploadImage({
               ...uploadedImg,
               content_id: getValues("id"),
+              hash,
             });
 
             editor
