@@ -1,5 +1,6 @@
 "use client";
 
+import { ScrollArea } from "@/components/ui/scroll-area";
 import Sidebar from "@/components/ui/sidebar/sidebar";
 import Unauthorized from "@/components/ui/unauthorized";
 import { cn } from "@/lib/utils";
@@ -31,14 +32,14 @@ const Layout = ({ children }: { children: ReactNode }) => {
   return (
     <div className="min-h-screen flex items-stretch bg-secondary p-2 gap-2">
       <Sidebar />
-      <div
+      <ScrollArea
         className={cn(
           "w-full h-[calc(100vh-1rem)] bg-background",
           segment !== "student-inbox" ? "border border-border rounded-xl" : null
         )}
       >
         {children}
-      </div>
+      </ScrollArea>
     </div>
   );
 };
