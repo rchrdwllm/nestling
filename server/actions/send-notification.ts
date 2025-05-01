@@ -17,13 +17,23 @@ export async function subscribeUser(sub: webpush.PushSubscription) {
 
   const user = await getOptimisticUser();
 
+  // Create a unique fingerprint for this subscription to avoid duplicates
+  const endpoint = sub.endpoint;
+  const subscriptionFingerprint =
+    endpoint.split("/").pop() || crypto.randomUUID();
+
   try {
+    // Use a unique ID for each subscription instead of user ID
+    const subscriptionId = `${user.id}_${subscriptionFingerprint}`;
+
     await db
       .collection("subscriptions")
-      .doc(user.id)
+      .doc(subscriptionId)
       .set({
         sub: JSON.stringify(sub),
         userId: user.id,
+        endpoint: endpoint,
+        fingerprint: subscriptionFingerprint,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       });
@@ -37,13 +47,18 @@ export async function subscribeUser(sub: webpush.PushSubscription) {
 }
 
 export async function unsubscribeUser() {
-  subscription = null;
+  if (!subscription) return { success: false, error: "No active subscription" };
 
   const user = await getOptimisticUser();
+  const endpoint = subscription.endpoint;
+  const subscriptionFingerprint = endpoint.split("/").pop() || "";
 
   try {
-    await db.collection("subscriptions").doc(user.id).delete();
+    // Delete only the specific subscription for this device
+    const subscriptionId = `${user.id}_${subscriptionFingerprint}`;
+    await db.collection("subscriptions").doc(subscriptionId).delete();
 
+    subscription = null;
     return { success: true };
   } catch (error) {
     console.error("Error removing subscription from database:", error);
@@ -62,10 +77,12 @@ export async function sendNotification({
   userIds: string[];
 }) {
   try {
+    // Query all subscriptions for the specified users
     const subsRef = await db
       .collection("subscriptions")
       .where("userId", "in", userIds)
       .get();
+
     const subscriptions = subsRef.docs.map((doc) => {
       const data = doc.data();
       return JSON.parse(data.sub) as webpush.PushSubscription;
