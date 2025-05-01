@@ -10,7 +10,6 @@ import CacheRefresherWrapper from "@/components/wrappers/cache-refresher-wrapper
 import ThemeWrapper from "@/components/wrappers/theme-wrapper";
 import ReactScan from "@/components/ui/react-scan";
 import NotificationWrapper from "@/components/wrappers/notification-wrapper";
-import NativeNotifWrapper from "@/components/wrappers/native-notif-wrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -50,9 +49,7 @@ export default async function RootLayout({
             <NextTopLoader showSpinner={false} color="#df1514" />
             <ReactScan />
             <CacheRefresherWrapper>
-              <NativeNotifWrapper>
-                <NotificationWrapper>{children}</NotificationWrapper>
-              </NativeNotifWrapper>
+              <NotificationWrapper>{children}</NotificationWrapper>
             </CacheRefresherWrapper>
             <Toaster />
           </ThemeWrapper>

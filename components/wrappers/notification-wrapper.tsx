@@ -8,12 +8,9 @@ import { and, collection, onSnapshot, query, where } from "firebase/firestore";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { useUser } from "@/hooks/use-user";
-import { useSubscriptionStore } from "@/context/notif-subscription-context";
-import { sendNativeNotif } from "@/server/actions/send-native-notifs";
 
 const NotificationWrapper = ({ children }: { children: ReactNode }) => {
   const { user } = useUser();
-  const { subscription } = useSubscriptionStore();
 
   useEffect(() => {
     if (!user) return;
@@ -27,25 +24,17 @@ const NotificationWrapper = ({ children }: { children: ReactNode }) => {
     );
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
-      snapshot.docChanges().forEach(async (change) => {
+      snapshot.docChanges().forEach((change) => {
         if (change.type === "added") {
           const notification = change.doc.data() as Notification;
 
-          await fetch("/api/revalidate", {
+          fetch("/api/revalidate", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({ pathname: notification.url }),
           });
-
-          if (subscription) {
-            await sendNativeNotif({
-              title: notification.title,
-              body: notification.message,
-              receiverIds: notification.receiverIds,
-            });
-          }
 
           if (notification.type === "inbox") {
             toast(`${notification.title}`, {
@@ -75,7 +64,7 @@ const NotificationWrapper = ({ children }: { children: ReactNode }) => {
     });
 
     return () => unsubscribe();
-  }, [user, subscription]);
+  }, [user]);
 
   return <>{children}</>;
 };
