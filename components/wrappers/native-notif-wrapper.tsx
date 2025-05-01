@@ -81,6 +81,12 @@ const NativeNotifWrapper = ({ children }: { children: ReactNode }) => {
           process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY
         ),
       });
+      console.log({ key: process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY });
+      console.log({
+        applicationServerKey: urlBase64ToUint8Array(
+          process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY
+        ),
+      });
       setSubscription(sub);
       const serializedSub = JSON.parse(JSON.stringify(sub));
       await subscribeUser(serializedSub);
