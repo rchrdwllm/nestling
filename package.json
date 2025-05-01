@@ -11,6 +11,7 @@
   "dependencies": {
     "@auth/firebase-adapter": "^2.7.4",
     "@hookform/resolvers": "^3.10.0",
+    "@pusher/push-notifications-web": "^1.1.0",
     "@radix-ui/react-alert-dialog": "^1.1.11",
     "@radix-ui/react-avatar": "^1.1.3",
     "@radix-ui/react-dialog": "^1.1.6",
@@ -33,6 +34,7 @@
     "@tiptap/starter-kit": "^2.11.5",
     "@types/bcrypt": "^5.0.2",
     "@types/sha1": "^1.1.5",
+    "@types/web-push": "^3.6.4",
     "@wojtekmaj/react-hooks": "^1.22.0",
     "bcrypt": "^5.1.1",
     "class-variance-authority": "^0.7.1",
@@ -63,6 +65,7 @@
     "tailwindcss-animate": "^1.0.7",
     "tiptap-extension-resize-image": "^1.2.1",
     "use-debounce": "^10.0.4",
+    "web-push": "^3.6.7",
     "zod": "^3.24.1",
     "zustand": "^5.0.3"
   },
