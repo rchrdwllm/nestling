@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Form, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { MAX_SIZE } from "@/constants/file";
 import { getSHA256 } from "@/lib/sha-256";
 import { CreateCourseSchema } from "@/schemas/CreateCourseSchema";
 import { createCourse } from "@/server/actions/create-course";
@@ -118,6 +119,11 @@ const CreateCourseForm = ({
     const file = target.files?.[0];
 
     if (file) {
+      if (file.size > MAX_SIZE) {
+        toast.error("File size exceeds 100MB limit.");
+        return;
+      }
+
       const reader = new FileReader();
 
       reader.onload = () => {

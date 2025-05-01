@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { MAX_SIZE } from "@/constants/file";
 import { getSHA256 } from "@/lib/sha-256";
 import { deleteFile } from "@/server/actions/delete-file";
 import { deleteFileFromCloudinary } from "@/server/actions/delete-from-cloudinary";
@@ -37,6 +38,11 @@ const FileForm = () => {
     setFile(file);
 
     if (file) {
+      if (file.size > MAX_SIZE) {
+        toast.error("File size exceeds 100MB limit.");
+        return;
+      }
+
       const hash = await getSHA256(file);
       const { success: uploadedFile, error } = await uploadFileToCloudinary(
         file

@@ -4,6 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { MAX_SIZE } from "@/constants/file";
 import { UpdateProfileSchema } from "@/schemas/UpdateProfileSchema";
 import { updateStudentProfile } from "@/server/actions/update-profile";
 import { uploadImgToCloudinary } from "@/server/actions/upload-to-cloudinary";
@@ -96,6 +97,11 @@ const EditProfileForm = ({ user }: EditProfileFormProps) => {
     const file = target.files?.[0];
 
     if (file) {
+      if (file.size > MAX_SIZE) {
+        toast.error("File size exceeds 100MB limit.");
+        return;
+      }
+
       const reader = new FileReader();
 
       reader.onload = () => {
