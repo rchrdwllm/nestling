@@ -1,5 +1,7 @@
 "use server";
 
+import { db } from "@/lib/firebase";
+import { getOptimisticUser } from "@/lib/user";
 import webpush from "web-push";
 
 webpush.setVapidDetails(
@@ -12,32 +14,84 @@ let subscription: webpush.PushSubscription | null = null;
 
 export async function subscribeUser(sub: webpush.PushSubscription) {
   subscription = sub;
-  // In a production environment, you would want to store the subscription in a database
-  // For example: await db.subscriptions.create({ data: sub })
-  return { success: true };
+
+  const user = await getOptimisticUser();
+
+  try {
+    await db
+      .collection("subscriptions")
+      .doc(user.id)
+      .set({
+        sub: JSON.stringify(sub),
+        userId: user.id,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      });
+
+    return { success: true };
+  } catch (error) {
+    console.error("Error saving subscription to database:", error);
+
+    return { success: false, error: "Failed to save subscription" };
+  }
 }
 
 export async function unsubscribeUser() {
   subscription = null;
-  // In a production environment, you would want to remove the subscription from the database
-  // For example: await db.subscriptions.delete({ where: { ... } })
-  return { success: true };
-}
 
-export async function sendNotification(message: string) {
-  if (!subscription) {
-    throw new Error("No subscription available");
-  }
+  const user = await getOptimisticUser();
 
   try {
-    await webpush.sendNotification(
-      subscription,
-      JSON.stringify({
-        title: "Test Notification",
-        body: message,
-        icon: "/icon.png",
-      })
+    await db.collection("subscriptions").doc(user.id).delete();
+
+    return { success: true };
+  } catch (error) {
+    console.error("Error removing subscription from database:", error);
+
+    return { success: false, error: "Failed to remove subscription" };
+  }
+}
+
+export async function sendNotification({
+  title,
+  body,
+  userIds,
+}: {
+  title: string;
+  body: string;
+  userIds: string[];
+}) {
+  try {
+    const subsRef = await db
+      .collection("subscriptions")
+      .where("userId", "in", userIds)
+      .get();
+    const subscriptions = subsRef.docs.map((doc) => {
+      const data = doc.data();
+      return JSON.parse(data.sub) as webpush.PushSubscription;
+    });
+
+    if (subscriptions.length === 0) {
+      throw new Error("No subscriptions found for the specified users");
+    }
+
+    await Promise.all(
+      subscriptions.map((sub) =>
+        webpush
+          .sendNotification(
+            sub,
+            JSON.stringify({
+              title,
+              body,
+              icon: "/icon.png",
+            })
+          )
+          .catch((err) => {
+            console.error("Error sending notification to a subscription:", err);
+          })
+      )
     );
+
     return { success: true };
   } catch (error) {
     console.error("Error sending push notification:", error);

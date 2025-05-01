@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, ReactNode } from "react";
 import {
   subscribeUser,
   unsubscribeUser,
-  sendNotification,
 } from "@/server/actions/send-notification";
+import { useCurrentUser } from "@/hooks/use-current-user";
+import { useUser } from "@/hooks/use-user";
 
 function urlBase64ToUint8Array(base64String: string) {
   const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
@@ -26,13 +27,17 @@ function PushNotificationManager() {
     null
   );
   const [message, setMessage] = useState("");
+  const { user } = useUser();
 
   useEffect(() => {
+    if (!user) return;
+
     if ("serviceWorker" in navigator && "PushManager" in window) {
       setIsSupported(true);
       registerServiceWorker();
+      subscribeToPush();
     }
-  }, []);
+  }, [user]);
 
   async function registerServiceWorker() {
     const registration = await navigator.serviceWorker.register("/sw.js", {
@@ -62,13 +67,6 @@ function PushNotificationManager() {
     await unsubscribeUser();
   }
 
-  async function sendTestNotification() {
-    if (subscription) {
-      await sendNotification(message);
-      setMessage("");
-    }
-  }
-
   if (!isSupported) {
     return <p>Push notifications are not supported in this browser.</p>;
   }
@@ -86,7 +84,7 @@ function PushNotificationManager() {
             value={message}
             onChange={(e) => setMessage(e.target.value)}
           />
-          <button onClick={sendTestNotification}>Send Test</button>
+          {/* <button onClick={sendTestNotification}>Send Test</button> */}
         </>
       ) : (
         <>
@@ -98,50 +96,13 @@ function PushNotificationManager() {
   );
 }
 
-function InstallPrompt() {
-  const [isIOS, setIsIOS] = useState(false);
-  const [isStandalone, setIsStandalone] = useState(false);
-
-  useEffect(() => {
-    setIsIOS(
-      /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream
-    );
-
-    setIsStandalone(window.matchMedia("(display-mode: standalone)").matches);
-  }, []);
-
-  if (isStandalone) {
-    return null; // Don't show install button if already installed
-  }
-
-  return (
-    <div>
-      <h3>Install App</h3>
-      <button>Add to Home Screen</button>
-      {isIOS && (
-        <p>
-          To install this app on your iOS device, tap the share button
-          <span role="img" aria-label="share icon">
-            {" "}
-            ⎋{" "}
-          </span>
-          and then "Add to Home Screen"
-          <span role="img" aria-label="plus icon">
-            {" "}
-            ➕{" "}
-          </span>
-          .
-        </p>
-      )}
-    </div>
-  );
-}
-
-export default function Page() {
+const NativeNotificationWrapper = ({ children }: { children: ReactNode }) => {
   return (
     <div>
       <PushNotificationManager />
-      <InstallPrompt />
+      {children}
     </div>
   );
-}
+};
+
+export default NativeNotificationWrapper;
