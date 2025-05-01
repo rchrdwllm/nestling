@@ -39,6 +39,8 @@ const NotificationWrapper = ({ children }: { children: ReactNode }) => {
             body: JSON.stringify({ pathname: notification.url }),
           });
 
+          console.log({ subscription });
+
           if (subscription) {
             await sendNativeNotif({
               title: notification.title,

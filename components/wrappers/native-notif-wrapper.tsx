@@ -32,12 +32,12 @@ const NativeNotifWrapper = ({ children }: { children: ReactNode }) => {
   }, []);
 
   useEffect(() => {
-    if (subscription) subscribeToPush();
+    subscribeToPush();
 
     return () => {
       unsubscribeFromPush();
     };
-  }, [subscription]);
+  }, []);
 
   async function registerServiceWorker() {
     try {
