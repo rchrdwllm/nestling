@@ -12,7 +12,11 @@ webpush.setVapidDetails(
   process.env.VAPID_PRIVATE_KEY!
 );
 
+let subscription: webpush.PushSubscription | null = null;
+
 export async function subscribeUser(sub: webpush.PushSubscription) {
+  subscription = sub;
+
   const user = await getOptimisticUser();
 
   if (!user) {
@@ -37,7 +41,6 @@ export async function subscribeUser(sub: webpush.PushSubscription) {
   } else {
     await subRef.set({
       subscription: JSON.stringify(sub),
-      userId: user.id,
     });
   }
 
@@ -45,6 +48,8 @@ export async function subscribeUser(sub: webpush.PushSubscription) {
 }
 
 export async function unsubscribeUser() {
+  subscription = null;
+
   const user = await getOptimisticUser();
 
   if (!user) {
@@ -71,10 +76,16 @@ export const sendNativeNotif = actionClient
   .action(async ({ parsedInput }) => {
     const { body, title, receiverIds } = parsedInput;
 
+    if (!subscription) {
+      console.error("No subscription found. Cannot send notification.");
+
+      return { error: "No subscription found", success: false };
+    }
+
     try {
       const userSubs = await db
         .collection("subscriptions")
-        .where("userId", "in", receiverIds)
+        .where("receiverIds", "array-contains", receiverIds)
         .get();
 
       userSubs.forEach(async (doc) => {
