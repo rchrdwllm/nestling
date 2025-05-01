@@ -84,19 +84,8 @@ const NativeNotifWrapper = ({ children }: { children: ReactNode }) => {
       setSubscription(sub);
       const serializedSub = JSON.parse(JSON.stringify(sub));
       await subscribeUser(serializedSub);
-    } catch (err: any) {
+    } catch (err) {
       console.error("Push subscription failed:", err);
-      if (window.isSecureContext === false) {
-        console.error(
-          "This page is not served over HTTPS. Service workers require HTTPS."
-        );
-      }
-      if (Notification.permission === "denied") {
-        console.error("Notification permission is denied.");
-      }
-      if (err && err.name) {
-        console.error("Error name:", err.name);
-      }
     }
   }
 
