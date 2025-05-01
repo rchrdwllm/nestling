@@ -5,7 +5,6 @@ import {
   subscribeUser,
   unsubscribeUser,
 } from "@/server/actions/send-notification";
-import { useCurrentUser } from "@/hooks/use-current-user";
 import { useUser } from "@/hooks/use-user";
 
 function urlBase64ToUint8Array(base64String: string) {
@@ -67,33 +66,7 @@ function PushNotificationManager() {
     await unsubscribeUser();
   }
 
-  if (!isSupported) {
-    return <p>Push notifications are not supported in this browser.</p>;
-  }
-
-  return (
-    <div>
-      <h3>Push Notifications</h3>
-      {subscription ? (
-        <>
-          <p>You are subscribed to push notifications.</p>
-          <button onClick={unsubscribeFromPush}>Unsubscribe</button>
-          <input
-            type="text"
-            placeholder="Enter notification message"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-          />
-          {/* <button onClick={sendTestNotification}>Send Test</button> */}
-        </>
-      ) : (
-        <>
-          <p>You are not subscribed to push notifications.</p>
-          <button onClick={subscribeToPush}>Subscribe</button>
-        </>
-      )}
-    </div>
-  );
+  return <></>;
 }
 
 const NativeNotificationWrapper = ({ children }: { children: ReactNode }) => {
