@@ -74,15 +74,15 @@ const NativeNotifWrapper = ({ children }: { children: ReactNode }) => {
       return;
     }
     try {
-      console.log({ key: process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY });
-      console.log({
+      const registration = await navigator.serviceWorker.ready;
+      const sub = await registration.pushManager.subscribe({
+        userVisibleOnly: true,
         applicationServerKey: urlBase64ToUint8Array(
           process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY
         ),
       });
-      const registration = await navigator.serviceWorker.ready;
-      const sub = await registration.pushManager.subscribe({
-        userVisibleOnly: true,
+      console.log({ key: process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY });
+      console.log({
         applicationServerKey: urlBase64ToUint8Array(
           process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY
         ),
