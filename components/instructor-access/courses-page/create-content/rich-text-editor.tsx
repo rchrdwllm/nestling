@@ -21,6 +21,7 @@ import { deleteImgFromCloudinary } from "@/server/actions/delete-from-cloudinary
 import { deleteImage } from "@/server/actions/delete-image";
 import Heading from "@tiptap/extension-heading";
 import { getSHA256 } from "@/lib/sha-256";
+import { MAX_SIZE } from "@/constants/file";
 
 type RichTextEditorProps = {
   content: string;
@@ -108,6 +109,11 @@ const RichTextEditor = ({ content }: RichTextEditorProps) => {
       const file = target.files?.[0];
 
       if (file) {
+        if (file.size > MAX_SIZE) {
+          toast.error("File size exceeds 100MB limit.");
+          return;
+        }
+
         const hash = await getSHA256(file);
         const { success: uploadedImg, error } = await uploadImgToCloudinary(
           file

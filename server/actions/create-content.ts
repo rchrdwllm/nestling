@@ -51,6 +51,7 @@ export const createContent = actionClient
         revalidateTag("contents");
         revalidateTag("modules");
         revalidateTag("module");
+        revalidateTag("assignments");
 
         return { success: parsedInput };
       }
@@ -174,6 +175,8 @@ export const createContent = actionClient
           url: `/student-courses/${courseId}/modules/content/${id}`,
           receiverIds: enrolledStudentIds,
         });
+
+        revalidateTag("assignments");
       }
 
       return { success: newContent };

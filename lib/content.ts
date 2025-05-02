@@ -1,6 +1,9 @@
-import { Content, File } from "@/types";
+import { Content, Course, File } from "@/types";
 import { db } from "./firebase";
 import { unstable_cache } from "next/cache";
+import { getEnrolledCourses } from "./course";
+import { getOptimisticUser } from "./user";
+import { doc } from "firebase/firestore";
 
 export const getModuleContents = unstable_cache(
   async (moduleId: string) => {
@@ -79,4 +82,90 @@ export const getModuleContent = unstable_cache(
   },
   ["contents"],
   { revalidate: 3600 }
+);
+
+export const getCourseAssignments = unstable_cache(
+  async (courseId: string) => {
+    try {
+      const assignmentsRef = await db
+        .collection("contents")
+        .where("courseId", "==", courseId)
+        .where("type", "==", "assignment")
+        .get();
+
+      if (assignmentsRef.empty) {
+        return { success: [] };
+      }
+
+      const assignments = assignmentsRef.docs.map(
+        (doc) => doc.data() as Content
+      );
+
+      return { success: assignments };
+    } catch (error) {
+      return { error };
+    }
+  },
+  ["courseId"],
+  { tags: ["contents", "assignments"] }
+);
+
+export const getUpcomingAssignments = unstable_cache(
+  async (courseId: string) => {
+    try {
+      const assignmentsRef = await db
+        .collection("contents")
+        .where("courseId", "==", courseId)
+        .where("type", "==", "assignment")
+        .get();
+      const assignments = assignmentsRef.docs.map(
+        (doc) => doc.data() as Content
+      );
+      const filteredAssignments = assignments.filter((assignment) => {
+        const now = new Date();
+        const endDate = new Date(assignment.endDate!);
+        return endDate > now;
+      });
+
+      return { success: filteredAssignments };
+    } catch (error) {
+      console.error("Error fetching upcoming assignments: ", error);
+
+      return { error };
+    }
+  },
+  ["courseId"],
+  { tags: ["contents", "assignments"], revalidate: 3600 }
+);
+
+export const getUpcomingAssignmentsForStudent = unstable_cache(
+  async (userId: string) => {
+    try {
+      const { success: courses, error } = await getEnrolledCourses(userId);
+
+      if (error) return { error };
+
+      if (!courses) return { success: [] };
+
+      const assignmentsArr = await Promise.all(
+        courses.map(async (course: Course) => {
+          const { success: assignments } = await getUpcomingAssignments(
+            course.id
+          );
+
+          return assignments || [];
+        })
+      );
+
+      const allAssignments = assignmentsArr.flat();
+
+      return { success: allAssignments };
+    } catch (error) {
+      console.error("Error fetching upcoming assignments: ", error);
+
+      return { error: "Error fetching upcoming assignments for student" };
+    }
+  },
+  ["userId"],
+  { revalidate: 3600, tags: ["contents", "assignments"] }
 );

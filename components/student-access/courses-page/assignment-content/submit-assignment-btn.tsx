@@ -11,6 +11,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
+import { MAX_SIZE } from "@/constants/file";
 import { getSHA256 } from "@/lib/sha-256";
 import { SubmitAssignmentSchema } from "@/schemas/SubmitAssignmentSchema";
 import { UploadFileSchema } from "@/schemas/UploadFileSchema";
@@ -70,6 +71,13 @@ const SubmitAssignmentBtn = ({
     const target = e.target as HTMLInputElement;
     const file = target.files?.[0];
 
+    if (file) {
+      if (file.size > MAX_SIZE) {
+        toast.error("File size exceeds 100MB limit.");
+        return;
+      }
+    }
+
     setFile(file);
   }, []);
 
@@ -85,6 +93,11 @@ const SubmitAssignmentBtn = ({
       execute({ content: data.content, contentId, submissionType });
     } else if (submissionType === "file") {
       if (file) {
+        if (file.size > MAX_SIZE) {
+          toast.error("File size exceeds 100MB limit.");
+          return;
+        }
+
         const hash = await getSHA256(file);
         const { success: uploadedFile, error } = await uploadFileToCloudinary(
           file

@@ -8,6 +8,7 @@ import { createThread } from "./create-thread";
 import { createNotif } from "./create-notif";
 import { getOptimisticUser, getUserById } from "@/lib/user";
 import { updateThread } from "./update-thread";
+import { sendNotification } from "./send-notification";
 
 export const sendMessage = actionClient
   .schema(InboxSchema)
@@ -58,6 +59,11 @@ export const sendMessage = actionClient
             message,
             title: `From ${user.name}`,
             url: `/${receiver!.role}-inbox/${channelId}`,
+          });
+          await sendNotification({
+            title: `From ${user.name}`,
+            body: message,
+            userIds: [receiver!.id],
           });
 
           await updateThread(threadId);
