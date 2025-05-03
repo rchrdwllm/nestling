@@ -94,3 +94,11 @@ span {
     @apply bg-background text-foreground;
   }
 }
+
+:root {
+  --nestling-color: #DF1514;
+}
+
+:root {
+  --gray-bg: #D2D2D2;
+}

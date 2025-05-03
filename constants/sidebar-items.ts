@@ -35,7 +35,7 @@ export const studentSidebarItems: SidebarItem[] = [
   },
   {
     label: "About",
-    href: "/about",
+    href: "/student-about",
     Icon: Info,
   },
   {
@@ -63,7 +63,7 @@ export const instructorSidebarItems: SidebarItem[] = [
   },
   {
     label: "About",
-    href: "/about",
+    href: "/student-about",
     Icon: Info,
   },
   {

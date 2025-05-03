@@ -12,11 +12,11 @@ type SidePanelProps = {
 
 const SidePanel = ({ notifications, pendingTasks }: SidePanelProps) => {
   return (
-    <div className="w-full lg:w-[400px] lg:sticky lg:top-10 relative bg-secondary lg:bg-transparent z-30 lg:z-0 p-4 lg:p-0 shadow-inner lg:shadow-none mt-6 lg:mt-4">
+    <div className="w-full lg:w-[400px] lg:sticky lg:top-10 relative bg-white lg:bg-transparent z-30 lg:z-0 p-4 lg:p-0 shadow-inner lg:shadow-none mt-6 lg:mt-4">
       <div className="space-y-6">
         {/* Notifications */}
         {notifications.length > 0 && (
-          <div className="bg-secondary rounded-lg shadow-xl border border-border p-6">
+          <div className="bg-white rounded-lg shadow-xl border border-border p-6">
             <h3 className="text-4xl font-bold text-foreground mb-4 flex items-center justify-center">
               <Image
                 src={notifbell}
@@ -48,7 +48,7 @@ const SidePanel = ({ notifications, pendingTasks }: SidePanelProps) => {
 
         {/* Pending Tasks */}
         {pendingTasks.length > 0 && (
-          <div className="bg-secondary rounded-lg shadow-xl border border-black-900 p-6">
+          <div className="bg-white rounded-lg shadow-xl border border-black-900 p-6">
             <h3 className="text-4xl font-bold text-foreground mb-4 flex items-center justify-center">
               <Image
                 src={pending}
