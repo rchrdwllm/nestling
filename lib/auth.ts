@@ -69,10 +69,12 @@ export const authOptions = {
       token.role = data.role;
       token.firstName = data.firstName;
       token.middleName = data.middleName;
+      token.name = `${data.firstName} ${data.middleName} ${data.lastName}`;
       token.lastName = data.lastName;
       token.contactNumber = data.contactNumber;
       token.email = data.email;
       token.image = data.image;
+      token.notifsEnabled = data.notifsEnabled;
 
       return token;
     },
@@ -92,6 +94,8 @@ export const authOptions = {
         session.user.firstName = user.firstName as string;
         session.user.middleName = user.middleName as string;
         session.user.lastName = user.lastName as string;
+        session.user.contactNumber = user.contactNumber as string;
+        session.user.notifsEnabled = user.notifsEnabled as boolean;
 
         if (token.image) {
           session.user.image = token.image as string;

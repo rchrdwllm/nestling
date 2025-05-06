@@ -9,6 +9,7 @@ export type ExtendUser = DefaultSession["user"] & {
   middleName: string;
   lastName: string;
   contactNumber: string;
+  notifsEnabled: boolean;
 };
 
 declare module "next-auth" {

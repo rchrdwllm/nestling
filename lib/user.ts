@@ -18,20 +18,24 @@ export const getOptimisticUser = async () => {
   return user!.user!;
 };
 
-export const getUserById = unstable_cache(async (userId: string) => {
-  try {
-    const userSnapshot = await db.collection("users").doc(userId).get();
+export const getUserById = unstable_cache(
+  async (userId: string) => {
+    try {
+      const userSnapshot = await db.collection("users").doc(userId).get();
 
-    if (!userSnapshot.exists) {
-      return { error: "User not found" };
+      if (!userSnapshot.exists) {
+        return { error: "User not found" };
+      }
+
+      const user = userSnapshot.data() as User;
+
+      return { success: user };
+    } catch (error) {
+      console.error(error);
+
+      return { error: JSON.stringify(error) };
     }
-
-    const user = userSnapshot.data() as User;
-
-    return { success: user };
-  } catch (error) {
-    console.error(error);
-
-    return { error: JSON.stringify(error) };
-  }
-});
+  },
+  ["userId"],
+  { revalidate: 60 * 60 * 24, tags: ["user"] }
+);

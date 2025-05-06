@@ -15,6 +15,7 @@ import Link from "next/link";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { useMemo } from "react";
 import ThemeToggler from "../theme-toggler";
+import NotificationToggler from "@/components/shared/notifications/notification-toggler";
 
 const UserBtn = () => {
   const { user } = useCurrentUser();
@@ -94,6 +95,9 @@ const UserBtn = () => {
               <span>Profile</span>
             </DropdownMenuItem>
           </Link>
+          <DropdownMenuItem className="cursor-pointer">
+            <NotificationToggler />
+          </DropdownMenuItem>
           <DropdownMenuItem className="cursor-pointer">
             <ThemeToggler />
           </DropdownMenuItem>

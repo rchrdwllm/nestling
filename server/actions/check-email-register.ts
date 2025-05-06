@@ -42,6 +42,7 @@ export const checkEmailRegister = async (
       name: `${firstName} ${middleName} ${lastName}`,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
+      notifsEnabled: false,
     };
 
     await db.collection("users").doc(id).set(newUser);

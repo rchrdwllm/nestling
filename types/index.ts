@@ -13,6 +13,7 @@ export type User = {
   createdAt: string;
   updatedAt: string;
   name?: string;
+  notifsEnabled: boolean;
 };
 
 export type PasswordResetToken = {
