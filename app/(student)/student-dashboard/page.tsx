@@ -21,7 +21,7 @@ const Dashboard = () => {
         <div className="w-full lg:w-3/4 flex justify-center items-center">
           <Announcements />
         </div>
-        <div className="w-full lg:w-1/4 lg:sticky lg:top-4 lg:bg-transparent bg-background rounded-lg shadow-md p-6 lg:p-0 lg:shadow-none lg:mt-0 mt-6">
+        <div className="max-w-[400px] lg:sticky lg:top-4 lg:bg-transparent bg-background rounded-lg shadow-md p-6 lg:p-0 lg:shadow-none lg:mt-0 mt-6">
           <SidePanel
             notifications={[
               {

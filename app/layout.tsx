@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Montserrat } from "next/font/google";
+import { Geist, Geist_Mono, Montserrat, Space_Mono } from "next/font/google";
 import NextTopLoader from "nextjs-toploader";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
@@ -11,6 +11,7 @@ import ThemeWrapper from "@/components/wrappers/theme-wrapper";
 import ReactScan from "@/components/ui/react-scan";
 import NotificationWrapper from "@/components/wrappers/notification-wrapper";
 import NativeNotificationWrapper from "@/components/wrappers/native-notification-wrapper";
+import { getCurrentUser, getOptimisticUser } from "@/lib/user";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,6 +28,12 @@ const montserrat = Montserrat({
   subsets: ["latin"],
 });
 
+const spaceMono = Space_Mono({
+  variable: "--font-space-mono",
+  subsets: ["latin"],
+  weight: ["400", "700"],
+});
+
 export const metadata: Metadata = {
   title: "Nestling",
   description: "A Web-based Learning Management System for Leave a Nest",
@@ -38,20 +45,21 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const session = await getServerSession(authOptions);
+  const user = await getCurrentUser();
 
   return (
     <html lang="en" suppressHydrationWarning>
       <body
         suppressHydrationWarning
-        className={`${geistSans.variable} ${geistMono.variable} ${montserrat.className} antialiased overflow-x-hidden`}
+        className={`${geistSans.variable} ${geistMono.variable} ${spaceMono.variable} ${montserrat.className} antialiased overflow-x-hidden`}
       >
         <SessionWrapper session={session}>
           <ThemeWrapper attribute="class" defaultTheme="light">
             <NextTopLoader showSpinner={false} color="#df1514" />
             <ReactScan />
             <CacheRefresherWrapper>
-              <NotificationWrapper>
-                <NativeNotificationWrapper>
+              <NotificationWrapper authUser={JSON.stringify(user)}>
+                <NativeNotificationWrapper authUser={JSON.stringify(user)}>
                   {children}
                 </NativeNotificationWrapper>
               </NotificationWrapper>

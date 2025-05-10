@@ -40,7 +40,7 @@ const announcementsData = [
 
 const Announcements = () => {
   return (
-    <div className="w-full max-w-7xl mx-auto space-y-10 mb-12 border border-border pr-[22px] bg-white rounded-xl p-8 shadow-2xl ml-1 mt-4 z-0 relative">
+    <div className="w-full mx-auto space-y-10 mb-12 border border-border pr-[22px] bg-white rounded-xl p-8 shadow-2xl ml-1 mt-4 z-0 relative">
       {announcementsData.map((announcement) => (
         <div key={announcement.id} className="space-y-6 px-4 sm:px-8">
           <div className="relative mx-auto w-full rounded-lg overflow-hidden border border-border mt-4 transition-all duration-300 hover:scale-[102%] hover:bg-opacity-30 hover:bg-gray-900">
