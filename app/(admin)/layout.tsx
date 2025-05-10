@@ -1,5 +1,7 @@
 "use client";
 
+import { ScrollArea } from "@/components/ui/scroll-area";
+import Sidebar from "@/components/ui/sidebar/sidebar";
 import Unauthorized from "@/components/ui/unauthorized";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -23,7 +25,14 @@ const Layout = ({ children }: { children: ReactNode }) => {
     }
   }
 
-  return <>{children}</>;
+  return (
+    <main className="min-h-screen flex items-stretch bg-secondary p-2 gap-2">
+      <Sidebar />
+      <ScrollArea className="w-full h-[calc(100vh-1rem)] bg-background border border-border rounded-xl">
+        {children}
+      </ScrollArea>
+    </main>
+  );
 };
 
 export default Layout;
