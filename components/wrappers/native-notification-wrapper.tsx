@@ -6,6 +6,7 @@ import {
   unsubscribeUser,
 } from "@/server/actions/send-notification";
 import { useUser } from "@/hooks/use-user";
+import { User } from "@/types";
 
 function urlBase64ToUint8Array(base64String: string) {
   const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
@@ -20,23 +21,24 @@ function urlBase64ToUint8Array(base64String: string) {
   return outputArray;
 }
 
-function PushNotificationManager() {
+function PushNotificationManager({ authUser }: { authUser?: User | null }) {
   const [isSupported, setIsSupported] = useState(false);
   const [subscription, setSubscription] = useState<PushSubscription | null>(
     null
   );
-  const [message, setMessage] = useState("");
   const { user } = useUser();
 
   useEffect(() => {
-    if (!user) return;
+    if (!user || !authUser) return;
+
+    if (!authUser.notifsEnabled) return;
 
     if ("serviceWorker" in navigator && "PushManager" in window) {
       setIsSupported(true);
       registerServiceWorker();
       subscribeToPush();
     }
-  }, [user]);
+  }, [user, authUser]);
 
   async function registerServiceWorker() {
     const registration = await navigator.serviceWorker.register("/sw.js", {
@@ -69,10 +71,20 @@ function PushNotificationManager() {
   return <></>;
 }
 
-const NativeNotificationWrapper = ({ children }: { children: ReactNode }) => {
+type NativeNotificationWrapperProps = {
+  authUser?: string;
+  children: ReactNode;
+};
+
+const NativeNotificationWrapper = ({
+  authUser,
+  children,
+}: NativeNotificationWrapperProps) => {
+  const authUserData = authUser ? (JSON.parse(authUser) as User) : null;
+
   return (
     <div>
-      <PushNotificationManager />
+      <PushNotificationManager authUser={authUserData} />
       {children}
     </div>
   );

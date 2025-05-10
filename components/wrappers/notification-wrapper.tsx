@@ -1,7 +1,7 @@
 "use client";
 
 import { ReactNode, useEffect } from "react";
-import { Notification } from "@/types";
+import { Notification, User } from "@/types";
 import { toast } from "sonner";
 import { clientDb } from "@/lib/firebase-client";
 import { and, collection, onSnapshot, query, where } from "firebase/firestore";
@@ -9,11 +9,20 @@ import { Button } from "../ui/button";
 import Link from "next/link";
 import { useUser } from "@/hooks/use-user";
 
-const NotificationWrapper = ({ children }: { children: ReactNode }) => {
+type NotificationWrapperProps = {
+  authUser?: string;
+  children: ReactNode;
+};
+
+const NotificationWrapper = ({
+  authUser,
+  children,
+}: NotificationWrapperProps) => {
   const { user } = useUser();
+  const authUserData = authUser ? (JSON.parse(authUser) as User) : null;
 
   useEffect(() => {
-    if (!user) return;
+    if (!user || !authUserData || !authUserData.notifsEnabled) return;
 
     const q = query(
       collection(clientDb, "notifications"),
@@ -64,7 +73,7 @@ const NotificationWrapper = ({ children }: { children: ReactNode }) => {
     });
 
     return () => unsubscribe();
-  }, [user]);
+  }, [user, authUserData]);
 
   return <>{children}</>;
 };

@@ -39,3 +39,43 @@ export const getUserById = unstable_cache(
   ["userId"],
   { revalidate: 60 * 60 * 24, tags: ["user"] }
 );
+
+export const getAllStudents = unstable_cache(
+  async () => {
+    try {
+      const usersSnapshot = await db
+        .collection("users")
+        .where("role", "==", "student")
+        .get();
+      const users = usersSnapshot.docs.map((doc) => doc.data()) as User[];
+
+      return { success: users };
+    } catch (error) {
+      console.error(error);
+
+      return { error: JSON.stringify(error) };
+    }
+  },
+  ["allStudents"],
+  { revalidate: 60 * 60 * 24, tags: ["user", "students"] }
+);
+
+export const getAllInstructors = unstable_cache(
+  async () => {
+    try {
+      const usersSnapshot = await db
+        .collection("users")
+        .where("role", "==", "instructor")
+        .get();
+      const users = usersSnapshot.docs.map((doc) => doc.data()) as User[];
+
+      return { success: users };
+    } catch (error) {
+      console.error(error);
+
+      return { error: JSON.stringify(error) };
+    }
+  },
+  ["allInstructors"],
+  { revalidate: 60 * 60 * 24, tags: ["user", "instructors"] }
+);
