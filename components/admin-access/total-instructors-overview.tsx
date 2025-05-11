@@ -14,11 +14,11 @@ const TotalInstructorsOverview = async () => {
 
   return (
     <article className="border border-border rounded-xl p-4 flex flex-col gap-2">
-      <h1 className="font-mono font-semibold text-4xl text-primary">
+      <p className="text-sm">Total instructors</p>
+      <h1 className="font-mono font-semibold text-4xl">
         {allInstructors.length}
       </h1>
-      <p className="font-medium">Total instructors</p>
-      <p className="text-muted-foreground">
+      <p className="text-muted-foreground text-sm">
         Last updated: {new Date().toLocaleString()}
       </p>
     </article>

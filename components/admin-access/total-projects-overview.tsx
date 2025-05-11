@@ -14,11 +14,9 @@ const TotalProjectsOverview = async () => {
 
   return (
     <article className="border border-border rounded-xl p-4 flex flex-col gap-2">
-      <h1 className="font-mono font-semibold text-4xl text-primary">
-        {allStudents.length}
-      </h1>
-      <p className="font-medium">Total projects</p>
-      <p className="text-muted-foreground">
+      <p className="text-sm">Total projects</p>
+      <h1 className="font-mono font-semibold text-4xl">{allStudents.length}</h1>
+      <p className="text-muted-foreground text-sm">
         Last updated: {new Date().toLocaleString()}
       </p>
     </article>
