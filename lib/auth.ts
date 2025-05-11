@@ -58,13 +58,16 @@ export const authOptions = {
     async jwt({ token }) {
       if (!token.sub) return token;
 
-      const userRef = db.collection("users").where("id", "==", token.sub);
+      const userRef = db.collection("users").doc(token.sub);
       const userDoc = await userRef.get();
-      const user = userDoc.docs[0];
 
-      if (!user.exists) return token;
+      if (!userDoc.exists) return token;
 
-      const data = user.data()!;
+      await userRef.update({
+        lastLoginAt: new Date().toISOString(),
+      });
+
+      const data = userDoc.data() as User;
 
       token.role = data.role;
       token.firstName = data.firstName;
@@ -75,6 +78,7 @@ export const authOptions = {
       token.email = data.email;
       token.image = data.image;
       token.notifsEnabled = data.notifsEnabled;
+      token.lastLoginAt = new Date().toISOString();
 
       return token;
     },
@@ -96,6 +100,7 @@ export const authOptions = {
         session.user.lastName = user.lastName as string;
         session.user.contactNumber = user.contactNumber as string;
         session.user.notifsEnabled = user.notifsEnabled as boolean;
+        session.user.lastLoginAt = new Date().toISOString();
 
         if (token.image) {
           session.user.image = token.image as string;

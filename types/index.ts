@@ -14,6 +14,7 @@ export type User = {
   updatedAt: string;
   name?: string;
   notifsEnabled: boolean;
+  lastLoginAt?: string;
 };
 
 export type PasswordResetToken = {
@@ -207,4 +208,14 @@ export type PendingTask = {
   courseCode: string;
   courseName: string;
   timeAgo: string;
+};
+
+export type ActiveUserRecord = {
+  id: string;
+  lastLoginAt: string;
+};
+
+export type MonthlyActiveUserRecord = {
+  month: string;
+  activeUsers: number;
 };
