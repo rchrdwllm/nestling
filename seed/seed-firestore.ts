@@ -9,7 +9,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Initialize Firebase Admin SDK using service-key.json
-const serviceAccountPath = path.join(__dirname, "../service-key.json");
+const serviceAccountPath = path.join(__dirname, "../service-account.json");
 const serviceAccount = JSON.parse(fs.readFileSync(serviceAccountPath, "utf-8"));
 
 initializeApp({

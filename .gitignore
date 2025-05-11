@@ -10,6 +10,7 @@
 !.yarn/releases
 !.yarn/versions
 /todo.md
+/service-account.json
 
 # testing
 /coverage
