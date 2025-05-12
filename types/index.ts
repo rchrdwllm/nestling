@@ -215,6 +215,7 @@ export type UserActivity = {
   id: string;
   type: Activity;
   createdAt: string;
+  updatedAt: string;
   userId: string;
 };
 

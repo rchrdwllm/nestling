@@ -3,7 +3,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { db } from "@/lib/firebase";
 import { LoginSchema } from "@/schemas/LoginSchema";
 import bcrypt from "bcrypt";
-import { Role, User } from "@/types";
+import { Role, User, UserActivity } from "@/types";
 
 export const authOptions = {
   providers: [
@@ -82,8 +82,15 @@ export const authOptions = {
             userId: user.id,
             type: "login",
             createdAt: today,
+            updatedAt: new Date().toISOString(),
           });
         }
+
+        const activityData = activityRef.docs[0].data() as UserActivity;
+
+        await db.collection("userActivities").doc(activityData.id).update({
+          updatedAt: new Date().toISOString(),
+        });
       }
 
       token.role = user.role;
