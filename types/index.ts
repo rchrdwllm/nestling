@@ -1,4 +1,5 @@
 export type Role = "student" | "instructor" | "admin";
+export type Activity = "login";
 
 export type User = {
   email: string;
@@ -210,9 +211,11 @@ export type PendingTask = {
   timeAgo: string;
 };
 
-export type ActiveUserRecord = {
+export type UserActivity = {
   id: string;
-  lastLoginAt: string;
+  type: Activity;
+  createdAt: string;
+  userId: string;
 };
 
 export type MonthlyActiveUserRecord = {

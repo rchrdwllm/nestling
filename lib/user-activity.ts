@@ -1,12 +1,12 @@
 "use server";
 
-import { ActiveUserRecord, MonthlyActiveUserRecord, User } from "@/types";
+import { MonthlyActiveUserRecord, User, UserActivity } from "@/types";
 import { db } from "./firebase";
 import { format, subMonths, parseISO } from "date-fns";
 import { unstable_cache } from "next/cache";
 
 export const calculateMonthlyActiveUsers = async (
-  activities: ActiveUserRecord[],
+  activities: UserActivity[],
   months: number = 6,
 ) => {
   const now = new Date();
@@ -25,7 +25,7 @@ export const calculateMonthlyActiveUsers = async (
   const monthlyUsers: Record<string, Set<string>> = {};
 
   activities.forEach((activity) => {
-    const date = parseISO(activity.lastLoginAt);
+    const date = parseISO(activity.createdAt);
     const monthStr = format(date, "MMMM");
 
     if (!monthlyUsers[monthStr]) {
@@ -53,20 +53,13 @@ export const getActiveUsersFromMonths = async (months = 6) => {
     ).toISOString();
 
     const snapshot = await db
-      .collection("users")
-      .where("lastLoginAt", "<=", startDate)
-      .where("lastLoginAt", ">=", endDate)
-      .where("role", "!=", "admin")
+      .collection("userActivities")
+      .where("createdAt", ">=", endDate)
+      .where("createdAt", "<=", startDate)
+      .where("type", "==", "login")
       .get();
 
-    const activeUsers = snapshot.docs.map((doc) => {
-      const data = doc.data() as User;
-
-      return {
-        id: doc.id,
-        lastLoginAt: data.lastLoginAt,
-      } as ActiveUserRecord;
-    });
+    const activeUsers = snapshot.docs.map((doc) => doc.data() as UserActivity);
     const monthlyActiveUsers = await calculateMonthlyActiveUsers(activeUsers);
 
     return { success: { activeUsers, monthlyActiveUsers } };

@@ -63,22 +63,38 @@ export const authOptions = {
 
       if (!userDoc.exists) return token;
 
-      await userRef.update({
-        lastLoginAt: new Date().toISOString(),
-      });
+      const user = userDoc.data() as User;
 
-      const data = userDoc.data() as User;
+      if (user.role !== "admin") {
+        const today = new Date().toISOString().split("T")[0];
+        const activityRef = await db
+          .collection("userActivities")
+          .where("userId", "==", user.id)
+          .where("type", "==", "login")
+          .where("createdAt", "==", today)
+          .get();
 
-      token.role = data.role;
-      token.firstName = data.firstName;
-      token.middleName = data.middleName;
-      token.name = `${data.firstName} ${data.middleName} ${data.lastName}`;
-      token.lastName = data.lastName;
-      token.contactNumber = data.contactNumber;
-      token.email = data.email;
-      token.image = data.image;
-      token.notifsEnabled = data.notifsEnabled;
-      token.lastLoginAt = new Date().toISOString();
+        if (activityRef.empty) {
+          const id = crypto.randomUUID();
+
+          await db.collection("userActivities").doc(id).set({
+            id,
+            userId: user.id,
+            type: "login",
+            createdAt: today,
+          });
+        }
+      }
+
+      token.role = user.role;
+      token.firstName = user.firstName;
+      token.middleName = user.middleName;
+      token.name = `${user.firstName} ${user.middleName} ${user.lastName}`;
+      token.lastName = user.lastName;
+      token.contactNumber = user.contactNumber;
+      token.email = user.email;
+      token.image = user.image;
+      token.notifsEnabled = user.notifsEnabled;
 
       return token;
     },
@@ -100,7 +116,6 @@ export const authOptions = {
         session.user.lastName = user.lastName as string;
         session.user.contactNumber = user.contactNumber as string;
         session.user.notifsEnabled = user.notifsEnabled as boolean;
-        session.user.lastLoginAt = new Date().toISOString();
 
         if (token.image) {
           session.user.image = token.image as string;
