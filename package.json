@@ -34,6 +34,7 @@
     "@tiptap/starter-kit": "^2.11.5",
     "@types/bcrypt": "^5.0.2",
     "@types/sha1": "^1.1.5",
+    "@types/web-push": "^3.6.4",
     "@wojtekmaj/react-hooks": "^1.22.0",
     "bcrypt": "^5.1.1",
     "class-variance-authority": "^0.7.1",
