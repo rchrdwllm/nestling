@@ -1,7 +1,7 @@
 "use client";
 
 import { TrendingUp } from "lucide-react";
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import { use, useMemo } from "react";
 
 import {
@@ -53,6 +53,13 @@ const ActiveUsers = ({ monthlyActiveUsers }: ActiveUserProps) => {
         <ChartContainer config={chartConfig}>
           <BarChart accessibilityLayer data={monthlyActiveUsers}>
             <CartesianGrid vertical={false} />
+            <YAxis
+              tickLine={false}
+              axisLine={false}
+              tickMargin={8}
+              tickCount={3}
+              allowDecimals={false}
+            />
             <XAxis
               dataKey="month"
               tickLine={false}
