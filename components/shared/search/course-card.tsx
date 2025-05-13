@@ -8,7 +8,7 @@ const CourseCard = memo(({ id, name }: Course) => {
   const { user } = useCurrentUser();
 
   return (
-    <Link href={`/${user.role}-courses/${id}`} className="w-full">
+    <Link href={`/courses/${id}`} className="w-full">
       <Button
         variant="link"
         className="text-left inline-flex justify-start items-center gap-3 p-0 w-full"

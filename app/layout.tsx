@@ -12,6 +12,7 @@ import ReactScan from "@/components/ui/react-scan";
 import NotificationWrapper from "@/components/wrappers/notification-wrapper";
 import NativeNotificationWrapper from "@/components/wrappers/native-notification-wrapper";
 import { getCurrentUser, getOptimisticUser } from "@/lib/user";
+import LayoutWrapper from "@/components/ui/layout-wrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -60,7 +61,7 @@ export default async function RootLayout({
             <CacheRefresherWrapper>
               <NotificationWrapper authUser={JSON.stringify(user)}>
                 <NativeNotificationWrapper authUser={JSON.stringify(user)}>
-                  {children}
+                  <LayoutWrapper>{children}</LayoutWrapper>
                 </NativeNotificationWrapper>
               </NotificationWrapper>
             </CacheRefresherWrapper>

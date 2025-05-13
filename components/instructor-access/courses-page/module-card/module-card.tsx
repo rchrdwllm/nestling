@@ -32,7 +32,7 @@ const ModuleCard = async ({
         <h1 className="text-xl flex-1 font-medium">
           {moduleNumber}. {title}
         </h1>
-        <Link href={`/instructor-courses/${courseId}/create?moduleId=${id}`}>
+        <Link href={`/courses/${courseId}/create?moduleId=${id}`}>
           <Button
             variant="ghost"
             className="text-muted-foreground hover:text-foreground"

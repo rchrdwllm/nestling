@@ -19,7 +19,7 @@ const CourseCard = async ({ name, id, courseCode, image }: Course) => {
   return (
     <article className="p-4 rounded-xl border border-border flex flex-col gap-4">
       <Link
-        href={`/student-courses/${id}`}
+        href={`/courses/${id}`}
         className="block h-40 relative rounded-lg overflow-hidden"
       >
         <Image src={image} alt={image} className="w-full object-cover" fill />
@@ -27,7 +27,7 @@ const CourseCard = async ({ name, id, courseCode, image }: Course) => {
       <div className="flex flex-col gap-2">
         <div>
           <div className="flex justify-between items-center">
-            <Link href={`/student-courses/${id}`} key={id}>
+            <Link href={`/courses/${id}`} key={id}>
               <h1 className="font-medium text-md">{name}</h1>
             </Link>
           </div>

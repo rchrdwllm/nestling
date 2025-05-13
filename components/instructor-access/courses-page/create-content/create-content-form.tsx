@@ -53,7 +53,7 @@ const CreateContentForm = ({
   const router = useRouter();
   const isEdit = useMemo(
     () => content && content !== "" && content !== "{}" && content !== "null",
-    [content]
+    [content],
   );
   const form = useForm<z.infer<typeof CreateContentSchema>>({
     resolver: zodResolver(CreateContentSchema),
@@ -80,9 +80,7 @@ const CreateContentForm = ({
           toast.success("Content created successfully");
         }
 
-        router.push(
-          `/instructor-courses/${courseId}/modules/content/${data.success.id}`
-        );
+        router.push(`/courses/${courseId}/modules/content/${data.success.id}`);
       } else if (data?.error) {
         toast.dismiss();
         toast.error(JSON.stringify(data.error));

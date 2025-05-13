@@ -89,12 +89,10 @@ export const submitAssignment = actionClient
           await batch.commit();
 
           revalidatePath(
-            "/(student)/student-courses/[courseId]/modules/content/[contentId]",
-            "page"
+            "/courses/[courseId]/modules/content/[contentId]",
+            "page",
           );
-          revalidatePath(
-            `/(student)/student-courses/${courseId}/modules/content/${contentId}`
-          );
+          revalidatePath(`/courses/${courseId}/modules/content/${contentId}`);
           revalidateTag("submissions");
 
           return { success: "Assignment submitted successfully" };
@@ -126,13 +124,8 @@ export const submitAssignment = actionClient
 
       await batch.commit();
 
-      revalidatePath(
-        "/(student)/student-courses/[courseId]/modules/content/[contentId]",
-        "page"
-      );
-      revalidatePath(
-        `/(student)/student-courses/${courseId}/modules/content/${contentId}`
-      );
+      revalidatePath("/courses/[courseId]/modules/content/[contentId]", "page");
+      revalidatePath(`/courses/${courseId}/modules/content/${contentId}`);
       revalidateTag("submissions");
 
       return { success: "Assignment submitted successfully" };

@@ -23,7 +23,7 @@ const InstructorCard = memo(
           variant="ghost"
           onClick={() => {
             router.push(
-              `/${user.role}-inbox/${channelName}?senderId=${user.id}&receiverId=${id}`
+              `/inbox/${channelName}?senderId=${user.id}&receiverId=${id}`,
             );
           }}
           className="flex text-left items-center justify-start gap-2 w-full"
@@ -50,7 +50,7 @@ const InstructorCard = memo(
       );
 
     return (
-      <Link href={`/instructor-search/user/${id}`} className="w-full">
+      <Link href={`/search/user/${id}`} className="w-full">
         <Button
           variant="ghost"
           className="flex text-left items-center justify-start gap-2 w-full"
@@ -76,7 +76,7 @@ const InstructorCard = memo(
         </Button>
       </Link>
     );
-  }
+  },
 );
 
 export default InstructorCard;

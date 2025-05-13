@@ -9,14 +9,14 @@ const ContentCard = ({ id, courseId, title, type, isPublished }: Content) => {
     type === "lesson"
       ? ScrollText
       : type === "assignment"
-      ? FilePen
-      : Paperclip;
+        ? FilePen
+        : Paperclip;
 
   return (
     <article className="flex justify-between items-center">
       <Link
         className="flex-1 block"
-        href={`/instructor-courses/${courseId}/modules/content/${id}`}
+        href={`/courses/${courseId}/modules/content/${id}`}
       >
         <Button
           variant="link"

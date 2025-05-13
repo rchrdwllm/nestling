@@ -24,7 +24,7 @@ const ChatWindow = ({ messages, receiver }: ChatWindowProps) => {
   return (
     <div className="h-full flex flex-col">
       <header className="p-4 h-[72.8px] flex items-center border-b border-border">
-        <h1 className="font-semibold">Chat with {receiverData.name}</h1>
+        <h1 className="font-semibold">{receiverData.name}</h1>
       </header>
       <Chat prevMessages={prevMessagesData} receiverId={receiverData.id} />
       <ChatForm receiverId={receiverData.id} />

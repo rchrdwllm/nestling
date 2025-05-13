@@ -10,11 +10,11 @@ const ContentCard = ({ id, courseId, title, type }: Content) => {
     type === "lesson"
       ? ScrollText
       : type === "assignment"
-      ? FilePen
-      : Paperclip;
+        ? FilePen
+        : Paperclip;
 
   return (
-    <Link href={`/${user.role}-courses/${courseId}/modules/content/${id}`}>
+    <Link href={`/courses/${courseId}/modules/content/${id}`}>
       <Button
         variant="link"
         className="text-left inline-flex justify-start items-center gap-3 p-0 w-full"

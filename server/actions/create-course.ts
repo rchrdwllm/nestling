@@ -101,7 +101,7 @@ export const createCourse = actionClient
           }
         }
 
-        revalidatePath("/instructor-courses");
+        revalidatePath("/courses");
 
         return { success: "Course updated successfully" };
       } catch (error) {
@@ -183,7 +183,7 @@ export const createCourse = actionClient
 
       await batch.commit();
 
-      revalidatePath("/instructor-courses");
+      revalidatePath("/courses");
 
       return { success: "Course created successfully" };
     } catch (error) {

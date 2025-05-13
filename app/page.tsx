@@ -7,17 +7,7 @@ const HomePage = async () => {
 
   if (!session) return redirect("/api/auth/signin");
 
-  if (session.user.role === "student") {
-    return redirect("/student-dashboard");
-  }
-
-  if (session.user.role === "instructor") {
-    return redirect("/instructor-dashboard");
-  }
-
-  if (session.user.role === "admin") {
-    return redirect("/admin-dashboard");
-  }
+  return redirect("/dashboard");
 };
 
 export default HomePage;

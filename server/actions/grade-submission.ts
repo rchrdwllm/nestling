@@ -25,12 +25,12 @@ export const gradeSubmission = actionClient
       });
 
       revalidatePath(
-        "/(instructor)/instructor-courses/[courseId]/modules/content/[contentId]/submissions",
-        "page"
+        "/courses/[courseId]/modules/content/[contentId]/submissions",
+        "page",
       );
       revalidatePath(
-        "/(student)/student-courses/[courseId]/modules/content/[contentId]/page",
-        "page"
+        "/courses/[courseId]/modules/content/[contentId]/page",
+        "page",
       );
 
       if (regrade) {

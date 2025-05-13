@@ -45,8 +45,8 @@ export const createContent = actionClient
         });
 
         revalidatePath(
-          "/(instructor)/instructor-courses/[courseId]/modules/content/[contentId]",
-          "page"
+          "/courses/[courseId]/modules/content/[contentId]",
+          "page",
         );
         revalidateTag("contents");
         revalidateTag("modules");
@@ -69,8 +69,8 @@ export const createContent = actionClient
         });
 
         revalidatePath(
-          "/(instructor)/instructor-courses/[courseId]/modules/content/[contentId]",
-          "page"
+          "/courses/[courseId]/modules/content/[contentId]",
+          "page",
         );
         revalidateTag("contents");
         revalidateTag("modules");
@@ -96,35 +96,35 @@ export const createContent = actionClient
               isPublished,
             }
           : type === "assignment"
-          ? {
-              title,
-              type,
-              moduleId,
-              id,
-              courseId,
-              createdAt: new Date().toISOString(),
-              updatedAt: new Date().toISOString(),
-              startDate: date?.from.toISOString(),
-              endDate: date?.to.toISOString(),
-              submissionType,
-              points,
-              maxAttempts,
-              isLocked: false,
-              content,
-              isPublished,
-            }
-          : {
-              title,
-              type,
-              moduleId,
-              id,
-              courseId,
-              createdAt: new Date().toISOString(),
-              updatedAt: new Date().toISOString(),
-              content,
-              isLocked: false,
-              isPublished,
-            };
+            ? {
+                title,
+                type,
+                moduleId,
+                id,
+                courseId,
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
+                startDate: date?.from.toISOString(),
+                endDate: date?.to.toISOString(),
+                submissionType,
+                points,
+                maxAttempts,
+                isLocked: false,
+                content,
+                isPublished,
+              }
+            : {
+                title,
+                type,
+                moduleId,
+                id,
+                courseId,
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
+                content,
+                isLocked: false,
+                isPublished,
+              };
 
       await db.collection("contents").doc(id).set(newContent);
 
@@ -152,7 +152,7 @@ export const createContent = actionClient
 
       await batch.commit();
 
-      revalidatePath("/(instructor)/instructor-courses/[courseId]", "page");
+      revalidatePath("/courses/[courseId]", "page");
       revalidateTag("contents");
       revalidateTag("modules");
       revalidateTag("module");
@@ -172,7 +172,7 @@ export const createContent = actionClient
           message: `A new assignment has been created!`,
           senderId: user.id,
           type: "assignment",
-          url: `/student-courses/${courseId}/modules/content/${id}`,
+          url: `/courses/${courseId}/modules/content/${id}`,
           receiverIds: enrolledStudentIds,
         });
 

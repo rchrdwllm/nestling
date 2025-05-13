@@ -30,7 +30,7 @@ const Dashboard = () => {
                 title: "From John Doe",
                 message: "asdfalksdghsg",
                 senderId: "use-uiry2i3uhfs",
-                url: "/student-inbox",
+                url: "/inbox",
                 createdAt: new Date().toISOString(),
                 isRead: false,
                 isArchived: false,

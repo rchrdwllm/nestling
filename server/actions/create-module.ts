@@ -12,9 +12,8 @@ export const createModule = actionClient
     const { title, courseId, isEdit, moduleId } = parsedInput;
 
     try {
-      const { success: existingModules, error } = await getCourseModules(
-        courseId
-      );
+      const { success: existingModules, error } =
+        await getCourseModules(courseId);
 
       if (error) {
         return { error };
@@ -30,8 +29,8 @@ export const createModule = actionClient
           updatedAt: new Date().toISOString(),
         });
 
-        revalidatePath("/(instructor)/instructor-courses/[courseId]", "page");
-        revalidatePath(`/(instructor)/instructor-courses/${courseId}`);
+        revalidatePath("/courses/[courseId]", "page");
+        revalidatePath(`/courses/${courseId}`);
 
         return { success: `Module updated successfully` };
       }
@@ -74,12 +73,9 @@ export const createModule = actionClient
 
       await batch.commit();
 
-      revalidatePath("/(instructor)/instructor-courses/[courseId]", "page");
-      revalidatePath(
-        "/(instructor)/instructor-courses/[courseId]/create",
-        "page"
-      );
-      revalidatePath(`/(instructor)/instructor-courses/${courseId}`);
+      revalidatePath("/courses/[courseId]", "page");
+      revalidatePath("/courses/[courseId]/create", "page");
+      revalidatePath(`/courses/${courseId}`);
       revalidateTag("modules");
       revalidateTag("courses");
 

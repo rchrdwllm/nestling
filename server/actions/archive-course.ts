@@ -26,8 +26,8 @@ export const archiveCourse = actionClient
         archivedAt: new Date().toISOString(),
       });
 
-      revalidatePath("/instructor-courses");
-      revalidatePath("/instructor-courses/archive");
+      revalidatePath("/courses");
+      revalidatePath("/courses/archive");
 
       return {
         success: `Course ${course.isArchived ? "unarchived" : "archived"}`,

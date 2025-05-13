@@ -21,7 +21,7 @@ export const publishContent = actionClient
         defaultPublished ? "unpublished" : "published"
       } successfully`;
 
-      revalidatePath("/(instructor)/instructor-courses/[courseId]", "page");
+      revalidatePath("/courses/[courseId]", "page");
 
       return { success: successMessage };
     } catch (error) {

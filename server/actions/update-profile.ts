@@ -31,7 +31,7 @@ export const updateStudentProfile = actionClient
       if (parsedInput.newPassword && parsedInput.currentPassword) {
         const passwordMatch = await bcrypt.compare(
           parsedInput.currentPassword,
-          user.password
+          user.password,
         );
 
         if (!passwordMatch) {
@@ -45,8 +45,7 @@ export const updateStudentProfile = actionClient
           password: hashedPassword,
         });
 
-        revalidatePath("/(student)/student-profile", "page");
-        revalidatePath("/(student)", "layout");
+        revalidatePath("/profile", "page");
 
         return { success: "Profile updated" };
       }
@@ -55,7 +54,7 @@ export const updateStudentProfile = actionClient
         ...updates,
       });
 
-      revalidatePath("/(student)/student-profile", "page");
+      revalidatePath("/profile", "page");
 
       return { success: "Profile updated" };
     } catch (error) {
@@ -89,7 +88,7 @@ export const updateInstructorProfile = actionClient
       if (parsedInput.newPassword && parsedInput.currentPassword) {
         const passwordMatch = await bcrypt.compare(
           parsedInput.currentPassword,
-          user.password
+          user.password,
         );
 
         if (!passwordMatch) {
@@ -103,8 +102,8 @@ export const updateInstructorProfile = actionClient
           password: hashedPassword,
         });
 
-        revalidatePath("/(instructor)/instructor-profile", "page");
-        revalidatePath("/(instructor)", "layout");
+        revalidatePath("/profile", "page");
+        revalidatePath("/", "layout");
 
         return { success: "Profile updated" };
       }
@@ -113,7 +112,7 @@ export const updateInstructorProfile = actionClient
         ...updates,
       });
 
-      revalidatePath("/(instructor)/instructor-profile", "page");
+      revalidatePath("/profile", "page");
 
       return { success: "Profile updated" };
     } catch (error) {

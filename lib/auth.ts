@@ -65,33 +65,33 @@ export const authOptions = {
 
       const user = userDoc.data() as User;
 
-      if (user.role !== "admin") {
-        const today = new Date().toISOString().split("T")[0];
-        const activityRef = await db
-          .collection("userActivities")
-          .where("userId", "==", user.id)
-          .where("type", "==", "login")
-          .where("createdAt", "==", today)
-          .get();
+      // if (user.role !== "admin") {
+      //   const today = new Date().toISOString().split("T")[0];
+      //   const activityRef = await db
+      //     .collection("userActivities")
+      //     .where("userId", "==", user.id)
+      //     .where("type", "==", "login")
+      //     .where("createdAt", "==", today)
+      //     .get();
 
-        if (activityRef.empty) {
-          const id = crypto.randomUUID();
+      //   if (activityRef.empty) {
+      //     const id = crypto.randomUUID();
 
-          await db.collection("userActivities").doc(id).set({
-            id,
-            userId: user.id,
-            type: "login",
-            createdAt: today,
-            updatedAt: new Date().toISOString(),
-          });
-        }
+      //     await db.collection("userActivities").doc(id).set({
+      //       id,
+      //       userId: user.id,
+      //       type: "login",
+      //       createdAt: today,
+      //       updatedAt: new Date().toISOString(),
+      //     });
+      //   }
 
-        const activityData = activityRef.docs[0].data() as UserActivity;
+      //   const activityData = activityRef.docs[0].data() as UserActivity;
 
-        await db.collection("userActivities").doc(activityData.id).update({
-          updatedAt: new Date().toISOString(),
-        });
-      }
+      //   await db.collection("userActivities").doc(activityData.id).update({
+      //     updatedAt: new Date().toISOString(),
+      //   });
+      // }
 
       token.role = user.role;
       token.firstName = user.firstName;

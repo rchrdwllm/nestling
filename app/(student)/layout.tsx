@@ -35,7 +35,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
       <ScrollArea
         className={cn(
           "w-full h-[calc(100vh-1rem)] bg-background",
-          segment !== "student-inbox" ? "border border-border rounded-xl" : null
+          segment !== "inbox" ? "border border-border rounded-xl" : null,
         )}
       >
         {children}

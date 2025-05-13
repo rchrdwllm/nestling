@@ -33,12 +33,9 @@ export const createThread = actionClient
 
       await threadRef.set(threadData);
 
-      revalidatePath("/(student)/student-inbox", "layout");
-      revalidatePath("/(student)/student-inbox/[channelId]", "page");
-      revalidatePath(`/student-inbox/${channelId}`);
-      revalidatePath("/(instructor)/instructor-inbox", "layout");
-      revalidatePath("/(instructor)/instructor-inbox/[channelId]", "page");
-      revalidatePath(`/instructor-inbox/${channelId}`);
+      revalidatePath("/inbox", "layout");
+      revalidatePath("/inbox/[channelId]", "page");
+      revalidatePath(`/inbox/${channelId}`);
 
       return { success: threadData };
     } catch (error) {

@@ -57,7 +57,7 @@ const LoginForm = ({ role, setStep }: LoginFormProps) => {
         .then(() => {
           toast.dismiss();
           toast.success("Login successful");
-          router.push(`/${success.role}-dashboard`);
+          router.push("/dashboard");
           setIsLoading(false);
         })
         .catch((error) => {

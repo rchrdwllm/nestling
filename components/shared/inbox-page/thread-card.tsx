@@ -7,9 +7,8 @@ import { getLatestMessage } from "@/lib/message";
 const ThreadCard = async ({ userIds, channelId }: Thread) => {
   const user = await getOptimisticUser();
   const receiverId = userIds.find((id) => id !== user.id)!;
-  const { success: receiver, error: receiverError } = await getUserById(
-    receiverId
-  );
+  const { success: receiver, error: receiverError } =
+    await getUserById(receiverId);
   const { success: latestMessage } = await getLatestMessage(channelId);
 
   if (receiverError) {
@@ -31,7 +30,7 @@ const ThreadCard = async ({ userIds, channelId }: Thread) => {
   }
 
   return (
-    <Link href={`/${user.role}-inbox/${channelId}`}>
+    <Link href={`/inbox/${channelId}`}>
       <ThreadCardWrapper channelId={channelId}>
         <h1 className="font-medium text-inherit">{receiver.name}</h1>
         {latestMessage && (

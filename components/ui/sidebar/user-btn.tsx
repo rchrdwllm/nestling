@@ -22,11 +22,11 @@ const UserBtn = () => {
   const profileLink = useMemo(() => {
     if (user) {
       if (user.role === "student") {
-        return `/student-profile?userId=${user.id}`;
+        return `/profile?userId=${user.id}`;
       } else if (user.role === "instructor") {
-        return `/instructor-profile?userId=${user.id}`;
+        return `/profile?userId=${user.id}`;
       } else {
-        return `/admin-profile?userId=${user.id}`;
+        return `/profile?userId=${user.id}`;
       }
     }
 

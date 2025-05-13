@@ -11,10 +11,8 @@ export const updateThread = async (threadId: string) => {
       updatedAt: new Date().toISOString(),
     });
 
-    revalidatePath("/(student)/student-inbox", "layout");
-    revalidatePath("/(student)/student-inbox/[channelId]", "page");
-    revalidatePath("/(instructor)/instructor-inbox", "layout");
-    revalidatePath("/(instructor)/instructor-inbox/[channelId]", "page");
+    revalidatePath("/inbox", "layout");
+    revalidatePath("/inbox/[channelId]", "page");
 
     return { success: "Thread updated" };
   } catch (error) {

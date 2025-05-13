@@ -60,7 +60,7 @@ const RegisterForm2 = ({ setStep, role, details }: RegisterForm2Props) => {
         .then(() => {
           toast.dismiss();
           toast.success("Account created successfully");
-          router.push(`/${success.role}-dashboard`);
+          router.push("/dashboard");
           setIsLoading(false);
         })
         .catch((error) => {

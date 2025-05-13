@@ -22,14 +22,14 @@ const CourseCard = async ({ id, name, courseCode, image }: Course) => {
   return (
     <article className="p-4 rounded-xl border border-border flex flex-col gap-4">
       <Link
-        href={`/instructor-courses/${id}`}
+        href={`/courses/${id}`}
         className="block h-40 relative rounded-lg overflow-hidden"
       >
         <Image src={image} alt={image} className="w-full object-cover" fill />
       </Link>
       <div>
         <div className="flex justify-between items-center">
-          <Link href={`/instructor-courses/${id}`} key={id}>
+          <Link href={`/courses/${id}`} key={id}>
             <h1 className="font-medium text-md">{name}</h1>
           </Link>
           <CourseDetailsBtn

@@ -8,7 +8,7 @@ import { redirect } from "next/navigation";
 const RegisterPage = async () => {
   const user = await getCurrentUser();
 
-  if (user) return redirect(`/${user.role}-dashboard`);
+  if (user) return redirect(`/dashboard`);
 
   return (
     <main className="h-screen grid grid-cols-2 overflow-x-hidden">

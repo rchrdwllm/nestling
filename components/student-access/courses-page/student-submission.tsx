@@ -10,7 +10,7 @@ const StudentSubmission = ({ contentId, courseId }: StudentSubmissionProps) => {
   return (
     <div>
       <Link
-        href={`/student-courses/${courseId}/modules/content/${contentId}/submissions`}
+        href={`/courses/${courseId}/modules/content/${contentId}/submissions`}
       >
         <Button variant="link">Submission details</Button>
       </Link>

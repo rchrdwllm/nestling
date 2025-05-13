@@ -6,6 +6,7 @@ import {
   CircleHelp,
   LucideProps,
   BookOpen,
+  KanbanSquare,
 } from "lucide-react";
 import { ForwardRefExoticComponent, RefAttributes } from "react";
 
@@ -20,22 +21,22 @@ export type SidebarItem = {
 export const studentSidebarItems: SidebarItem[] = [
   {
     label: "Courses",
-    href: "/student-courses",
+    href: "/courses",
     Icon: BookMarked,
   },
   {
     label: "Calendar",
-    href: "/student-calendar",
+    href: "/calendar",
     Icon: CalendarDays,
   },
   {
     label: "Inbox",
-    href: "/student-inbox",
+    href: "/inbox",
     Icon: Mail,
   },
   {
     label: "About",
-    href: "/student-about",
+    href: "/about",
     Icon: Info,
   },
   {
@@ -48,27 +49,35 @@ export const studentSidebarItems: SidebarItem[] = [
 export const instructorSidebarItems: SidebarItem[] = [
   {
     label: "Course Management",
-    href: "/instructor-courses",
+    href: "/courses",
     Icon: BookOpen,
   },
   {
     label: "Calendar",
-    href: "/instructor-calendar",
+    href: "/calendar",
     Icon: CalendarDays,
   },
   {
     label: "Inbox",
-    href: "/instructor-inbox",
+    href: "/inbox",
     Icon: Mail,
   },
   {
     label: "About",
-    href: "/student-about",
+    href: "/about",
     Icon: Info,
   },
   {
     label: "Help",
     href: "/help",
     Icon: CircleHelp,
+  },
+];
+
+export const adminSidebarItems: SidebarItem[] = [
+  {
+    label: "Projects",
+    href: "/projects",
+    Icon: KanbanSquare,
   },
 ];
