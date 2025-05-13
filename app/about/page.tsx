@@ -1,5 +1,3 @@
-import SidePanel from "@/components/student-access/dashboard-page/side-panel";
-
 const AboutPage = () => {
   return (
     <div className="p-6 flex flex-col gap-10">
