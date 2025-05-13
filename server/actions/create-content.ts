@@ -7,6 +7,7 @@ import { revalidatePath, revalidateTag } from "next/cache";
 import { createNotif } from "./create-notif";
 import { getOptimisticUser } from "@/lib/user";
 import { getEnrolledStudentIds } from "@/lib/course";
+import { sendNotification } from "./send-notification";
 
 export const createContent = actionClient
   .schema(CreateContentSchema)
@@ -174,6 +175,11 @@ export const createContent = actionClient
           type: "assignment",
           url: `/courses/${courseId}/modules/content/${id}`,
           receiverIds: enrolledStudentIds,
+        });
+        await sendNotification({
+          title: `New assignment: ${title}`,
+          body: "A new assignment has been created!",
+          userIds: enrolledStudentIds ?? [],
         });
 
         revalidateTag("assignments");
