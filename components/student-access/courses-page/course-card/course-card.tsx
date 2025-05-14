@@ -17,7 +17,7 @@ const CourseCard = async ({ name, id, courseCode, image }: Course) => {
   }
 
   return (
-    <article className="p-4 rounded-xl border border-border flex flex-col gap-4">
+    <article className="p-4 shadow-sm transition-shadow hover:shadow-md rounded-xl border border-border flex flex-col gap-4">
       <Link
         href={`/courses/${id}`}
         className="block h-40 relative rounded-lg overflow-hidden"

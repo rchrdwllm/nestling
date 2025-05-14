@@ -8,11 +8,11 @@ type AnnouncementCardProps = {
 
 const AnnouncementCard = ({ announcement }: AnnouncementCardProps) => {
   const { id, title, content, isArchived, createdAt } = JSON.parse(
-    announcement
+    announcement,
   ) as Announcement;
 
   return (
-    <article className="p-4 rounded-xl border border-border flex flex-col gap-2">
+    <article className="p-4 shadow-sm transition-shadow hover:shadow-md rounded-xl border border-border flex flex-col gap-2">
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-semibold">{title}</h1>
         <AnnouncementDetailsBtn

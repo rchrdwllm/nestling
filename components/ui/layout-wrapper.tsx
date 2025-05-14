@@ -20,7 +20,7 @@ const LayoutWrapper = ({ children }: { children: ReactNode }) => {
   return (
     <main className="min-h-screen flex items-stretch bg-secondary p-2 gap-2">
       <Sidebar />
-      <ScrollArea className="w-full h-[calc(100vh-1rem)] bg-background border border-border rounded-xl">
+      <ScrollArea className="w-full shadow-sm h-[calc(100vh-1rem)] bg-background border border-border rounded-xl">
         {children}
       </ScrollArea>
     </main>

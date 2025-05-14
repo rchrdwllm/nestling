@@ -27,7 +27,7 @@ const ModuleCard = async ({
   }
 
   return (
-    <article className="border border-border rounded-xl p-4 flex flex-col gap-4">
+    <article className="border shadow-sm transition-shadow hover:shadow-md border-border rounded-xl p-4 flex flex-col gap-4">
       <div className="flex justify-between items-center gap-4">
         <h1 className="text-xl flex-1 font-medium">
           {moduleNumber}. {title}
