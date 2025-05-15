@@ -31,7 +31,7 @@ export const sendMessage = actionClient
       await pusherServer.trigger(
         channelId,
         "new-message",
-        files ? { ...messageData, files } : messageData
+        files ? { ...messageData, files } : messageData,
       );
 
       try {
@@ -58,7 +58,7 @@ export const sendMessage = actionClient
             receiverIds: [receiver!.id],
             message,
             title: `From ${user.name}`,
-            url: `/${receiver!.role}-inbox/${channelId}`,
+            url: `/inbox/${channelId}`,
           });
           await sendNotification({
             title: `From ${user.name}`,
