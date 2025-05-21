@@ -4,8 +4,8 @@ import { Button } from "./button";
 import { getCurrentUser } from "@/lib/user";
 import { useCurrentUser } from "@/hooks/use-current-user";
 
-const Unauthorized = () => {
-  const { user } = useCurrentUser();
+const Unauthorized = async () => {
+  const user = await getCurrentUser();
 
   if (!user) {
     return redirect("/api/auth/signin");
