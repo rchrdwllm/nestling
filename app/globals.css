@@ -90,8 +90,13 @@ span {
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
+  }
+
+  .projects-scroll-area > div[data-radix-scroll-area-viewport] > div {
+    @apply block !important;
   }
 }
 
