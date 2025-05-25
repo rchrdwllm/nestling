@@ -53,8 +53,9 @@ const CreateContentForm = ({
   const router = useRouter();
   const isEdit = useMemo(
     () => content && content !== "" && content !== "{}" && content !== "null",
-    [content],
+    [content]
   );
+  const contentData = content ? JSON.parse(content) : null;
   const form = useForm<z.infer<typeof CreateContentSchema>>({
     resolver: zodResolver(CreateContentSchema),
     defaultValues: {
@@ -67,6 +68,14 @@ const CreateContentForm = ({
       content: "",
       isPublished: true,
       isEdit: isEdit ? true : false,
+      type: contentData?.type || "lesson",
+      date: {
+        from: contentData?.startDate
+          ? new Date(contentData.startDate)
+          : undefined,
+        to: contentData?.endDate ? new Date(contentData.endDate) : undefined,
+      },
+      submissionType: contentData?.submissionType || "text",
     },
   });
   const { execute, isExecuting } = useAction(createContent, {
