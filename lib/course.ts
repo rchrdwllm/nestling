@@ -281,3 +281,31 @@ export const getEnrollmentDetails = unstable_cache(
   ["courseId", "studentId"],
   { revalidate: 60 * 60 * 24, tags: ["enrollmentDetails"] }
 );
+
+export const getCourseInstructors = unstable_cache(async (courseId: string) => {
+  try {
+    const courseInstructorSnapshot = await db
+      .collection("courses")
+      .doc(courseId)
+      .collection("instructors")
+      .get();
+    const instructorIds = courseInstructorSnapshot.docs.map((doc) => doc.id);
+
+    const instructors = await Promise.all(
+      instructorIds.map(async (instructorId) => {
+        const instructorSnapshot = await db
+          .collection("users")
+          .doc(instructorId)
+          .get();
+
+        return instructorSnapshot.data() as User;
+      })
+    );
+
+    return { success: instructors };
+  } catch (error) {
+    console.error("Error fetching course instructors:", error);
+
+    return { error: "Error fetching course instructors" };
+  }
+});

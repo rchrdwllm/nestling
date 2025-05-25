@@ -14,7 +14,6 @@ export const CreateCourseSchema = z.object({
   isEdit: z.boolean().optional(),
   courseId: z.string().optional(),
   isAdmin: z.boolean().optional(),
-  instructors: z
-    .array(z.string())
-    .min(1, { message: "At least one instructor must be selected" }),
+  instructors: z.array(z.string()).optional(),
+  defaultInstructors: z.array(z.string()).optional(),
 });

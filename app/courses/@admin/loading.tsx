@@ -1,4 +1,4 @@
-import CreateCourseBtn from "@/components/instructor-access/courses-page/create-course-btn";
+import CreateCourseBtn from "@/components/shared/courses-page/create-course-btn";
 import { Skeleton } from "@/components/ui/skeleton";
 
 const Loading = () => {

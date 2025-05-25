@@ -1,4 +1,4 @@
-import ArchivedCourses from "@/components/instructor-access/courses-page/archived-courses";
+import ArchivedCourses from "@/components/shared/courses-page/archived-courses";
 import { Suspense } from "react";
 
 const ArchivedCoursesPage = () => {

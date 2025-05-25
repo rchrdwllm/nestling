@@ -1,6 +1,6 @@
 import { getUnarchivedInstructorCourses } from "@/lib/course";
 import { getCurrentUser } from "@/lib/user";
-import CourseCard from "./course-card";
+import CourseCard from "@/components/shared/courses-page/course-card";
 
 const Courses = async () => {
   const user = await getCurrentUser();

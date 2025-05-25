@@ -1,4 +1,4 @@
-import CreateModuleBtn from "@/components/instructor-access/courses-page/create-module-btn";
+import CreateModuleBtn from "@/components/shared/courses-page/create-module-btn";
 import ModuleCard from "@/components/instructor-access/courses-page/module-card/module-card";
 import { getCourse } from "@/lib/course";
 import { getUnarchivedCourseModules } from "@/lib/module";

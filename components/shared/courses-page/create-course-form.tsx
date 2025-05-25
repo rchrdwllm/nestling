@@ -24,6 +24,7 @@ type CreateCourseFormProps = {
   isEdit?: boolean;
   isAdmin?: boolean;
   instructors?: User[];
+  defaultInstructors?: User[];
 } & {
   course?: Course;
 };
@@ -34,6 +35,7 @@ const CreateCourseForm = ({
   course,
   isAdmin = false,
   instructors,
+  defaultInstructors,
 }: CreateCourseFormProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [img, setImg] = useState<File | null>(null);
@@ -47,6 +49,9 @@ const CreateCourseForm = ({
       isEdit: isEdit ?? false,
       courseId: course?.id ?? undefined,
       isAdmin: isAdmin ?? false,
+      instructors: defaultInstructors?.map((instructor) => instructor.id) ?? [],
+      defaultInstructors:
+        defaultInstructors?.map((instructor) => instructor.id) ?? [],
     },
   });
   const { execute, isExecuting } = useAction(createCourse, {
@@ -76,6 +81,15 @@ const CreateCourseForm = ({
     form.setValue("image", course?.image ?? "");
     form.setValue("isEdit", isEdit ?? false);
     form.setValue("courseId", course?.id ?? undefined);
+    form.setValue("isAdmin", isAdmin ?? false);
+    form.setValue(
+      "instructors",
+      defaultInstructors?.map((instructor) => instructor.id) ?? []
+    );
+    form.setValue(
+      "defaultInstructors",
+      defaultInstructors?.map((instructor) => instructor.id) ?? []
+    );
   }, []);
 
   const handleSubmit = async (data: z.infer<typeof CreateCourseSchema>) => {
@@ -113,6 +127,7 @@ const CreateCourseForm = ({
         courseId: data.courseId,
         isAdmin,
         instructors: data.instructors,
+        defaultInstructors: data.defaultInstructors,
       });
 
       return;
@@ -188,7 +203,9 @@ const CreateCourseForm = ({
                     value: instructor.id,
                   }))}
                   onValueChange={field.onChange}
-                  defaultValue={undefined}
+                  defaultValue={
+                    defaultInstructors?.map((instructor) => instructor.id) ?? []
+                  }
                   placeholder="Select instructors"
                   variant="inverted"
                 />

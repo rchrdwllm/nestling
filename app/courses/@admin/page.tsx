@@ -1,5 +1,5 @@
 import Courses from "@/components/admin-access/courses-page/courses";
-import CreateCourseBtn from "@/components/instructor-access/courses-page/create-course-btn";
+import CreateCourseBtn from "@/components/shared/courses-page/create-course-btn";
 import { getAllInstructors } from "@/lib/user";
 
 const AdminCoursesPage = async () => {

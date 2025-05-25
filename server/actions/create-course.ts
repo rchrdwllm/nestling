@@ -4,7 +4,7 @@ import { getCurrentUser } from "@/lib/user";
 import { actionClient } from "../action-client";
 import { CreateCourseSchema } from "@/schemas/CreateCourseSchema";
 import { db } from "@/lib/firebase";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { UploadImageSchema } from "@/schemas/UploadImageSchema";
 import { uploadImage } from "./upload-image";
 import { Course } from "@/types";
@@ -28,6 +28,7 @@ export const createCourse = actionClient
       courseId,
       isAdmin,
       instructors,
+      defaultInstructors,
     } = parsedInput;
     const user = await getCurrentUser();
 
@@ -35,95 +36,120 @@ export const createCourse = actionClient
       return { error: "Not authenticated" };
     }
 
-    if (isAdmin && user.role === "admin") {
-      if (!image) {
-        return { error: "Image is required" };
-      }
+    // if (isAdmin && user.role === "admin") {
+    //   try {
+    //     const existingCourseCode = await db
+    //       .collection("courses")
+    //       .where("courseCode", "==", courseCode)
+    //       .get();
+    //     const existingCourseName = await db
+    //       .collection("courses")
+    //       .where("name", "==", name)
+    //       .get();
 
-      try {
-        const existingCourseCode = await db
-          .collection("courses")
-          .where("courseCode", "==", courseCode)
-          .get();
-        const existingCourseName = await db
-          .collection("courses")
-          .where("name", "==", name)
-          .get();
+    //     if (!isEdit) {
+    //       if (!existingCourseCode.empty) {
+    //         return { error: "Course code already exists" };
+    //       }
 
-        if (!existingCourseCode.empty) {
-          return { error: "Course code already exists" };
-        }
+    //       if (!existingCourseName.empty) {
+    //         return { error: "Course name already exists" };
+    //       }
 
-        if (!existingCourseName.empty) {
-          return { error: "Course name already exists" };
-        }
+    //       if (!image) {
+    //         return { error: "Course image is required" };
+    //       }
+    //     }
 
-        const id = crypto.randomUUID();
+    //     if (image) {
+    //       await db.collection("courses").doc(id).set({
+    //         name,
+    //         description,
+    //         courseCode,
+    //         id,
+    //         createdAt: new Date().toISOString(),
+    //         updatedAt: new Date().toISOString(),
+    //         image: image.secure_url,
+    //         isArchived: false,
+    //       });
 
-        await db.collection("courses").doc(id).set({
-          name,
-          description,
-          courseCode,
-          id,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-          image: image.secure_url,
-          isArchived: false,
-        });
+    //       const data = await uploadImage({ ...image, course_id: id });
 
-        const data = await uploadImage({ ...image, course_id: id });
+    //       if (!data) {
+    //         console.error("Error uploading image");
 
-        if (!data) {
-          console.error("Error uploading image");
+    //         return { error: "Error uploading image" };
+    //       }
 
-          return { error: "Error uploading image" };
-        }
+    //       if (data.data?.error) {
+    //         return { error: data.data.error };
+    //       }
 
-        if (data.data?.error) {
-          return { error: data.data.error };
-        }
+    //       if (!data.data?.success) {
+    //         return { error: "Error uploading image" };
+    //       }
+    //     }
 
-        if (!data.data?.success) {
-          return { error: "Error uploading image" };
-        }
+    //     const batch = db.batch();
 
-        const batch = db.batch();
+    //     instructors.forEach((instructorId) => {
+    //       const courseInstructorRef = db
+    //         .collection("courses")
+    //         .doc(id)
+    //         .collection("instructors")
+    //         .doc(instructorId);
+    //       const instructorCourseRef = db
+    //         .collection("users")
+    //         .doc(instructorId)
+    //         .collection("courses")
+    //         .doc(id);
 
-        instructors.forEach((instructorId) => {
-          const courseInstructorRef = db
-            .collection("courses")
-            .doc(id)
-            .collection("instructors")
-            .doc(instructorId);
-          const instructorCourseRef = db
-            .collection("users")
-            .doc(instructorId)
-            .collection("courses")
-            .doc(id);
+    //       const courseInstructorData = {
+    //         courseId: id,
+    //         instructorId,
+    //         createdAt: new Date().toISOString(),
+    //       };
 
-          const courseInstructorData = {
-            courseId: id,
-            instructorId,
-            createdAt: new Date().toISOString(),
-          };
+    //       batch.set(courseInstructorRef, courseInstructorData);
+    //       batch.set(instructorCourseRef, courseInstructorData);
+    //     });
 
-          batch.set(courseInstructorRef, courseInstructorData);
-          batch.set(instructorCourseRef, courseInstructorData);
-        });
+    //     if (defaultInstructors) {
+    //       const instructorsToRemove = defaultInstructors.filter(
+    //         (instructorId) => !instructors.includes(instructorId)
+    //       );
 
-        await batch.commit();
+    //       instructorsToRemove.forEach((instructorId) => {
+    //         const courseInstructorRef = db
+    //           .collection("courses")
+    //           .doc(id)
+    //           .collection("instructors")
+    //           .doc(instructorId);
+    //         const instructorCourseRef = db
+    //           .collection("users")
+    //           .doc(instructorId)
+    //           .collection("courses")
+    //           .doc(id);
 
-        revalidatePath("/courses");
+    //         batch.delete(courseInstructorRef);
+    //         batch.delete(instructorCourseRef);
+    //       });
+    //     }
 
-        return { success: "Course created successfully" };
-      } catch (error) {
-        return { error: JSON.stringify(error) };
-      }
-    }
+    //     await batch.commit();
 
-    if (user.role !== "instructor") {
+    //     revalidatePath("/courses");
+
+    //     return { success: "Course updated successfully" };
+    //   } catch (error) {
+    //     return { error: JSON.stringify(error) };
+    //   }
+    // }
+
+    if (user.role === "student") {
       return {
-        error: "Not authorized, must be an instructor to create courses",
+        error:
+          "Not authorized, must be an instructor or student to create courses",
       };
     }
 
@@ -195,6 +221,55 @@ export const createCourse = actionClient
           }
         }
 
+        if (isAdmin && instructors) {
+          const batch = db.batch();
+
+          instructors.forEach((instructorId) => {
+            const courseInstructorRef = db
+              .collection("courses")
+              .doc(course.id)
+              .collection("instructors")
+              .doc(instructorId);
+            const instructorCourseRef = db
+              .collection("users")
+              .doc(instructorId)
+              .collection("courses")
+              .doc(course.id);
+            const courseInstructorData = {
+              courseId: course.id,
+              instructorId,
+              createdAt: new Date().toISOString(),
+            };
+
+            batch.set(courseInstructorRef, courseInstructorData);
+            batch.set(instructorCourseRef, courseInstructorData);
+          });
+
+          if (defaultInstructors) {
+            const instructorsToRemove = defaultInstructors.filter(
+              (instructorId) => !instructors.includes(instructorId)
+            );
+
+            instructorsToRemove.forEach((instructorId) => {
+              const courseInstructorRef = db
+                .collection("courses")
+                .doc(course.id)
+                .collection("instructors")
+                .doc(instructorId);
+              const instructorCourseRef = db
+                .collection("users")
+                .doc(instructorId)
+                .collection("courses")
+                .doc(course.id);
+
+              batch.delete(courseInstructorRef);
+              batch.delete(instructorCourseRef);
+            });
+          }
+
+          await batch.commit();
+        }
+
         revalidatePath("/courses");
 
         return { success: "Course updated successfully" };
@@ -252,6 +327,39 @@ export const createCourse = actionClient
 
       if (!data.data?.success) {
         return { error: "Error uploading image" };
+      }
+
+      if (isAdmin && instructors) {
+        const batch = db.batch();
+
+        instructors.forEach((instructorId) => {
+          const courseInstructorRef = db
+            .collection("courses")
+            .doc(id)
+            .collection("instructors")
+            .doc(instructorId);
+          const instructorCourseRef = db
+            .collection("users")
+            .doc(instructorId)
+            .collection("courses")
+            .doc(id);
+
+          const courseInstructorData = {
+            courseId: id,
+            instructorId,
+            createdAt: new Date().toISOString(),
+          };
+
+          batch.set(courseInstructorRef, courseInstructorData);
+          batch.set(instructorCourseRef, courseInstructorData);
+        });
+
+        await batch.commit();
+
+        revalidatePath("/courses");
+        revalidateTag("courses");
+
+        return { success: "Course created successfully" };
       }
 
       const courseInstructorRef = db

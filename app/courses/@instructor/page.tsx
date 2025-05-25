@@ -1,5 +1,5 @@
 import Courses from "@/components/instructor-access/courses-page/courses";
-import CreateCourseBtn from "@/components/instructor-access/courses-page/create-course-btn";
+import CreateCourseBtn from "@/components/shared/courses-page/create-course-btn";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 

@@ -1,4 +1,4 @@
-import ArchivedModules from "@/components/instructor-access/courses-page/archived-modules";
+import ArchivedModules from "@/components/shared/courses-page/archived-modules";
 import { Suspense } from "react";
 
 const ArchivePage = async ({

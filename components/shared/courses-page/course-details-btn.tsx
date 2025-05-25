@@ -10,15 +10,22 @@ import { EllipsisVertical } from "lucide-react";
 import EditCourseBtn from "./edit-course-btn";
 import ArchiveCourseBtn from "./archive-course-btn";
 import EditAccessBtn from "./edit-access-btn";
+import { User } from "@/types";
 
 type CourseDetailsBtnProps = {
   course: string;
   enrolledStudents: string;
+  isAdmin?: boolean;
+  instructors?: User[];
+  defaultInstructors?: User[];
 };
 
 const CourseDetailsBtn = ({
   course,
   enrolledStudents,
+  isAdmin,
+  instructors,
+  defaultInstructors = [],
 }: CourseDetailsBtnProps) => {
   return (
     <DropdownMenu>
@@ -27,7 +34,12 @@ const CourseDetailsBtn = ({
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuItem asChild>
-          <EditCourseBtn course={course} />
+          <EditCourseBtn
+            course={course}
+            isAdmin={isAdmin}
+            instructors={instructors}
+            defaultInstructors={defaultInstructors}
+          />
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <ArchiveCourseBtn course={course} />

@@ -9,12 +9,21 @@ import {
 import { useState } from "react";
 import CreateCourseForm from "./create-course-form";
 import { Button } from "@/components/ui/button";
+import { User } from "@/types";
 
 type EditCourseBtnProps = {
   course: string;
+  isAdmin?: boolean;
+  instructors?: User[];
+  defaultInstructors?: User[];
 };
 
-const EditCourseBtn = ({ course }: EditCourseBtnProps) => {
+const EditCourseBtn = ({
+  course,
+  isAdmin,
+  instructors,
+  defaultInstructors,
+}: EditCourseBtnProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const courseData = JSON.parse(course);
 
@@ -35,7 +44,10 @@ const EditCourseBtn = ({ course }: EditCourseBtnProps) => {
         </DialogHeader>
         <CreateCourseForm
           isEdit
+          isAdmin={isAdmin}
           setIsOpen={setIsOpen}
+          instructors={instructors}
+          defaultInstructors={defaultInstructors}
           course={{ ...courseData }}
         />
       </DialogContent>

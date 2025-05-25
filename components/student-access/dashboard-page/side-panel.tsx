@@ -24,10 +24,12 @@ const SidePanel = ({
   const { user } = useCurrentUser();
   const [notifications, setNotifications] = useState<Notification[]>([]);
 
+  if (user.role === "admin") return null;
+
   useEffect(() => {
     const q = query(
       collection(clientDb, "notifications"),
-      and(where("receiverIds", "array-contains", user.id)),
+      and(where("receiverIds", "array-contains", user.id))
     );
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
@@ -40,7 +42,7 @@ const SidePanel = ({
         if (change.type === "removed") {
           const notificationId = change.doc.id;
           setNotifications((prev) =>
-            prev.filter((notification) => notification.id !== notificationId),
+            prev.filter((notification) => notification.id !== notificationId)
           );
         }
       });
