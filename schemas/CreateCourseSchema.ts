@@ -13,4 +13,8 @@ export const CreateCourseSchema = z.object({
   image: z.string().nonempty({ message: "Please upload a course image" }),
   isEdit: z.boolean().optional(),
   courseId: z.string().optional(),
+  isAdmin: z.boolean().optional(),
+  instructors: z
+    .array(z.string())
+    .min(1, { message: "At least one instructor must be selected" }),
 });

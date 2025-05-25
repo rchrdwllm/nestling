@@ -3,12 +3,13 @@
 import { Button } from "@/components/ui/button";
 import { Form, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { MultiSelect } from "@/components/ui/multi-select";
 import { MAX_SIZE } from "@/constants/file";
 import { getSHA256 } from "@/lib/sha-256";
 import { CreateCourseSchema } from "@/schemas/CreateCourseSchema";
 import { createCourse } from "@/server/actions/create-course";
 import { uploadImgToCloudinary } from "@/server/actions/upload-to-cloudinary";
-import { Course } from "@/types";
+import { Course, User } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Paperclip } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
@@ -21,6 +22,8 @@ import * as z from "zod";
 type CreateCourseFormProps = {
   setIsOpen: (value: boolean) => void;
   isEdit?: boolean;
+  isAdmin?: boolean;
+  instructors?: User[];
 } & {
   course?: Course;
 };
@@ -29,6 +32,8 @@ const CreateCourseForm = ({
   setIsOpen,
   isEdit,
   course,
+  isAdmin = false,
+  instructors,
 }: CreateCourseFormProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [img, setImg] = useState<File | null>(null);
@@ -41,6 +46,7 @@ const CreateCourseForm = ({
       image: course?.image ?? "",
       isEdit: isEdit ?? false,
       courseId: course?.id ?? undefined,
+      isAdmin: isAdmin ?? false,
     },
   });
   const { execute, isExecuting } = useAction(createCourse, {
@@ -105,6 +111,8 @@ const CreateCourseForm = ({
         description: data.description,
         isEdit: true,
         courseId: data.courseId,
+        isAdmin,
+        instructors: data.instructors,
       });
 
       return;
@@ -168,6 +176,26 @@ const CreateCourseForm = ({
             </FormItem>
           )}
         />
+        {isAdmin && instructors && (
+          <FormField
+            control={form.control}
+            name="instructors"
+            render={({ field }) => (
+              <FormItem>
+                <MultiSelect
+                  options={instructors!.map((instructor) => ({
+                    label: `${instructor.firstName} ${instructor.lastName}`,
+                    value: instructor.id,
+                  }))}
+                  onValueChange={field.onChange}
+                  defaultValue={undefined}
+                  placeholder="Select instructors"
+                  variant="inverted"
+                />
+              </FormItem>
+            )}
+          />
+        )}
         <FormField
           control={form.control}
           name="image"

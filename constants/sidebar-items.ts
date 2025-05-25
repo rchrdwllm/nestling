@@ -80,4 +80,9 @@ export const adminSidebarItems: SidebarItem[] = [
     href: "/projects",
     Icon: KanbanSquare,
   },
+  {
+    label: "Courses",
+    href: "/courses",
+    Icon: BookMarked,
+  },
 ];

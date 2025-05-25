@@ -19,12 +19,106 @@ export const createCourse = actionClient
     });
   })
   .action(async ({ parsedInput }) => {
-    const { name, description, courseCode, image, isEdit, courseId } =
-      parsedInput;
+    const {
+      name,
+      description,
+      courseCode,
+      image,
+      isEdit,
+      courseId,
+      isAdmin,
+      instructors,
+    } = parsedInput;
     const user = await getCurrentUser();
 
     if (!user) {
       return { error: "Not authenticated" };
+    }
+
+    if (isAdmin && user.role === "admin") {
+      if (!image) {
+        return { error: "Image is required" };
+      }
+
+      try {
+        const existingCourseCode = await db
+          .collection("courses")
+          .where("courseCode", "==", courseCode)
+          .get();
+        const existingCourseName = await db
+          .collection("courses")
+          .where("name", "==", name)
+          .get();
+
+        if (!existingCourseCode.empty) {
+          return { error: "Course code already exists" };
+        }
+
+        if (!existingCourseName.empty) {
+          return { error: "Course name already exists" };
+        }
+
+        const id = crypto.randomUUID();
+
+        await db.collection("courses").doc(id).set({
+          name,
+          description,
+          courseCode,
+          id,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+          image: image.secure_url,
+          isArchived: false,
+        });
+
+        const data = await uploadImage({ ...image, course_id: id });
+
+        if (!data) {
+          console.error("Error uploading image");
+
+          return { error: "Error uploading image" };
+        }
+
+        if (data.data?.error) {
+          return { error: data.data.error };
+        }
+
+        if (!data.data?.success) {
+          return { error: "Error uploading image" };
+        }
+
+        const batch = db.batch();
+
+        instructors.forEach((instructorId) => {
+          const courseInstructorRef = db
+            .collection("courses")
+            .doc(id)
+            .collection("instructors")
+            .doc(instructorId);
+          const instructorCourseRef = db
+            .collection("users")
+            .doc(instructorId)
+            .collection("courses")
+            .doc(id);
+
+          const courseInstructorData = {
+            courseId: id,
+            instructorId,
+            createdAt: new Date().toISOString(),
+          };
+
+          batch.set(courseInstructorRef, courseInstructorData);
+          batch.set(instructorCourseRef, courseInstructorData);
+        });
+
+        await batch.commit();
+
+        revalidatePath("/courses");
+
+        return { success: "Course created successfully" };
+      } catch (error) {
+        return { error: JSON.stringify(error) };
+      }
     }
 
     if (user.role !== "instructor") {

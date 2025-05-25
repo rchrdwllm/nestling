@@ -12,8 +12,14 @@ import {
 } from "@/components/ui/dialog";
 import CreateCourseForm from "./create-course-form";
 import { useState } from "react";
+import { User } from "@/types";
 
-const CreateCourseBtn = () => {
+type CreateCourseBtnProps = {
+  isAdmin?: boolean;
+  instructors?: User[];
+};
+
+const CreateCourseBtn = ({ isAdmin, instructors }: CreateCourseBtnProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -31,7 +37,11 @@ const CreateCourseBtn = () => {
             Fill in the form below to create a new course
           </DialogDescription>
         </DialogHeader>
-        <CreateCourseForm setIsOpen={setIsOpen} />
+        <CreateCourseForm
+          setIsOpen={setIsOpen}
+          isAdmin={isAdmin}
+          instructors={instructors}
+        />
       </DialogContent>
     </Dialog>
   );

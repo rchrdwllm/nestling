@@ -1,25 +1,26 @@
-import ActiveUsers from "@/components/admin-access/active-users";
-import TotalInstructorsOverview from "@/components/admin-access/total-instructors-overview";
-import TotalProjectsOverview from "@/components/admin-access/total-projects-overview";
-import TotalStudentsOverview from "@/components/admin-access/total-students-overview";
-import { getActiveUsersFromMonths } from "@/lib/user-activity";
+import Courses from "@/components/admin-access/courses-page/courses";
+import CreateCourseBtn from "@/components/instructor-access/courses-page/create-course-btn";
+import { getAllInstructors } from "@/lib/user";
 
-const AdminDashboardPage = async () => {
-  const { success: activeUsers } = await getActiveUsersFromMonths(6);
+const AdminCoursesPage = async () => {
+  const { success: instructors, error } = await getAllInstructors();
 
-  if (!activeUsers) return <h1>Loading...</h1>;
+  if (error || !instructors) {
+    return <h1>Error fetching instructors: {error}</h1>;
+  }
 
   return (
     <div className="p-6 flex flex-col gap-4">
-      <h1 className="text-3xl font-semibold">Admin Dashboard</h1>
-      <div className="grid grid-cols-3 gap-4">
-        <TotalStudentsOverview />
-        <TotalInstructorsOverview />
-        <TotalProjectsOverview />
+      <div className="flex flex-col gap-4">
+        <div className="flex items-center justify-between">
+          <h1 className="text-3xl font-semibold">Courses</h1>
+          <CreateCourseBtn instructors={instructors} isAdmin />
+        </div>
+        <hr />
       </div>
-      <ActiveUsers monthlyActiveUsers={activeUsers.monthlyActiveUsers} />
+      <Courses />
     </div>
   );
 };
 
-export default AdminDashboardPage;
+export default AdminCoursesPage;
