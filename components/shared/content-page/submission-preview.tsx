@@ -1,5 +1,5 @@
 import { getStudentAssignmentSubmission } from "@/lib/submission";
-import SubmissionAttempt from "../../instructor-access/courses-page/submissions/submission-attempt";
+import SubmissionAttempt from "@/components/shared/courses-page/submissions/submission-attempt";
 import PdfViewer from "@/components/shared/content-page/pdf-viewer";
 import { getModuleContent } from "@/lib/content";
 import { getFile, verifyFileIntegrity } from "@/lib/file";

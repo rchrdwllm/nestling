@@ -1,6 +1,6 @@
 "use client";
 
-import RichTextEditor from "@/components/instructor-access/courses-page/create-content/rich-text-editor";
+import RichTextEditor from "@/components/shared/courses-page/create-content/rich-text-editor";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,

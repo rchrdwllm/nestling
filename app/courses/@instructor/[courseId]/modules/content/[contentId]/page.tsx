@@ -1,4 +1,4 @@
-import AssignmentDetails from "@/components/instructor-access/courses-page/assignment-content/assignment-details";
+import AssignmentDetails from "@/components/shared/courses-page/assignment-content/assignment-details";
 import PdfViewer from "@/components/shared/content-page/pdf-viewer";
 import { Button } from "@/components/ui/button";
 import { getContentFile, getModuleContent } from "@/lib/content";

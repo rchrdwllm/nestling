@@ -1,4 +1,4 @@
-import ArchivedAnnouncements from "@/components/instructor-access/courses-page/announcements/archived-announcements";
+import ArchivedAnnouncements from "@/components/shared/courses-page/announcements/archived-announcements";
 import { Suspense } from "react";
 
 const ArchivedAnnouncementsPage = async ({

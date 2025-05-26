@@ -1,4 +1,4 @@
-import Help from "@/components/student-access/help-page/faq";
+import Help from "@/components/shared/help-page/faq";
 
 const HelpPage = () => {
   return <div>adwasd</div>;

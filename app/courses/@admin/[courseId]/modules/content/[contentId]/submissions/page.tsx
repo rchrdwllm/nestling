@@ -1,4 +1,4 @@
-import SubmissionGrid from "@/components/instructor-access/courses-page/submissions/submission-grid";
+import SubmissionGrid from "@/components/shared/courses-page/submissions/submission-grid";
 import { getModuleContent } from "@/lib/content";
 import { Suspense } from "react";
 

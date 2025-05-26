@@ -1,4 +1,3 @@
-import ModuleCard from "@/components/instructor-access/courses-page/module-card/module-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import React from "react";
 

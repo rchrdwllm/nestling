@@ -1,4 +1,4 @@
-import EditProfileForm from "@/components/student-access/profile-page/edit-profile-form";
+import EditProfileForm from "@/components/shared/profile-page/edit-profile-form";
 import { getUserById } from "@/lib/user";
 
 const ProfilePage = async ({
