@@ -223,3 +223,19 @@ export type MonthlyActiveUserRecord = {
   month: string;
   activeUsers: number;
 };
+
+export type Project = {
+  id: string;
+  title: string;
+  description: string;
+  startDate: string;
+  endDate: string;
+  projectHeads: string[];
+  projectAssociates: string[];
+  createdAt: string;
+  updatedAt: string;
+  isArchived: boolean;
+  archivedAt: string | null;
+  ownerId: string;
+  status: "planned" | "in-progress" | "completed";
+};

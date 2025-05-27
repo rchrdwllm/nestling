@@ -85,4 +85,9 @@ export const adminSidebarItems: SidebarItem[] = [
     href: "/courses",
     Icon: BookMarked,
   },
+  {
+    label: "Calendar",
+    href: "/calendar",
+    Icon: CalendarDays,
+  },
 ];

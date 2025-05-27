@@ -1,25 +1,30 @@
-import ActiveUsers from "@/components/admin-access/active-users";
-import TotalInstructorsOverview from "@/components/admin-access/total-instructors-overview";
-import TotalProjectsOverview from "@/components/admin-access/total-projects-overview";
-import TotalStudentsOverview from "@/components/admin-access/total-students-overview";
-import { getActiveUsersFromMonths } from "@/lib/user-activity";
+import FullCalendar from "@/components/ui/full-calendar";
+import { getProjects } from "@/lib/project";
 
-const AdminDashboardPage = async () => {
-  const { success: activeUsers } = await getActiveUsersFromMonths(6);
+const AdminCalendarPage = async () => {
+  const { success: projects, error: projectsError } = await getProjects();
 
-  if (!activeUsers) return <h1>Loading...</h1>;
+  if (projectsError) {
+    console.error("Error fetching projects:", projectsError);
+    return <div>Error loading projects</div>;
+  }
+
+  if (!projects) {
+    console.error("No projects found");
+    return <div>No projects available</div>;
+  }
 
   return (
-    <div className="p-6 flex flex-col gap-4">
-      <h1 className="text-3xl font-semibold">Admin Dashboard</h1>
-      <div className="grid grid-cols-3 gap-4">
-        <TotalStudentsOverview />
-        <TotalInstructorsOverview />
-        <TotalProjectsOverview />
-      </div>
-      <ActiveUsers monthlyActiveUsers={activeUsers.monthlyActiveUsers} />
-    </div>
+    <FullCalendar
+      events={projects.map((project) => ({
+        start: new Date(project.startDate),
+        end: new Date(project.endDate),
+        title: project.title,
+        id: project.id,
+        url: `/projects/${project.id}`,
+      }))}
+    />
   );
 };
 
-export default AdminDashboardPage;
+export default AdminCalendarPage;

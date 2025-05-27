@@ -79,3 +79,23 @@ export const getAllInstructors = unstable_cache(
   ["allInstructors"],
   { revalidate: 60 * 60 * 24, tags: ["user", "instructors"] }
 );
+
+export const getAllAdmins = unstable_cache(
+  async () => {
+    try {
+      const usersSnapshot = await db
+        .collection("users")
+        .where("role", "==", "admin")
+        .get();
+      const users = usersSnapshot.docs.map((doc) => doc.data()) as User[];
+
+      return { success: users };
+    } catch (error) {
+      console.error(error);
+
+      return { error: JSON.stringify(error) };
+    }
+  },
+  ["allAdmins"],
+  { revalidate: 60 * 60 * 24, tags: ["user", "admins"] }
+);

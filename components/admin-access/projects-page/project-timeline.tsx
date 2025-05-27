@@ -22,7 +22,7 @@ import {
   GanttToday,
 } from "@/components/ui/gantt";
 import { EyeIcon, LinkIcon, Plus, TrashIcon } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Select,
   SelectContent,
@@ -39,97 +39,53 @@ import {
   subDays,
   subMonths,
 } from "date-fns";
+import CreateProjectBtn from "./create-project-btn";
+import { projectStatuses } from "@/constants/project-statuses";
+import { Project, User } from "@/types";
 
 // Inline content
 const today = new Date();
 
-const exampleStatuses = [
-  { id: "1", name: "Planned", color: "#6B7280" },
-  { id: "2", name: "In Progress", color: "#F59E0B" },
-  { id: "3", name: "Done", color: "#10B981" },
-];
+type ProjectTimelineProps = {
+  admins: string;
+  instructors: string;
+  projects: Project[];
+};
 
-const initialFeatures = [
-  {
-    id: "1",
-    name: "AI Scene Analysis",
-    startAt: startOfMonth(subMonths(today, 6)),
-    endAt: subDays(endOfMonth(today), 5),
-    status: exampleStatuses[0],
-    owner: {
-      id: "1",
-      image: "https://api.dicebear.com/7.x/adventurer-neutral/svg?seed=1",
-      name: "Alice Johnson",
-    },
-    initiative: { id: "1", name: "AI Integration" },
-    release: { id: "1", name: "v1.0" },
-  },
-  {
-    id: "2",
-    name: "Collaborative Editing",
-    startAt: startOfMonth(subMonths(today, 5)),
-    endAt: subDays(endOfMonth(today), 5),
-    status: exampleStatuses[1],
-    owner: {
-      id: "2",
-      image: "https://api.dicebear.com/7.x/adventurer-neutral/svg?seed=2",
-      name: "Bob Smith",
-    },
-    initiative: { id: "2", name: "Real-time Collaboration" },
-    release: { id: "1", name: "v1.0" },
-  },
-  {
-    id: "3",
-    name: "AI-Powered Color Grading",
-    startAt: startOfMonth(subMonths(today, 4)),
-    endAt: subDays(endOfMonth(today), 5),
-    status: exampleStatuses[2],
-    owner: {
-      id: "3",
-      image: "https://api.dicebear.com/7.x/adventurer-neutral/svg?seed=3",
-      name: "Charlie Brown",
-    },
-    initiative: { id: "1", name: "AI Integration" },
-    release: { id: "2", name: "v1.1" },
-  },
-  {
-    id: "4",
-    name: "Real-time Video Chat",
-    startAt: startOfMonth(subMonths(today, 3)),
-    endAt: subDays(endOfMonth(today), 12),
-    status: exampleStatuses[0],
-    owner: {
-      id: "4",
-      image: "https://api.dicebear.com/7.x/adventurer-neutral/svg?seed=4",
-      name: "Diana Prince",
-    },
-    initiative: { id: "2", name: "Real-time Collaboration" },
-    release: { id: "2", name: "v1.1" },
-  },
-  {
-    id: "5",
-    name: "AI Voice-to-Text Subtitles",
-    startAt: startOfMonth(subMonths(today, 2)),
-    endAt: subDays(endOfMonth(today), 5),
-    status: exampleStatuses[1],
-    owner: {
-      id: "5",
-      image: "https://api.dicebear.com/7.x/adventurer-neutral/svg?seed=5",
-      name: "Ethan Hunt",
-    },
-    initiative: { id: "1", name: "AI Integration" },
-    release: { id: "2", name: "v1.1" },
-  },
-];
-
-const ProjectTimeline = () => {
-  const [features, setFeatures] = useState(initialFeatures);
+const ProjectTimeline = ({
+  admins,
+  instructors,
+  projects,
+}: ProjectTimelineProps) => {
   const [isMounted, setIsMounted] = useState(false);
   const [view, setView] = useState<"daily" | "monthly" | "quarterly">(
     "monthly"
   );
+  const adminsData = useMemo(() => JSON.parse(admins) as User[], [admins]);
+  const instructorsData = useMemo(
+    () => JSON.parse(instructors) as User[],
+    [instructors]
+  );
+  const projectsWithOwners = useMemo(
+    () =>
+      projects.map((project) => ({
+        ...project,
+        owner:
+          [...adminsData, ...instructorsData].find((user) => {
+            console.log(user.id, project.ownerId);
+
+            return user.id === project.ownerId;
+          }) || null,
+      })),
+    [projects, adminsData, instructorsData]
+  );
+  const [features, setFeatures] = useState(projectsWithOwners);
 
   useEffect(() => setIsMounted(true), []);
+
+  useEffect(() => {
+    setFeatures(projectsWithOwners);
+  }, [projectsWithOwners]);
 
   if (!isMounted) return null;
 
@@ -147,18 +103,28 @@ const ProjectTimeline = () => {
   const handleCreateMarker = (date: Date) =>
     console.log(`Create marker: ${date.toISOString()}`);
 
-  const handleMoveFeature = (id: string, startAt: Date, endAt: Date | null) => {
-    if (!endAt) {
+  const handleMoveFeature = (
+    id: string,
+    startDate: Date,
+    endDate: Date | null
+  ) => {
+    if (!endDate) {
       return;
     }
 
     setFeatures((prev) =>
       prev.map((feature) =>
-        feature.id === id ? { ...feature, startAt, endAt } : feature
+        feature.id === id
+          ? {
+              ...feature,
+              startDate: startDate.toISOString(),
+              endDate: endDate.toISOString(),
+            }
+          : feature
       )
     );
 
-    console.log(`Move feature: ${id} from ${startAt} to ${endAt}`);
+    console.log(`Move feature: ${id} from ${startDate} to ${endDate}`);
   };
   const handleAddFeature = (date: Date) =>
     console.log(`Add feature: ${date.toISOString()}`);
@@ -185,13 +151,7 @@ const ProjectTimeline = () => {
           <CalendarIcon size={18} className="mr-2" />
           Today
         </Button>
-        <Button
-          className="ml-auto"
-          onClick={() => handleAddFeature(new Date())}
-        >
-          <Plus className="size-4" />
-          New project
-        </Button>
+        <CreateProjectBtn admins={admins} instructors={instructors} />
       </div>
       <GanttProvider
         className="border border-input rounded-xl shadow-sm"
@@ -200,66 +160,79 @@ const ProjectTimeline = () => {
         zoom={100}
       >
         <GanttSidebar>
-          {features.map((feature) => (
-            <GanttSidebarItem
-              key={feature.id}
-              feature={feature}
-              onSelectItem={handleViewFeature}
-            />
-          ))}
+          {features.map((feature) => {
+            return (
+              <GanttSidebarItem
+                key={feature.id}
+                feature={feature}
+                onSelectItem={handleViewFeature}
+              />
+            );
+          })}
         </GanttSidebar>
         <GanttTimeline>
           <GanttHeader />
           <GanttFeatureList>
-            {features.map((feature) => (
-              <div className="flex" key={feature.id}>
-                <ContextMenu>
-                  <ContextMenuTrigger asChild>
-                    <button
-                      type="button"
-                      onClick={() => handleViewFeature(feature.id)}
-                    >
-                      <GanttFeatureItem onMove={handleMoveFeature} {...feature}>
-                        <p className="flex-1 truncate text-xs">
-                          {feature.name}
-                        </p>
-                        {feature.owner && (
-                          <Avatar className="h-4 w-4">
-                            <AvatarImage src={feature.owner.image} />
-                            <AvatarFallback>
-                              {feature.owner.name?.slice(0, 2)}
-                            </AvatarFallback>
-                          </Avatar>
-                        )}
-                      </GanttFeatureItem>
-                    </button>
-                  </ContextMenuTrigger>
-                  <ContextMenuContent>
-                    <ContextMenuItem
-                      className="flex items-center gap-2"
-                      onClick={() => handleViewFeature(feature.id)}
-                    >
-                      <EyeIcon size={16} className="text-muted-foreground" />
-                      View feature
-                    </ContextMenuItem>
-                    <ContextMenuItem
-                      className="flex items-center gap-2"
-                      onClick={() => handleCopyLink(feature.id)}
-                    >
-                      <LinkIcon size={16} className="text-muted-foreground" />
-                      Copy link
-                    </ContextMenuItem>
-                    <ContextMenuItem
-                      className="flex items-center gap-2 text-destructive"
-                      onClick={() => handleRemoveFeature(feature.id)}
-                    >
-                      <TrashIcon size={16} />
-                      Remove from roadmap
-                    </ContextMenuItem>
-                  </ContextMenuContent>
-                </ContextMenu>
-              </div>
-            ))}
+            {features.map((feature) => {
+              return (
+                <div className="flex" key={feature.id}>
+                  <ContextMenu>
+                    <ContextMenuTrigger asChild>
+                      <button
+                        type="button"
+                        onClick={() => handleViewFeature(feature.id)}
+                      >
+                        <GanttFeatureItem
+                          onMove={handleMoveFeature}
+                          {...feature}
+                        >
+                          <p className="flex-1 truncate text-xs">
+                            {feature.title}
+                          </p>
+                          {feature.owner && feature.owner.image ? (
+                            <Avatar className="h-4 w-4">
+                              <AvatarImage src={feature.owner.image} />
+                              <AvatarFallback>
+                                {feature.owner.name?.slice(0, 2)}
+                              </AvatarFallback>
+                            </Avatar>
+                          ) : (
+                            <div className="flex items-center justify-center size-6 bg-muted rounded-full">
+                              <p className="text-xs font-semibold">
+                                {feature.owner!.name![0]}
+                              </p>
+                            </div>
+                          )}
+                        </GanttFeatureItem>
+                      </button>
+                    </ContextMenuTrigger>
+                    <ContextMenuContent>
+                      <ContextMenuItem
+                        className="flex items-center gap-2"
+                        onClick={() => handleViewFeature(feature.id)}
+                      >
+                        <EyeIcon size={16} className="text-muted-foreground" />
+                        View feature
+                      </ContextMenuItem>
+                      <ContextMenuItem
+                        className="flex items-center gap-2"
+                        onClick={() => handleCopyLink(feature.id)}
+                      >
+                        <LinkIcon size={16} className="text-muted-foreground" />
+                        Copy link
+                      </ContextMenuItem>
+                      <ContextMenuItem
+                        className="flex items-center gap-2 text-destructive"
+                        onClick={() => handleRemoveFeature(feature.id)}
+                      >
+                        <TrashIcon size={16} />
+                        Remove from roadmap
+                      </ContextMenuItem>
+                    </ContextMenuContent>
+                  </ContextMenu>
+                </div>
+              );
+            })}
           </GanttFeatureList>
           <GanttToday />
           <GanttCreateMarkerTrigger onCreateMarker={handleCreateMarker} />
