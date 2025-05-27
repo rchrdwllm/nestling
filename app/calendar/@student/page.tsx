@@ -27,6 +27,7 @@ const StudentCalendarPage = async () => {
           title: assignment.title,
           url: `/courses/${assignment.courseId}/modules/content/${assignment.id}`,
           courseId: assignment.courseId,
+          type: "assignment",
         })) || []
       }
     />
