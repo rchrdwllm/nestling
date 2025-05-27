@@ -24,7 +24,7 @@ const ArchivedAnnouncements = async ({
       {announcements.map((announcement) => (
         <AnnouncementCard
           key={announcement.id}
-          announcement={JSON.stringify(announcement)}
+          announcement={announcement}
           {...announcement}
         />
       ))}
