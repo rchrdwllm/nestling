@@ -54,6 +54,7 @@ import type {
   RefObject,
 } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
+import Link from "next/link";
 
 const draggingAtom = atom(false);
 const scrollXAtom = atom(0);
@@ -433,11 +434,12 @@ export const GanttSidebarItem: FC<GanttSidebarItemProps> = ({
   )!;
 
   return (
-    <div
+    <Link
       // biome-ignore lint/a11y/useSemanticElements: <explanation>
       role="button"
-      onClick={handleClick}
-      onKeyDown={handleKeyDown}
+      href={`/projects/${feature.id}`}
+      onClick={handleClick as any}
+      onKeyDown={handleKeyDown as any}
       tabIndex={0}
       key={feature.id}
       className={cn(
@@ -473,7 +475,7 @@ export const GanttSidebarItem: FC<GanttSidebarItemProps> = ({
       <p className="ml-auto pointer-events-none text-muted-foreground">
         {duration}
       </p>
-    </div>
+    </Link>
   );
 };
 

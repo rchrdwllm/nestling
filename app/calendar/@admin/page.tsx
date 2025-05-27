@@ -22,6 +22,8 @@ const AdminCalendarPage = async () => {
         title: project.title,
         id: project.id,
         url: `/projects/${project.id}`,
+        type: "project",
+        description: project.description,
       }))}
     />
   );

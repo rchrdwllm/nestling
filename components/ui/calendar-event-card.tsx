@@ -3,13 +3,14 @@
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
-import { monthEventVariants } from "./full-calendar";
+import { CalendarEvent, monthEventVariants } from "./full-calendar";
 import { format } from "date-fns";
 import { Book, Calendar, Clock } from "lucide-react";
 import { Button } from "./button";
@@ -17,14 +18,7 @@ import Link from "next/link";
 import { Course } from "@/types";
 import { useEffect, useState } from "react";
 import { getCourse } from "@/lib/course";
-
-type CalendarEventCardProps = {
-  title: string;
-  start: Date;
-  end: Date;
-  url: string;
-  courseId?: string;
-};
+import { Badge } from "./badge";
 
 const CalendarEventCard = ({
   title,
@@ -32,7 +26,9 @@ const CalendarEventCard = ({
   end,
   url,
   courseId,
-}: CalendarEventCardProps) => {
+  description,
+  type,
+}: CalendarEvent) => {
   const [course, setCourse] = useState<Course | null>(null);
 
   const fetchCourse = async () => {
@@ -69,7 +65,13 @@ const CalendarEventCard = ({
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
+          <DialogTitle asChild>
+            <div className="flex items-center gap-2">
+              <h1>{title}</h1>{" "}
+              <Badge>{type.charAt(0).toUpperCase() + type.slice(1)}</Badge>
+            </div>
+          </DialogTitle>
+          {description && <DialogDescription>{description}</DialogDescription>}
         </DialogHeader>
         <div className="flex items-start gap-2">
           <Calendar className="mt-1 size-4 shrink-0" />

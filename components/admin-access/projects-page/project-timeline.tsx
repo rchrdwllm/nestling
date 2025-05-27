@@ -66,8 +66,6 @@ const ProjectTimeline = ({
         ...project,
         owner:
           [...adminsData, ...instructorsData].find((user) => {
-            console.log(user.id, project.ownerId);
-
             return user.id === project.ownerId;
           }) || null,
       })),
