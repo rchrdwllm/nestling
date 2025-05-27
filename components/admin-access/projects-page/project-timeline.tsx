@@ -40,11 +40,7 @@ import {
   subMonths,
 } from "date-fns";
 import CreateProjectBtn from "./create-project-btn";
-import { projectStatuses } from "@/constants/project-statuses";
 import { Project, User } from "@/types";
-
-// Inline content
-const today = new Date();
 
 type ProjectTimelineProps = {
   admins: string;
@@ -58,9 +54,7 @@ const ProjectTimeline = ({
   projects,
 }: ProjectTimelineProps) => {
   const [isMounted, setIsMounted] = useState(false);
-  const [view, setView] = useState<"daily" | "monthly" | "quarterly">(
-    "monthly"
-  );
+  const [view, setView] = useState<"monthly" | "quarterly">("monthly");
   const adminsData = useMemo(() => JSON.parse(admins) as User[], [admins]);
   const instructorsData = useMemo(
     () => JSON.parse(instructors) as User[],
@@ -134,15 +128,12 @@ const ProjectTimeline = ({
       <div className="w-full flex items-center gap-4">
         <Select
           value={view}
-          onValueChange={(val) =>
-            setView(val as "daily" | "monthly" | "quarterly")
-          }
+          onValueChange={(val) => setView(val as "monthly" | "quarterly")}
         >
           <SelectTrigger className="w-32">
             <SelectValue placeholder="Select view" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="daily">Daily</SelectItem>
             <SelectItem value="monthly">Monthly</SelectItem>
             <SelectItem value="quarterly">Quarterly</SelectItem>
           </SelectContent>

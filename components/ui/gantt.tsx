@@ -78,7 +78,7 @@ export type GanttMarkerProps = {
   label: string;
 };
 
-export type Range = "daily" | "monthly" | "quarterly";
+export type Range = "monthly" | "quarterly";
 
 export type TimelineData = {
   year: number;
@@ -166,13 +166,6 @@ const getAddRange = (range: Range) => {
 };
 
 const getDateByMousePosition = (context: GanttContextProps, mouseX: number) => {
-  if (context.range === "daily" && context.currentMonth) {
-    // For daily view, base the calculation on the currentMonth
-    const columnWidth = (context.columnWidth * context.zoom) / 100;
-    const start = startOfMonth(context.currentMonth);
-    const dayOffset = Math.floor(mouseX / columnWidth);
-    return addDays(start, dayOffset);
-  }
   // For when range is monthly or quarterly
   const timelineStartDate = new Date(context.timelineData[0].year, 0, 1);
   const columnWidth = (context.columnWidth * context.zoom) / 100;
@@ -220,11 +213,6 @@ const getOffset = (
   const differenceIn = getDifferenceIn(context.range);
   const startOf = getStartOf(context.range);
   const fullColumns = differenceIn(startOf(date), timelineStartDate);
-
-  if (context.range === "daily") {
-    return parsedColumnWidth * fullColumns;
-  }
-
   const partialColumns = date.getDate();
   const daysInMonth = getDaysInMonth(date);
   const pixelsPerDay = parsedColumnWidth / daysInMonth;
@@ -244,12 +232,6 @@ const getWidth = (
   }
 
   const differenceIn = getDifferenceIn(context.range);
-
-  if (context.range === "daily") {
-    const delta = differenceIn(endDate, startDate);
-
-    return parsedColumnWidth * (delta ? delta : 1);
-  }
 
   const daysInStartMonth = getDaysInMonth(startDate);
   const pixelsPerDayInStartMonth = parsedColumnWidth / daysInStartMonth;
@@ -356,56 +338,6 @@ export const GanttContentHeader: FC<GanttContentHeaderProps> = ({
   );
 };
 
-const DailyHeader: FC = () => {
-  const gantt = useContext(GanttContext);
-  if (!gantt.currentMonth || !gantt.setCurrentMonth) return null;
-  const { currentMonth, setCurrentMonth } = gantt;
-  const daysInMonth = getDaysInMonth(currentMonth);
-  const start = startOfMonth(currentMonth);
-
-  return (
-    <div className="relative flex flex-col">
-      <div className="flex items-center justify-between px-2 py-1 bg-background sticky top-0 z-10">
-        <button
-          type="button"
-          aria-label="Previous Month"
-          onClick={() => setCurrentMonth(subMonths(currentMonth, 1))}
-          className="px-2 py-1"
-        >
-          &lt;
-        </button>
-        <span className="font-medium">{format(currentMonth, "MMMM yyyy")}</span>
-        <button
-          type="button"
-          aria-label="Next Month"
-          onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}
-          className="px-2 py-1"
-        >
-          &gt;
-        </button>
-      </div>
-      <GanttContentHeader
-        title={format(currentMonth, "MMMM yyyy")}
-        columns={daysInMonth}
-        renderHeaderItem={(i: number) => (
-          <div className="flex items-center justify-center gap-1">
-            <p>{format(addDays(start, i), "d")}</p>
-            <p className="text-muted-foreground">
-              {format(addDays(start, i), "EEEEE")}
-            </p>
-          </div>
-        )}
-      />
-      <GanttColumns
-        columns={daysInMonth}
-        isColumnSecondary={(i: number) =>
-          [0, 6].includes(addDays(start, i).getDay())
-        }
-      />
-    </div>
-  );
-};
-
 const MonthlyHeader: FC = () => {
   const gantt = useContext(GanttContext);
 
@@ -450,7 +382,6 @@ const QuarterlyHeader: FC = () => {
 };
 
 const headers: Record<Range, FC> = {
-  daily: DailyHeader,
   monthly: MonthlyHeader,
   quarterly: QuarterlyHeader,
 };
@@ -461,9 +392,6 @@ export type GanttHeaderProps = {
 
 export const GanttHeader: FC<GanttHeaderProps> = ({ className }) => {
   const gantt = useContext(GanttContext);
-  if (gantt.range === "daily") {
-    return <DailyHeader />;
-  }
   const Header = headers[gantt.range];
   return <Header />;
 };
@@ -897,10 +825,7 @@ export const GanttFeatureItem: FC<GanttFeatureItemProps> = ({
   const handleItemDragMove = () => {
     const currentDate = getDateByMousePosition(gantt, mousePosition.x);
     const originalDate = getDateByMousePosition(gantt, previousMouseX);
-    const delta =
-      gantt.range === "daily"
-        ? getDifferenceIn(gantt.range)(currentDate, originalDate)
-        : getInnerDifferenceIn(gantt.range)(currentDate, originalDate);
+    const delta = getInnerDifferenceIn(gantt.range)(currentDate, originalDate);
     const newStartDate = addDays(previousstartDate, delta);
     const newEndDate = previousendDate ? addDays(previousendDate, delta) : null;
 
@@ -1206,16 +1131,8 @@ export const GanttProvider: FC<GanttProviderProps> = ({
 
   // Add currentMonth state for daily view
   const [currentMonth, setCurrentMonth] = useState(() => {
-    if (range === "daily") return new Date();
     return undefined;
   });
-
-  useEffect(() => {
-    // Reset currentMonth if range changes to daily
-    if (range === "daily" && !currentMonth) {
-      setCurrentMonth(new Date());
-    }
-  }, [range]);
 
   return (
     <GanttContext.Provider
@@ -1231,7 +1148,6 @@ export const GanttProvider: FC<GanttProviderProps> = ({
         placeholderLength: 2,
         ref: scrollRef,
         currentMonth,
-        setCurrentMonth,
       }}
     >
       <div
