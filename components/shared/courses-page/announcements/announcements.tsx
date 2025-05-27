@@ -21,10 +21,7 @@ const Announcements = async ({ courseId }: AnnouncementsProps) => {
   return (
     <section className="flex flex-col gap-4">
       {announcements.map((announcement) => (
-        <AnnouncementCard
-          key={announcement.id}
-          announcement={JSON.stringify(announcement)}
-        />
+        <AnnouncementCard key={announcement.id} announcement={announcement} />
       ))}
     </section>
   );
