@@ -3,6 +3,7 @@
 import { unstable_cache } from "next/cache";
 import { db } from "./firebase";
 import { Project } from "@/types";
+import { getUserById } from "./user";
 
 export const getProjects = unstable_cache(
   async () => {
@@ -132,4 +133,94 @@ export const getArchivedUserProjects = unstable_cache(
   },
   ["userId"],
   { revalidate: 60 * 60, tags: ["projects"] }
+);
+
+export const getProjectHeads = unstable_cache(
+  async (projectId: string) => {
+    try {
+      const { success: project, error } = await getProjectById(projectId);
+
+      if (error) {
+        console.error("Error fetching project heads:", error);
+
+        return { error };
+      }
+
+      if (!project) {
+        console.error("Error fetching project heads:", error);
+
+        return { error };
+      }
+
+      const projectHeadIds = project.projectHeads;
+      const projectHeadsData = await Promise.all(
+        projectHeadIds.map(async (headId) => {
+          const { success: user, error } = await getUserById(headId);
+
+          if (error) {
+            console.error(error);
+          }
+
+          if (!user) {
+            console.error(error);
+          }
+
+          return user!;
+        })
+      );
+
+      return { success: projectHeadsData };
+    } catch (error) {
+      console.error("Error fetching project heads: ", error);
+
+      return { error: "Failed to fetch project heads" };
+    }
+  },
+  ["projectId"],
+  { revalidate: 60 * 60, tags: ["projects", "user"] }
+);
+
+export const getProjectAssociates = unstable_cache(
+  async (projectId: string) => {
+    try {
+      const { success: project, error } = await getProjectById(projectId);
+
+      if (error) {
+        console.error("Error fetching project heads:", error);
+
+        return { error };
+      }
+
+      if (!project) {
+        console.error("Error fetching project heads:", error);
+
+        return { error };
+      }
+
+      const projectAssociateIds = project.projectAssociates;
+      const projectAssociatesData = await Promise.all(
+        projectAssociateIds.map(async (associateId) => {
+          const { success: user, error } = await getUserById(associateId);
+
+          if (error) {
+            console.error(error);
+          }
+
+          if (!user) {
+            console.error(error);
+          }
+
+          return user!;
+        })
+      );
+
+      return { success: projectAssociatesData };
+    } catch (error) {
+      console.error("Error fetching project heads: ", error);
+
+      return { error: "Failed to fetch project heads" };
+    }
+  },
+  ["projectId"],
+  { revalidate: 60 * 60, tags: ["projects", "user"] }
 );

@@ -227,7 +227,7 @@ export type MonthlyActiveUserRecord = {
 export type Project = {
   id: string;
   title: string;
-  description: string;
+  description?: string;
   startDate: string;
   endDate: string;
   projectHeads: string[];
@@ -239,4 +239,18 @@ export type Project = {
   ownerId: string;
   status: "planned" | "in-progress" | "completed";
   priority: "low" | "medium" | "high";
+};
+
+export type Task = {
+  id: string;
+  title: string;
+  description?: string;
+  startDate: string;
+  endDate: string;
+  createdAt: string;
+  updatedAt: string;
+  ownerId: string;
+  status: "planned" | "in-progress" | "completed";
+  priority: "low" | "medium" | "high";
+  projectId: string;
 };

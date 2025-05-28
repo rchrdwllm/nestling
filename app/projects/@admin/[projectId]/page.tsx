@@ -1,11 +1,16 @@
 import EditProjectBtn from "@/components/admin-access/projects-page/edit-project-btn";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { getProjectById } from "@/lib/project";
+import {
+  getProjectAssociates,
+  getProjectById,
+  getProjectHeads,
+} from "@/lib/project";
 import { getAllAdmins, getAllInstructors } from "@/lib/user";
 import { Plus } from "lucide-react";
 import { projectPriorities, projectStatuses } from "@/constants/project";
 import ArchiveProjectBtn from "@/components/admin-access/projects-page/archive-project-btn";
+import CreateTaskBtn from "@/components/shared/projects-page/create-task-btn";
 
 const ProjectPage = async ({
   params,
@@ -31,6 +36,23 @@ const ProjectPage = async ({
   if (!admins || !instructors || !project) {
     return <div>No data available.</div>;
   }
+
+  const { success: heads, error: headsError } = await getProjectHeads(
+    project.id
+  );
+  const { success: associates, error: associatesError } =
+    await getProjectAssociates(project.id);
+
+  if (headsError || associatesError) {
+    console.error("Error fetching data:", headsError || associatesError);
+    return <div>Error loading data. Please try again later.</div>;
+  }
+
+  if (!heads || !associates) {
+    return <div>No data available.</div>;
+  }
+
+  const availableAssignees = [...heads, ...associates];
 
   return (
     <div className="p-6 flex flex-col gap-4">
@@ -70,9 +92,10 @@ const ProjectPage = async ({
             instructors={JSON.stringify(instructors)}
             project={JSON.stringify(project)}
           />
-          <Button>
-            <Plus className="size-4" /> Add task
-          </Button>
+          <CreateTaskBtn
+            availableAssignees={JSON.stringify(availableAssignees)}
+            projectId={project.id}
+          />
         </div>
         <hr />
       </div>
