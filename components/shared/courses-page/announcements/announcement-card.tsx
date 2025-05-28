@@ -1,6 +1,6 @@
 import { Announcement } from "@/types";
 import AnnouncementDetailsBtn from "./announcement-details-btn";
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 import { getUserById } from "@/lib/user";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -83,7 +83,7 @@ const AnnouncementCard = async ({ announcement }: AnnouncementCardProps) => {
             <div>
               <h1 className="font-semibold">{sender.name}</h1>
               <p className="text-sm text-muted-foreground mb-2">
-                Posted {format(new Date(createdAt), "LLLL dd, y p")}
+                Posted {format(parseISO(createdAt), "LLLL dd, y p")}
               </p>
             </div>
           </div>
