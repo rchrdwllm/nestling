@@ -33,7 +33,7 @@ const ProjectPage = async ({
   }
 
   return (
-    <main className="p-6">
+    <div className="p-6 flex flex-col gap-4">
       <div className="flex flex-col gap-4">
         <div className="flex items-stretch justify-between gap-2">
           <h1 className="text-3xl font-semibold flex items-center gap-4 flex-1">
@@ -76,7 +76,8 @@ const ProjectPage = async ({
         </div>
         <hr />
       </div>
-    </main>
+      <h3 className="text-xl font-semibold">Tasks</h3>
+    </div>
   );
 };
 
