@@ -1,6 +1,6 @@
+import DateDisplay from "@/components/ui/date-display";
 import { cn } from "@/lib/utils";
 import { Content } from "@/types";
-import { format } from "date-fns";
 
 type AssignmentDetailsProps = Content;
 
@@ -17,13 +17,13 @@ const AssignmentDetails = async ({
         <p className="text-muted-foreground">
           Start date:{" "}
           <span className="text-foreground">
-            {format(new Date(startDate!), "LLLL dd, y p")}
+            <DateDisplay date={startDate!} outputFormat="MMMM d, yyyy h:mm a" />
           </span>
         </p>
         <p className="text-muted-foreground">
           End date:{" "}
           <span className="text-foreground">
-            {format(new Date(endDate!), "LLLL dd, y p")}
+            <DateDisplay date={endDate!} outputFormat="MMMM d, yyyy h:mm a" />
           </span>
         </p>
       </div>

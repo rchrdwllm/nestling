@@ -30,7 +30,7 @@ const EditProjectBtn = ({
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button variant="outline">
-          <Pencil className="size-4" /> Edit project
+          <Pencil className="size-4" />
         </Button>
       </DialogTrigger>
       <DialogContent>

@@ -5,6 +5,7 @@ import { getProjectById } from "@/lib/project";
 import { getAllAdmins, getAllInstructors } from "@/lib/user";
 import { Plus } from "lucide-react";
 import { projectPriorities, projectStatuses } from "@/constants/project";
+import ArchiveProjectBtn from "@/components/admin-access/projects-page/archive-project-btn";
 
 const ProjectPage = async ({
   params,
@@ -34,7 +35,7 @@ const ProjectPage = async ({
   return (
     <main className="p-6">
       <div className="flex flex-col gap-4">
-        <div className="flex items-center justify-between gap-2">
+        <div className="flex items-stretch justify-between gap-2">
           <h1 className="text-3xl font-semibold flex items-center gap-4 flex-1">
             <span>{project.title}</span>{" "}
             <div className="flex gap-2 items-center">
@@ -60,6 +61,10 @@ const ProjectPage = async ({
               </Badge>
             </div>
           </h1>
+          <ArchiveProjectBtn
+            projectId={project.id}
+            isArchived={project.isArchived}
+          />
           <EditProjectBtn
             admins={JSON.stringify(admins)}
             instructors={JSON.stringify(instructors)}

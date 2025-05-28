@@ -12,6 +12,7 @@ import { projectPriorities, projectStatuses } from "@/constants/project";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { format, parseISO } from "date-fns";
+import DateDisplay from "@/components/ui/date-display";
 
 type ProjectsTableProps = {
   projects: Project[];
@@ -70,10 +71,16 @@ const ProjectsTable = ({ projects }: ProjectsTableProps) => {
                   </Badge>
                 </TableCell>
                 <TableCell>
-                  {new Date(project.startDate).toLocaleString()}
+                  <DateDisplay
+                    date={project.startDate}
+                    outputFormat="MMMM d, yyyy h:mm a"
+                  />
                 </TableCell>
                 <TableCell>
-                  {new Date(project.endDate).toLocaleString()}
+                  <DateDisplay
+                    date={project.endDate}
+                    outputFormat="MMMM d, yyyy h:mm a"
+                  />
                 </TableCell>
               </TableRow>
             );
