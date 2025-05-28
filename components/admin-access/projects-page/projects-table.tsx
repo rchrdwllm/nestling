@@ -70,13 +70,10 @@ const ProjectsTable = ({ projects }: ProjectsTableProps) => {
                   </Badge>
                 </TableCell>
                 <TableCell>
-                  {new Date(project.startDate).toLocaleDateString()}
+                  {new Date(project.startDate).toLocaleString()}
                 </TableCell>
                 <TableCell>
-                  {format(parseISO(project.startDate), "LLLL dd, y")}
-                </TableCell>
-                <TableCell>
-                  {format(parseISO(project.endDate), "LLLL dd, y")}
+                  {new Date(project.endDate).toLocaleString()}
                 </TableCell>
               </TableRow>
             );
