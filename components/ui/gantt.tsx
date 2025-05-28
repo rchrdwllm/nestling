@@ -7,7 +7,7 @@ import {
   ContextMenuItem,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
-import { projectStatuses } from "@/constants/project-statuses";
+import { projectStatuses } from "@/constants/project";
 import { cn } from "@/lib/utils";
 import { Project, User } from "@/types";
 import {

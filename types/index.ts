@@ -238,4 +238,5 @@ export type Project = {
   archivedAt: string | null;
   ownerId: string;
   status: "planned" | "in-progress" | "completed";
+  priority: "low" | "medium" | "high";
 };
