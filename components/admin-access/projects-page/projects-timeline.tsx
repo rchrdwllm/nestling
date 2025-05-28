@@ -141,11 +141,11 @@ const ProjectsTimeline = ({
     });
   };
 
-  const handleAddFeature = (date: Date) => {
+  const handleAddFeature = (date?: Date) => {
     setFormToggled(true);
 
-    const startDate = startOfMonth(date);
-    const endDate = endOfMonth(date);
+    const startDate = date ? startOfMonth(date) : new Date();
+    const endDate = date ? endOfMonth(date) : addMonths(startDate, 1);
 
     setSelectedStartDate(startDate);
     setSelectedEndDate(endDate);
@@ -170,7 +170,7 @@ const ProjectsTimeline = ({
           <CalendarIcon size={18} className="mr-2" />
           Today
         </Button>
-        <Button className="ml-auto">
+        <Button onClick={() => handleAddFeature()} className="ml-auto">
           <Plus className="size-4" />
           New project
         </Button>
