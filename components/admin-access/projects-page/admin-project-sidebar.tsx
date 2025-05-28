@@ -28,6 +28,9 @@ const AdminProjectSidebar = async () => {
         <CourseSectionLink segments={["timeline"]} href="/projects/timeline">
           Timeline
         </CourseSectionLink>
+        <CourseSectionLink segments={["archive"]} href="/projects/archive">
+          Archive
+        </CourseSectionLink>
       </div>
       <div className="flex justify-between items-center px-4">
         <h1 className="font-semibold">Projects</h1>
