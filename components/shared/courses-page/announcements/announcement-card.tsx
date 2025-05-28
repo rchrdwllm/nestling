@@ -10,6 +10,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { DialogTitle } from "@radix-ui/react-dialog";
+import DateDisplay from "@/components/ui/date-display";
 
 type AnnouncementCardProps = { announcement: Announcement };
 
@@ -53,7 +54,10 @@ const AnnouncementCard = async ({ announcement }: AnnouncementCardProps) => {
               />
             </div>
             <p className="text-sm text-muted-foreground">
-              {format(new Date(createdAt), "LLLL dd, y p")}
+              <DateDisplay
+                date={announcement.updatedAt}
+                outputFormat="MMMM d, yyyy h:mm a"
+              />
             </p>
             <p className="text-muted-foreground">{content}</p>
           </div>
@@ -83,7 +87,11 @@ const AnnouncementCard = async ({ announcement }: AnnouncementCardProps) => {
             <div>
               <h1 className="font-semibold">{sender.name}</h1>
               <p className="text-sm text-muted-foreground mb-2">
-                Posted {format(parseISO(createdAt), "LLLL dd, y p")}
+                Posted at{" "}
+                <DateDisplay
+                  date={announcement.updatedAt}
+                  outputFormat="MMMM d, yyyy h:mm a"
+                />
               </p>
             </div>
           </div>
