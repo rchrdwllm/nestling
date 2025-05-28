@@ -6,13 +6,14 @@ import {
   getProjectById,
   getProjectHeads,
 } from "@/lib/project";
-import { getAllAdmins, getAllInstructors } from "@/lib/user";
+import { getAllAdmins, getAllInstructors, getUserById } from "@/lib/user";
 import { Plus } from "lucide-react";
 import { projectPriorities, projectStatuses } from "@/constants/project";
 import ArchiveProjectBtn from "@/components/admin-access/projects-page/archive-project-btn";
 import CreateTaskBtn from "@/components/shared/projects-page/create-task-btn";
 import { getProjectTasks } from "@/lib/task";
 import TasksTable from "@/components/shared/projects-page/tasks-table";
+import ProjectDetails from "@/components/shared/projects-page/project-details";
 
 const ProjectPage = async ({
   params,
@@ -59,13 +60,16 @@ const ProjectPage = async ({
   const { success: tasks, error: tasksError } = await getProjectTasks(
     project.id
   );
+  const { success: owner, error: ownerError } = await getUserById(
+    project.ownerId
+  );
 
-  if (tasksError) {
+  if (tasksError || ownerError) {
     console.error("Error fetching data:", headsError || associatesError);
     return <div>Error loading data. Please try again later.</div>;
   }
 
-  if (!tasks) {
+  if (!tasks || !owner) {
     return <div>No data available.</div>;
   }
 
@@ -114,6 +118,7 @@ const ProjectPage = async ({
         </div>
         <hr />
       </div>
+      <ProjectDetails project={project} owner={owner} />
       <h3 className="text-xl font-semibold">Tasks</h3>
       <TasksTable tasks={tasks} />
     </div>

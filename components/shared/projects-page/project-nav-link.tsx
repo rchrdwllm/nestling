@@ -10,6 +10,7 @@ import {
   useSelectedLayoutSegments,
 } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 type ProjectNavLinkProps = {
   href: string;
@@ -21,15 +22,17 @@ const ProjectNavLink = ({ href, children }: ProjectNavLinkProps) => {
   const isActive = useMemo(() => pathname === href, [pathname]);
 
   return (
-    <Link
-      className={cn(
-        "flex items-center gap-2 py-2 px-4 transition-colors text-muted-foreground/65 hover:bg-secondary hover:text-foreground",
-        isActive &&
-          "bg-secondary text-foreground font-medium hover:bg-secondary hover:text-foreground"
-      )}
-      href={href}
-    >
-      <Briefcase className="size-4" /> <span>{children}</span>
+    <Link className="block" href={href}>
+      <Button
+        variant="ghost"
+        className={cn(
+          "w-full text-left justify-start rounded-none flex items-center gap-2 py-2 px-4 text-muted-foreground/65 group-hover:text-foreground",
+          isActive &&
+            "bg-secondary text-foreground font-medium hover:bg-secondary hover:text-foreground"
+        )}
+      >
+        <Briefcase className="size-4" /> <span>{children}</span>
+      </Button>
     </Link>
   );
 };
