@@ -33,6 +33,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { projectStatuses } from "@/constants/project-statuses";
+import { useProjectsTimelineStore } from "@/context/projects-timeline-context";
 
 type CreateProjectFormProps = {
   admins: string;
@@ -45,14 +46,15 @@ const CreateProjectForm = ({
   instructors,
   setIsOpen,
 }: CreateProjectFormProps) => {
+  const { selectedStartDate, selectedEndDate } = useProjectsTimelineStore();
   const adminsList = JSON.parse(admins) as User[];
   const instructorsList = JSON.parse(instructors) as User[];
   const form = useForm<z.infer<typeof CreateProjectSchema>>({
     defaultValues: {
       title: "",
       description: "",
-      startDate: undefined,
-      endDate: undefined,
+      startDate: selectedStartDate || undefined,
+      endDate: selectedEndDate || undefined,
       projectHeads: [],
       projectAssociates: [],
       status: "planned",

@@ -175,7 +175,7 @@ const getDateByMousePosition = (context: GanttContextProps, mouseX: number) => {
   const addRange = getAddRange(context.range);
   const month = addRange(timelineStartDate, offset);
   const daysInMonth = daysIn(month);
-  const pixelsPerDay = Math.round(columnWidth / daysInMonth);
+  const pixelsPerDay = columnWidth / daysInMonth;
   const dayOffset = Math.floor((mouseX % columnWidth) / pixelsPerDay);
   const actualDate = addDays(month, dayOffset);
 

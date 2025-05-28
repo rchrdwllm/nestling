@@ -41,6 +41,7 @@ import {
 } from "date-fns";
 import CreateProjectBtn from "./create-project-btn";
 import { Project, User } from "@/types";
+import { useProjectsTimelineStore } from "@/context/projects-timeline-context";
 
 type ProjectTimelineProps = {
   admins: string;
@@ -53,6 +54,8 @@ const ProjectTimeline = ({
   instructors,
   projects,
 }: ProjectTimelineProps) => {
+  const { setFormToggled, setSelectedStartDate, setSelectedEndDate } =
+    useProjectsTimelineStore();
   const [isMounted, setIsMounted] = useState(false);
   const [view, setView] = useState<"monthly" | "quarterly">("monthly");
   const adminsData = useMemo(() => JSON.parse(admins) as User[], [admins]);
@@ -89,11 +92,15 @@ const ProjectTimeline = ({
   const handleRemoveFeature = (id: string) =>
     setFeatures((prev) => prev.filter((feature) => feature.id !== id));
 
-  const handleRemoveMarker = (id: string) =>
-    console.log(`Remove marker: ${id}`);
+  const handleCreateMarker = (date: Date) => {
+    setFormToggled(true);
 
-  const handleCreateMarker = (date: Date) =>
-    console.log(`Create marker: ${date.toISOString()}`);
+    const startDate = date;
+    const endDate = addMonths(date, 1);
+
+    setSelectedStartDate(startDate);
+    setSelectedEndDate(endDate);
+  };
 
   const handleMoveFeature = (
     id: string,
@@ -118,8 +125,15 @@ const ProjectTimeline = ({
 
     console.log(`Move feature: ${id} from ${startDate} to ${endDate}`);
   };
-  const handleAddFeature = (date: Date) =>
-    console.log(`Add feature: ${date.toISOString()}`);
+  const handleAddFeature = (date: Date) => {
+    setFormToggled(true);
+
+    const startDate = startOfMonth(date);
+    const endDate = endOfMonth(date);
+
+    setSelectedStartDate(startDate);
+    setSelectedEndDate(endDate);
+  };
 
   return (
     <div className="flex flex-col gap-4">
