@@ -1,4 +1,5 @@
-import ProjectTimeline from "@/components/admin-access/projects-page/project-timeline";
+import ProjectsTable from "@/components/admin-access/projects-page/projects-table";
+import ProjectsTimeline from "@/components/admin-access/projects-page/projects-timeline";
 import { getProjectsOfUser } from "@/lib/project";
 import { getAllAdmins, getAllInstructors, getOptimisticUser } from "@/lib/user";
 
@@ -29,11 +30,14 @@ const TimelinePage = async () => {
         <h1 className="text-3xl font-semibold">Projects Timeline</h1>
         <hr />
       </div>
-      <ProjectTimeline
-        admins={JSON.stringify(admins)}
-        instructors={JSON.stringify(instructors)}
-        projects={projects}
-      />
+      <div className="flex flex-col gap-20">
+        <ProjectsTimeline
+          admins={JSON.stringify(admins)}
+          instructors={JSON.stringify(instructors)}
+          projects={projects}
+        />
+        <ProjectsTable projects={projects} />
+      </div>
     </main>
   );
 };

@@ -11,12 +11,9 @@ import {
   GanttCreateMarkerTrigger,
   GanttFeatureItem,
   GanttFeatureList,
-  GanttFeatureListGroup,
   GanttHeader,
-  GanttMarker,
   GanttProvider,
   GanttSidebar,
-  GanttSidebarGroup,
   GanttSidebarItem,
   GanttTimeline,
   GanttToday,
@@ -32,28 +29,25 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { CalendarIcon } from "lucide-react";
-import {
-  addMonths,
-  endOfMonth,
-  startOfMonth,
-  subDays,
-  subMonths,
-} from "date-fns";
-import CreateProjectBtn from "./create-project-btn";
+import { addMonths, endOfMonth, startOfMonth } from "date-fns";
 import { Project, User } from "@/types";
 import { useProjectsTimelineStore } from "@/context/projects-timeline-context";
+import { useAction } from "next-safe-action/hooks";
+import { createProject } from "@/server/actions/create-project";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
-type ProjectTimelineProps = {
+type ProjectsTimelineProps = {
   admins: string;
   instructors: string;
   projects: Project[];
 };
 
-const ProjectTimeline = ({
+const ProjectsTimeline = ({
   admins,
   instructors,
   projects,
-}: ProjectTimelineProps) => {
+}: ProjectsTimelineProps) => {
   const { setFormToggled, setSelectedStartDate, setSelectedEndDate } =
     useProjectsTimelineStore();
   const [isMounted, setIsMounted] = useState(false);
@@ -63,6 +57,7 @@ const ProjectTimeline = ({
     () => JSON.parse(instructors) as User[],
     [instructors]
   );
+  const router = useRouter();
   const projectsWithOwners = useMemo(
     () =>
       projects.map((project) => ({
@@ -75,6 +70,19 @@ const ProjectTimeline = ({
     [projects, adminsData, instructorsData]
   );
   const [features, setFeatures] = useState(projectsWithOwners);
+  const { execute } = useAction(createProject, {
+    onExecute: () => {
+      toast.dismiss("Updating project...");
+    },
+    onSuccess: () => {
+      toast.dismiss();
+      toast.success("Project updated successfully!");
+    },
+    onError: (error) => {
+      toast.dismiss();
+      toast.error(`Error updating project: ${error}`);
+    },
+  });
 
   useEffect(() => setIsMounted(true), []);
 
@@ -84,15 +92,16 @@ const ProjectTimeline = ({
 
   if (!isMounted) return null;
 
-  const handleViewFeature = (id: string) =>
-    console.log(`Feature selected: ${id}`);
+  const handleViewFeature = (id: string) => {
+    router.push(`/projects/${id}`);
+  };
 
   const handleCopyLink = (id: string) => console.log(`Copy link: ${id}`);
 
   const handleRemoveFeature = (id: string) =>
     setFeatures((prev) => prev.filter((feature) => feature.id !== id));
 
-  const handleCreateMarker = (date: Date) => {
+  const handleCreateWithDate = (date: Date) => {
     setFormToggled(true);
 
     const startDate = date;
@@ -123,8 +132,15 @@ const ProjectTimeline = ({
       )
     );
 
-    console.log(`Move feature: ${id} from ${startDate} to ${endDate}`);
+    execute({
+      ...features.find((feature) => feature.id === id)!,
+      endDate: endDate,
+      startDate: startDate,
+      isEdit: true,
+      projectId: id,
+    });
   };
+
   const handleAddFeature = (date: Date) => {
     setFormToggled(true);
 
@@ -154,7 +170,10 @@ const ProjectTimeline = ({
           <CalendarIcon size={18} className="mr-2" />
           Today
         </Button>
-        <CreateProjectBtn admins={admins} instructors={instructors} />
+        <Button className="ml-auto">
+          <Plus className="size-4" />
+          New project
+        </Button>
       </div>
       <GanttProvider
         className="border border-input rounded-xl shadow-sm"
@@ -238,11 +257,11 @@ const ProjectTimeline = ({
             })}
           </GanttFeatureList>
           <GanttToday />
-          <GanttCreateMarkerTrigger onCreateMarker={handleCreateMarker} />
+          <GanttCreateMarkerTrigger onCreateMarker={handleCreateWithDate} />
         </GanttTimeline>
       </GanttProvider>
     </div>
   );
 };
 
-export default ProjectTimeline;
+export default ProjectsTimeline;

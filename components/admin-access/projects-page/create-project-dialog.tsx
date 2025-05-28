@@ -10,16 +10,18 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { useState } from "react";
 import CreateProjectForm from "./create-project-form";
 import { useProjectsTimelineStore } from "@/context/projects-timeline-context";
 
-type CreateProjectBtnProps = {
+type CreateProjectDialogProps = {
   admins: string;
   instructors: string;
 };
 
-const CreateProjectBtn = ({ admins, instructors }: CreateProjectBtnProps) => {
+const CreateProjectDialog = ({
+  admins,
+  instructors,
+}: CreateProjectDialogProps) => {
   const { formToggled, setFormToggled } = useProjectsTimelineStore();
   const { setSelectedEndDate, setSelectedStartDate } =
     useProjectsTimelineStore();
@@ -28,15 +30,13 @@ const CreateProjectBtn = ({ admins, instructors }: CreateProjectBtnProps) => {
     <Dialog open={formToggled} onOpenChange={setFormToggled}>
       <DialogTrigger
         onClick={() => {
+          setFormToggled(true);
           setSelectedStartDate(new Date());
           setSelectedEndDate(new Date());
         }}
         asChild
       >
-        <Button className="ml-auto">
-          <Plus className="size-4" />
-          New project
-        </Button>
+        {null}
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -55,4 +55,4 @@ const CreateProjectBtn = ({ admins, instructors }: CreateProjectBtnProps) => {
   );
 };
 
-export default CreateProjectBtn;
+export default CreateProjectDialog;
