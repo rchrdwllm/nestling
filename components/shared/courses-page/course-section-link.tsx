@@ -1,7 +1,10 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import {
+  usePathname,
   useSelectedLayoutSegment,
   useSelectedLayoutSegments,
 } from "next/navigation";
@@ -20,6 +23,7 @@ const CourseSectionLink = ({
 }: CourseSectionLinkProps) => {
   const layoutSegments = useSelectedLayoutSegments();
   const layoutSegment = useSelectedLayoutSegment();
+  const pathname = usePathname();
 
   return (
     <Link href={href}>
@@ -31,7 +35,8 @@ const CourseSectionLink = ({
             segments?.every((segment) => layoutSegments.includes(segment))
             ? "text-primary underline"
             : "text-muted-foreground",
-          !layoutSegment && !segments && "text-primary underline"
+          !layoutSegment && !segments && "text-primary underline",
+          pathname === href && "text-primary underline"
         )}
       >
         {children}

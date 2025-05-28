@@ -6,6 +6,7 @@ import { ScrollArea } from "./scroll-area";
 import { useUser } from "@/hooks/use-user";
 import { usePathname } from "next/navigation";
 import SidePanel from "../student-access/dashboard-page/side-panel";
+import { cn } from "@/lib/utils";
 
 const LayoutWrapper = ({ children }: { children: ReactNode }) => {
   const pathname = usePathname();
@@ -22,7 +23,13 @@ const LayoutWrapper = ({ children }: { children: ReactNode }) => {
   return (
     <main className="relative min-h-screen flex items-stretch bg-secondary p-2 gap-2">
       <Sidebar />
-      <ScrollArea className="projects-scroll-area w-full shadow-sm h-[calc(100vh-1rem)] bg-background border border-border rounded-xl">
+      <ScrollArea
+        className={cn(
+          "projects-scroll-area w-full shadow-sm h-[calc(100vh-1rem)] bg-background border border-border rounded-xl",
+          (pathname.startsWith("/projects") || pathname.startsWith("/inbox")) &&
+            "border-0 shadow-none"
+        )}
+      >
         {children}
       </ScrollArea>
       <SidePanel

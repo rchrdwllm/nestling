@@ -52,7 +52,7 @@ export default async function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body
         suppressHydrationWarning
-        className={`${geistSans.variable} ${geistMono.variable} ${spaceMono.variable} ${montserrat.className} antialiased overflow-x-hidden`}
+        className={`${geistSans.variable} ${geistMono.variable} ${spaceMono.variable} ${montserrat.className} bg-secondary antialiased overflow-x-hidden`}
       >
         <SessionWrapper session={session}>
           <ThemeWrapper attribute="class" defaultTheme="light">
