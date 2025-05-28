@@ -11,6 +11,8 @@ import { Plus } from "lucide-react";
 import { projectPriorities, projectStatuses } from "@/constants/project";
 import ArchiveProjectBtn from "@/components/admin-access/projects-page/archive-project-btn";
 import CreateTaskBtn from "@/components/shared/projects-page/create-task-btn";
+import { getProjectTasks } from "@/lib/task";
+import TasksTable from "@/components/shared/projects-page/tasks-table";
 
 const ProjectPage = async ({
   params,
@@ -54,8 +56,21 @@ const ProjectPage = async ({
 
   const availableAssignees = [...heads, ...associates];
 
+  const { success: tasks, error: tasksError } = await getProjectTasks(
+    project.id
+  );
+
+  if (tasksError) {
+    console.error("Error fetching data:", headsError || associatesError);
+    return <div>Error loading data. Please try again later.</div>;
+  }
+
+  if (!tasks) {
+    return <div>No data available.</div>;
+  }
+
   return (
-    <div className="p-6 flex flex-col gap-4">
+    <div className="p-6 flex flex-col gap-8">
       <div className="flex flex-col gap-4">
         <div className="flex items-stretch justify-between gap-2">
           <h1 className="text-3xl font-semibold flex items-center gap-4 flex-1">
@@ -100,6 +115,7 @@ const ProjectPage = async ({
         <hr />
       </div>
       <h3 className="text-xl font-semibold">Tasks</h3>
+      <TasksTable tasks={tasks} />
     </div>
   );
 };

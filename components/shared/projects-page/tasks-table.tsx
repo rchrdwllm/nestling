@@ -1,32 +1,28 @@
-import { Project } from "@/types";
+import { Task } from "@/types";
 import {
   Table,
-  TableHeader,
   TableBody,
-  TableRow,
-  TableHead,
   TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
 } from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
-import { projectPriorities, projectStatuses } from "@/constants/project";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { format, parseISO } from "date-fns";
 import DateDisplay from "@/components/ui/date-display";
 import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { projectPriorities, projectStatuses } from "@/constants/project";
 
-type ProjectsTableProps = {
-  projects: Project[];
+type TasksTableProps = {
+  tasks: Task[];
 };
 
-const ProjectsTable = ({ projects }: ProjectsTableProps) => {
+const TasksTable = ({ tasks }: TasksTableProps) => {
   return (
     <Card>
       <Table>
         <TableHeader>
           <TableRow>
             <TableHead>Title</TableHead>
-            <TableHead>Description</TableHead>
             <TableHead>Status</TableHead>
             <TableHead>Priority</TableHead>
             <TableHead>Start Date</TableHead>
@@ -34,53 +30,46 @@ const ProjectsTable = ({ projects }: ProjectsTableProps) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {projects.length === 0 ? (
+          {tasks.length === 0 ? (
             <TableRow>
               <TableCell
                 colSpan={6}
                 className="text-center text-muted-foreground"
               >
-                No projects found
+                No tasks found
               </TableCell>
             </TableRow>
           ) : (
-            projects.map((project) => {
+            tasks.map((task) => {
               const statusObj = projectStatuses.find(
-                (s) => s.value === project.status
+                (s) => s.value === task.status
               );
               const priorityObj = projectPriorities.find(
-                (p) => p.value === project.priority
+                (p) => p.value === task.priority
               );
 
               return (
-                <TableRow key={project.id}>
-                  <TableCell className="font-medium">
-                    <Link href={`/projects/${project.id}`}>
-                      <Button className="p-0 text-foreground" variant="link">
-                        {project.title}
-                      </Button>
-                    </Link>
-                  </TableCell>
-                  <TableCell>{project.description}</TableCell>
+                <TableRow key={task.id}>
+                  <TableCell>{task.title}</TableCell>
                   <TableCell>
                     <Badge style={{ backgroundColor: statusObj?.color }}>
-                      {statusObj?.name ?? project.status}
+                      {statusObj?.name ?? task.status}
                     </Badge>
                   </TableCell>
                   <TableCell>
                     <Badge style={{ backgroundColor: priorityObj?.color }}>
-                      {priorityObj?.name ?? project.priority}
+                      {priorityObj?.name ?? task.priority}
                     </Badge>
                   </TableCell>
                   <TableCell>
                     <DateDisplay
-                      date={project.startDate}
+                      date={task.startDate}
                       outputFormat="MMMM d, yyyy h:mm a"
                     />
                   </TableCell>
                   <TableCell>
                     <DateDisplay
-                      date={project.endDate}
+                      date={task.endDate}
                       outputFormat="MMMM d, yyyy h:mm a"
                     />
                   </TableCell>
@@ -94,4 +83,4 @@ const ProjectsTable = ({ projects }: ProjectsTableProps) => {
   );
 };
 
-export default ProjectsTable;
+export default TasksTable;
