@@ -11,7 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { projectPriorities, projectStatuses } from "@/constants/project";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { parseISO } from "date-fns";
+import { format, parseISO } from "date-fns";
 
 type ProjectsTableProps = {
   projects: Project[];
@@ -70,10 +70,10 @@ const ProjectsTable = ({ projects }: ProjectsTableProps) => {
                   </Badge>
                 </TableCell>
                 <TableCell>
-                  {parseISO(project.startDate).toLocaleDateString()}
+                  {format(parseISO(project.startDate), "LLLL dd, y")}
                 </TableCell>
                 <TableCell>
-                  {parseISO(project.endDate).toLocaleDateString()}
+                  {format(parseISO(project.endDate), "LLLL dd, y")}
                 </TableCell>
               </TableRow>
             );
