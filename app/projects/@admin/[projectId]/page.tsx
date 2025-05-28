@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { getProjectById } from "@/lib/project";
 import { getAllAdmins, getAllInstructors } from "@/lib/user";
 import { Plus } from "lucide-react";
-import { projectStatuses } from "@/constants/project-statuses";
+import { projectPriorities, projectStatuses } from "@/constants/project";
 
 const ProjectPage = async ({
   params,
@@ -37,15 +37,28 @@ const ProjectPage = async ({
         <div className="flex items-center justify-between gap-2">
           <h1 className="text-3xl font-semibold flex items-center gap-4 flex-1">
             <span>{project.title}</span>{" "}
-            <Badge
-              style={{
-                backgroundColor: projectStatuses.find(
-                  (status) => status.value === project.status
-                )!.color,
-              }}
-            >
-              {project.status.charAt(0).toUpperCase() + project.status.slice(1)}
-            </Badge>
+            <div className="flex gap-2 items-center">
+              <Badge
+                style={{
+                  backgroundColor: projectStatuses.find(
+                    (status) => status.value === project.status
+                  )!.color,
+                }}
+              >
+                {project.status.charAt(0).toUpperCase() +
+                  project.status.slice(1)}
+              </Badge>
+              <Badge
+                style={{
+                  backgroundColor: projectPriorities.find(
+                    (priority) => priority.value === project.priority
+                  )!.color,
+                }}
+              >
+                {project.priority.charAt(0).toUpperCase() +
+                  project.priority.slice(1)}
+              </Badge>
+            </div>
           </h1>
           <EditProjectBtn
             admins={JSON.stringify(admins)}

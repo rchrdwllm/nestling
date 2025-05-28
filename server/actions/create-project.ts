@@ -16,6 +16,7 @@ export const createProject = actionClient
       endDate,
       startDate,
       status,
+      priority,
       projectHeads,
       projectAssociates,
       isEdit,
@@ -26,14 +27,13 @@ export const createProject = actionClient
       if (isEdit && projectId) {
         const projectRef = db.collection("projects").doc(projectId);
 
-        console.log({ parsedInput });
-
         await projectRef.update({
           title,
           description,
           endDate: new Date(endDate).toISOString(),
           startDate: new Date(startDate).toISOString(),
           status,
+          priority,
           projectHeads,
           projectAssociates,
           updatedAt: new Date().toISOString(),
@@ -55,6 +55,7 @@ export const createProject = actionClient
         endDate: new Date(endDate).toISOString(),
         startDate: new Date(startDate).toISOString(),
         status,
+        priority,
         projectHeads,
         projectAssociates,
         createdAt: new Date().toISOString(),

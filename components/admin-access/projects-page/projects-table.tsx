@@ -8,9 +8,10 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { projectStatuses } from "@/constants/project-statuses";
+import { projectPriorities, projectStatuses } from "@/constants/project";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { format, parseISO } from "date-fns";
 
 type ProjectsTableProps = {
   projects: Project[];
@@ -24,6 +25,7 @@ const ProjectsTable = ({ projects }: ProjectsTableProps) => {
           <TableHead>Title</TableHead>
           <TableHead>Description</TableHead>
           <TableHead>Status</TableHead>
+          <TableHead>Priority</TableHead>
           <TableHead>Start Date</TableHead>
           <TableHead>End Date</TableHead>
         </TableRow>
@@ -43,6 +45,10 @@ const ProjectsTable = ({ projects }: ProjectsTableProps) => {
             const statusObj = projectStatuses.find(
               (s) => s.value === project.status
             );
+            const priorityObj = projectPriorities.find(
+              (p) => p.value === project.priority
+            );
+
             return (
               <TableRow key={project.id}>
                 <TableCell className="font-medium">
@@ -56,6 +62,11 @@ const ProjectsTable = ({ projects }: ProjectsTableProps) => {
                 <TableCell>
                   <Badge style={{ backgroundColor: statusObj?.color }}>
                     {statusObj?.name ?? project.status}
+                  </Badge>
+                </TableCell>
+                <TableCell>
+                  <Badge style={{ backgroundColor: priorityObj?.color }}>
+                    {priorityObj?.name ?? project.priority}
                   </Badge>
                 </TableCell>
                 <TableCell>

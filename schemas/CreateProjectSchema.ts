@@ -6,6 +6,7 @@ export const CreateProjectSchema = z.object({
   startDate: z.date(),
   endDate: z.date(),
   status: z.enum(["planned", "in-progress", "completed"]),
+  priority: z.enum(["low", "medium", "high"]),
   projectHeads: z
     .array(z.string())
     .min(1, "At least one project head is required"),

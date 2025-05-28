@@ -32,7 +32,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { projectStatuses } from "@/constants/project-statuses";
+import { projectPriorities, projectStatuses } from "@/constants/project";
 import { useProjectsTimelineStore } from "@/context/projects-timeline-context";
 import { useEffect, useMemo } from "react";
 
@@ -76,6 +76,7 @@ const CreateProjectForm = ({
       projectHeads: projectData?.projectHeads || [],
       projectAssociates: projectData?.projectAssociates || [],
       status: projectData?.status || "planned",
+      priority: projectData?.priority || "low",
       isEdit,
       projectId: projectData?.id || undefined,
     },
@@ -109,6 +110,7 @@ const CreateProjectForm = ({
       form.setValue("projectHeads", projectData.projectHeads || []);
       form.setValue("projectAssociates", projectData.projectAssociates || []);
       form.setValue("status", projectData.status || "planned");
+      form.setValue("priority", projectData.priority || "low");
     }
   }, [projectData]);
 
@@ -164,6 +166,40 @@ const CreateProjectForm = ({
                               style={{ backgroundColor: status.color }}
                             ></span>{" "}
                             <span>{status.name}</span>
+                          </div>
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </Select>
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="priority"
+          render={({ field }) => (
+            <FormItem>
+              <Select>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select priority" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>Priority</SelectLabel>
+                      {projectPriorities.map((priority) => (
+                        <SelectItem key={priority.id} value={priority.value}>
+                          <div className="flex items-center gap-2">
+                            <span
+                              className="inline-block size-2 rounded-md"
+                              style={{ backgroundColor: priority.color }}
+                            ></span>{" "}
+                            <span>{priority.name}</span>
                           </div>
                         </SelectItem>
                       ))}
