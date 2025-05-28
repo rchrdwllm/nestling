@@ -73,7 +73,10 @@ const ProjectsTable = ({ projects }: ProjectsTableProps) => {
                   {new Date(project.startDate).toLocaleDateString()}
                 </TableCell>
                 <TableCell>
-                  {new Date(project.endDate).toLocaleDateString()}
+                  {format(parseISO(project.startDate), "LLLL dd, y")}
+                </TableCell>
+                <TableCell>
+                  {format(parseISO(project.endDate), "LLLL dd, y")}
                 </TableCell>
               </TableRow>
             );
