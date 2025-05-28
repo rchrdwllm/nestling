@@ -10,17 +10,53 @@ export const createProject = actionClient
   .schema(CreateProjectSchema)
   .action(async ({ parsedInput }) => {
     const user = await getOptimisticUser();
+    const {
+      title,
+      description,
+      endDate,
+      startDate,
+      status,
+      projectHeads,
+      projectAssociates,
+      isEdit,
+      projectId,
+    } = parsedInput;
 
     try {
+      if (isEdit && projectId) {
+        const projectRef = db.collection("projects").doc(projectId);
+
+        console.log({ parsedInput });
+
+        await projectRef.update({
+          title,
+          description,
+          endDate: new Date(endDate).toISOString(),
+          startDate: new Date(startDate).toISOString(),
+          status,
+          projectHeads,
+          projectAssociates,
+          updatedAt: new Date().toISOString(),
+        });
+
+        revalidateTag("projects");
+
+        return { success: "Project updated successfully" };
+      }
+
       const id = crypto.randomUUID();
 
       const projectRef = db.collection("projects").doc(id);
 
       await projectRef.set({
-        ...parsedInput,
         id,
-        startDate: new Date(parsedInput.startDate).toISOString(),
-        endDate: new Date(parsedInput.endDate).toISOString(),
+        title,
+        description,
+        endDate: new Date(endDate).toISOString(),
+        startDate: new Date(startDate).toISOString(),
+        status,
+        projectHeads,
+        projectAssociates,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
         isArchived: false,

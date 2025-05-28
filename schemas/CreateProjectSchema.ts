@@ -10,4 +10,6 @@ export const CreateProjectSchema = z.object({
     .array(z.string())
     .min(1, "At least one project head is required"),
   projectAssociates: z.array(z.string()).optional(),
+  isEdit: z.boolean().default(false),
+  projectId: z.string().optional(),
 });

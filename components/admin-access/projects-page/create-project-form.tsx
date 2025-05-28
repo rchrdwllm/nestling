@@ -19,7 +19,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Calendar as CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
-import { User } from "@/types";
+import { Project, User } from "@/types";
 import { useAction } from "next-safe-action/hooks";
 import { createProject } from "@/server/actions/create-project";
 import { toast } from "sonner";
@@ -34,49 +34,83 @@ import {
 } from "@/components/ui/select";
 import { projectStatuses } from "@/constants/project-statuses";
 import { useProjectsTimelineStore } from "@/context/projects-timeline-context";
+import { useEffect, useMemo } from "react";
 
 type CreateProjectFormProps = {
   admins: string;
   instructors: string;
+  project?: string;
   setIsOpen: (isOpen: boolean) => void;
+  isEdit?: boolean;
 };
 
 const CreateProjectForm = ({
   admins,
   instructors,
+  project,
   setIsOpen,
+  isEdit = false,
 }: CreateProjectFormProps) => {
   const { selectedStartDate, selectedEndDate } = useProjectsTimelineStore();
-  const adminsList = JSON.parse(admins) as User[];
-  const instructorsList = JSON.parse(instructors) as User[];
+  const adminsList = useMemo(() => JSON.parse(admins) as User[], [admins]);
+  const instructorsList = useMemo(
+    () => JSON.parse(instructors) as User[],
+    [instructors]
+  );
+  const projectData = useMemo(
+    () => (project ? (JSON.parse(project) as Project) : null),
+    [project]
+  );
   const form = useForm<z.infer<typeof CreateProjectSchema>>({
     defaultValues: {
-      title: "",
-      description: "",
-      startDate: selectedStartDate || undefined,
-      endDate: selectedEndDate || undefined,
-      projectHeads: [],
-      projectAssociates: [],
-      status: "planned",
+      title: projectData?.title || "",
+      description: projectData?.description || "",
+      startDate:
+        (projectData?.startDate && new Date(projectData.startDate)) ||
+        selectedStartDate ||
+        undefined,
+      endDate:
+        (projectData?.endDate && new Date(projectData.endDate)) ||
+        selectedEndDate ||
+        undefined,
+      projectHeads: projectData?.projectHeads || [],
+      projectAssociates: projectData?.projectAssociates || [],
+      status: projectData?.status || "planned",
+      isEdit,
+      projectId: projectData?.id || undefined,
     },
     resolver: zodResolver(CreateProjectSchema),
   });
   const { execute, isExecuting } = useAction(createProject, {
     onExecute: () => {
       toast.dismiss();
-      toast.loading("Creating project...");
+      toast.loading(isEdit ? "Updating project..." : "Creating project...");
     },
     onSuccess: () => {
       toast.dismiss();
-      toast.success("Project created successfully");
+      toast.success(
+        isEdit ? "Project updated successfully" : "Project created successfully"
+      );
       form.reset();
       setIsOpen(false);
     },
     onError: (error) => {
       toast.dismiss();
-      toast.error(`Error creating project: ${error}`);
+      toast.error(
+        `Error ${isEdit ? "updating" : "creating"} project: ${error}`
+      );
     },
   });
+
+  useEffect(() => {
+    if (projectData) {
+      form.setValue("title", projectData.title);
+      form.setValue("description", projectData.description);
+      form.setValue("projectHeads", projectData.projectHeads || []);
+      form.setValue("projectAssociates", projectData.projectAssociates || []);
+      form.setValue("status", projectData.status || "planned");
+    }
+  }, [projectData]);
 
   const handleSubmit = async (data: z.infer<typeof CreateProjectSchema>) => {
     execute(data);
@@ -234,7 +268,7 @@ const CreateProjectForm = ({
                   value: admin.id,
                 }))}
                 onValueChange={field.onChange}
-                defaultValue={[]}
+                defaultValue={projectData?.projectHeads || []}
                 placeholder="Select project heads"
                 variant="inverted"
               />
@@ -252,7 +286,7 @@ const CreateProjectForm = ({
                   value: instructor.id,
                 }))}
                 onValueChange={field.onChange}
-                defaultValue={[]}
+                defaultValue={projectData?.projectAssociates || []}
                 placeholder="Select project associates"
                 variant="inverted"
               />
@@ -260,7 +294,7 @@ const CreateProjectForm = ({
           )}
         />
         <Button type="submit" disabled={isExecuting}>
-          Create project
+          {isEdit ? "Update Project" : "Create Project"}
         </Button>
       </form>
     </Form>
