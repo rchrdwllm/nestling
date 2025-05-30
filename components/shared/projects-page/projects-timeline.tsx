@@ -240,6 +240,10 @@ const ProjectsTimeline = ({
             <SelectItem value="quarterly">Quarterly</SelectItem>
           </SelectContent>
         </Select>
+        <Button type="button" variant="outline" title="Go to today">
+          <CalendarIcon size={18} className="mr-2" />
+          Today
+        </Button>
         {view === "daily" && (
           <div className="flex items-center gap-2">
             <Button
@@ -265,10 +269,6 @@ const ProjectsTimeline = ({
             </Button>
           </div>
         )}
-        <Button type="button" variant="outline" title="Go to today">
-          <CalendarIcon size={18} className="mr-2" />
-          Today
-        </Button>
         <Button onClick={() => handleAddFeature()} className="ml-auto">
           <Plus className="size-4" />
           New project

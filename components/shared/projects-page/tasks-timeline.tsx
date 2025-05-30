@@ -219,6 +219,10 @@ const TasksTimeline = ({ tasks }: TasksTimelineProps) => {
             <SelectItem value="quarterly">Quarterly</SelectItem>
           </SelectContent>
         </Select>
+        <Button type="button" variant="outline" title="Go to today">
+          <CalendarIcon size={18} className="mr-2" />
+          Today
+        </Button>
         {view === "daily" && (
           <div className="flex items-center gap-2">
             <Button
@@ -244,10 +248,6 @@ const TasksTimeline = ({ tasks }: TasksTimelineProps) => {
             </Button>
           </div>
         )}
-        <Button type="button" variant="outline" title="Go to today">
-          <CalendarIcon size={18} className="mr-2" />
-          Today
-        </Button>
       </div>
       <GanttProvider
         key={`gantt-view-${view}-${currentDisplayMonth.getMonth()}-${currentDisplayMonth.getFullYear()}`}
