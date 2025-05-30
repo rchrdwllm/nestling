@@ -5,7 +5,7 @@ import { getProjectsOfUser } from "@/lib/project";
 import { getOptimisticUser } from "@/lib/user";
 import React from "react";
 
-const AdminProjectSidebar = async () => {
+const ProjectsSidebar = async () => {
   const user = await getOptimisticUser();
   const { success: projects, error: projectsError } = await getProjectsOfUser(
     user.id
@@ -47,4 +47,4 @@ const AdminProjectSidebar = async () => {
   );
 };
 
-export default AdminProjectSidebar;
+export default ProjectsSidebar;

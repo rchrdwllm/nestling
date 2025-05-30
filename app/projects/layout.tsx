@@ -1,8 +1,7 @@
 import { getCurrentUser } from "@/lib/user";
 import { redirect } from "next/navigation";
 import { ReactNode } from "react";
-import AdminProjectSidebar from "@/components/admin-access/projects-page/admin-project-sidebar";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import ProjectsSidebar from "@/components/shared/projects-page/projects-sidebar";
 
 const Layout = async ({
   children,
@@ -19,24 +18,16 @@ const Layout = async ({
 
   if (!user) return redirect("/api/auth/signin");
 
-  //   return user.role === "student"
-  //     ? student
-  //     : user.role === "instructor"
-  //       ? instructor
-  //       : user.role === "admin"
-  //         ? admin
-  //         : null;
   return (
     <>
       {user.role === "student" && student}
-      {user.role === "instructor" && instructor}
-      {user.role === "admin" && (
+      {user.role !== "student" && (
         <main className="grid grid-cols-8 gap-x-2 bg-secondary h-[calc(100vh-1rem)]">
           <div className="col-span-2 h-full">
-            <AdminProjectSidebar />
+            <ProjectsSidebar />
           </div>
           <div className="overflow-y-auto col-span-6 h-full shadow-sm border border-border rounded-xl bg-background">
-            {admin}
+            {user.role === "admin" ? admin : instructor}
           </div>
         </main>
       )}

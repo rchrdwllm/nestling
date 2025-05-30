@@ -27,7 +27,7 @@ const NotificationWrapper = ({
     const q = query(
       collection(clientDb, "notifications"),
       and(
-        where("receiverIds", "array-contains", user.id),
+        where("receiverId", "==", user.id),
         where("createdAt", ">", new Date(Date.now()))
       )
     );

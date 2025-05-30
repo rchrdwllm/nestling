@@ -59,6 +59,11 @@ export const instructorSidebarItems: SidebarItem[] = [
     Icon: CalendarDays,
   },
   {
+    label: "Projects",
+    href: "/projects",
+    Icon: KanbanSquare,
+  },
+  {
     label: "Inbox",
     href: "/inbox",
     Icon: Mail,
@@ -87,9 +92,9 @@ export const adminSidebarItems: SidebarItem[] = [
     Icon: KanbanSquare,
   },
   {
-    label: "Courses",
+    label: "Course Management",
     href: "/courses",
-    Icon: BookMarked,
+    Icon: BookOpen,
   },
   {
     label: "Calendar",

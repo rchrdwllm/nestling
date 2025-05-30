@@ -11,20 +11,25 @@ export const createNotif = actionClient
     const { type, title, message, url, senderId, receiverIds } = parsedInput;
 
     try {
-      const id = crypto.randomUUID();
+      const batch = db.batch();
 
-      const notification = {
-        id,
-        type,
-        title,
-        message,
-        url,
-        senderId,
-        createdAt: Timestamp.now().toDate(),
-        receiverIds,
-      };
+      receiverIds?.forEach((receiverId) => {
+        const id = crypto.randomUUID();
+        const notificationRef = db.collection("notifications").doc(id);
 
-      await db.collection("notifications").doc(id).set(notification);
+        batch.set(notificationRef, {
+          id,
+          type,
+          title,
+          message,
+          url,
+          senderId,
+          createdAt: Timestamp.now().toDate(),
+          receiverId,
+        });
+      });
+
+      await batch.commit();
 
       return { success: "Notification created" };
     } catch (error) {

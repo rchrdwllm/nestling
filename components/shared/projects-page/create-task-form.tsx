@@ -62,15 +62,17 @@ const CreateTaskForm = ({
   attachments = [],
 }: CreateTaskFormProps) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [previewUrls, setPreviewUrls] = useState<
-    { url: string; type: string; name: string }[]
-  >(
-    attachments.map((attachment) => ({
-      name: attachment.public_id,
-      type: attachment.resource_type,
-      url: attachment.secure_url,
-    }))
+  const initialPreviewUrls = useMemo(
+    () =>
+      attachments.map((attachment) => ({
+        name: attachment.public_id,
+        type: attachment.resource_type,
+        url: attachment.secure_url,
+      })),
+    [attachments]
   );
+  const [previewUrls, setPreviewUrls] =
+    useState<{ url: string; type: string; name: string }[]>(initialPreviewUrls);
   const form = useForm<z.infer<typeof CreateTaskSchema>>({
     defaultValues: {
       title: task?.title || "",
@@ -127,16 +129,6 @@ const CreateTaskForm = ({
       form.setValue("taskId", task.id);
     }
   }, [task]);
-
-  useEffect(() => {
-    setPreviewUrls(
-      attachments.map((attachment) => ({
-        name: attachment.public_id,
-        type: attachment.resource_type,
-        url: attachment.secure_url,
-      }))
-    );
-  }, [attachments]);
 
   const handleSubmit = async (data: z.infer<typeof CreateTaskSchema>) => {
     execute(data);

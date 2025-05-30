@@ -71,7 +71,7 @@ const SidePanel = ({
   useEffect(() => {
     const q = query(
       collection(clientDb, "notifications"),
-      and(where("receiverIds", "array-contains", user.id))
+      and(where("receiverId", "==", user.id))
     );
 
     const unsubscribe = onSnapshot(q, (snapshot) => {

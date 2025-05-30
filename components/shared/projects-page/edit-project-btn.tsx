@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import CreateProjectForm from "./create-project-form";
+import CreateProjectForm from "../../admin-access/projects-page/create-project-form";
 import { Pencil } from "lucide-react";
 
 type EditProjectBtnProps = {

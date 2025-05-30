@@ -18,14 +18,17 @@ const SidePanelTasks = ({ tasks }: SidePanelTasksProps) => {
     <div>
       <section className="flex justify-between items-center">
         <h1 className="font-semibold">Pending tasks</h1>
-        <Button variant="outline" className="px-2">
-          <X className="size-5" />
-        </Button>
       </section>
       <div className="flex flex-col gap-4 mt-4">
-        {user.role === "student"
-          ? tasks.map((task) => <StudentTaskCard key={task.id} {...task} />)
-          : tasks.map((task) => <EmployeeTaskCard key={task.id} {...task} />)}
+        {tasks.length ? (
+          user.role === "student" ? (
+            tasks.map((task) => <StudentTaskCard key={task.id} {...task} />)
+          ) : (
+            tasks.map((task) => <EmployeeTaskCard key={task.id} {...task} />)
+          )
+        ) : (
+          <p className="text-sm text-muted-foreground">No pending tasks</p>
+        )}
       </div>
     </div>
   );
