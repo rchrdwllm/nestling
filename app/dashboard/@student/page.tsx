@@ -1,4 +1,4 @@
-import SidePanel from "@/components/student-access/dashboard-page/side-panel";
+import SidePanel from "@/components/shared/layout/side-panel";
 import SearchBar from "@/components/shared/search/search-bar";
 import Announcements from "@/components/student-access/dashboard-page/announcements";
 

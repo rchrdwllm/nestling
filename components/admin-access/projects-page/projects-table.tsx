@@ -75,13 +75,13 @@ const ProjectsTable = ({ projects }: ProjectsTableProps) => {
                   <TableCell>
                     <DateDisplay
                       date={project.startDate}
-                      outputFormat="MMMM d, yyyy h:mm a"
+                      outputFormat="MMMM d, yyyy"
                     />
                   </TableCell>
                   <TableCell>
                     <DateDisplay
                       date={project.endDate}
-                      outputFormat="MMMM d, yyyy h:mm a"
+                      outputFormat="MMMM d, yyyy"
                     />
                   </TableCell>
                 </TableRow>

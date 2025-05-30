@@ -1,32 +1,49 @@
 import FullCalendar from "@/components/ui/full-calendar";
-import { getProjects } from "@/lib/project";
+import { getProjectsOfUser } from "@/lib/project";
+import { getIncompleteUserTasks } from "@/lib/task";
+import { getOptimisticUser } from "@/lib/user";
 
 const AdminCalendarPage = async () => {
-  const { success: projects, error: projectsError } = await getProjects();
+  const user = await getOptimisticUser();
+  const { success: adminProjects, error: adminProjectsError } =
+    await getProjectsOfUser(user.id);
+  const { success: adminTasks, error: adminTasksError } =
+    await getIncompleteUserTasks(user.id);
 
-  if (projectsError) {
-    console.error("Error fetching projects:", projectsError);
-    return <div>Error loading projects</div>;
+  if (adminProjectsError || adminTasksError) {
+    console.error(
+      "Error fetching admin projects and tasks:",
+      adminProjectsError || adminTasksError
+    );
+    return <div>Error loading admin projects and tasks</div>;
   }
 
-  if (!projects) {
-    console.error("No projects found");
-    return <div>No projects available</div>;
+  if (!adminProjects || !adminTasks) {
+    return <div>No admin projects or tasks found</div>;
   }
 
-  return (
-    <FullCalendar
-      events={projects.map((project) => ({
-        start: new Date(project.startDate),
-        end: new Date(project.endDate),
-        title: project.title,
-        id: project.id,
-        url: `/projects/${project.id}`,
-        type: "project",
-        description: project.description,
-      }))}
-    />
-  );
+  const projectsAndTasks = [
+    ...adminProjects.map((project) => ({
+      start: new Date(project.startDate),
+      end: new Date(project.endDate),
+      title: project.title,
+      id: project.id,
+      url: `/projects/${project.id}`,
+      type: "project" as "project",
+      description: project.description,
+    })),
+    ...adminTasks.map((task) => ({
+      start: new Date(task.startDate),
+      end: new Date(task.endDate),
+      title: task.title,
+      id: task.id,
+      url: `/projects/${task.projectId}`,
+      type: "task" as "task",
+      description: task.description,
+    })),
+  ];
+
+  return <FullCalendar events={projectsAndTasks} />;
 };
 
 export default AdminCalendarPage;

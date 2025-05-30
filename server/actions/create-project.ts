@@ -5,6 +5,8 @@ import { actionClient } from "../action-client";
 import { db } from "@/lib/firebase";
 import { revalidateTag } from "next/cache";
 import { getOptimisticUser } from "@/lib/user";
+import { createNotif } from "./create-notif";
+import { sendNotification } from "./send-notification";
 
 export const createProject = actionClient
   .schema(CreateProjectSchema)
@@ -41,7 +43,7 @@ export const createProject = actionClient
 
         revalidateTag("projects");
 
-        return { success: "Project updated successfully" };
+        return { success: { id: projectId } };
       }
 
       const id = crypto.randomUUID();
@@ -65,9 +67,27 @@ export const createProject = actionClient
         ownerId: user.id,
       });
 
+      const uniqueUserIds = Array.from(
+        new Set([...(projectHeads ?? []), ...(projectAssociates ?? [])])
+      ).filter((id) => user.id !== id);
+
+      await createNotif({
+        title: `New project: ${title}`,
+        message: "You're part of a new project!",
+        senderId: user.id,
+        type: "project",
+        url: `/projects/${id}`,
+        receiverIds: uniqueUserIds,
+      });
+      await sendNotification({
+        title: `New project: ${title}`,
+        body: "You're part of a new project!",
+        userIds: uniqueUserIds,
+      });
+
       revalidateTag("projects");
 
-      return { success: "Project created successfully" };
+      return { success: { id } };
     } catch (error) {
       console.error("Error creating project:", error);
 

@@ -77,31 +77,7 @@ const ProjectPage = async ({
     <div className="p-6 flex flex-col gap-8">
       <div className="flex flex-col gap-4">
         <div className="flex items-stretch justify-between gap-2">
-          <h1 className="text-3xl font-semibold flex items-center gap-4 flex-1">
-            <span>{project.title}</span>{" "}
-            <div className="flex gap-2 items-center">
-              <Badge
-                style={{
-                  backgroundColor: projectStatuses.find(
-                    (status) => status.value === project.status
-                  )!.color,
-                }}
-              >
-                {project.status.charAt(0).toUpperCase() +
-                  project.status.slice(1)}
-              </Badge>
-              <Badge
-                style={{
-                  backgroundColor: projectPriorities.find(
-                    (priority) => priority.value === project.priority
-                  )!.color,
-                }}
-              >
-                {project.priority.charAt(0).toUpperCase() +
-                  project.priority.slice(1)}
-              </Badge>
-            </div>
-          </h1>
+          <h1 className="text-3xl font-semibold flex-1">{project.title}</h1>
           <ArchiveProjectBtn
             projectId={project.id}
             isArchived={project.isArchived}
@@ -120,7 +96,10 @@ const ProjectPage = async ({
       </div>
       <ProjectDetails project={project} owner={owner} />
       <h3 className="text-xl font-semibold">Tasks</h3>
-      <TasksTable tasks={tasks} />
+      <TasksTable
+        tasks={tasks}
+        availableAssignees={JSON.stringify(availableAssignees)}
+      />
     </div>
   );
 };

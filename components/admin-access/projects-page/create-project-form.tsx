@@ -35,6 +35,7 @@ import {
 import { projectPriorities, projectStatuses } from "@/constants/project";
 import { useProjectsTimelineStore } from "@/context/projects-timeline-context";
 import { useEffect, useMemo } from "react";
+import { useRouter } from "next/navigation";
 
 type CreateProjectFormProps = {
   admins: string;
@@ -56,6 +57,10 @@ const CreateProjectForm = ({
   const instructorsList = useMemo(
     () => JSON.parse(instructors) as User[],
     [instructors]
+  );
+  const availableAssignees = useMemo(
+    () => [...adminsList, ...instructorsList],
+    [adminsList, instructorsList]
   );
   const projectData = useMemo(
     () => (project ? (JSON.parse(project) as Project) : null),
@@ -82,18 +87,20 @@ const CreateProjectForm = ({
     },
     resolver: zodResolver(CreateProjectSchema),
   });
+  const router = useRouter();
   const { execute, isExecuting } = useAction(createProject, {
     onExecute: () => {
       toast.dismiss();
       toast.loading(isEdit ? "Updating project..." : "Creating project...");
     },
-    onSuccess: () => {
+    onSuccess: ({ data }) => {
       toast.dismiss();
       toast.success(
         isEdit ? "Project updated successfully" : "Project created successfully"
       );
       form.reset();
       setIsOpen(false);
+      router.push(`/projects/${data?.success?.id}`);
     },
     onError: (error) => {
       toast.dismiss();
@@ -111,6 +118,8 @@ const CreateProjectForm = ({
       form.setValue("projectAssociates", projectData.projectAssociates || []);
       form.setValue("status", projectData.status || "planned");
       form.setValue("priority", projectData.priority || "low");
+
+      console.log(projectData);
     }
   }, [projectData]);
 
@@ -299,9 +308,9 @@ const CreateProjectForm = ({
           render={({ field }) => (
             <FormItem>
               <MultiSelect
-                options={adminsList.map((admin) => ({
-                  label: `${admin.firstName} ${admin.lastName}`,
-                  value: admin.id,
+                options={availableAssignees.map((user) => ({
+                  label: `${user.firstName} ${user.lastName} | ${user.role}`,
+                  value: user.id,
                 }))}
                 onValueChange={field.onChange}
                 defaultValue={projectData?.projectHeads || []}
@@ -317,9 +326,9 @@ const CreateProjectForm = ({
           render={({ field }) => (
             <FormItem>
               <MultiSelect
-                options={instructorsList.map((instructor) => ({
-                  label: `${instructor.firstName} ${instructor.lastName}`,
-                  value: instructor.id,
+                options={availableAssignees.map((user) => ({
+                  label: `${user.firstName} ${user.lastName} | ${user.role}`,
+                  value: user.id,
                 }))}
                 onValueChange={field.onChange}
                 defaultValue={projectData?.projectAssociates || []}

@@ -1,9 +1,9 @@
+"use server";
+
 import { Content, Course, File } from "@/types";
 import { db } from "./firebase";
 import { unstable_cache } from "next/cache";
 import { getEnrolledCourses } from "./course";
-import { getOptimisticUser } from "./user";
-import { doc } from "firebase/firestore";
 
 export const getModuleContents = unstable_cache(
   async (moduleId: string) => {

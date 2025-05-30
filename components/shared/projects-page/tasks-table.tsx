@@ -11,12 +11,14 @@ import DateDisplay from "@/components/ui/date-display";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { projectPriorities, projectStatuses } from "@/constants/project";
+import TaskSheetBtn from "./task-sheet-btn";
 
 type TasksTableProps = {
   tasks: Task[];
+  availableAssignees: string;
 };
 
-const TasksTable = ({ tasks }: TasksTableProps) => {
+const TasksTable = ({ tasks, availableAssignees }: TasksTableProps) => {
   return (
     <Card>
       <Table>
@@ -31,7 +33,7 @@ const TasksTable = ({ tasks }: TasksTableProps) => {
         </TableHeader>
         <TableBody>
           {tasks.length === 0 ? (
-            <TableRow>
+            <TableRow key="no-tasks">
               <TableCell
                 colSpan={6}
                 className="text-center text-muted-foreground"
@@ -50,7 +52,12 @@ const TasksTable = ({ tasks }: TasksTableProps) => {
 
               return (
                 <TableRow key={task.id}>
-                  <TableCell>{task.title}</TableCell>
+                  <TableCell>
+                    <TaskSheetBtn
+                      availableAssignees={availableAssignees}
+                      task={task}
+                    />
+                  </TableCell>
                   <TableCell>
                     <Badge style={{ backgroundColor: statusObj?.color }}>
                       {statusObj?.name ?? task.status}
@@ -64,13 +71,13 @@ const TasksTable = ({ tasks }: TasksTableProps) => {
                   <TableCell>
                     <DateDisplay
                       date={task.startDate}
-                      outputFormat="MMMM d, yyyy h:mm a"
+                      outputFormat="MMMM d, yyyy"
                     />
                   </TableCell>
                   <TableCell>
                     <DateDisplay
                       date={task.endDate}
-                      outputFormat="MMMM d, yyyy h:mm a"
+                      outputFormat="MMMM d, yyyy"
                     />
                   </TableCell>
                 </TableRow>

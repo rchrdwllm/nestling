@@ -2,11 +2,9 @@ import { deleteNotif } from "@/server/actions/delete-notif";
 import { Notification } from "@/types";
 import { useAction } from "next-safe-action/hooks";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 
 const NotificationCard = ({ title, message, url, id }: Notification) => {
   const { execute } = useAction(deleteNotif);
-  const router = useRouter();
 
   const handleNotifClick = async () => {
     execute({ notificationId: id });

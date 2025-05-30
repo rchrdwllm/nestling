@@ -19,7 +19,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Calendar as CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
-import { Project, User } from "@/types";
+import { Project, Task, User } from "@/types";
 import { useAction } from "next-safe-action/hooks";
 import { createProject } from "@/server/actions/create-project";
 import { toast } from "sonner";
@@ -42,6 +42,7 @@ type CreateTaskFormProps = {
   projectId: string;
   availableAssignees: string;
   isEdit?: boolean;
+  task?: Task;
   setIsOpen: (isOpen: boolean) => void;
 };
 
@@ -49,6 +50,7 @@ const CreateTaskForm = ({
   projectId,
   availableAssignees,
   isEdit = false,
+  task,
   setIsOpen,
 }: CreateTaskFormProps) => {
   const availableAssigneesData = useMemo(
@@ -57,14 +59,16 @@ const CreateTaskForm = ({
   );
   const form = useForm<z.infer<typeof CreateTaskSchema>>({
     defaultValues: {
-      title: "",
-      description: "",
-      startDate: undefined,
-      endDate: undefined,
-      assignees: [],
-      priority: "low",
-      status: "planned",
+      title: task?.title || "",
+      description: task?.description || "",
+      startDate: task?.startDate ? new Date(task?.startDate) : undefined,
+      endDate: task?.endDate ? new Date(task?.endDate) : undefined,
+      assignees: task?.assignees || [],
+      priority: task?.priority || "low",
+      status: task?.status || "planned",
       projectId,
+      isEdit,
+      taskId: task?.id || undefined,
     },
     resolver: zodResolver(CreateTaskSchema),
   });
@@ -86,6 +90,20 @@ const CreateTaskForm = ({
       toast.error(`Error ${isEdit ? "updating" : "creating"} task: ${error}`);
     },
   });
+
+  useEffect(() => {
+    if (task) {
+      form.setValue("title", task.title);
+      form.setValue("description", task.description);
+      form.setValue("startDate", new Date(task.startDate));
+      form.setValue("endDate", new Date(task.endDate));
+      form.setValue("assignees", task.assignees);
+      form.setValue("priority", task.priority);
+      form.setValue("status", task.status);
+      form.setValue("projectId", task.projectId);
+      form.setValue("taskId", task.id);
+    }
+  }, [task]);
 
   const handleSubmit = async (data: z.infer<typeof CreateTaskSchema>) => {
     execute(data);
@@ -273,11 +291,11 @@ const CreateTaskForm = ({
             <FormItem>
               <MultiSelect
                 options={availableAssigneesData.map((user) => ({
-                  label: `${user.firstName} ${user.lastName}`,
+                  label: `${user.firstName} ${user.lastName} | ${user.role}`,
                   value: user.id,
                 }))}
                 onValueChange={field.onChange}
-                defaultValue={[]}
+                defaultValue={task ? task?.assignees : []}
                 placeholder="Select assignees"
                 variant="inverted"
               />

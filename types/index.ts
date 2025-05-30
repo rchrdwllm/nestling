@@ -253,4 +253,5 @@ export type Task = {
   status: "planned" | "in-progress" | "completed";
   priority: "low" | "medium" | "high";
   projectId: string;
+  assignees: string[];
 };

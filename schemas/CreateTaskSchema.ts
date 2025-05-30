@@ -9,4 +9,6 @@ export const CreateTaskSchema = z.object({
   priority: z.enum(["low", "medium", "high"]),
   assignees: z.array(z.string()).optional(),
   projectId: z.string(),
+  isEdit: z.boolean().optional(),
+  taskId: z.string().optional(),
 });

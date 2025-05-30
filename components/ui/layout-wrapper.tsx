@@ -5,7 +5,7 @@ import Sidebar from "./sidebar/sidebar";
 import { ScrollArea } from "./scroll-area";
 import { useUser } from "@/hooks/use-user";
 import { usePathname } from "next/navigation";
-import SidePanel from "../student-access/dashboard-page/side-panel";
+import SidePanel from "../shared/layout/side-panel";
 import { cn } from "@/lib/utils";
 
 const LayoutWrapper = ({ children }: { children: ReactNode }) => {

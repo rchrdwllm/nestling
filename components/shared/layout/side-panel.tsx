@@ -1,15 +1,18 @@
 "use client";
 
-import SidePanelNotifications from "@/components/shared/notifications/sidepanel-notifications";
+import SidePanelNotifications from "@/components/shared/layout/sidepanel-notifications";
 import { Button } from "@/components/ui/button";
 import MotionWrapper from "@/components/wrappers/motion-wrapper";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { clientDb } from "@/lib/firebase-client";
-import { Notification } from "@/types";
+import { Content, Notification, Task } from "@/types";
 import { and, collection, onSnapshot, query, where } from "firebase/firestore";
 import { ChevronsLeft, ChevronsRight, X } from "lucide-react";
 import { AnimatePresence } from "motion/react";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
+import SidePanelTasks from "./sidepanel-tasks";
+import { getUpcomingAssignmentsForStudent } from "@/lib/content";
+import { getIncompleteUserTasks } from "@/lib/task";
 
 type SidePanelProps = {
   setRightPanelToggled: (toggled: boolean) => void;
@@ -23,8 +26,47 @@ const SidePanel = ({
   const [isHovered, setIsHovered] = useState(false);
   const { user } = useCurrentUser();
   const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [isPending, startTransition] = useTransition();
+  const [studentTasks, setStudentTasks] = useState<Content[]>([]);
+  const [employeeTasks, setEmployeeTasks] = useState<Task[]>([]);
 
-  if (user.role === "admin") return null;
+  const fetchStudentTasks = async () => {
+    startTransition(async () => {
+      const { success: tasks, error } = await getUpcomingAssignmentsForStudent(
+        user.id
+      );
+
+      if (error || !tasks) {
+        console.error("Error fetching student tasks: ", error);
+
+        return;
+      }
+
+      setStudentTasks(studentTasks);
+    });
+  };
+
+  const fetchEmployeeTasks = async () => {
+    startTransition(async () => {
+      const { success: tasks, error } = await getIncompleteUserTasks(user.id);
+
+      if (error || !tasks) {
+        console.error("Error fetching student tasks: ", error);
+
+        return;
+      }
+
+      setEmployeeTasks(tasks);
+    });
+  };
+
+  useEffect(() => {
+    if (user.role === "student") {
+      fetchStudentTasks();
+    } else if (user.role === "admin" || user.role === "instructor") {
+      fetchEmployeeTasks();
+    }
+  }, [user]);
 
   useEffect(() => {
     const q = query(
@@ -59,7 +101,7 @@ const SidePanel = ({
         <MotionWrapper
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
-          className="absolute w-[calc(50px+2rem)] top-0 right-0 h-screen z-10 p-4"
+          className="absolute w-[calc(50px+2rem)] top-1/2 right-0 h-[50vh] z-10 p-4 -translate-y-1/2"
         >
           <MotionWrapper
             initial={{ opacity: 0, x: "100%" }}
@@ -101,70 +143,9 @@ const SidePanel = ({
                 </Button>
               </div>
               <SidePanelNotifications notifications={notifications} />
-              {/* Notifications */}
-              {/* {notifications.length > 0 && (
-                <div className="bg-white rounded-lg shadow-xl border border-border p-6">
-                  <h3 className="text-4xl font-bold text-foreground mb-4 flex items-center justify-center">
-                    <Image
-                      src={notifbell}
-                      alt="Notification Bell"
-                      width={48}
-                      height={48}
-                      className="mr-2"
-                    />
-                    Notifications
-                  </h3>
-                  <ul className="space-y-4">
-                    {notifications.map((notification, index) => (
-                      <li key={index} className="flex items-start">
-                        <div>
-                          <p className="text-sm text-foreground font-semibold">
-                            <span className="text-primary">{notification.title}</span>{" "}
-                            - {notification.message}
-                          </p>
-                          <p className="text-xs text-muted-foreground">
-                            CS 001 - Introduction to Computing
-                          </p>
-                          <p className="text-xs text-muted-foreground">4h ago</p>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )} */}
-
-              {/* Pending Tasks */}
-              {/* {pendingTasks.length > 0 && (
-                <div className="bg-white rounded-lg shadow-xl border border-black-900 p-6">
-                  <h3 className="text-4xl font-bold text-foreground mb-4 flex items-center justify-center">
-                    <Image
-                      src={pending}
-                      alt="Pending Tasks"
-                      width={40}
-                      height={40}
-                      className="mr-2"
-                    />
-                    Pending Tasks
-                  </h3>
-                  <ul className="space-y-4">
-                    {pendingTasks.map((task, index) => (
-                      <li key={index} className="flex items-start">
-                        <div>
-                          <p className="text-sm text-foreground font-semibold">
-                            {task.name}
-                          </p>
-                          <p className="text-xs text-muted-foreground">
-                            {task.courseCode} - {task.courseName}
-                          </p>
-                          <p className="text-xs text-muted-foreground">
-                            {task.timeAgo}
-                          </p>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )} */}
+              <SidePanelTasks
+                tasks={user.role === "student" ? studentTasks : employeeTasks}
+              />
             </div>
           </MotionWrapper>
         )}

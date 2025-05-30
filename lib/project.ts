@@ -25,28 +25,6 @@ export const getProjects = unstable_cache(
   { revalidate: 60 * 60, tags: ["projects"] }
 );
 
-export const getInstructorProjects = unstable_cache(
-  async (instructorId: string) => {
-    try {
-      const projectsSnapshot = await db
-        .collection("projects")
-        .where("projectAssociates", "array-contains", instructorId)
-        .get();
-      const projects = projectsSnapshot.docs.map((doc) =>
-        doc.data()
-      ) as Project[];
-
-      return { success: projects };
-    } catch (error) {
-      console.error("Error fetching instructor projects:", error);
-
-      return { error: "Failed to fetch instructor projects" };
-    }
-  },
-  ["instructorId"],
-  { revalidate: 60 * 60, tags: ["projects"] }
-);
-
 export const getProjectById = unstable_cache(
   async (projectId: string) => {
     try {

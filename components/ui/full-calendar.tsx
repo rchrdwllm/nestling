@@ -96,7 +96,7 @@ export type CalendarEvent = {
   title: string;
   url: string;
   courseId?: string;
-  type: "assignment" | "project";
+  type: "assignment" | "project" | "task";
   description?: string;
 };
 
