@@ -12,6 +12,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { projectPriorities, projectStatuses } from "@/constants/project";
 import TaskSheetBtn from "./task-sheet-btn";
+import TaskSheetBtnWrapper from "./task-sheet-btn-wrapper";
 
 type TasksTableProps = {
   tasks: Task[];
@@ -53,7 +54,7 @@ const TasksTable = ({ tasks, availableAssignees }: TasksTableProps) => {
               return (
                 <TableRow key={task.id}>
                   <TableCell>
-                    <TaskSheetBtn
+                    <TaskSheetBtnWrapper
                       availableAssignees={availableAssignees}
                       task={task}
                     />

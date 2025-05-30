@@ -1,7 +1,6 @@
 "use client";
 
 import { Form } from "@/components/ui/form";
-import { CreateProjectSchema } from "@/schemas/CreateProjectSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -16,12 +15,11 @@ import {
   PopoverContent,
 } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
-import { Calendar as CalendarIcon } from "lucide-react";
+import { Calendar as CalendarIcon, FileIcon, Plus } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
-import { Project, Task, User } from "@/types";
+import { File as CustomFile, Task, User } from "@/types";
 import { useAction } from "next-safe-action/hooks";
-import { createProject } from "@/server/actions/create-project";
 import { toast } from "sonner";
 import {
   Select,
@@ -33,10 +31,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { projectPriorities, projectStatuses } from "@/constants/project";
-import { useProjectsTimelineStore } from "@/context/projects-timeline-context";
-import { useEffect, useMemo } from "react";
+import { ChangeEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { createTask } from "@/server/actions/create-task";
 import { CreateTaskSchema } from "@/schemas/CreateTaskSchema";
+import { MAX_SIZE } from "@/constants/file";
+import { getSHA256 } from "@/lib/sha-256";
+import { uploadFileToCloudinary } from "@/server/actions/upload-to-cloudinary";
+import { addAttachment } from "@/server/actions/add-attachment";
+import AttachmentPreview from "./attachment-preview";
 
 type CreateTaskFormProps = {
   projectId: string;
@@ -46,6 +48,7 @@ type CreateTaskFormProps = {
   setIsOpen: (isOpen: boolean) => void;
   selectedStartDate?: Date;
   selectedEndDate?: Date;
+  attachments?: CustomFile[];
 };
 
 const CreateTaskForm = ({
@@ -56,7 +59,18 @@ const CreateTaskForm = ({
   setIsOpen,
   selectedStartDate,
   selectedEndDate,
+  attachments = [],
 }: CreateTaskFormProps) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [previewUrls, setPreviewUrls] = useState<
+    { url: string; type: string; name: string }[]
+  >(
+    attachments.map((attachment) => ({
+      name: attachment.public_id,
+      type: attachment.resource_type,
+      url: attachment.secure_url,
+    }))
+  );
   const form = useForm<z.infer<typeof CreateTaskSchema>>({
     defaultValues: {
       title: task?.title || "",
@@ -98,6 +112,7 @@ const CreateTaskForm = ({
       toast.error(`Error ${isEdit ? "updating" : "creating"} task: ${error}`);
     },
   });
+  const { execute: attachmentExecute } = useAction(addAttachment);
 
   useEffect(() => {
     if (task) {
@@ -113,8 +128,83 @@ const CreateTaskForm = ({
     }
   }, [task]);
 
+  useEffect(() => {
+    setPreviewUrls(
+      attachments.map((attachment) => ({
+        name: attachment.public_id,
+        type: attachment.resource_type,
+        url: attachment.secure_url,
+      }))
+    );
+  }, [attachments]);
+
   const handleSubmit = async (data: z.infer<typeof CreateTaskSchema>) => {
     execute(data);
+  };
+
+  const addFiles = useCallback((e: ChangeEvent) => {
+    setIsLoading(true);
+    toast.dismiss();
+    toast.loading("Adding attachments...");
+
+    const target = e.target as HTMLInputElement;
+    const files = target.files;
+
+    if (files && files.length > 0) {
+      const fileArray = Array.from(files);
+      const tooLarge = fileArray.some((file) => file.size > MAX_SIZE);
+
+      if (tooLarge) {
+        toast.error(
+          `One or more files exceed the maximum size of ${
+            MAX_SIZE / 1024 / 1024
+          }MB.`
+        );
+
+        return;
+      }
+
+      handleAddAttachment(fileArray);
+    }
+  }, []);
+
+  const handleAddAttachment = async (files: File[]) => {
+    const uploadedFiles = await Promise.all(
+      files.map(async (file) => {
+        const hash = await getSHA256(file);
+        const { success: uploadedFile, error } = await uploadFileToCloudinary(
+          file
+        );
+
+        if (error || !uploadedFile) {
+          console.error("Error adding attachment: ", error);
+          toast.error(JSON.stringify(error));
+
+          return null;
+        }
+
+        return { ...uploadedFile, hash };
+      })
+    );
+
+    if (uploadedFiles.length && task) {
+      attachmentExecute({
+        taskId: task.id,
+        files: uploadedFiles as any,
+      });
+
+      toast.dismiss();
+      toast.success("Attachments added!");
+      setIsLoading(false);
+      setPreviewUrls((prev) => [
+        ...prev,
+        ...uploadedFiles.map((file) => ({
+          name: file!.public_id,
+          type: file!.resource_type,
+          url: file!.secure_url,
+        })),
+      ]);
+    }
   };
 
   return (
@@ -310,7 +400,56 @@ const CreateTaskForm = ({
             </FormItem>
           )}
         />
-        <Button type="submit" disabled={isExecuting}>
+        {isEdit && task && (
+          <div className="flex flex-col gap-4">
+            <h1 className="font-semibold">Attachments</h1>
+            <div className="border border-border rounded-lg overflow-hidden">
+              {previewUrls.length ? (
+                previewUrls.map((previewUrl) => (
+                  <article key={previewUrl.url}>
+                    <AttachmentPreview
+                      id={previewUrl.url}
+                      type={previewUrl.type}
+                      url={previewUrl.url}
+                      name={previewUrl.name}
+                      taskId={task.id}
+                    />
+                  </article>
+                ))
+              ) : (
+                <p className="text-muted-foreground text-center my-8">
+                  No attachments
+                </p>
+              )}
+            </div>
+            <div>
+              <button
+                type="button"
+                className="w-full bg-secondary hover:bg-accent hover:text-accent-foreground rounded-md cursor-pointer group transition-colors"
+              >
+                <label
+                  className="flex flex-col justify-center items-center gap-2 w-full py-2 cursor-pointer text-muted-foreground transition-colors group-hover:text-foreground"
+                  htmlFor="submission"
+                >
+                  <>
+                    <span className="flex items-center gap-2 text-sm font-medium">
+                      <Plus className="size-4" /> Add attachments
+                    </span>
+                  </>
+                </label>
+              </button>
+              <input
+                type="file"
+                id="submission"
+                name="submission"
+                className="hidden"
+                multiple
+                onChange={addFiles}
+              />
+            </div>
+          </div>
+        )}
+        <Button type="submit" disabled={isExecuting || isLoading}>
           {isEdit ? "Update task" : "Create task"}
         </Button>
       </form>

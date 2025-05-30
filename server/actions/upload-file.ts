@@ -16,6 +16,7 @@ export const uploadFile = actionClient
       secure_url,
       content_id,
       message_id,
+      task_id,
       type,
       submission_id,
       resource_type,
@@ -91,6 +92,24 @@ export const uploadFile = actionClient
         };
 
         await messageFileRef.set(reference);
+      }
+
+      if (task_id) {
+        const taskFileRef = db
+          .collection("tasks")
+          .doc(task_id)
+          .collection("files")
+          .doc(public_id);
+
+        const reference = {
+          public_id,
+          created_at,
+          task_id,
+          secure_url,
+          hash,
+        };
+
+        await taskFileRef.set(reference);
       }
 
       return { success: newFile };

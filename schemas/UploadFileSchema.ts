@@ -10,6 +10,7 @@ export const UploadFileSchema = z.object({
   content_id: z.optional(z.string()),
   submission_id: z.optional(z.string()),
   message_id: z.optional(z.string()),
+  task_id: z.optional(z.string()),
   resource_type: z.string(),
   hash: z.string(),
 });

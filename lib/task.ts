@@ -3,6 +3,7 @@
 import { unstable_cache } from "next/cache";
 import { db } from "./firebase";
 import { Task } from "@/types";
+import { getFile } from "./file";
 
 export const getProjectTasks = unstable_cache(
   async (projectId: string) => {
@@ -62,5 +63,35 @@ export const getIncompleteUserTasks = unstable_cache(
     }
   },
   ["userId"],
+  { revalidate: 60 * 60, tags: ["tasks"] }
+);
+
+export const getTaskAttachments = unstable_cache(
+  async (taskId: string) => {
+    try {
+      const taskAttachmentsSnapshot = await db
+        .collection("tasks")
+        .doc(taskId)
+        .collection("files")
+        .get();
+      const taskAttachmentIds = taskAttachmentsSnapshot.docs.map(
+        (doc) => doc.id
+      );
+      const taskAttachments = await Promise.all(
+        taskAttachmentIds.map(async (id) => {
+          const { success, error } = await getFile(id);
+
+          return success!;
+        })
+      );
+
+      return { success: taskAttachments };
+    } catch (error) {
+      console.error("Error fetching task attachments: ", error);
+
+      return { error };
+    }
+  },
+  ["taskId"],
   { revalidate: 60 * 60, tags: ["tasks"] }
 );

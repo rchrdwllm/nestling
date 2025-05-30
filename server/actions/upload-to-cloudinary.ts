@@ -44,6 +44,8 @@ export const uploadFileToCloudinary = async (file: File) => {
       );
       const data = (await res.json()) as CloudinaryFile;
 
+      console.log("Uploaded!!!");
+
       return { success: data };
     } catch (error) {
       console.error("File upload failed:", error);
@@ -61,6 +63,8 @@ export const uploadFileToCloudinary = async (file: File) => {
       }
     );
     const data = (await res.json()) as CloudinaryFile;
+
+    console.log("Uploaded!!!");
 
     return { success: data };
   } catch (error) {

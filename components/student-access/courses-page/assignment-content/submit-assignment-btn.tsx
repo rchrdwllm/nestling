@@ -14,7 +14,6 @@ import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { MAX_SIZE } from "@/constants/file";
 import { getSHA256 } from "@/lib/sha-256";
 import { SubmitAssignmentSchema } from "@/schemas/SubmitAssignmentSchema";
-import { UploadFileSchema } from "@/schemas/UploadFileSchema";
 import { submitAssignment } from "@/server/actions/submit-assignment";
 import { uploadFileToCloudinary } from "@/server/actions/upload-to-cloudinary";
 import { zodResolver } from "@hookform/resolvers/zod";

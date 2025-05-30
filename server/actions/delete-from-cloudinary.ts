@@ -52,6 +52,7 @@ export const deleteFileFromCloudinary = async (public_id: string) => {
   const url = `https://api.cloudinary.com/v1_1/nestling-lan/raw/destroy`;
 
   try {
+    console.log("Deleting file from Cloudinary:", public_id);
     const res = await fetch(url, {
       method: "POST",
       headers: {
@@ -65,6 +66,7 @@ export const deleteFileFromCloudinary = async (public_id: string) => {
       }),
     });
     const data = await res.json();
+    console.log("File deletion response:", data);
 
     return { success: data };
   } catch (error) {

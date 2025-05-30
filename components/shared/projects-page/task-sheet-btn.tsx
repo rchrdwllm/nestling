@@ -1,6 +1,6 @@
 "use client";
 
-import { Task, User } from "@/types";
+import { File, Task, User } from "@/types";
 import {
   Sheet,
   SheetContent,
@@ -15,9 +15,14 @@ import { useState } from "react";
 type TaskSheetBtnProps = {
   task: Task;
   availableAssignees: User[];
+  attachments?: File[];
 };
 
-const TaskSheetBtn = ({ task, availableAssignees }: TaskSheetBtnProps) => {
+const TaskSheetBtn = ({
+  task,
+  availableAssignees,
+  attachments = [],
+}: TaskSheetBtnProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -27,7 +32,7 @@ const TaskSheetBtn = ({ task, availableAssignees }: TaskSheetBtnProps) => {
           {task.title}
         </Button>
       </SheetTrigger>
-      <SheetContent className="w-[500px] sm:max-w-[500px]">
+      <SheetContent className="w-[500px] sm:max-w-[500px] overflow-y-auto">
         <SheetHeader>
           <SheetTitle>{task.title}</SheetTitle>
           <CreateTaskForm
@@ -36,6 +41,7 @@ const TaskSheetBtn = ({ task, availableAssignees }: TaskSheetBtnProps) => {
             setIsOpen={setIsOpen}
             isEdit
             task={task}
+            attachments={attachments}
           />
         </SheetHeader>
       </SheetContent>
