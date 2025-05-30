@@ -1,6 +1,6 @@
 "use client";
 
-import { Task } from "@/types";
+import { Task, User } from "@/types";
 import {
   Sheet,
   SheetContent,
@@ -14,7 +14,7 @@ import { useState } from "react";
 
 type TaskSheetBtnProps = {
   task: Task;
-  availableAssignees: string;
+  availableAssignees: User[];
 };
 
 const TaskSheetBtn = ({ task, availableAssignees }: TaskSheetBtnProps) => {

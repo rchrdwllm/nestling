@@ -102,10 +102,7 @@ const ProjectPage = async ({
         <h3 className="text-xl font-semibold">Project timeline</h3>
         <TasksTimeline tasks={tasks} />
         <h3 className="text-xl font-semibold">Tasks</h3>
-        <TasksTable
-          tasks={tasks}
-          availableAssignees={JSON.stringify(availableAssignees)}
-        />
+        <TasksTable tasks={tasks} availableAssignees={availableAssignees} />
       </div>
     </>
   );

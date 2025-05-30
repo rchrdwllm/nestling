@@ -71,9 +71,7 @@ const TasksTimeline = ({ tasks }: TasksTimelineProps) => {
 
   if (!isMounted) return null;
 
-  const handleViewFeature = (id: string) => {
-    router.push(`/projects/${id}`);
-  };
+  const handleViewFeature = (id: string) => {};
 
   const handleCopyLink = (id: string) => console.log(`Copy link: ${id}`);
 

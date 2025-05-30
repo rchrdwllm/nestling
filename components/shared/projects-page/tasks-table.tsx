@@ -1,4 +1,4 @@
-import { Task } from "@/types";
+import { Task, User } from "@/types";
 import {
   Table,
   TableBody,
@@ -15,7 +15,7 @@ import TaskSheetBtn from "./task-sheet-btn";
 
 type TasksTableProps = {
   tasks: Task[];
-  availableAssignees: string;
+  availableAssignees: User[];
 };
 
 const TasksTable = ({ tasks, availableAssignees }: TasksTableProps) => {

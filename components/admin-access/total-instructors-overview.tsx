@@ -1,4 +1,5 @@
 import { getAllInstructors } from "@/lib/user";
+import DateDisplay from "../ui/date-display";
 
 const TotalInstructorsOverview = async () => {
   const { success: allInstructors, error: allInstructorsError } =
@@ -19,7 +20,8 @@ const TotalInstructorsOverview = async () => {
         {allInstructors.length}
       </h1>
       <p className="text-muted-foreground text-sm">
-        Last updated: {new Date().toLocaleString()}
+        Last updated:{" "}
+        <DateDisplay outputFormat="MMMM d, yyyy h:mm a" date={new Date()} />
       </p>
     </article>
   );

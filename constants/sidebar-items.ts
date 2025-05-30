@@ -7,6 +7,7 @@ import {
   LucideProps,
   BookOpen,
   KanbanSquare,
+  ChartColumnIncreasing,
 } from "lucide-react";
 import { ForwardRefExoticComponent, RefAttributes } from "react";
 
@@ -75,6 +76,11 @@ export const instructorSidebarItems: SidebarItem[] = [
 ];
 
 export const adminSidebarItems: SidebarItem[] = [
+  {
+    label: "Dashboard",
+    href: "/dashboard",
+    Icon: ChartColumnIncreasing,
+  },
   {
     label: "Projects",
     href: "/projects",
