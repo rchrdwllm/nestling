@@ -32,7 +32,7 @@ const SearchResults = memo(
           opacity: 0,
           y: 10,
         }}
-        className="absolute w-full min-h-96 bg-card mt-2 shadow-sm border border-border rounded-md p-4"
+        className="absolute w-full min-h-96 bg-card z-10 mt-2 shadow-sm border border-border rounded-md p-4"
       >
         <Tabs defaultValue={entities[0]} className="w-full">
           <TabsList className="w-full">
