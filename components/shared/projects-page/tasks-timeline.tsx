@@ -18,7 +18,14 @@ import {
   GanttTimeline,
   GanttToday,
 } from "@/components/ui/gantt";
-import { EyeIcon, LinkIcon, Plus, TrashIcon } from "lucide-react";
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  EyeIcon,
+  LinkIcon,
+  Plus,
+  TrashIcon,
+} from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import {
   Select,
@@ -29,24 +36,34 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { CalendarIcon } from "lucide-react";
-import { addMonths, endOfMonth, startOfMonth } from "date-fns";
+import { format } from "date-fns";
+import {
+  addDays,
+  addMonths,
+  endOfDay,
+  endOfMonth,
+  startOfDay,
+  startOfMonth,
+} from "date-fns";
 import { Project, Task, User } from "@/types";
+import { useTasksTimelineStore } from "@/context/tasks-timeline-context";
 import { useAction } from "next-safe-action/hooks";
 import { createProject } from "@/server/actions/create-project";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { createTask } from "@/server/actions/create-task";
-import { useTasksTimelineStore } from "@/context/tasks-timeline-context";
 
 type TasksTimelineProps = {
   tasks: Task[];
 };
 
 const TasksTimeline = ({ tasks }: TasksTimelineProps) => {
-  const [isMounted, setIsMounted] = useState(false);
-  const { setFormToggled, setSelectedEndDate, setSelectedStartDate } =
+  const { setFormToggled, setSelectedStartDate, setSelectedEndDate } =
     useTasksTimelineStore();
-  const [view, setView] = useState<"monthly" | "quarterly">("monthly");
+  const [isMounted, setIsMounted] = useState(false);
+  const [view, setView] = useState<"daily" | "monthly" | "quarterly">(
+    "monthly"
+  );
   const router = useRouter();
   const [features, setFeatures] = useState(tasks);
   const { execute } = useAction(createTask, {
@@ -62,6 +79,7 @@ const TasksTimeline = ({ tasks }: TasksTimelineProps) => {
       toast.error(`Error updating task: ${error}`);
     },
   });
+  const [currentDisplayMonth, setCurrentDisplayMonth] = useState(new Date());
 
   useEffect(() => setIsMounted(true), []);
 
@@ -71,18 +89,25 @@ const TasksTimeline = ({ tasks }: TasksTimelineProps) => {
 
   if (!isMounted) return null;
 
-  const handleViewFeature = (id: string) => {};
+  const handleViewFeature = (id: string) => {
+    router.push(`/projects/${id}`);
+  };
 
   const handleCopyLink = (id: string) => console.log(`Copy link: ${id}`);
 
   const handleRemoveFeature = (id: string) =>
     setFeatures((prev) => prev.filter((feature) => feature.id !== id));
-
   const handleCreateWithDate = (date: Date) => {
     setFormToggled(true);
 
     const startDate = date;
-    const endDate = addMonths(date, 1);
+    let endDate;
+
+    if (view === "daily") {
+      endDate = addDays(date, 1);
+    } else {
+      endDate = addMonths(date, 1);
+    }
 
     setSelectedStartDate(startDate);
     setSelectedEndDate(endDate);
@@ -117,15 +142,63 @@ const TasksTimeline = ({ tasks }: TasksTimelineProps) => {
       taskId: id,
     });
   };
-
   const handleAddFeature = (date?: Date) => {
     setFormToggled(true);
 
-    const startDate = date ? startOfMonth(date) : new Date();
-    const endDate = date ? endOfMonth(date) : addMonths(startDate, 1);
+    let startDate, endDate;
+
+    if (date) {
+      if (view === "daily") {
+        startDate = startOfDay(date);
+        endDate = endOfDay(date);
+      } else {
+        startDate = startOfMonth(date);
+        endDate = endOfMonth(date);
+      }
+    } else {
+      startDate = new Date();
+
+      if (view === "daily") {
+        endDate = addDays(startDate, 1);
+      } else {
+        endDate = addMonths(startDate, 1);
+      }
+    }
 
     setSelectedStartDate(startDate);
     setSelectedEndDate(endDate);
+  };
+
+  const handlePrevMonth = () => {
+    if (view === "daily") {
+      const prevMonth = new Date(currentDisplayMonth);
+      prevMonth.setMonth(prevMonth.getMonth() - 1);
+      setCurrentDisplayMonth(prevMonth);
+
+      const firstDayOfMonth = new Date(
+        prevMonth.getFullYear(),
+        prevMonth.getMonth(),
+        1
+      );
+      setSelectedStartDate(firstDayOfMonth);
+      setSelectedEndDate(addDays(firstDayOfMonth, 1));
+    }
+  };
+
+  const handleNextMonth = () => {
+    if (view === "daily") {
+      const nextMonth = new Date(currentDisplayMonth);
+      nextMonth.setMonth(nextMonth.getMonth() + 1);
+      setCurrentDisplayMonth(nextMonth);
+
+      const firstDayOfMonth = new Date(
+        nextMonth.getFullYear(),
+        nextMonth.getMonth(),
+        1
+      );
+      setSelectedStartDate(firstDayOfMonth);
+      setSelectedEndDate(addDays(firstDayOfMonth, 1));
+    }
   };
 
   return (
@@ -133,26 +206,56 @@ const TasksTimeline = ({ tasks }: TasksTimelineProps) => {
       <div className="w-full flex items-center gap-4">
         <Select
           value={view}
-          onValueChange={(val) => setView(val as "monthly" | "quarterly")}
+          onValueChange={(val) =>
+            setView(val as "daily" | "monthly" | "quarterly")
+          }
         >
           <SelectTrigger className="w-32">
             <SelectValue placeholder="Select view" />
           </SelectTrigger>
           <SelectContent>
+            <SelectItem value="daily">Daily</SelectItem>
             <SelectItem value="monthly">Monthly</SelectItem>
             <SelectItem value="quarterly">Quarterly</SelectItem>
           </SelectContent>
         </Select>
+        {view === "daily" && (
+          <div className="flex items-center gap-2">
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              onClick={handlePrevMonth}
+              title="Previous month"
+            >
+              <ChevronLeftIcon size={18} />
+            </Button>
+            <span className="text-xs font-medium">
+              {format(currentDisplayMonth, "MMMM yyyy")}
+            </span>
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              onClick={handleNextMonth}
+              title="Next month"
+            >
+              <ChevronRightIcon size={18} />
+            </Button>
+          </div>
+        )}
         <Button type="button" variant="outline" title="Go to today">
           <CalendarIcon size={18} className="mr-2" />
           Today
         </Button>
       </div>
       <GanttProvider
+        key={`gantt-view-${view}-${currentDisplayMonth.getMonth()}-${currentDisplayMonth.getFullYear()}`}
         className="border border-input rounded-xl shadow-sm"
         onAddItem={handleAddFeature}
         range={view}
         zoom={100}
+        currentMonth={currentDisplayMonth}
       >
         <GanttSidebar>
           {features.map((feature) => {

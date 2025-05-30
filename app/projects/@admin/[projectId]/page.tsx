@@ -1,14 +1,10 @@
 import EditProjectBtn from "@/components/shared/projects-page/edit-project-btn";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import {
   getProjectAssociates,
   getProjectById,
   getProjectHeads,
 } from "@/lib/project";
 import { getAllAdmins, getAllInstructors, getUserById } from "@/lib/user";
-import { Plus } from "lucide-react";
-import { projectPriorities, projectStatuses } from "@/constants/project";
 import ArchiveProjectBtn from "@/components/admin-access/projects-page/archive-project-btn";
 import CreateTaskBtn from "@/components/shared/projects-page/create-task-btn";
 import { getProjectTasks } from "@/lib/task";
