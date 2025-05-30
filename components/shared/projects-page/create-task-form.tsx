@@ -40,10 +40,12 @@ import { CreateTaskSchema } from "@/schemas/CreateTaskSchema";
 
 type CreateTaskFormProps = {
   projectId: string;
-  availableAssignees: string;
+  availableAssignees: User[];
   isEdit?: boolean;
   task?: Task;
   setIsOpen: (isOpen: boolean) => void;
+  selectedStartDate?: Date;
+  selectedEndDate?: Date;
 };
 
 const CreateTaskForm = ({
@@ -52,17 +54,23 @@ const CreateTaskForm = ({
   isEdit = false,
   task,
   setIsOpen,
+  selectedStartDate,
+  selectedEndDate,
 }: CreateTaskFormProps) => {
-  const availableAssigneesData = useMemo(
-    () => JSON.parse(availableAssignees) as User[],
-    [availableAssignees]
-  );
   const form = useForm<z.infer<typeof CreateTaskSchema>>({
     defaultValues: {
       title: task?.title || "",
       description: task?.description || "",
-      startDate: task?.startDate ? new Date(task?.startDate) : undefined,
-      endDate: task?.endDate ? new Date(task?.endDate) : undefined,
+      startDate: task?.startDate
+        ? new Date(task?.startDate)
+        : selectedStartDate
+        ? selectedStartDate
+        : undefined,
+      endDate: task?.endDate
+        ? new Date(task?.endDate)
+        : selectedEndDate
+        ? selectedEndDate
+        : undefined,
       assignees: task?.assignees || [],
       priority: task?.priority || "low",
       status: task?.status || "planned",
@@ -290,7 +298,7 @@ const CreateTaskForm = ({
           render={({ field }) => (
             <FormItem>
               <MultiSelect
-                options={availableAssigneesData.map((user) => ({
+                options={availableAssignees.map((user) => ({
                   label: `${user.firstName} ${user.lastName} | ${user.role}`,
                   value: user.id,
                 }))}

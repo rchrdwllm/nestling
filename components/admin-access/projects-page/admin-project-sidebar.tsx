@@ -20,7 +20,7 @@ const AdminProjectSidebar = async () => {
   }
 
   return (
-    <aside className="flex flex-col gap-4 py-6 border rounded-xl border-border bg-background h-full shadow-sm">
+    <aside className="overflow-y-auto flex flex-col gap-4 py-6 border rounded-xl border-border bg-background h-full shadow-sm">
       <div className="flex flex-col gap-2 px-4">
         <CourseSectionLink segments={["projects"]} href="/projects">
           Home

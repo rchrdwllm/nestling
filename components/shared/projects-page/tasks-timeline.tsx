@@ -36,6 +36,7 @@ import { createProject } from "@/server/actions/create-project";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { createTask } from "@/server/actions/create-task";
+import { useTasksTimelineStore } from "@/context/tasks-timeline-context";
 
 type TasksTimelineProps = {
   tasks: Task[];
@@ -43,6 +44,8 @@ type TasksTimelineProps = {
 
 const TasksTimeline = ({ tasks }: TasksTimelineProps) => {
   const [isMounted, setIsMounted] = useState(false);
+  const { setFormToggled, setSelectedEndDate, setSelectedStartDate } =
+    useTasksTimelineStore();
   const [view, setView] = useState<"monthly" | "quarterly">("monthly");
   const router = useRouter();
   const [features, setFeatures] = useState(tasks);
@@ -78,13 +81,13 @@ const TasksTimeline = ({ tasks }: TasksTimelineProps) => {
     setFeatures((prev) => prev.filter((feature) => feature.id !== id));
 
   const handleCreateWithDate = (date: Date) => {
-    // setFormToggled(true);
+    setFormToggled(true);
 
     const startDate = date;
     const endDate = addMonths(date, 1);
 
-    // setSelectedStartDate(startDate);
-    // setSelectedEndDate(endDate);
+    setSelectedStartDate(startDate);
+    setSelectedEndDate(endDate);
   };
 
   const handleMoveFeature = (
@@ -118,13 +121,13 @@ const TasksTimeline = ({ tasks }: TasksTimelineProps) => {
   };
 
   const handleAddFeature = (date?: Date) => {
-    // setFormToggled(true);
+    setFormToggled(true);
 
     const startDate = date ? startOfMonth(date) : new Date();
     const endDate = date ? endOfMonth(date) : addMonths(startDate, 1);
 
-    // setSelectedStartDate(startDate);
-    // setSelectedEndDate(endDate);
+    setSelectedStartDate(startDate);
+    setSelectedEndDate(endDate);
   };
 
   return (

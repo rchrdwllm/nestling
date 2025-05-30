@@ -98,6 +98,10 @@ span {
   .projects-scroll-area > div[data-radix-scroll-area-viewport] > div {
     @apply block !important;
   }
+
+  .sidebar-scroll-area > div[data-radix-scroll-area-viewport] > div {
+    @apply block h-full !important;
+  }
 }
 
 :root {
