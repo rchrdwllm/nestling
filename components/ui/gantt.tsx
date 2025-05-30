@@ -69,7 +69,7 @@ export type GanttStatus = {
   value: "planned" | "in-progress" | "completed";
 };
 
-export type GanttFeature = Project & {
+export type GanttFeature = any & {
   owner: User | null;
 };
 
@@ -437,7 +437,7 @@ export const GanttSidebarItem: FC<GanttSidebarItemProps> = ({
     <Link
       // biome-ignore lint/a11y/useSemanticElements: <explanation>
       role="button"
-      href={`/projects/${feature.id}`}
+      href={`/projects/${feature.projectId ? feature.projectId : feature.id}`}
       onClick={handleClick as any}
       onKeyDown={handleKeyDown as any}
       tabIndex={0}
@@ -466,11 +466,11 @@ export const GanttSidebarItem: FC<GanttSidebarItemProps> = ({
             <AvatarImage src={feature.owner.image} />
             <AvatarFallback>{feature.owner.name?.slice(0, 2)}</AvatarFallback>
           </Avatar>
-        ) : (
+        ) : feature.ownwer ? (
           <div className="flex items-center justify-center size-6 bg-muted rounded-full">
             <p className="text-xs font-semibold">{feature.owner!.name![0]}</p>
           </div>
-        )}
+        ) : null}
       </div>
       <p className="ml-auto pointer-events-none text-muted-foreground">
         {duration}

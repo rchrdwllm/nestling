@@ -14,6 +14,7 @@ import CreateTaskBtn from "@/components/shared/projects-page/create-task-btn";
 import { getProjectTasks } from "@/lib/task";
 import TasksTable from "@/components/shared/projects-page/tasks-table";
 import ProjectDetails from "@/components/shared/projects-page/project-details";
+import TasksTimeline from "@/components/shared/projects-page/tasks-timeline";
 
 const ProjectPage = async ({
   params,
@@ -95,6 +96,8 @@ const ProjectPage = async ({
         <hr />
       </div>
       <ProjectDetails project={project} owner={owner} />
+      <h3 className="text-xl font-semibold">Project timeline</h3>
+      <TasksTimeline tasks={tasks} />
       <h3 className="text-xl font-semibold">Tasks</h3>
       <TasksTable
         tasks={tasks}
