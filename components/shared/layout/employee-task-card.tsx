@@ -11,8 +11,8 @@ const EmployeeTaskCard = ({ title, projectId, startDate, endDate }: Task) => {
     >
       <h1 className="font-medium">{title}</h1>
       <p className="text-muted-foreground flex items-center gap-2">
-        <Calendar className="size-4" /> <DateDisplay date={startDate} /> -{" "}
-        <Calendar className="size-4" /> <DateDisplay date={endDate} />
+        <Calendar className="size-3" /> <DateDisplay date={startDate} /> -{" "}
+        <Calendar className="size-3" /> <DateDisplay date={endDate} />
       </p>
     </Link>
   );
