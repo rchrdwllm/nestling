@@ -36,6 +36,9 @@ const UserBtn = () => {
   if (!user) return null;
 
   const handleSignOut = () => {
+    toast.dismiss();
+    toast.loading("Signing you out...");
+
     signOut()
       .then(() => {
         fetch("/api/revalidate", {
@@ -44,9 +47,15 @@ const UserBtn = () => {
             tags: ["courses", "students", "contents", "modules"],
           }),
         });
+
+        toast.dismiss();
+        toast.success("You have been signed out successfully!");
       })
       .catch((error) => {
         toast.error(error);
+
+        toast.dismiss();
+        toast.success("Error signing you out: " + error);
       });
   };
 
