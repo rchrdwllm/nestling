@@ -1,13 +1,12 @@
 "use server";
 
-import { MonthlyActiveUserRecord, User, UserActivity } from "@/types";
+import { MonthlyActiveUserRecord, UserActivity } from "@/types";
 import { db } from "./firebase";
 import { format, subMonths, parseISO } from "date-fns";
-import { unstable_cache } from "next/cache";
 
 export const calculateMonthlyActiveUsers = async (
   activities: UserActivity[],
-  months: number = 6,
+  months: number = 6
 ) => {
   const now = new Date();
   const result = [];
@@ -23,7 +22,6 @@ export const calculateMonthlyActiveUsers = async (
   }
 
   const monthlyUsers: Record<string, Set<string>> = {};
-
   activities.forEach((activity) => {
     const date = parseISO(activity.createdAt);
     const monthStr = format(date, "MMMM");
@@ -32,7 +30,7 @@ export const calculateMonthlyActiveUsers = async (
       monthlyUsers[monthStr] = new Set();
     }
 
-    monthlyUsers[monthStr].add(activity.id);
+    monthlyUsers[monthStr].add(activity.userId);
   });
 
   result.forEach((item) => {
@@ -46,10 +44,13 @@ export const calculateMonthlyActiveUsers = async (
 
 export const getActiveUsersFromMonths = async (months = 6) => {
   try {
-    const date = new Date();
-    const startDate = new Date(format(date, "yyyy-MM-dd")).toISOString();
+    const now = new Date();
+    const startDate = new Date(
+      Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + 1, 0, 23, 59, 59, 999)
+    ).toISOString();
+    const endMonthsAgo = subMonths(now, months);
     const endDate = new Date(
-      format(subMonths(date, months), "yyyy-MM-dd"),
+      Date.UTC(endMonthsAgo.getUTCFullYear(), endMonthsAgo.getUTCMonth(), 1)
     ).toISOString();
 
     const snapshot = await db
