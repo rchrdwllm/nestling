@@ -90,10 +90,42 @@ const SubmitAssignmentBtn = ({
 
     if (submissionType === "text") {
       execute({ content: data.content, contentId, submissionType });
-    } else if (submissionType === "file") {
+    } else {
       if (file) {
         if (file.size > MAX_SIZE) {
           toast.error("File size exceeds 100MB limit.");
+          return;
+        }
+
+        const allowedTypes: Record<string, string[]> = {
+          pdf: ["application/pdf"],
+          docx: [
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            "application/msword",
+          ],
+          xlsx: [
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            "application/vnd.ms-excel",
+          ],
+          pptx: [
+            "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+            "application/vnd.ms-powerpoint",
+          ],
+          mp4: ["video/mp4"],
+          other: [],
+        };
+
+        if (
+          submissionType !== "other" &&
+          allowedTypes[submissionType] &&
+          !allowedTypes[submissionType].includes(file.type)
+        ) {
+          toast.error(
+            `Invalid file type. Please upload a ${submissionType.toUpperCase()} file.`
+          );
+
+          setIsLoading(false);
+
           return;
         }
 
@@ -150,7 +182,7 @@ const SubmitAssignmentBtn = ({
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleAssignmentSubmit)}>
-            {submissionType === "file" ? (
+            {submissionType !== "text" ? (
               <>
                 <button
                   type="button"
@@ -176,6 +208,19 @@ const SubmitAssignmentBtn = ({
                   name="submission"
                   className="hidden"
                   onChange={addFile}
+                  accept={
+                    submissionType === "pdf"
+                      ? "application/pdf"
+                      : submissionType === "docx"
+                      ? ".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                      : submissionType === "xlsx"
+                      ? ".xls,.xlsx,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                      : submissionType === "pptx"
+                      ? ".ppt,.pptx,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation"
+                      : submissionType === "mp4"
+                      ? "video/mp4"
+                      : undefined
+                  }
                 />
               </>
             ) : (

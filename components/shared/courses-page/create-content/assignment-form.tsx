@@ -125,8 +125,13 @@ const AssignmentForm = () => {
               <SelectContent>
                 <SelectGroup>
                   <SelectLabel>Submission type</SelectLabel>
-                  <SelectItem value="file">File</SelectItem>
                   <SelectItem value="text">Text</SelectItem>
+                  <SelectItem value="pdf">PDF</SelectItem>
+                  <SelectItem value="docx">Docs</SelectItem>
+                  <SelectItem value="xlsx">Excel</SelectItem>
+                  <SelectItem value="pptx">PPT</SelectItem>
+                  <SelectItem value="mp4">MP4</SelectItem>
+                  <SelectItem value="other">Other</SelectItem>
                 </SelectGroup>
               </SelectContent>
             </Select>

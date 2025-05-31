@@ -15,7 +15,9 @@ export const CreateContentSchema = z.object({
     })
     .optional(),
   maxAttempts: z.number().optional(),
-  submissionType: z.enum(["file", "text"]).optional(),
+  submissionType: z
+    .enum(["text", "pdf", "docx", "xlsx", "pptx", "mp4", "other"])
+    .optional(),
   id: z.string(),
   fileUrl: z.string().optional(),
   isEdit: z.boolean(),

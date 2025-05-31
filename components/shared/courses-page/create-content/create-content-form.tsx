@@ -230,7 +230,7 @@ const CreateContentForm = ({
           />
         )}
         <Button type="submit" disabled={isExecuting}>
-          {content ? "Save" : "Crate"}
+          {content ? "Save" : "Create"}
         </Button>
       </form>
     </Form>
