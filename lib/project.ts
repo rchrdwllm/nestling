@@ -2,7 +2,7 @@
 
 import { unstable_cache } from "next/cache";
 import { db } from "./firebase";
-import { Project } from "@/types";
+import { Project, Task } from "@/types";
 import { getUserById } from "./user";
 
 export const getProjects = unstable_cache(
@@ -25,6 +25,29 @@ export const getProjects = unstable_cache(
     }
   },
   ["allProjects"],
+  { revalidate: 60 * 60, tags: ["projects"] }
+);
+
+export const getUnarchivedProjects = unstable_cache(
+  async () => {
+    try {
+      const projectsSnapshot = await db
+        .collection("projects")
+        .where("isArchived", "==", false)
+        .orderBy("createdAt", "desc")
+        .get();
+      const projects = projectsSnapshot.docs.map((doc) =>
+        doc.data()
+      ) as Project[];
+
+      return { success: projects };
+    } catch (error) {
+      console.error("Error fetching unarchived projects:", error);
+
+      return { error: "Failed to fetch unarchived projects" };
+    }
+  },
+  ["unarchivedProjects"],
   { revalidate: 60 * 60, tags: ["projects"] }
 );
 
@@ -228,4 +251,41 @@ export const getProjectAssociates = unstable_cache(
   },
   ["projectId"],
   { revalidate: 60 * 60, tags: ["projects", "user"] }
+);
+
+export const getProjectsWithTasks = unstable_cache(
+  async () => {
+    try {
+      const projectsSnapshot = await db
+        .collection("projects")
+        .where("isArchived", "==", false)
+        .orderBy("createdAt", "desc")
+        .get();
+      const projects = projectsSnapshot.docs.map((doc) =>
+        doc.data()
+      ) as Project[];
+      const projectsWithTasks = await Promise.all(
+        projects.map(async (project) => {
+          const tasksSnapshot = await db
+            .collection("tasks")
+            .where("projectId", "==", project.id)
+            .get();
+          const tasks = tasksSnapshot.docs.map((doc) => doc.data()) as Task[];
+
+          return {
+            ...project,
+            tasks: tasks,
+          };
+        })
+      );
+
+      return { success: projectsWithTasks };
+    } catch (error) {
+      console.error("Error fetching projects with tasks:", error);
+
+      return { error: "Failed to fetch projects with tasks" };
+    }
+  },
+  ["allProjectsWithTasks"],
+  { revalidate: 60 * 60, tags: ["projects", "tasks"] }
 );

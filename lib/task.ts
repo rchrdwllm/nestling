@@ -5,6 +5,41 @@ import { db } from "./firebase";
 import { Task } from "@/types";
 import { getFile } from "./file";
 
+export const getIncompleteTasks = unstable_cache(
+  async () => {
+    try {
+      const incompleteProjectsSnapshot = await db
+        .collection("projects")
+        .where("isArchived", "==", false)
+        .where("status", "!=", "completed")
+        .get();
+
+      if (incompleteProjectsSnapshot.empty) {
+        return { success: [] };
+      }
+
+      const incompleteProjectIds = incompleteProjectsSnapshot.docs.map(
+        (doc) => doc.id
+      );
+      const tasksSnapshot = await db
+        .collection("tasks")
+        .where("projectId", "in", incompleteProjectIds)
+        .where("isArchived", "==", false)
+        .where("status", "!=", "completed")
+        .get();
+      const tasks = tasksSnapshot.docs.map((doc) => doc.data()) as Task[];
+
+      return { success: tasks };
+    } catch (error) {
+      console.error("Error fetching all tasks:", error);
+
+      return { error: JSON.stringify(error) };
+    }
+  },
+  ["allTasks"],
+  { revalidate: 60 * 60, tags: ["tasks"] }
+);
+
 export const getProjectTasks = unstable_cache(
   async (projectId: string) => {
     try {
