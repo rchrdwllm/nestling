@@ -11,6 +11,8 @@ export const getProjectTasks = unstable_cache(
       const tasksSnapshot = await db
         .collection("tasks")
         .where("projectId", "==", projectId)
+        .where("isArchived", "==", false)
+        .orderBy("createdAt", "desc")
         .get();
       const tasks = tasksSnapshot.docs.map((doc) => doc.data()) as Task[];
 
@@ -18,6 +20,27 @@ export const getProjectTasks = unstable_cache(
     } catch (error) {
       console.error("Error fetching project tasks:", error);
 
+      return { error };
+    }
+  },
+  ["projectId"],
+  { revalidate: 60 * 60, tags: ["tasks"] }
+);
+
+export const getArchivedProjectTasks = unstable_cache(
+  async (projectId: string) => {
+    try {
+      const tasksSnapshot = await db
+        .collection("tasks")
+        .where("projectId", "==", projectId)
+        .where("isArchived", "==", true)
+        .orderBy("createdAt", "desc")
+        .get();
+      const tasks = tasksSnapshot.docs.map((doc) => doc.data()) as Task[];
+
+      return { success: tasks };
+    } catch (error) {
+      console.error("Error fetching archived project tasks:", error);
       return { error };
     }
   },
@@ -95,3 +118,21 @@ export const getTaskAttachments = unstable_cache(
   ["taskId"],
   { revalidate: 60 * 60, tags: ["tasks"] }
 );
+
+export const getTask = unstable_cache(async (taskId: string) => {
+  try {
+    const taskSnapshot = await db.collection("tasks").doc(taskId).get();
+
+    if (!taskSnapshot.exists) {
+      return { error: "Task not found" };
+    }
+
+    const taskData = taskSnapshot.data() as Task;
+
+    return { success: taskData };
+  } catch (error) {
+    console.error("Error fetching task:", error);
+
+    return { error };
+  }
+});

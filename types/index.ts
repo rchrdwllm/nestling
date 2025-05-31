@@ -254,4 +254,6 @@ export type Task = {
   priority: "low" | "medium" | "high";
   projectId: string;
   assignees: string[];
+  isArchived: boolean;
+  archivedAt: string | null;
 };

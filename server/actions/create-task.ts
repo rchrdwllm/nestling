@@ -82,6 +82,8 @@ export const createTask = actionClient
         status,
         assignees,
         projectId,
+        isArchived: false,
+        archivedAt: null,
       });
 
       const reference = {

@@ -1,12 +1,8 @@
 import ProjectsTable from "@/components/shared/projects-page/projects-table";
-import { getArchivedUserProjects } from "@/lib/project";
-import { getOptimisticUser } from "@/lib/user";
+import { getArchivedProjects } from "@/lib/project";
 
 const ProjectsArchivePage = async () => {
-  const user = await getOptimisticUser();
-  const { success: archivedProjects, error } = await getArchivedUserProjects(
-    user.id
-  );
+  const { success: archivedProjects, error } = await getArchivedProjects();
 
   if (error) {
     console.error("Error fetching archived projects:", error);

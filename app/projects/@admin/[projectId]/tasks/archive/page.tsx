@@ -1,0 +1,59 @@
+import TasksTable from "@/components/shared/projects-page/tasks-table";
+import { getProjectAssociates, getProjectHeads } from "@/lib/project";
+import { getArchivedProjectTasks } from "@/lib/task";
+
+const ArchivedTasks = async ({
+  params,
+}: {
+  params: Promise<{ projectId: string }>;
+}) => {
+  const { projectId } = await params;
+
+  const { success: archivedTasks, error } = await getArchivedProjectTasks(
+    projectId
+  );
+
+  if (error) {
+    console.error("Error fetching archived tasks:", error);
+    return <div>Error loading archived tasks. Please try again later.</div>;
+  }
+
+  if (!archivedTasks) {
+    console.error("Error fetching archived tasks: No tasks found");
+    return <div>No archived tasks available.</div>;
+  }
+
+  const { success: heads, error: headsError } = await getProjectHeads(
+    projectId
+  );
+  const { success: associates, error: associatesError } =
+    await getProjectAssociates(projectId);
+
+  if (headsError || associatesError) {
+    console.error("Error fetching data:", headsError || associatesError);
+    return <div>Error loading data. Please try again later.</div>;
+  }
+
+  if (!heads || !associates) {
+    return <div>No data available.</div>;
+  }
+
+  const availableAssignees = [...heads, ...associates];
+
+  return (
+    <div className="p-6 flex flex-col gap-4">
+      <div className="flex flex-col gap-4">
+        <h1 className="text-3xl font-semibold">Archived Tasks</h1>
+        <hr />
+      </div>
+      <div>
+        <TasksTable
+          tasks={archivedTasks}
+          availableAssignees={availableAssignees}
+        />
+      </div>
+    </div>
+  );
+};
+
+export default ArchivedTasks;

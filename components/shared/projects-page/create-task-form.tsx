@@ -39,6 +39,7 @@ import { getSHA256 } from "@/lib/sha-256";
 import { uploadFileToCloudinary } from "@/server/actions/upload-to-cloudinary";
 import { addAttachment } from "@/server/actions/add-attachment";
 import AttachmentPreview from "./attachment-preview";
+import { archiveTask } from "@/server/actions/archive-task";
 
 type CreateTaskFormProps = {
   projectId: string;
@@ -115,6 +116,17 @@ const CreateTaskForm = ({
     },
   });
   const { execute: attachmentExecute } = useAction(addAttachment);
+  const { execute: taskArchive } = useAction(archiveTask, {
+    onSuccess: ({ data }) => {
+      toast.dismiss();
+      toast.success(data?.success);
+      setIsOpen(false);
+    },
+    onError: (error) => {
+      toast.dismiss();
+      toast.error(`Error archiving task: ${error}`);
+    },
+  });
 
   useEffect(() => {
     if (task) {
@@ -394,7 +406,34 @@ const CreateTaskForm = ({
         />
         {isEdit && task && (
           <div className="flex flex-col gap-4">
-            <h1 className="font-semibold">Attachments</h1>
+            <div className="flex items-center justify-between">
+              <h1 className="font-semibold">Attachments</h1>
+              <div>
+                <button
+                  type="button"
+                  className="aspect-square hover:bg-accent hover:text-accent-foreground rounded-md cursor-pointer group transition-colors"
+                >
+                  <label
+                    className="flex flex-col justify-center items-center gap-2 w-full p-2 cursor-pointer text-muted-foreground transition-colors group-hover:text-foreground"
+                    htmlFor="submission"
+                  >
+                    <>
+                      <span className="flex items-center gap-2 text-sm font-medium">
+                        <Plus className="size-4" />
+                      </span>
+                    </>
+                  </label>
+                </button>
+                <input
+                  type="file"
+                  id="submission"
+                  name="submission"
+                  className="hidden"
+                  multiple
+                  onChange={addFiles}
+                />
+              </div>
+            </div>
             <div className="border border-border rounded-lg overflow-hidden">
               {previewUrls.length ? (
                 previewUrls.map((previewUrl) => (
@@ -414,32 +453,19 @@ const CreateTaskForm = ({
                 </p>
               )}
             </div>
-            <div>
-              <button
-                type="button"
-                className="w-full bg-secondary hover:bg-accent hover:text-accent-foreground rounded-md cursor-pointer group transition-colors"
-              >
-                <label
-                  className="flex flex-col justify-center items-center gap-2 w-full py-2 cursor-pointer text-muted-foreground transition-colors group-hover:text-foreground"
-                  htmlFor="submission"
-                >
-                  <>
-                    <span className="flex items-center gap-2 text-sm font-medium">
-                      <Plus className="size-4" /> Add attachments
-                    </span>
-                  </>
-                </label>
-              </button>
-              <input
-                type="file"
-                id="submission"
-                name="submission"
-                className="hidden"
-                multiple
-                onChange={addFiles}
-              />
-            </div>
           </div>
+        )}
+        {task && isEdit && (
+          <Button
+            type="button"
+            variant="outline"
+            className="hover:text-primary"
+            onClick={() => {
+              taskArchive({ taskId: task.id });
+            }}
+          >
+            {task.isArchived ? "Unarchive" : "Archive"} task
+          </Button>
         )}
         <Button type="submit" disabled={isExecuting || isLoading}>
           {isEdit ? "Update task" : "Create task"}

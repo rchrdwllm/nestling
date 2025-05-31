@@ -79,6 +79,28 @@ export const getProjectsOfUser = unstable_cache(
   { revalidate: 60 * 60, tags: ["projects"] }
 );
 
+export const getArchivedProjects = unstable_cache(
+  async () => {
+    try {
+      const projectsSnapshot = await db
+
+        .collection("projects")
+        .where("isArchived", "==", true)
+        .get();
+      const projects = projectsSnapshot.docs.map((doc) =>
+        doc.data()
+      ) as Project[];
+
+      return { success: projects };
+    } catch (error) {
+      console.error("Error fetching archived projects:", error);
+      return { error: "Failed to fetch archived projects" };
+    }
+  },
+  ["archivedProjects"],
+  { revalidate: 60 * 60, tags: ["projects"] }
+);
+
 export const getArchivedUserProjects = unstable_cache(
   async (userId: string) => {
     try {

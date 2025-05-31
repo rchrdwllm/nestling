@@ -101,7 +101,7 @@ const SidePanel = ({
         <MotionWrapper
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
-          className="absolute w-[calc(50px+2rem)] top-1/2 right-0 h-[50vh] z-10 p-4 -translate-y-1/2"
+          className="absolute w-[calc(50px+2rem)] top-1/2 right-0 h-[25vh] z-10 p-4 -translate-y-1/2"
         >
           <MotionWrapper
             initial={{ opacity: 0, x: "100%" }}
