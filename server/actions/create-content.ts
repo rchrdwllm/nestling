@@ -36,7 +36,8 @@ export const createContent = actionClient
           moduleId,
           courseId,
           content,
-          date,
+          startDate: date?.from.toISOString(),
+          endDate: date?.to.toISOString(),
           submissionType,
           points,
           maxAttempts,
@@ -47,7 +48,7 @@ export const createContent = actionClient
 
         revalidatePath(
           "/courses/[courseId]/modules/content/[contentId]",
-          "page",
+          "page"
         );
         revalidateTag("contents");
         revalidateTag("modules");
@@ -71,7 +72,7 @@ export const createContent = actionClient
 
         revalidatePath(
           "/courses/[courseId]/modules/content/[contentId]",
-          "page",
+          "page"
         );
         revalidateTag("contents");
         revalidateTag("modules");
@@ -97,35 +98,35 @@ export const createContent = actionClient
               isPublished,
             }
           : type === "assignment"
-            ? {
-                title,
-                type,
-                moduleId,
-                id,
-                courseId,
-                createdAt: new Date().toISOString(),
-                updatedAt: new Date().toISOString(),
-                startDate: date?.from.toISOString(),
-                endDate: date?.to.toISOString(),
-                submissionType,
-                points,
-                maxAttempts,
-                isLocked: false,
-                content,
-                isPublished,
-              }
-            : {
-                title,
-                type,
-                moduleId,
-                id,
-                courseId,
-                createdAt: new Date().toISOString(),
-                updatedAt: new Date().toISOString(),
-                content,
-                isLocked: false,
-                isPublished,
-              };
+          ? {
+              title,
+              type,
+              moduleId,
+              id,
+              courseId,
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString(),
+              startDate: date?.from.toISOString(),
+              endDate: date?.to.toISOString(),
+              submissionType,
+              points,
+              maxAttempts,
+              isLocked: false,
+              content,
+              isPublished,
+            }
+          : {
+              title,
+              type,
+              moduleId,
+              id,
+              courseId,
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString(),
+              content,
+              isLocked: false,
+              isPublished,
+            };
 
       await db.collection("contents").doc(id).set(newContent);
 

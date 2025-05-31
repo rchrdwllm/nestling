@@ -2,23 +2,26 @@
 
 import Papa from "papaparse";
 import { Button } from "@/components/ui/button";
-import { Submission } from "@/types";
-import { generateSubmissionsReport } from "@/lib/report";
+import { Share } from "lucide-react";
+import { generateGradesReport } from "@/lib/report";
 import { toast } from "sonner";
 
-type GenerateSubmissionReportProps = {
-  contentId: string;
+type GenerateGradesReportProps = {
+  studentIds: string[];
+  courseId: string;
 };
 
-const GenerateSubmissionReport = ({
-  contentId,
-}: GenerateSubmissionReportProps) => {
+const GenerateGradesReport = ({
+  studentIds,
+  courseId,
+}: GenerateGradesReportProps) => {
   const handleDownloadCsv = async () => {
-    const { success, error } = await generateSubmissionsReport(contentId);
+    const { success, error } = await generateGradesReport(studentIds, courseId);
 
     if (error || !success) {
+      toast.error("Error generating report. Please try again later: " + error);
       console.error("Error generating report:", error);
-      toast.error("Error generating report. Please try again later.");
+
       return;
     }
 
@@ -28,7 +31,7 @@ const GenerateSubmissionReport = ({
     const link = document.createElement("a");
 
     link.href = url;
-    link.setAttribute("download", "submissions_report.csv");
+    link.setAttribute("download", "grades_report.csv");
 
     document.body.appendChild(link);
 
@@ -40,10 +43,10 @@ const GenerateSubmissionReport = ({
   };
 
   return (
-    <Button variant="secondary" onClick={handleDownloadCsv}>
-      Generate report
+    <Button variant="outline" onClick={handleDownloadCsv}>
+      <Share className="size-4" /> Generate report
     </Button>
   );
 };
 
-export default GenerateSubmissionReport;
+export default GenerateGradesReport;

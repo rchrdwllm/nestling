@@ -153,6 +153,7 @@ export type Submission = {
   grade: number | null;
   content: string;
   feedback: string | undefined;
+  gradedAt: string | null;
 };
 
 export type Announcement = {

@@ -95,10 +95,11 @@ const SubmissionGrid = async ({
             points={content.points!}
             isGraded={latestAttempt.isGraded}
             grade={latestAttempt.grade?.toString()}
+            feedback={latestAttempt.feedback}
             isMultipleAttempts={content.maxAttempts! > 1}
           />
         )}
-        <GenerateSubmissionReport submissions={submissions} />
+        <GenerateSubmissionReport contentId={content.id} />
       </div>
     </div>
   );

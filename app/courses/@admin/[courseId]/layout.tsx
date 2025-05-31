@@ -31,6 +31,12 @@ const Layout = ({ children }: { children: ReactNode }) => {
         >
           Archived Announcements
         </CourseSectionLink>
+        <CourseSectionLink
+          segments={["grade"]}
+          href={`/courses/${courseId}/grade`}
+        >
+          Grade
+        </CourseSectionLink>
       </aside>
       <div className="col-span-8">{children}</div>
     </section>

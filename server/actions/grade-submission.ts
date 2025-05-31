@@ -3,7 +3,7 @@
 import { GradeSubmissionSchema } from "@/schemas/GradeSubmissionSchema";
 import { actionClient } from "../action-client";
 import { db } from "@/lib/firebase";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 export const gradeSubmission = actionClient
   .schema(GradeSubmissionSchema)
@@ -20,18 +20,20 @@ export const gradeSubmission = actionClient
 
       await submission.update({
         grade: parseInt(grade),
-        feedback,
+        feedback: feedback || "",
         isGraded: true,
+        gradedAt: new Date().toISOString(),
       });
 
       revalidatePath(
         "/courses/[courseId]/modules/content/[contentId]/submissions",
-        "page",
+        "page"
       );
       revalidatePath(
         "/courses/[courseId]/modules/content/[contentId]/page",
-        "page",
+        "page"
       );
+      revalidateTag("submissions");
 
       if (regrade) {
         return { success: "Assessment regraded" };

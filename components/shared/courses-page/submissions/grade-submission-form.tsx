@@ -21,6 +21,7 @@ type GradeSubmissionFormProps = {
   isGraded: boolean;
   grade: string | undefined;
   isMultipleAttempts: boolean;
+  feedback?: string;
 };
 
 const GradeSubmissionForm = ({
@@ -30,13 +31,14 @@ const GradeSubmissionForm = ({
   points,
   isGraded,
   grade,
+  feedback,
   isMultipleAttempts,
 }: GradeSubmissionFormProps) => {
   const form = useForm<z.infer<typeof GradeSubmissionSchema>>({
     resolver: zodResolver(GradeSubmissionSchema),
     defaultValues: {
       grade: grade || "0",
-      feedback: "",
+      feedback: feedback || "",
       studentId,
       contentId,
       submissionId,
@@ -65,6 +67,7 @@ const GradeSubmissionForm = ({
 
   useEffect(() => {
     form.setValue("grade", grade || "0");
+    form.setValue("feedback", feedback || "");
   }, [grade]);
 
   const handleSubmit = (data: z.infer<typeof GradeSubmissionSchema>) => {
@@ -110,6 +113,7 @@ const GradeSubmissionForm = ({
           <FormField
             control={form.control}
             name="feedback"
+            defaultValue={feedback || ""}
             render={({ field }) => (
               <FormControl>
                 <FormItem>
