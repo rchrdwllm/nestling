@@ -1,14 +1,10 @@
 import EditProjectBtn from "@/components/shared/projects-page/edit-project-btn";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import {
   getProjectAssociates,
   getProjectById,
   getProjectHeads,
 } from "@/lib/project";
 import { getAllAdmins, getAllInstructors, getUserById } from "@/lib/user";
-import { Plus } from "lucide-react";
-import { projectPriorities, projectStatuses } from "@/constants/project";
 import ArchiveProjectBtn from "@/components/admin-access/projects-page/archive-project-btn";
 import CreateTaskBtn from "@/components/shared/projects-page/create-task-btn";
 import { getProjectTasks } from "@/lib/task";
@@ -16,6 +12,8 @@ import TasksTable from "@/components/shared/projects-page/tasks-table";
 import ProjectDetails from "@/components/shared/projects-page/project-details";
 import TasksTimeline from "@/components/shared/projects-page/tasks-timeline";
 import CreateTaskDialog from "@/components/shared/projects-page/create-task-dialog";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 const ProjectPage = async ({
   params,
@@ -101,7 +99,14 @@ const ProjectPage = async ({
         <ProjectDetails project={project} owner={owner} />
         <h3 className="text-xl font-semibold">Project timeline</h3>
         <TasksTimeline tasks={tasks} />
-        <h3 className="text-xl font-semibold">Tasks</h3>
+        <div className="flex items-center justify-between">
+          <h3 className="text-xl font-semibold">Tasks</h3>
+          <Link href={`/projects/${project.id}/tasks/archive`}>
+            <Button variant="link" className="px-0">
+              Archived tasks
+            </Button>
+          </Link>
+        </div>
         <TasksTable tasks={tasks} availableAssignees={availableAssignees} />
       </div>
     </>

@@ -1,4 +1,5 @@
 import ProjectsTable from "@/components/shared/projects-page/projects-table";
+import { projectCols } from "@/components/shared/projects-page/projects-table-def";
 import ProjectsTimeline from "@/components/shared/projects-page/projects-timeline";
 import { getProjectsOfUser } from "@/lib/project";
 import { getAllAdmins, getAllInstructors, getOptimisticUser } from "@/lib/user";
@@ -36,7 +37,7 @@ const TimelinePage = async () => {
           instructors={JSON.stringify(instructors)}
           projects={projects}
         />
-        <ProjectsTable projects={projects} />
+        <ProjectsTable columns={projectCols} data={projects} />
       </div>
     </main>
   );

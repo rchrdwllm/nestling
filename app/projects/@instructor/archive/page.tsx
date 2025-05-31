@@ -1,4 +1,5 @@
 import ProjectsTable from "@/components/shared/projects-page/projects-table";
+import { projectCols } from "@/components/shared/projects-page/projects-table-def";
 import { getArchivedUserProjects } from "@/lib/project";
 import { getOptimisticUser } from "@/lib/user";
 
@@ -26,7 +27,7 @@ const ProjectsArchivePage = async () => {
         <h1 className="text-3xl font-semibold">Archived Projects</h1>
         <hr />
       </div>
-      <ProjectsTable projects={archivedProjects} />
+      <ProjectsTable columns={projectCols} data={archivedProjects} />
     </div>
   );
 };
