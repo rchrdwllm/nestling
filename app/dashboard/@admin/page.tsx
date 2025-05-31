@@ -21,12 +21,20 @@ const AdminDashboardPage = async () => {
         </div>
         <hr />
       </div>
-      <div className="grid grid-cols-3 gap-4">
-        <TotalStudentsOverview />
-        <TotalInstructorsOverview />
-        <TotalProjectsOverview />
+      <div className="grid grid-cols-6 gap-4">
+        <article className="col-span-2">
+          <TotalStudentsOverview />
+        </article>
+        <article className="col-span-2">
+          <TotalInstructorsOverview />
+        </article>
+        <article className="col-span-2">
+          <TotalProjectsOverview />
+        </article>
+        <article className="col-span-3">
+          <ActiveUsers monthlyActiveUsers={activeUsers.monthlyActiveUsers} />
+        </article>
       </div>
-      <ActiveUsers monthlyActiveUsers={activeUsers.monthlyActiveUsers} />
     </div>
   );
 };

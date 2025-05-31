@@ -4,6 +4,7 @@ import { db } from "@/lib/firebase";
 import { LoginSchema } from "@/schemas/LoginSchema";
 import bcrypt from "bcrypt";
 import { Role, User, UserActivity } from "@/types";
+import { format } from "date-fns";
 
 export const authOptions = {
   providers: [
@@ -65,33 +66,40 @@ export const authOptions = {
 
       const user = userDoc.data() as User;
 
-      // if (user.role !== "admin") {
-      //   const today = new Date().toISOString().split("T")[0];
-      //   const activityRef = await db
-      //     .collection("userActivities")
-      //     .where("userId", "==", user.id)
-      //     .where("type", "==", "login")
-      //     .where("createdAt", "==", today)
-      //     .get();
+      if (user.role !== "admin") {
+        const today = new Date();
+        const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
+        const monthEnd = new Date(today.getFullYear(), today.getMonth() + 1, 0);
 
-      //   if (activityRef.empty) {
-      //     const id = crypto.randomUUID();
+        const activityRef = await db
+          .collection("userActivities")
+          .where("userId", "==", user.id)
+          .where("type", "==", "login")
+          .where("createdAt", ">=", format(monthStart, "yyyy-MM-dd"))
+          .where("createdAt", "<=", format(monthEnd, "yyyy-MM-dd"))
+          .get();
 
-      //     await db.collection("userActivities").doc(id).set({
-      //       id,
-      //       userId: user.id,
-      //       type: "login",
-      //       createdAt: today,
-      //       updatedAt: new Date().toISOString(),
-      //     });
-      //   }
+        if (activityRef.empty) {
+          const id = crypto.randomUUID();
 
-      //   const activityData = activityRef.docs[0].data() as UserActivity;
+          await db
+            .collection("userActivities")
+            .doc(id)
+            .set({
+              id,
+              userId: user.id,
+              type: "login",
+              createdAt: format(today, "yyyy-MM-dd"),
+              updatedAt: new Date().toISOString(),
+            });
+        } else {
+          const activityData = activityRef.docs[0].data() as UserActivity;
 
-      //   await db.collection("userActivities").doc(activityData.id).update({
-      //     updatedAt: new Date().toISOString(),
-      //   });
-      // }
+          await db.collection("userActivities").doc(activityData.id).update({
+            updatedAt: new Date().toISOString(),
+          });
+        }
+      }
 
       token.role = user.role;
       token.firstName = user.firstName;
