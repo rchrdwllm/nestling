@@ -101,4 +101,14 @@ export const adminSidebarItems: SidebarItem[] = [
     href: "/calendar",
     Icon: CalendarDays,
   },
+  {
+    label: "About",
+    href: "/about",
+    Icon: Info,
+  },
+  {
+    label: "Help",
+    href: "/help",
+    Icon: CircleHelp,
+  },
 ];
