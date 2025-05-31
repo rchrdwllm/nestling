@@ -65,38 +65,46 @@ export const authOptions = {
       if (!userDoc.exists) return token;
 
       const user = userDoc.data() as User;
-
       if (user.role !== "admin") {
-        const today = new Date();
-        const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
-        const monthEnd = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+        const now = new Date();
+        const monthStart = new Date(
+          Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1)
+        );
+        const monthEnd = new Date(
+          Date.UTC(
+            now.getUTCFullYear(),
+            now.getUTCMonth() + 1,
+            0,
+            23,
+            59,
+            59,
+            999
+          )
+        );
 
         const activityRef = await db
           .collection("userActivities")
           .where("userId", "==", user.id)
           .where("type", "==", "login")
-          .where("createdAt", ">=", format(monthStart, "yyyy-MM-dd"))
-          .where("createdAt", "<=", format(monthEnd, "yyyy-MM-dd"))
+          .where("createdAt", ">=", monthStart.toISOString())
+          .where("createdAt", "<=", monthEnd.toISOString())
           .get();
 
         if (activityRef.empty) {
           const id = crypto.randomUUID();
 
-          await db
-            .collection("userActivities")
-            .doc(id)
-            .set({
-              id,
-              userId: user.id,
-              type: "login",
-              createdAt: format(today, "yyyy-MM-dd"),
-              updatedAt: new Date().toISOString(),
-            });
+          await db.collection("userActivities").doc(id).set({
+            id,
+            userId: user.id,
+            type: "login",
+            createdAt: now.toISOString(),
+            updatedAt: now.toISOString(),
+          });
         } else {
           const activityData = activityRef.docs[0].data() as UserActivity;
 
           await db.collection("userActivities").doc(activityData.id).update({
-            updatedAt: new Date().toISOString(),
+            updatedAt: now.toISOString(),
           });
         }
       }

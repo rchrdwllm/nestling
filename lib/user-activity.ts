@@ -1,20 +1,21 @@
 "use server";
 
-import { MonthlyActiveUserRecord, User, UserActivity } from "@/types";
+import { MonthlyActiveUserRecord, UserActivity } from "@/types";
 import { db } from "./firebase";
-import { format, subMonths, parseISO } from "date-fns";
-import { unstable_cache } from "next/cache";
+import { format, parseISO } from "date-fns";
 
 export const calculateMonthlyActiveUsers = async (
   activities: UserActivity[],
-  months: number = 6,
+  months: number = 6
 ) => {
   const now = new Date();
   const result = [];
-
   for (let i = months - 1; i >= 0; i--) {
-    const date = subMonths(now, i);
-    const monthStr = format(date, "MMMM");
+    // Use UTC for consistent timezone handling
+    const utcDate = new Date(
+      Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - i, 1)
+    );
+    const monthStr = format(utcDate, "MMMM");
 
     result.push({
       month: monthStr,
@@ -23,16 +24,16 @@ export const calculateMonthlyActiveUsers = async (
   }
 
   const monthlyUsers: Record<string, Set<string>> = {};
-
   activities.forEach((activity) => {
     const date = parseISO(activity.createdAt);
+    // Since the date is already in UTC format, format it directly
     const monthStr = format(date, "MMMM");
 
     if (!monthlyUsers[monthStr]) {
       monthlyUsers[monthStr] = new Set();
     }
 
-    monthlyUsers[monthStr].add(activity.id);
+    monthlyUsers[monthStr].add(activity.userId);
   });
 
   result.forEach((item) => {
@@ -46,10 +47,15 @@ export const calculateMonthlyActiveUsers = async (
 
 export const getActiveUsersFromMonths = async (months = 6) => {
   try {
-    const date = new Date();
-    const startDate = new Date(format(date, "yyyy-MM-dd")).toISOString();
+    const now = new Date();
+    // Calculate start date (end of current month in UTC)
+    const startDate = new Date(
+      Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + 1, 0, 23, 59, 59, 999)
+    ).toISOString();
+
+    // Calculate end date (start of the month N months ago in UTC)
     const endDate = new Date(
-      format(subMonths(date, months), "yyyy-MM-dd"),
+      Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - months + 1, 1)
     ).toISOString();
 
     const snapshot = await db
