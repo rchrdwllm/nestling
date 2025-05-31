@@ -17,6 +17,7 @@ import {
   GanttSidebarItem,
   GanttTimeline,
   GanttToday,
+  GanttContext,
 } from "@/components/ui/gantt";
 import {
   ChevronLeftIcon,
@@ -26,7 +27,7 @@ import {
   Plus,
   TrashIcon,
 } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import {
   Select,
   SelectContent,
@@ -53,6 +54,21 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { createTask } from "@/server/actions/create-task";
 
+// Component to register scrollToToday function with parent ref
+const ScrollToTodayRegistrar = ({
+  scrollToTodayRef,
+}: {
+  scrollToTodayRef: React.MutableRefObject<(() => void) | null>;
+}) => {
+  const ganttContext = useContext(GanttContext);
+
+  useEffect(() => {
+    scrollToTodayRef.current = ganttContext.scrollToToday || null;
+  }, [ganttContext.scrollToToday, scrollToTodayRef]);
+
+  return null;
+};
+
 type TasksTimelineProps = {
   tasks: Task[];
 };
@@ -66,6 +82,7 @@ const TasksTimeline = ({ tasks }: TasksTimelineProps) => {
   );
   const router = useRouter();
   const [features, setFeatures] = useState(tasks);
+  const scrollToTodayRef = useRef<(() => void) | null>(null);
   const { execute } = useAction(createTask, {
     onExecute: () => {
       toast.dismiss("Updating task...");
@@ -169,6 +186,10 @@ const TasksTimeline = ({ tasks }: TasksTimelineProps) => {
     setSelectedEndDate(endDate);
   };
 
+  const handleTodayClick = () => {
+    scrollToTodayRef.current?.();
+  };
+
   const handlePrevMonth = () => {
     if (view === "daily") {
       const prevMonth = new Date(currentDisplayMonth);
@@ -217,9 +238,14 @@ const TasksTimeline = ({ tasks }: TasksTimelineProps) => {
             <SelectItem value="daily">Daily</SelectItem>
             <SelectItem value="monthly">Monthly</SelectItem>
             <SelectItem value="quarterly">Quarterly</SelectItem>
-          </SelectContent>
+          </SelectContent>{" "}
         </Select>
-        <Button type="button" variant="outline" title="Go to today">
+        <Button
+          type="button"
+          variant="outline"
+          title="Go to today"
+          onClick={handleTodayClick}
+        >
           <CalendarIcon size={18} className="mr-2" />
           Today
         </Button>
@@ -257,6 +283,7 @@ const TasksTimeline = ({ tasks }: TasksTimelineProps) => {
         zoom={100}
         currentMonth={currentDisplayMonth}
       >
+        <ScrollToTodayRegistrar scrollToTodayRef={scrollToTodayRef} />
         <GanttSidebar>
           {features.map((feature) => {
             return (

@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/context-menu";
 import { projectStatuses } from "@/constants/project";
 import { cn } from "@/lib/utils";
-import { Project, User } from "@/types";
+import { User } from "@/types";
 import {
   DndContext,
   MouseSensor,
@@ -103,14 +103,14 @@ export type GanttContextProps = {
   ref: RefObject<HTMLDivElement | null> | null;
   currentMonth?: Date;
   setCurrentMonth?: (date: Date) => void;
+  scrollToToday?: () => void;
 };
 
 const getsDaysIn = (range: Range) => {
-  // For when range is daily
   let fn = (_date: Date) => 1;
 
   if (range === "daily") {
-    fn = getDaysInMonth; // Get days in month for daily view
+    fn = getDaysInMonth;
   } else if (range === "monthly" || range === "quarterly") {
     fn = getDaysInMonth;
   }
@@ -180,14 +180,13 @@ const getAddRange = (range: Range) => {
 
 const getDateByMousePosition = (context: GanttContextProps, mouseX: number) => {
   if (context.range === "daily" && context.currentMonth) {
-    // For daily view, use the current month as reference
     const year = context.currentMonth.getFullYear();
     const month = context.currentMonth.getMonth();
     const columnWidth = (context.columnWidth * context.zoom) / 100;
     const dayOffset = Math.floor(mouseX / columnWidth);
-    return new Date(year, month, dayOffset + 1); // +1 because days are 1-indexed
+
+    return new Date(year, month, dayOffset + 1);
   } else {
-    // For monthly or quarterly view
     const timelineStartDate = new Date(context.timelineData[0].year, 0, 1);
     const columnWidth = (context.columnWidth * context.zoom) / 100;
     const offset = Math.floor(mouseX / columnWidth);
@@ -198,6 +197,7 @@ const getDateByMousePosition = (context: GanttContextProps, mouseX: number) => {
     const pixelsPerDay = columnWidth / daysInMonth;
     const dayOffset = Math.floor((mouseX % columnWidth) / pixelsPerDay);
     const actualDate = addDays(month, dayOffset);
+
     return actualDate;
   }
 };
@@ -233,37 +233,29 @@ const getOffset = (
   const parsedColumnWidth = (context.columnWidth * context.zoom) / 100;
 
   if (context.range === "daily" && context.currentMonth) {
-    // For daily view, handle the case where date might be in a different month
     const currentMonth = context.currentMonth.getMonth();
     const currentYear = context.currentMonth.getFullYear();
 
-    // If date is in a different month/year than our current view, adjust it
     if (
       date.getMonth() !== currentMonth ||
       date.getFullYear() !== currentYear
     ) {
-      // For projects starting in future months, position them off-screen to the right
       if (
         date.getFullYear() > currentYear ||
         (date.getFullYear() === currentYear && date.getMonth() > currentMonth)
       ) {
-        // Position them off the right edge of the visible area
         const daysInMonth = getDaysInMonth(
           new Date(currentYear, currentMonth, 1)
         );
         return daysInMonth * parsedColumnWidth;
       }
 
-      // For projects from earlier months that continue into this month,
-      // position them at the start of the month
       return 0;
     }
 
-    // For dates within current month, calculate offset based on day of month
-    const dayOfMonth = date.getDate() - 1; // 0-indexed position
+    const dayOfMonth = date.getDate() - 1;
     return dayOfMonth * parsedColumnWidth;
   } else {
-    // For monthly or quarterly view
     const differenceIn = getDifferenceIn(context.range);
     const startOf = getStartOf(context.range);
     const fullColumns = differenceIn(startOf(date), timelineStartDate);
@@ -285,7 +277,7 @@ const getWidth = (
   if (!endDate) {
     return parsedColumnWidth * 2;
   }
-  // For daily view, calculate width based on days difference
+
   if (context.range === "daily" && context.currentMonth) {
     const currentMonth = context.currentMonth.getMonth();
     const currentYear = context.currentMonth.getFullYear();
@@ -293,7 +285,6 @@ const getWidth = (
       new Date(currentYear, currentMonth, 1)
     );
 
-    // Check if project should be displayed in current month
     const projectInPreviousMonth =
       startDate.getFullYear() < currentYear ||
       (startDate.getFullYear() === currentYear &&
@@ -312,7 +303,6 @@ const getWidth = (
       endDate.getFullYear() === currentYear &&
       endDate.getMonth() === currentMonth;
 
-    // If the project is entirely in a future month, return 0 width
     if (
       !projectInPreviousMonth &&
       !projectStartsInCurrentMonth &&
@@ -321,28 +311,23 @@ const getWidth = (
       return 0;
     }
 
-    // Clone dates to avoid modifying the originals
     let start = new Date(startDate);
     let end = new Date(endDate);
 
-    // Adjust start date if project started in a previous month
     if (projectInPreviousMonth) {
-      start = new Date(currentYear, currentMonth, 1); // First day of current month
+      start = new Date(currentYear, currentMonth, 1);
     }
 
-    // Adjust end date if project continues to a future month
     if (projectInNextMonth) {
-      end = new Date(currentYear, currentMonth, daysInCurrentMonth); // Last day of current month
+      end = new Date(currentYear, currentMonth, daysInCurrentMonth);
     }
 
-    // If same day, return one column width
     if (isSameDay(start, end)) {
       return parsedColumnWidth;
     }
 
-    // Calculate days difference within this month's view
     const daysDiff = differenceInDays(end, start);
-    return Math.max(1, daysDiff + 1) * parsedColumnWidth; // +1 to include the end date
+    return Math.max(1, daysDiff + 1) * parsedColumnWidth;
   }
 
   const differenceIn = getDifferenceIn(context.range);
@@ -378,9 +363,8 @@ const calculateInnerOffset = (
   range: Range,
   columnWidth: number
 ) => {
-  // For daily view, we want positions to align with the day columns
   if (range === "daily") {
-    return 0; // No inner offset for daily view
+    return 0;
   }
 
   const startOf = getStartOf(range);
@@ -407,7 +391,10 @@ const GanttContext = createContext<GanttContextProps>({
   ref: null,
   currentMonth: undefined,
   setCurrentMonth: undefined,
+  scrollToToday: undefined,
 });
+
+export { GanttContext };
 
 export type GanttContentHeaderProps = {
   renderHeaderItem: (index: number) => ReactNode;
@@ -428,7 +415,6 @@ export const GanttContentHeader: FC<GanttContentHeaderProps> = ({
       className="sticky top-0 z-20 flex flex-col w-full shrink-0 bg-backdrop/90 backdrop-blur-sm"
       style={{ height: "var(--gantt-header-height)" }}
     >
-      {/* Top part with title - aligned with sidebar header */}
       <div className="h-8">
         <div
           className="sticky inline-flex whitespace-nowrap px-3 py-2 text-muted-foreground text-xs"
@@ -439,7 +425,6 @@ export const GanttContentHeader: FC<GanttContentHeaderProps> = ({
           <p>{title}</p>
         </div>
       </div>
-      {/* Bottom part with day numbers and weekday names */}
       <div
         className="grid w-full flex-1"
         style={{
@@ -480,14 +465,11 @@ const MonthlyHeader: FC = () => {
 
 const DailyHeader: FC = () => {
   const gantt = useContext(GanttContext);
-
-  // Use the currentMonth from context, or default to current month (May 2025)
-  const currentDate = gantt.currentMonth || new Date(); // May 30, 2025
+  const currentDate = gantt.currentMonth || new Date();
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
   const daysInMonth = getDaysInMonth(new Date(year, month));
 
-  // Use a key that includes year and month to force re-render when month changes
   return (
     <div
       className="relative flex flex-col"
@@ -527,10 +509,9 @@ const DailyHeader: FC = () => {
       <GanttColumns
         columns={daysInMonth}
         isColumnSecondary={(day) => {
-          // Highlight weekends
           const date = new Date(year, month, day + 1);
           const dayOfWeek = date.getDay();
-          return dayOfWeek === 0 || dayOfWeek === 6; // Sunday or Saturday
+          return dayOfWeek === 0 || dayOfWeek === 6;
         }}
       />
     </div>
@@ -630,7 +611,6 @@ export const GanttSidebarItem: FC<GanttSidebarItemProps> = ({
         height: "var(--gantt-row-height)",
       }}
     >
-      {/* <Checkbox onCheckedChange={handleCheck} className="shrink-0" /> */}
       <div
         className="pointer-events-none h-2 w-2 shrink-0 rounded-full"
         style={{
@@ -660,7 +640,6 @@ export const GanttSidebarItem: FC<GanttSidebarItemProps> = ({
 };
 
 export const GanttSidebarHeader: FC = () => {
-  // Get context to access daily view
   const gantt = useContext(GanttContext);
 
   return (
@@ -668,16 +647,11 @@ export const GanttSidebarHeader: FC = () => {
       className="sticky top-0 z-10 flex shrink-0 flex-col justify-between border-border/50 border-b bg-backdrop/90 font-medium text-muted-foreground text-xs backdrop-blur-sm"
       style={{ height: "var(--gantt-header-height)" }}
     >
-      {/* Top part - always visible regardless of view */}
       <div className="h-8 flex items-center justify-between px-3 py-2">
         <p className="flex-1 truncate text-left">Projects</p>
         <p className="shrink-0">Duration</p>
       </div>
-
-      {/* Bottom part - empty space to align with the daily view header */}
-      <div className="flex-1 flex items-end">
-        {/* This empty space helps align with the timeline header */}
-      </div>
+      <div className="flex-1 flex items-end"></div>
     </div>
   );
 };
@@ -1278,20 +1252,19 @@ export const GanttProvider: FC<GanttProviderProps> = ({
   currentMonth: propCurrentMonth,
 }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
-  // Use May 2025 as the reference date for timeline data
   const [timelineData, setTimelineData] = useState<TimelineData>(
-    createInitialTimelineData(propCurrentMonth || new Date(2025, 4, 15)) // May 15, 2025
+    createInitialTimelineData(propCurrentMonth || new Date())
   );
   const [, setScrollX] = useGanttScrollX();
   const sidebarElement = scrollRef.current?.querySelector(
     '[data-roadmap-ui="gantt-sidebar"]'
   );
-  const headerHeight = 70; // Increased height to accommodate day numbers and names
+  const headerHeight = 70;
   const sidebarWidth = sidebarElement ? 300 : 0;
   const rowHeight = 36;
   let columnWidth = 50;
   if (range === "daily") {
-    columnWidth = 60; // Slightly wider for daily view to fit day numbers and names
+    columnWidth = 60;
   } else if (range === "monthly") {
     columnWidth = 150;
   } else if (range === "quarterly") {
@@ -1308,8 +1281,6 @@ export const GanttProvider: FC<GanttProviderProps> = ({
   // biome-ignore lint/correctness/useExhaustiveDependencies: Re-render when props change
   useEffect(() => {
     if (scrollRef.current) {
-      // Only set initial scroll position for monthly/quarterly views
-      // For daily view, don't force a specific initial position
       if (range !== "daily") {
         scrollRef.current.scrollLeft =
           scrollRef.current.scrollWidth / 2 - scrollRef.current.clientWidth / 2;
@@ -1323,17 +1294,16 @@ export const GanttProvider: FC<GanttProviderProps> = ({
       if (!scrollRef.current) {
         return;
       }
+
       const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+
       setScrollX(scrollLeft);
 
-      // For daily view, don't restrict scrolling at all
       if (range === "daily") {
-        // Allow free scrolling in both directions
         return;
       }
 
       if (scrollLeft === 0) {
-        // Extend timelineData to the past
         const firstYear = timelineData[0]?.year;
 
         if (!firstYear) {
@@ -1357,8 +1327,6 @@ export const GanttProvider: FC<GanttProviderProps> = ({
         scrollRef.current.scrollLeft = scrollRef.current.clientWidth;
         setScrollX(scrollRef.current.scrollLeft);
       } else if (scrollLeft + clientWidth >= scrollWidth - 1) {
-        // Extend timelineData to the future for monthly and quarterly views
-        // Add a small threshold (1px) to handle floating-point precision issues
         const lastYear = timelineData.at(-1)?.year;
 
         if (!lastYear) {
@@ -1386,6 +1354,7 @@ export const GanttProvider: FC<GanttProviderProps> = ({
     }, 100),
     [timelineData, setScrollX, range]
   );
+
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.addEventListener("scroll", handleScroll);
@@ -1397,16 +1366,12 @@ export const GanttProvider: FC<GanttProviderProps> = ({
       }
     };
   }, [handleScroll]);
+
   useEffect(() => {
     if (range === "daily" && scrollRef.current) {
-      // Don't reset scroll left when switching to daily view
-      // This allows users to maintain their scroll position
       setScrollX(scrollRef.current.scrollLeft);
 
-      // Remove any scroll restrictions for daily view
-      // Let the user scroll freely in both directions
       const handleDailyScroll = (e: Event) => {
-        // Just update scrollX without restricting scrolling
         const target = e.target as HTMLElement;
         setScrollX(target.scrollLeft);
       };
@@ -1422,19 +1387,82 @@ export const GanttProvider: FC<GanttProviderProps> = ({
       };
     }
   }, [range, setScrollX]);
-
   const [currentMonth, setCurrentMonth] = useState<Date>(() => {
     return propCurrentMonth || new Date();
   });
+
+  const scrollToToday = useCallback(() => {
+    if (!scrollRef.current) return;
+
+    const today = new Date();
+
+    if (range === "daily") {
+      if (currentMonth) {
+        const currentMonthValue = currentMonth.getMonth();
+        const currentYear = currentMonth.getFullYear();
+
+        if (
+          today.getMonth() === currentMonthValue &&
+          today.getFullYear() === currentYear
+        ) {
+          const dayOfMonth = today.getDate() - 1;
+          const columnWidth = (zoom / 100) * 60;
+          const scrollPosition = dayOfMonth * columnWidth;
+
+          scrollRef.current.scrollTo({
+            left: scrollPosition,
+            behavior: "smooth",
+          });
+        } else {
+          setCurrentMonth(new Date(today.getFullYear(), today.getMonth(), 1));
+          setTimeout(() => {
+            if (scrollRef.current) {
+              const dayOfMonth = today.getDate() - 1;
+              const columnWidth = (zoom / 100) * 60;
+              const scrollPosition = dayOfMonth * columnWidth;
+
+              scrollRef.current.scrollTo({
+                left: scrollPosition,
+                behavior: "smooth",
+              });
+            }
+          }, 100);
+        }
+      }
+    } else {
+      const timelineStartDate = new Date(timelineData.at(0)?.year ?? 0, 0, 1);
+      const offset = getOffset(today, timelineStartDate, {
+        zoom,
+        range,
+        columnWidth: range === "monthly" ? 150 : 100,
+        sidebarWidth: 300,
+        headerHeight: 70,
+        rowHeight: 36,
+        onAddItem,
+        placeholderLength: 2,
+        timelineData,
+        ref: scrollRef,
+        currentMonth,
+        setCurrentMonth,
+        scrollToToday,
+      });
+
+      const viewportWidth = scrollRef.current.clientWidth;
+      const scrollPosition = offset - viewportWidth / 2;
+
+      scrollRef.current.scrollTo({
+        left: Math.max(0, scrollPosition),
+        behavior: "smooth",
+      });
+    }
+  }, [range, currentMonth, zoom, timelineData, onAddItem, setCurrentMonth]);
+
   useEffect(() => {
     if (propCurrentMonth) {
       setCurrentMonth(propCurrentMonth);
-
-      // Don't reset the scroll position when changing months
-      // This allows users to scroll freely to the left
     }
   }, [propCurrentMonth]);
-  // For daily view, don't include month/year in the key to prevent scroll reset when month changes
+
   const providerKey =
     range === "daily"
       ? `gantt-provider-${range}`
@@ -1455,6 +1483,7 @@ export const GanttProvider: FC<GanttProviderProps> = ({
         ref: scrollRef,
         currentMonth,
         setCurrentMonth,
+        scrollToToday,
       }}
     >
       <div
