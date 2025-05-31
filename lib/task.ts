@@ -54,6 +54,7 @@ export const getUserTasks = unstable_cache(
       const employeeTasks = await db
         .collection("tasks")
         .where("assignees", "array-contains", userId)
+        .orderBy("createdAt", "desc")
         .get();
       const tasks = employeeTasks.docs.map((doc) => doc.data()) as Task[];
 
@@ -75,6 +76,7 @@ export const getIncompleteUserTasks = unstable_cache(
         .collection("tasks")
         .where("assignees", "array-contains", userId)
         .where("status", "!=", "completed")
+        .orderBy("createdAt", "desc")
         .get();
       const tasks = employeeTasks.docs.map((doc) => doc.data()) as Task[];
 
@@ -96,6 +98,7 @@ export const getTaskAttachments = unstable_cache(
         .collection("tasks")
         .doc(taskId)
         .collection("files")
+        .orderBy("createdAt", "desc")
         .get();
       const taskAttachmentIds = taskAttachmentsSnapshot.docs.map(
         (doc) => doc.id

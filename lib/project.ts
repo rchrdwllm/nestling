@@ -8,7 +8,10 @@ import { getUserById } from "./user";
 export const getProjects = unstable_cache(
   async () => {
     try {
-      const projectsSnapshot = await db.collection("projects").get();
+      const projectsSnapshot = await db
+        .collection("projects")
+        .orderBy("createdAt", "desc")
+        .get();
 
       const projects = projectsSnapshot.docs.map((doc) =>
         doc.data()
@@ -53,11 +56,13 @@ export const getProjectsOfUser = unstable_cache(
         .collection("projects")
         .where("projectAssociates", "array-contains", userId)
         .where("isArchived", "==", false)
+        .orderBy("createdAt", "desc")
         .get();
       const headProjectsSnapshot = await db
         .collection("projects")
         .where("projectHeads", "array-contains", userId)
         .where("isArchived", "==", false)
+        .orderBy("createdAt", "desc")
         .get();
 
       const allDocs = [
@@ -83,9 +88,9 @@ export const getArchivedProjects = unstable_cache(
   async () => {
     try {
       const projectsSnapshot = await db
-
         .collection("projects")
         .where("isArchived", "==", true)
+        .orderBy("createdAt", "desc")
         .get();
       const projects = projectsSnapshot.docs.map((doc) =>
         doc.data()
