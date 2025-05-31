@@ -6,17 +6,7 @@ import DateDisplay from "@/components/ui/date-display";
 import { projectPriorities, projectStatuses } from "@/constants/project";
 import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
-import { ArrowUpDown, MoreHorizontal } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { useAction } from "next-safe-action/hooks";
-import { archiveTask } from "@/server/actions/archive-task";
+import { ArrowUpDown } from "lucide-react";
 
 type ProjectCol = {
   id: string;
@@ -53,15 +43,6 @@ export const projectCols: ColumnDef<ProjectCol>[] = [
           </Button>
         </Link>
       );
-    },
-  },
-  {
-    accessorKey: "description",
-    header: "Description",
-    cell: ({ getValue }) => {
-      const description = getValue() as string;
-
-      return <span className="text-ellipsis">{description || "-"}</span>;
     },
   },
   {
