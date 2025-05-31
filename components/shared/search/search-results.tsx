@@ -7,6 +7,7 @@ import CoursesSearchResults from "./courses-search-results";
 import InstructorSearchResults from "./instructor-search-results";
 import { memo } from "react";
 import ContentsSearchResults from "./contents-search-results";
+import ProjectsSearchResults from "./projects-search-results";
 
 type SearchResultsProps = {
   isInbox?: boolean;
@@ -84,7 +85,7 @@ const SearchResults = memo(
           )}
           {entities.includes("projects") && (
             <TabsContent value="projects">
-              <p>To do: Projects</p>
+              <ProjectsSearchResults />
             </TabsContent>
           )}
         </Tabs>

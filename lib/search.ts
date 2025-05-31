@@ -1,8 +1,9 @@
 "use server";
 
 import { db } from "./firebase";
-import { Content, Course, Role, User } from "@/types";
+import { Content, Course, Project, Role, User } from "@/types";
 import { unstable_cache } from "next/cache";
+import { getProjectsOfUser } from "./project";
 
 export const searchStudents = unstable_cache(
   async (
@@ -259,4 +260,54 @@ export const searchContents = unstable_cache(
     }
   },
   ["role", "userId", "query", "page", "itemsPerPage"]
+);
+
+export const searchProjects = unstable_cache(
+  async (
+    role: Role,
+    userId: string,
+    query: string,
+    page: number = 1,
+    itemsPerPage: number = 10
+  ): Promise<{ projects: string[]; totalProjects: number }> => {
+    if (role === "admin") {
+      const projectsSnapshot = await db.collection("projects").get();
+
+      const projects = projectsSnapshot.docs.map(
+        (doc) => doc.data() as Project
+      );
+
+      const filteredProjects = projects.filter(
+        (project) =>
+          project.title?.toLowerCase().includes(query.toLowerCase()) ||
+          project.description?.toLowerCase().includes(query.toLowerCase())
+      );
+
+      const paginatedProjects = filteredProjects
+        .slice((page - 1) * itemsPerPage, page * itemsPerPage)
+        .map((project) => JSON.stringify(project));
+      const totalProjects = filteredProjects.length;
+
+      return { projects: paginatedProjects, totalProjects };
+    } else {
+      const { success: projects } = await getProjectsOfUser(userId);
+
+      if (!projects) {
+        return { projects: [], totalProjects: 0 };
+      }
+
+      const filteredProjects = projects.filter(
+        (project) =>
+          project.title?.toLowerCase().includes(query.toLowerCase()) ||
+          project.description?.toLowerCase().includes(query.toLowerCase())
+      );
+
+      const paginatedProjects = filteredProjects
+        .slice((page - 1) * itemsPerPage, page * itemsPerPage)
+        .map((project) => JSON.stringify(project));
+      const totalProjects = filteredProjects.length;
+
+      return { projects: paginatedProjects, totalProjects };
+    }
+  }
 );
