@@ -9,6 +9,7 @@ import {
 } from "@/lib/submission";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import GradeSubmissionForm from "./grade-submission-form";
+import GenerateSubmissionReport from "./generate-submission-report";
 
 type SubmissionGridProps = {
   studentId: string | undefined;
@@ -97,6 +98,7 @@ const SubmissionGrid = async ({
             isMultipleAttempts={content.maxAttempts! > 1}
           />
         )}
+        <GenerateSubmissionReport submissions={submissions} />
       </div>
     </div>
   );
