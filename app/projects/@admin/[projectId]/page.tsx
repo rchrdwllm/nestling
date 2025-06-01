@@ -98,7 +98,11 @@ const ProjectPage = async ({
         </div>
         <ProjectDetails project={project} owner={owner} />
         <h3 className="text-xl font-semibold">Project timeline</h3>
-        <TasksTimeline tasks={tasks} />
+        <section className="grid grid-cols-2">
+          <article className="col-span-2">
+            <TasksTimeline tasks={tasks} />
+          </article>
+        </section>
         <div className="flex items-center justify-between">
           <h3 className="text-xl font-semibold">Tasks</h3>
           <Link href={`/projects/${project.id}/tasks/archive`}>
