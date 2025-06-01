@@ -1144,6 +1144,11 @@ export const GanttFeatureItem: FC<GanttFeatureItemProps> = ({
             />
           </DndContext>
         )}
+        {width < 100 && (
+          <p className="absolute top-1/2 left-0 -translate-y-1/2 -translate-x-[calc(100%+0.5rem)] text-xs">
+            {feature.title}
+          </p>
+        )}
       </div>
     </div>
   );
