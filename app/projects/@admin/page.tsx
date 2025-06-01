@@ -1,8 +1,12 @@
 import ProjectsProgressGraph from "@/components/shared/projects-page/projects-progress-graph";
 import ProjectsStatusGraph from "@/components/shared/projects-page/projects-status-graph";
+import ProjectsTable from "@/components/shared/projects-page/projects-table";
+import { projectCols } from "@/components/shared/projects-page/projects-table-def";
+import ProjectsTimeline from "@/components/shared/projects-page/projects-timeline";
 import TasksPriorityGraph from "@/components/shared/projects-page/tasks-priority-graph";
 import { getProjectsWithTasks, getUnarchivedProjects } from "@/lib/project";
 import { getIncompleteTasks } from "@/lib/task";
+import { getAllAdmins, getAllInstructors } from "@/lib/user";
 
 const AdminProjectsPage = async () => {
   const { success: projects, error: projectsError } =
@@ -10,6 +14,21 @@ const AdminProjectsPage = async () => {
   const { success: tasks, error: tasksError } = await getIncompleteTasks();
   const { success: projectsWithTasks, error: projectsWithTasksError } =
     await getProjectsWithTasks();
+  const { success: admins, error: adminsError } = await getAllAdmins();
+  const { success: instructors, error: instructorsError } =
+    await getAllInstructors();
+
+  if (adminsError || instructorsError || projectsError) {
+    console.error(
+      "Error fetching data:",
+      adminsError || instructorsError || projectsError
+    );
+    return <div>Error loading data. Please try again later.</div>;
+  }
+
+  if (!admins || !instructors || !projects) {
+    return <div>No data available.</div>;
+  }
 
   if (projectsError || !projects) {
     console.error("Error fetching projects:", projectsError);
@@ -41,6 +60,16 @@ const AdminProjectsPage = async () => {
         <hr />
       </div>
       <section className="grid grid-cols-2 gap-4 pb-6">
+        <article className="col-span-2">
+          <ProjectsTimeline
+            admins={JSON.stringify(admins)}
+            instructors={JSON.stringify(instructors)}
+            projects={projects}
+          />
+        </article>
+        <article className="col-span-2">
+          <ProjectsTable columns={projectCols} data={projects} />
+        </article>
         <article className="min-h-[378px]">
           <ProjectsStatusGraph projects={projects} />
         </article>
