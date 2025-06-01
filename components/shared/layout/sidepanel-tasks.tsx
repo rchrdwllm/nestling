@@ -1,11 +1,8 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { useCurrentUser } from "@/hooks/use-current-user";
-import { X } from "lucide-react";
 import StudentTaskCard from "./student-task-card";
 import EmployeeTaskCard from "./employee-task-card";
-import { Content, Task } from "@/types";
 
 type SidePanelTasksProps = {
   tasks: any[];

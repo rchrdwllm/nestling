@@ -6,13 +6,21 @@ import MotionWrapper from "@/components/wrappers/motion-wrapper";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { clientDb } from "@/lib/firebase-client";
 import { Content, Notification, Task } from "@/types";
-import { and, collection, onSnapshot, query, where } from "firebase/firestore";
+import {
+  and,
+  collection,
+  onSnapshot,
+  orderBy,
+  query,
+  where,
+} from "firebase/firestore";
 import { ChevronsLeft, ChevronsRight, X } from "lucide-react";
 import { AnimatePresence } from "motion/react";
 import { useEffect, useState, useTransition } from "react";
 import SidePanelTasks from "./sidepanel-tasks";
 import { getUpcomingAssignmentsForStudent } from "@/lib/content";
 import { getIncompleteUserTasks } from "@/lib/task";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 type SidePanelProps = {
   setRightPanelToggled: (toggled: boolean) => void;
@@ -71,7 +79,8 @@ const SidePanel = ({
   useEffect(() => {
     const q = query(
       collection(clientDb, "notifications"),
-      and(where("receiverId", "==", user.id), where("isRead", "==", false))
+      and(where("receiverId", "==", user.id), where("isRead", "==", false)),
+      orderBy("createdAt", "desc")
     );
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
@@ -130,23 +139,25 @@ const SidePanel = ({
               x: rightPanelToggled ? 0 : "100%",
             }}
             exit={{ opacity: 0, x: "100%" }}
-            className="overflow-y-auto w-full border border-border rounded-xl lg:w-[400px] lg:sticky relative bg-background lg:p-0 shadow-sm"
+            className="w-full border border-border rounded-xl lg:w-[400px] lg:sticky relative bg-background lg:p-0 shadow-sm"
           >
-            <div className="flex flex-col space-y-6 p-6">
-              <div>
-                <Button
-                  onClick={() => setRightPanelToggled(false)}
-                  variant="outline"
-                  className="px-2"
-                >
-                  <ChevronsRight className="size-5" />
-                </Button>
+            <ScrollArea className="h-full">
+              <div className="flex flex-col space-y-6 p-6">
+                <div>
+                  <Button
+                    onClick={() => setRightPanelToggled(false)}
+                    variant="outline"
+                    className="px-2"
+                  >
+                    <ChevronsRight className="size-5" />
+                  </Button>
+                </div>
+                <SidePanelNotifications notifications={notifications} />
+                <SidePanelTasks
+                  tasks={user.role === "student" ? studentTasks : employeeTasks}
+                />
               </div>
-              <SidePanelNotifications notifications={notifications} />
-              <SidePanelTasks
-                tasks={user.role === "student" ? studentTasks : employeeTasks}
-              />
-            </div>
+            </ScrollArea>
           </MotionWrapper>
         )}
       </AnimatePresence>

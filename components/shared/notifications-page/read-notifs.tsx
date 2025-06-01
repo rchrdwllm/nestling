@@ -16,9 +16,13 @@ const ReadNotifs = async () => {
 
   return (
     <div className="flex flex-col gap-4">
-      {readNotifs.map((notif) => (
-        <NotifCard key={notif.id} {...notif} />
-      ))}
+      {!readNotifs.length ? (
+        <div className="flex items-center justify-center py-12">
+          <p className="text-sm text-muted-foreground">No notifications</p>
+        </div>
+      ) : (
+        readNotifs.map((notif) => <NotifCard key={notif.id} {...notif} />)
+      )}
     </div>
   );
 };

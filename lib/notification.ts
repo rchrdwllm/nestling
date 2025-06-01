@@ -11,6 +11,7 @@ export const getUnreadNotifs = unstable_cache(
         .collection("notifications")
         .where("receiverId", "==", userId)
         .where("isRead", "==", false)
+        .orderBy("createdAt", "desc")
         .get();
       const notifications = notifsSnapshot.docs.map((doc) =>
         doc.data()
@@ -34,6 +35,7 @@ export const getReadNotifs = unstable_cache(
         .collection("notifications")
         .where("receiverId", "==", userId)
         .where("isRead", "==", true)
+        .orderBy("createdAt", "desc")
         .get();
       const notifications = notifsSnapshot.docs.map((doc) =>
         doc.data()

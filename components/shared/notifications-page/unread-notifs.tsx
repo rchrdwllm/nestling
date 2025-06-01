@@ -15,9 +15,13 @@ const UnreadNotifs = async () => {
 
   return (
     <div className="flex flex-col gap-4">
-      {unreadNotifs.map((notif) => (
-        <NotifCard key={notif.id} {...notif} />
-      ))}
+      {!unreadNotifs.length ? (
+        <div className="flex items-center justify-center py-12">
+          <p className="text-sm text-muted-foreground">No notifications</p>
+        </div>
+      ) : (
+        unreadNotifs.map((notif) => <NotifCard key={notif.id} {...notif} />)
+      )}
     </div>
   );
 };

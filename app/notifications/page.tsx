@@ -12,8 +12,8 @@ const NotificationsPage = () => {
       </div>
       <section>
         <Tabs defaultValue="unread" className="w-full">
-          <div className="flex items-center justify-between">
-            <TabsList className="mb-4 w-96">
+          <div className="flex items-center justify-between mb-4">
+            <TabsList className="w-96">
               <TabsTrigger className="w-full" value="unread">
                 Unread
               </TabsTrigger>
