@@ -36,7 +36,7 @@ const TopCourses = ({ data }: TopCourses) => {
         </p>
       </div>
       <CardContent className="h-full flex justify-center items-center">
-        <ChartContainer config={chartConfig}>
+        <ChartContainer className="w-full" config={chartConfig}>
           <BarChart
             accessibilityLayer
             data={data}
