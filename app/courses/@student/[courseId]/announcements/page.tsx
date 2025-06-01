@@ -16,9 +16,7 @@ const AnnouncementsPage = async ({
         </div>
         <hr />
       </header>
-      <Suspense fallback={<div>Loading...</div>}>
-        <Announcements courseId={courseId} />
-      </Suspense>
+      <Announcements courseId={courseId} />
     </main>
   );
 };
