@@ -3,6 +3,7 @@
 import { DeleteAllNotifSchema } from "@/schemas/DeleteAllNotifSchema";
 import { actionClient } from "../action-client";
 import { db } from "@/lib/firebase";
+import { revalidateTag } from "next/cache";
 
 export const deleteAllNotif = actionClient
   .schema(DeleteAllNotifSchema)
@@ -21,6 +22,8 @@ export const deleteAllNotif = actionClient
       });
 
       await batch.commit();
+
+      revalidateTag("notifications");
 
       return { success: "Notifications cleared" };
     } catch (error) {

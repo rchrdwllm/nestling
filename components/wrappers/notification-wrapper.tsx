@@ -28,6 +28,7 @@ const NotificationWrapper = ({
       collection(clientDb, "notifications"),
       and(
         where("receiverId", "==", user.id),
+        where("isRead", "==", false),
         where("createdAt", ">", new Date(Date.now()))
       )
     );
@@ -36,6 +37,8 @@ const NotificationWrapper = ({
       snapshot.docChanges().forEach((change) => {
         if (change.type === "added") {
           const notification = change.doc.data() as Notification;
+
+          console.log(notification);
 
           fetch("/api/revalidate", {
             method: "POST",

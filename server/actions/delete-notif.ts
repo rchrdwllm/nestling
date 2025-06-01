@@ -3,6 +3,7 @@
 import { DeleteNotifSchema } from "@/schemas/DeleteNotifSchema";
 import { actionClient } from "../action-client";
 import { db } from "@/lib/firebase";
+import { revalidateTag } from "next/cache";
 
 export const deleteNotif = actionClient
   .schema(DeleteNotifSchema)
@@ -22,6 +23,8 @@ export const deleteNotif = actionClient
       }
 
       await db.collection("notifications").doc(notificationId).delete();
+
+      revalidateTag("notifications");
 
       return { success: "Notification deleted" };
     } catch (error) {

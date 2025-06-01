@@ -3,7 +3,7 @@
 import { db } from "@/lib/firebase";
 import { actionClient } from "../action-client";
 import { CreateNotifSchema } from "@/schemas/CreateNotifSchema";
-import { Timestamp } from "firebase/firestore";
+import { revalidateTag } from "next/cache";
 
 export const createNotif = actionClient
   .schema(CreateNotifSchema)
@@ -24,12 +24,15 @@ export const createNotif = actionClient
           message,
           url,
           senderId,
-          createdAt: Timestamp.now().toDate(),
+          createdAt: new Date().toISOString(),
           receiverId,
+          isRead: false,
         });
       });
 
       await batch.commit();
+
+      revalidateTag("notifications");
 
       return { success: "Notification created" };
     } catch (error) {
