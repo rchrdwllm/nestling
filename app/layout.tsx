@@ -8,10 +8,9 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import CacheRefresherWrapper from "@/components/wrappers/cache-refresher-wrapper";
 import ThemeWrapper from "@/components/wrappers/theme-wrapper";
-import ReactScan from "@/components/ui/react-scan";
 import NotificationWrapper from "@/components/wrappers/notification-wrapper";
 import NativeNotificationWrapper from "@/components/wrappers/native-notification-wrapper";
-import { getCurrentUser, getOptimisticUser } from "@/lib/user";
+import { getCurrentUser } from "@/lib/user";
 import LayoutWrapper from "@/components/ui/layout-wrapper";
 
 const geistSans = Geist({
@@ -57,7 +56,6 @@ export default async function RootLayout({
         <SessionWrapper session={session}>
           <ThemeWrapper attribute="class" defaultTheme="light">
             <NextTopLoader showSpinner={false} color="#df1514" />
-            <ReactScan />
             <CacheRefresherWrapper>
               <NotificationWrapper authUser={JSON.stringify(user)}>
                 <NativeNotificationWrapper authUser={JSON.stringify(user)}>

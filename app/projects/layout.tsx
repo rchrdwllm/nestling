@@ -2,6 +2,7 @@ import { getCurrentUser } from "@/lib/user";
 import { redirect } from "next/navigation";
 import { ReactNode } from "react";
 import ProjectsSidebar from "@/components/shared/projects-page/projects-sidebar";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const Layout = async ({
   children,
@@ -22,13 +23,13 @@ const Layout = async ({
     <>
       {user.role === "student" && student}
       {user.role !== "student" && (
-        <main className="grid grid-cols-8 gap-x-2 bg-secondary h-[calc(100vh-1rem)]">
-          <div className="col-span-2 h-full">
+        <main className="grid grid-cols-8 gap-x-2 bg-secondary">
+          <ScrollArea className="sidebar-scroll-area col-span-2 h-[calc(100vh-1rem)]">
             <ProjectsSidebar />
-          </div>
-          <div className="overflow-y-auto col-span-6 h-full shadow-sm border border-border rounded-xl bg-background">
+          </ScrollArea>
+          <ScrollArea className="overflow-y-auto col-span-6 h-[calc(100vh-1rem)] shadow-sm border border-border rounded-xl bg-background">
             {user.role === "admin" ? admin : instructor}
-          </div>
+          </ScrollArea>
         </main>
       )}
     </>
