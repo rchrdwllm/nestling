@@ -309,3 +309,33 @@ export const getCourseInstructors = unstable_cache(async (courseId: string) => {
     return { error: "Error fetching course instructors" };
   }
 });
+
+export const getTopCoursesByEnrollments = async () => {
+  try {
+    const coursesSnapshot = await db.collection("courses").get();
+    const courses = await Promise.all(
+      coursesSnapshot.docs.map(async (doc) => {
+        const course = doc.data() as Course;
+        const enrolledStudentsSnapshot = await db
+          .collection("courses")
+          .doc(course.id)
+          .collection("enrolledStudents")
+          .get();
+        const enrollmentCount = enrolledStudentsSnapshot.size;
+
+        return { title: course.name, enrollmentCount };
+      })
+    );
+
+    courses.sort((a, b) => b.enrollmentCount - a.enrollmentCount);
+
+    const filteredCourses = courses.filter((course) => {
+      return course.enrollmentCount > 0 && course.title;
+    });
+
+    return { success: filteredCourses.slice(0, 5) };
+  } catch (error) {
+    console.error("Error fetching top courses by enrollments:", error);
+    return { error };
+  }
+};

@@ -1,14 +1,20 @@
 import ActiveUsers from "@/components/admin-access/active-users";
+import TopCourses from "@/components/admin-access/top-courses";
 import TotalInstructorsOverview from "@/components/admin-access/total-instructors-overview";
 import TotalProjectsOverview from "@/components/admin-access/total-projects-overview";
 import TotalStudentsOverview from "@/components/admin-access/total-students-overview";
 import SearchBar from "@/components/shared/search/search-bar";
+import { getTopCoursesByEnrollments } from "@/lib/course";
 import { getActiveUsersFromMonths } from "@/lib/user-activity";
 
 const AdminDashboardPage = async () => {
-  const { success: activeUsers } = await getActiveUsersFromMonths(6);
+  const { success: activeUsers, error: activeUsersError } =
+    await getActiveUsersFromMonths(6);
+  const { success: topCourses, error: topCoursesError } =
+    await getTopCoursesByEnrollments();
 
-  if (!activeUsers) return <h1>Loading...</h1>;
+  if (!activeUsers || !topCourses || activeUsersError || topCoursesError)
+    return <h1>Error loading data</h1>;
 
   return (
     <div className="p-6 flex flex-col gap-4">
@@ -33,6 +39,9 @@ const AdminDashboardPage = async () => {
         </article>
         <article className="col-span-3">
           <ActiveUsers monthlyActiveUsers={activeUsers.monthlyActiveUsers} />
+        </article>
+        <article className="col-span-3">
+          <TopCourses data={topCourses} />
         </article>
       </div>
     </div>

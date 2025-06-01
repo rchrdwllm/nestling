@@ -15,7 +15,7 @@ const TotalInstructorsOverview = async () => {
 
   return (
     <article className="border border-border rounded-xl p-4 flex flex-col gap-2 shadow-sm">
-      <p className="text-sm">Total instructors</p>
+      <p className="text-sm font-medium">Total instructors</p>
       <h1 className="font-mono font-semibold text-4xl">
         {allInstructors.length}
       </h1>
