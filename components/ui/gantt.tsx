@@ -1251,7 +1251,7 @@ export type GanttProviderProps = {
 };
 
 export const GanttProvider: FC<GanttProviderProps> = ({
-  zoom: initialZoom = 100,
+  zoom: initialZoom = 200,
   range = "monthly",
   onAddItem,
   children,
@@ -1267,7 +1267,7 @@ export const GanttProvider: FC<GanttProviderProps> = ({
   const [isZooming, setIsZooming] = useState(false);
 
   const MIN_ZOOM = 50;
-  const MAX_ZOOM = 200;
+  const MAX_ZOOM = 500;
   const updateZoom = useCallback((newZoom: number) => {
     if (!scrollRef.current) return;
 
