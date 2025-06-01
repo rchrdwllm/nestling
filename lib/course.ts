@@ -310,32 +310,69 @@ export const getCourseInstructors = unstable_cache(async (courseId: string) => {
   }
 });
 
-export const getTopCoursesByEnrollments = async () => {
-  try {
-    const coursesSnapshot = await db.collection("courses").get();
-    const courses = await Promise.all(
-      coursesSnapshot.docs.map(async (doc) => {
-        const course = doc.data() as Course;
-        const enrolledStudentsSnapshot = await db
-          .collection("courses")
-          .doc(course.id)
-          .collection("enrolledStudents")
-          .get();
-        const enrollmentCount = enrolledStudentsSnapshot.size;
+export const getTopCoursesByEnrollments = unstable_cache(
+  async () => {
+    try {
+      const coursesSnapshot = await db.collection("courses").get();
+      const courses = await Promise.all(
+        coursesSnapshot.docs.map(async (doc) => {
+          const course = doc.data() as Course;
+          const enrolledStudentsSnapshot = await db
+            .collection("courses")
+            .doc(course.id)
+            .collection("enrolledStudents")
+            .get();
+          const enrollmentCount = enrolledStudentsSnapshot.size;
 
-        return { title: course.name, enrollmentCount };
-      })
-    );
+          return { title: course.name, enrollmentCount };
+        })
+      );
 
-    courses.sort((a, b) => b.enrollmentCount - a.enrollmentCount);
+      courses.sort((a, b) => b.enrollmentCount - a.enrollmentCount);
 
-    const filteredCourses = courses.filter((course) => {
-      return course.enrollmentCount > 0 && course.title;
-    });
+      const filteredCourses = courses.filter((course) => {
+        return course.enrollmentCount > 0 && course.title;
+      });
 
-    return { success: filteredCourses.slice(0, 5) };
-  } catch (error) {
-    console.error("Error fetching top courses by enrollments:", error);
-    return { error };
-  }
-};
+      return { success: filteredCourses.slice(0, 5) };
+    } catch (error) {
+      console.error("Error fetching top courses by enrollments:", error);
+      return { error };
+    }
+  },
+  ["topCoursesByEnrollments"],
+  { revalidate: 60 * 60 * 24, tags: ["courses"] }
+);
+
+export const getSlicedCourses = unstable_cache(
+  async (studentId: string, limit: number = 4) => {
+    try {
+      const snapshot = await db
+        .collection("users")
+        .doc(studentId)
+        .collection("enrolledCourses")
+        .where("accessEnabled", "==", true)
+        .limit(limit)
+        .get();
+      const courseIds = snapshot.docs.map((doc) => doc.id);
+      const courses = await Promise.all(
+        courseIds.map(async (courseId) => {
+          const courseSnapshot = await db
+            .collection("courses")
+            .doc(courseId)
+            .get();
+          return courseSnapshot.data() as Course;
+        })
+      );
+      const enrolledCourses = courses.filter((course) => !course.isArchived);
+
+      return { success: enrolledCourses };
+    } catch (error) {
+      console.error("Error fetching sliced courses:", error);
+
+      return { error: "Error fetching courses" };
+    }
+  },
+  ["studentId", "limit"],
+  { revalidate: 60 * 60 * 24, tags: ["courses"] }
+);

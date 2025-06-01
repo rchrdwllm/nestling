@@ -10,14 +10,32 @@ import {
 } from "@/components/ui/dialog";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import DateDisplay from "@/components/ui/date-display";
+import { getCourse } from "@/lib/course";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
-type AnnouncementCardProps = { announcement: Announcement };
+type AnnouncementCardProps = {
+  announcement: Announcement;
+  showCourseTitle?: boolean;
+};
 
-const AnnouncementCard = async ({ announcement }: AnnouncementCardProps) => {
-  const { title, content, createdAt, senderId } = announcement;
+const AnnouncementCard = async ({
+  announcement,
+  showCourseTitle = false,
+}: AnnouncementCardProps) => {
+  const { title, content, senderId } = announcement;
   const { success: sender, error: senderError } = await getUserById(senderId);
+  const { success: course, error: courseError } = await getCourse(
+    announcement.courseId
+  );
+
+  if (courseError || !course) {
+    console.error("Error fetching course information:", courseError);
+    return <p>Error fetching course information</p>;
+  }
 
   if (senderError || !sender) {
+    console.error("Error fetching sender information:", senderError);
     return <p>Error fetching sender information</p>;
   }
 
@@ -44,6 +62,13 @@ const AnnouncementCard = async ({ announcement }: AnnouncementCardProps) => {
             </div>
           )}
           <div className="cursor-pointer flex-1 flex flex-col gap-2">
+            {showCourseTitle && (
+              <Link href={`/courses/${course.id}`}>
+                <Button variant="link" className="p-0">
+                  {course.name}
+                </Button>
+              </Link>
+            )}
             <div className="flex items-center justify-between">
               <h1 className="text-xl font-semibold">{title}</h1>
             </div>
