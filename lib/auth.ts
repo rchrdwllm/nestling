@@ -5,6 +5,7 @@ import { LoginSchema } from "@/schemas/LoginSchema";
 import bcrypt from "bcrypt";
 import { Role, User, UserActivity } from "@/types";
 import { format } from "date-fns";
+import { formatInTimeZone } from "date-fns-tz";
 
 export const authOptions = {
   providers: [
@@ -70,28 +71,40 @@ export const authOptions = {
         const today = new Date();
         const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
         const monthEnd = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+        const dateString = today.toISOString();
+        const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
         const activityRef = await db
           .collection("userActivities")
           .where("userId", "==", user.id)
           .where("type", "==", "login")
-          .where("createdAt", ">=", format(monthStart, "yyyy-MM-dd"))
-          .where("createdAt", "<=", format(monthEnd, "yyyy-MM-dd"))
+          .where(
+            "createdAt",
+            ">=",
+            formatInTimeZone(monthStart, timeZone, "yyyy-MM-dd")
+          )
+          .where(
+            "createdAt",
+            "<=",
+            formatInTimeZone(monthEnd, timeZone, "yyyy-MM-dd")
+          )
           .get();
 
         if (activityRef.empty) {
           const id = crypto.randomUUID();
+          const formattedDate = formatInTimeZone(
+            dateString,
+            timeZone,
+            "yyyy-MM-dd"
+          );
 
-          await db
-            .collection("userActivities")
-            .doc(id)
-            .set({
-              id,
-              userId: user.id,
-              type: "login",
-              createdAt: format(today, "yyyy-MM-dd"),
-              updatedAt: new Date().toISOString(),
-            });
+          await db.collection("userActivities").doc(id).set({
+            id,
+            userId: user.id,
+            type: "login",
+            createdAt: formattedDate,
+            updatedAt: new Date().toISOString(),
+          });
         } else {
           const activityData = activityRef.docs[0].data() as UserActivity;
 
