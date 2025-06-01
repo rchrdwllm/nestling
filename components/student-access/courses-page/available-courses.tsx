@@ -1,6 +1,8 @@
 import { getAvailableCourses } from "@/lib/course";
 import CourseCard from "./course-card/course-card";
 import { getCurrentUser } from "@/lib/user";
+import CoursesTable from "./courses-table";
+import { coursesCols } from "./courses-table-def";
 
 const AvailableCourses = async () => {
   const user = await getCurrentUser();
@@ -16,11 +18,7 @@ const AvailableCourses = async () => {
 
   return (
     <section>
-      <div className="grid grid-cols-4 gap-8">
-        {courses.map((course) => (
-          <CourseCard key={course.id} {...course} />
-        ))}
-      </div>
+      <CoursesTable columns={coursesCols} data={courses} />
     </section>
   );
 };

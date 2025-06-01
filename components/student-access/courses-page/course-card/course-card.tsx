@@ -5,17 +5,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 
-type CourseCardProps = Course & {
-  showEnrolled?: boolean;
-};
-
-const CourseCard = async ({
-  name,
-  id,
-  courseCode,
-  image,
-  showEnrolled = true,
-}: CourseCardProps) => {
+const CourseCard = async ({ name, id, courseCode, image }: Course) => {
   const { success: enrolledStudents, error } = await getEnrolledStudents(id);
 
   if (error) {
@@ -43,15 +33,6 @@ const CourseCard = async ({
           </div>
           <p className="text-muted-foreground">{courseCode}</p>
         </div>
-        {showEnrolled && (
-          <div>
-            <EnrollBtn
-              courseCode={courseCode}
-              id={id}
-              enrolledStudents={enrolledStudents}
-            />
-          </div>
-        )}
       </div>
     </article>
   );

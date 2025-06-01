@@ -3,11 +3,15 @@ import EnrolledCourses from "@/components/student-access/courses-page/enrolled-c
 
 const CoursesPage = () => {
   return (
-    <main className="p-6 flex flex-col gap-4">
-      <h1 className="font-medium">Available Courses</h1>
-      <AvailableCourses />
-      <h1 className="font-medium">Enrolled Courses</h1>
+    <main className="p-6 flex flex-col gap-8">
+      <div className="flex flex-col gap-4">
+        <h1 className="text-3xl font-semibold">Courses</h1>
+        <hr />
+      </div>
+      <h1 className="text-xl font-semibold">Enrolled Courses</h1>
       <EnrolledCourses />
+      <h1 className="text-xl font-semibold">Available Courses</h1>
+      <AvailableCourses />
     </main>
   );
 };

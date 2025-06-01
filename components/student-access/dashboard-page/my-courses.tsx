@@ -26,7 +26,7 @@ const MyCourses = async () => {
       </div>
       <section className="grid grid-cols-4 gap-8">
         {courses.map((course) => (
-          <CourseCard showEnrolled={false} key={course.id} {...course} />
+          <CourseCard key={course.id} {...course} />
         ))}
       </section>
     </div>

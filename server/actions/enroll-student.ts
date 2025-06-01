@@ -51,6 +51,7 @@ export const enrollStudent = actionClient
 
       revalidatePath("/courses");
       revalidateTag("students");
+      revalidateTag("courses");
 
       return { success: `Enrolled student in course ${courseId}` };
     } catch (error) {
