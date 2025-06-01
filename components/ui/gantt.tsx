@@ -92,6 +92,7 @@ export type TimelineData = {
 
 export type GanttContextProps = {
   zoom: number;
+  setZoom?: (zoom: number) => void;
   range: Range;
   columnWidth: number;
   sidebarWidth: number;
@@ -380,6 +381,7 @@ const calculateInnerOffset = (
 
 const GanttContext = createContext<GanttContextProps>({
   zoom: 100,
+  setZoom: undefined,
   range: "monthly",
   columnWidth: 50,
   headerHeight: 60,
@@ -1244,7 +1246,7 @@ export type GanttProviderProps = {
 };
 
 export const GanttProvider: FC<GanttProviderProps> = ({
-  zoom = 100,
+  zoom: initialZoom = 100,
   range = "monthly",
   onAddItem,
   children,
@@ -1256,6 +1258,52 @@ export const GanttProvider: FC<GanttProviderProps> = ({
     createInitialTimelineData(propCurrentMonth || new Date())
   );
   const [, setScrollX] = useGanttScrollX();
+  const [zoom, setZoom] = useState(initialZoom);
+  const [isZooming, setIsZooming] = useState(false);
+
+  const MIN_ZOOM = 50;
+  const MAX_ZOOM = 200;
+  const updateZoom = useCallback((newZoom: number) => {
+    if (!scrollRef.current) return;
+
+    const clampedZoom = Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, newZoom));
+
+    setIsZooming(true);
+
+    const currentScrollLeft = scrollRef.current.scrollLeft;
+    const currentViewportCenter =
+      currentScrollLeft + scrollRef.current.clientWidth / 2;
+
+    setZoom((currentZoom) => {
+      const zoomFactor = clampedZoom / currentZoom;
+      const newViewportCenter = Math.round(currentViewportCenter * zoomFactor);
+      const newScrollLeft = Math.round(
+        newViewportCenter - scrollRef.current!.clientWidth / 2
+      );
+
+      const targetScrollLeft = Math.max(0, newScrollLeft);
+      scrollRef.current!.scrollLeft = targetScrollLeft;
+
+      requestAnimationFrame(() => {
+        if (
+          scrollRef.current &&
+          Math.abs(scrollRef.current.scrollLeft - targetScrollLeft) > 1
+        ) {
+          scrollRef.current.scrollLeft = targetScrollLeft;
+        }
+        setScrollX(scrollRef.current?.scrollLeft || 0);
+      });
+
+      return clampedZoom;
+    });
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        setIsZooming(false);
+      });
+    });
+  }, []);
+
   const sidebarElement = scrollRef.current?.querySelector(
     '[data-roadmap-ui="gantt-sidebar"]'
   );
@@ -1278,20 +1326,16 @@ export const GanttProvider: FC<GanttProviderProps> = ({
     "--gantt-row-height": `${rowHeight}px`,
     "--gantt-sidebar-width": `${sidebarWidth}px`,
   } as CSSProperties;
-  // biome-ignore lint/correctness/useExhaustiveDependencies: Re-render when props change
   useEffect(() => {
-    if (scrollRef.current) {
-      if (range !== "daily") {
-        scrollRef.current.scrollLeft =
-          scrollRef.current.scrollWidth / 2 - scrollRef.current.clientWidth / 2;
-      }
+    if (scrollRef.current && range !== "daily") {
+      scrollRef.current.scrollLeft =
+        scrollRef.current.scrollWidth / 2 - scrollRef.current.clientWidth / 2;
       setScrollX(scrollRef.current.scrollLeft);
     }
-  }, [range, zoom, setScrollX]); // biome-ignore lint/correctness/useExhaustiveDependencies: "Throttled"
-
+  }, [range, setScrollX]);
   const handleScroll = useCallback(
     throttle(() => {
-      if (!scrollRef.current) {
+      if (!scrollRef.current || isZooming) {
         return;
       }
 
@@ -1352,7 +1396,7 @@ export const GanttProvider: FC<GanttProviderProps> = ({
         setScrollX(scrollRef.current.scrollLeft);
       }
     }, 100),
-    [timelineData, setScrollX, range]
+    [timelineData, setScrollX, range, isZooming]
   );
 
   useEffect(() => {
@@ -1366,12 +1410,13 @@ export const GanttProvider: FC<GanttProviderProps> = ({
       }
     };
   }, [handleScroll]);
-
   useEffect(() => {
     if (range === "daily" && scrollRef.current) {
       setScrollX(scrollRef.current.scrollLeft);
 
       const handleDailyScroll = (e: Event) => {
+        if (isZooming) return;
+
         const target = e.target as HTMLElement;
         setScrollX(target.scrollLeft);
       };
@@ -1386,7 +1431,7 @@ export const GanttProvider: FC<GanttProviderProps> = ({
         }
       };
     }
-  }, [range, setScrollX]);
+  }, [range, setScrollX, isZooming]);
   const [currentMonth, setCurrentMonth] = useState<Date>(() => {
     return propCurrentMonth || new Date();
   });
@@ -1449,13 +1494,12 @@ export const GanttProvider: FC<GanttProviderProps> = ({
 
       const viewportWidth = scrollRef.current.clientWidth;
       const scrollPosition = offset - viewportWidth / 2;
-
       scrollRef.current.scrollTo({
         left: Math.max(0, scrollPosition),
         behavior: "smooth",
       });
     }
-  }, [range, currentMonth, zoom, timelineData, onAddItem, setCurrentMonth]);
+  }, [range, currentMonth, timelineData, onAddItem, setCurrentMonth]);
 
   useEffect(() => {
     if (propCurrentMonth) {
@@ -1472,6 +1516,7 @@ export const GanttProvider: FC<GanttProviderProps> = ({
     <GanttContext.Provider
       value={{
         zoom,
+        setZoom: updateZoom,
         range,
         headerHeight,
         columnWidth,
@@ -1496,8 +1541,8 @@ export const GanttProvider: FC<GanttProviderProps> = ({
         style={{
           ...cssVariables,
           gridTemplateColumns: "var(--gantt-sidebar-width) 1fr",
-          scrollSnapType: "none", // Remove scroll snap entirely to allow free scrolling
-          overscrollBehavior: "auto", // Allow overscrolling
+          scrollSnapType: "none",
+          overscrollBehavior: "auto",
         }}
         ref={scrollRef}
       >
@@ -1515,16 +1560,54 @@ export type GanttTimelineProps = {
 export const GanttTimeline: FC<GanttTimelineProps> = ({
   children,
   className,
-}) => (
-  <div
-    className={cn(
-      "relative flex h-full w-max flex-none overflow-clip",
-      className
-    )}
-  >
-    {children}
-  </div>
-);
+}) => {
+  const gantt = useContext(GanttContext);
+  const timelineRef = useRef<HTMLDivElement>(null);
+  const handleWheel = useCallback(
+    (event: WheelEvent) => {
+      if (!gantt.setZoom) return;
+
+      const target = event.target as HTMLElement;
+      const sidebarElement = target.closest(
+        '[data-roadmap-ui="gantt-sidebar"]'
+      );
+      if (sidebarElement) return;
+
+      if (event.ctrlKey) {
+        event.preventDefault();
+
+        const ZOOM_SENSITIVITY = 0.1;
+        const zoomDelta = -event.deltaY * ZOOM_SENSITIVITY;
+        const newZoom = gantt.zoom + zoomDelta;
+
+        gantt.setZoom(newZoom);
+      }
+    },
+    [gantt]
+  );
+  useEffect(() => {
+    const element = timelineRef.current;
+    if (!element) return;
+
+    element.addEventListener("wheel", handleWheel, { passive: false });
+
+    return () => {
+      element.removeEventListener("wheel", handleWheel);
+    };
+  }, [handleWheel]);
+
+  return (
+    <div
+      ref={timelineRef}
+      className={cn(
+        "gantt-timeline relative flex h-full w-max flex-none overflow-clip",
+        className
+      )}
+    >
+      {children}
+    </div>
+  );
+};
 
 export type GanttTodayProps = {
   className?: string;
