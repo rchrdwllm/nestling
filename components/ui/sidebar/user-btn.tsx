@@ -16,6 +16,8 @@ import { useCurrentUser } from "@/hooks/use-current-user";
 import { useMemo } from "react";
 import ThemeToggler from "../theme-toggler";
 import NotificationToggler from "@/components/shared/notifications/notification-toggler";
+import { useAction } from "next-safe-action/hooks";
+import { logUserActivity } from "@/server/actions/log-user-activity";
 
 const UserBtn = () => {
   const { user } = useCurrentUser();
@@ -32,6 +34,7 @@ const UserBtn = () => {
 
     return "";
   }, [user]);
+  const { execute } = useAction(logUserActivity);
 
   if (!user) return null;
 
@@ -50,6 +53,10 @@ const UserBtn = () => {
 
         toast.dismiss();
         toast.success("You have been signed out successfully!");
+        execute({
+          userId: user.id,
+          type: "logout",
+        });
       })
       .catch((error) => {
         toast.error(error);

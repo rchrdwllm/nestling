@@ -3,7 +3,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { db } from "@/lib/firebase";
 import { LoginSchema } from "@/schemas/LoginSchema";
 import bcrypt from "bcrypt";
-import { Role, User, UserActivity } from "@/types";
+import { Role, User, MonthlyActivity } from "@/types";
 import { format } from "date-fns";
 import { formatInTimeZone } from "date-fns-tz";
 
@@ -75,7 +75,7 @@ export const authOptions = {
         const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
         const activityRef = await db
-          .collection("userActivities")
+          .collection("monthlyActivities")
           .where("userId", "==", user.id)
           .where("type", "==", "login")
           .where(
@@ -97,8 +97,7 @@ export const authOptions = {
             timeZone,
             "yyyy-MM-dd"
           );
-
-          await db.collection("userActivities").doc(id).set({
+          await db.collection("monthlyActivities").doc(id).set({
             id,
             userId: user.id,
             type: "login",
@@ -106,9 +105,8 @@ export const authOptions = {
             updatedAt: new Date().toISOString(),
           });
         } else {
-          const activityData = activityRef.docs[0].data() as UserActivity;
-
-          await db.collection("userActivities").doc(activityData.id).update({
+          const activityData = activityRef.docs[0].data() as MonthlyActivity;
+          await db.collection("monthlyActivities").doc(activityData.id).update({
             updatedAt: new Date().toISOString(),
           });
         }

@@ -1,11 +1,12 @@
-import ActiveUsers from "@/components/admin-access/active-users";
-import TopCourses from "@/components/admin-access/top-courses";
-import TotalInstructorsOverview from "@/components/admin-access/total-instructors-overview";
-import TotalProjectsOverview from "@/components/admin-access/total-projects-overview";
-import TotalStudentsOverview from "@/components/admin-access/total-students-overview";
+import ActiveUsers from "@/components/admin-access/dashboard-page/active-users";
+import TopCourses from "@/components/admin-access/dashboard-page/top-courses";
+import TotalInstructorsOverview from "@/components/admin-access/dashboard-page/total-instructors-overview";
+import TotalProjectsOverview from "@/components/admin-access/dashboard-page/total-projects-overview";
+import TotalStudentsOverview from "@/components/admin-access/dashboard-page/total-students-overview";
+import UserEventLogs from "@/components/admin-access/dashboard-page/user-events/user-event-logs";
 import SearchBar from "@/components/shared/search/search-bar";
 import { getTopCoursesByEnrollments } from "@/lib/course";
-import { getActiveUsersFromMonths } from "@/lib/user-activity";
+import { getActiveUsersFromMonths } from "@/lib/monthly-activity";
 
 const AdminDashboardPage = async () => {
   const { success: activeUsers, error: activeUsersError } =
@@ -17,7 +18,7 @@ const AdminDashboardPage = async () => {
     return <h1>Error loading data</h1>;
 
   return (
-    <div className="p-6 flex flex-col gap-4">
+    <div className="p-6 flex flex-col gap-8">
       <div className="flex flex-col gap-4">
         <div className="flex items-center gap-6">
           <h1 className="text-3xl font-semibold">Admin Dashboard</h1>
@@ -43,6 +44,9 @@ const AdminDashboardPage = async () => {
         <article className="col-span-3">
           <TopCourses data={topCourses} />
         </article>
+      </div>
+      <div className="flex flex-col gap-4">
+        <UserEventLogs />
       </div>
     </div>
   );

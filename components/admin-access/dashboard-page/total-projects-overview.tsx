@@ -1,5 +1,5 @@
 import { getProjects } from "@/lib/project";
-import DateDisplay from "../ui/date-display";
+import DateDisplay from "../../ui/date-display";
 
 const TotalProjectsOverview = async () => {
   const { success: allProjects, error: allProjectsError } = await getProjects();

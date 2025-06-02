@@ -212,7 +212,7 @@ export type PendingTask = {
   timeAgo: string;
 };
 
-export type UserActivity = {
+export type MonthlyActivity = {
   id: string;
   type: Activity;
   createdAt: string;
@@ -257,4 +257,11 @@ export type Task = {
   assignees: string[];
   isArchived: boolean;
   archivedAt: string | null;
+};
+
+export type UserActivity = {
+  id: string;
+  userId: string;
+  type: "login" | "logout" | "register";
+  createdAt: string;
 };

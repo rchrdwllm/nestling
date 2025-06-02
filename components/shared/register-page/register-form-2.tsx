@@ -13,6 +13,8 @@ import { toast } from "sonner";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useAction } from "next-safe-action/hooks";
+import { logUserActivity } from "@/server/actions/log-user-activity";
 
 type RegisterForm2Props = {
   setStep: (step: number) => void;
@@ -41,6 +43,7 @@ const RegisterForm2 = ({ setStep, role, details }: RegisterForm2Props) => {
     },
     resolver: zodResolver(RegisterSchema),
   });
+  const { execute } = useAction(logUserActivity);
 
   const handleSubmit = async (data: z.infer<typeof RegisterSchema>) => {
     setIsLoading(true);
@@ -58,6 +61,10 @@ const RegisterForm2 = ({ setStep, role, details }: RegisterForm2Props) => {
         redirect: false,
       })
         .then(() => {
+          execute({
+            userId: success.id,
+            type: "register",
+          });
           toast.dismiss();
           toast.success("Account created successfully");
           router.push("/dashboard");

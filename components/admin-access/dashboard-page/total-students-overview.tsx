@@ -1,5 +1,5 @@
 import { getAllStudents } from "@/lib/user";
-import DateDisplay from "../ui/date-display";
+import DateDisplay from "../../ui/date-display";
 
 const TotalStudentsOverview = async () => {
   const { success: allStudents, error: allStudentsError } =

@@ -14,6 +14,8 @@ import { toast } from "sonner";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useAction } from "next-safe-action/hooks";
+import { logUserActivity } from "@/server/actions/log-user-activity";
 
 type LoginFormProps = {
   setStep: (step: number) => void;
@@ -30,6 +32,7 @@ const LoginForm = ({ role, setStep }: LoginFormProps) => {
       password: "",
     },
   });
+  const { execute } = useAction(logUserActivity);
 
   const handleSubmit = async (data: z.infer<typeof LoginSchema>) => {
     setIsLoading(true);
@@ -55,6 +58,10 @@ const LoginForm = ({ role, setStep }: LoginFormProps) => {
         redirect: false,
       })
         .then(() => {
+          execute({
+            userId: success.id,
+            type: "login",
+          });
           toast.dismiss();
           toast.success("Login successful");
           router.push("/dashboard");

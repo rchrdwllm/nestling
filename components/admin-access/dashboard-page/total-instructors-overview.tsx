@@ -1,5 +1,5 @@
 import { getAllInstructors } from "@/lib/user";
-import DateDisplay from "../ui/date-display";
+import DateDisplay from "../../ui/date-display";
 
 const TotalInstructorsOverview = async () => {
   const { success: allInstructors, error: allInstructorsError } =
