@@ -1,13 +1,26 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { UserActivity } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
 import { formatInTimeZone } from "date-fns-tz";
+import Link from "next/link";
 
 export const logsTableCols: ColumnDef<UserActivity>[] = [
   {
     accessorKey: "userId",
     header: "User ID",
+    cell: ({ row }) => {
+      const userId = row.getValue("userId") as string;
+
+      return (
+        <Link href={`/search/user/${userId}`}>
+          <Button variant="link" className="px-0">
+            {userId}
+          </Button>
+        </Link>
+      );
+    },
   },
   {
     accessorKey: "type",
