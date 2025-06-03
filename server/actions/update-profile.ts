@@ -7,6 +7,7 @@ import { User } from "@/types";
 import bcrypt from "bcrypt";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { logUserActivity } from "./log-user-activity";
+import { encryptData } from "@/lib/aes";
 
 export const updateProfile = actionClient
   .schema(UpdateProfileSchema)
@@ -15,13 +16,22 @@ export const updateProfile = actionClient
       const userRef = db.collection("users").doc(parsedInput.userId);
       const userSnapshot = await userRef.get();
       const user = userSnapshot.data() as User;
+      const aesKey = process.env.AES_ENCRYPTION_KEY;
 
       if (!userRef) {
         return { error: "User not found" };
       }
 
+      if (!aesKey) {
+        return {
+          error:
+            "Failed to encrypt updated user data. Encryption key not found.",
+        };
+      }
+
       const updates = {
-        contactNumber: parsedInput.contactNumber,
+        contactNumber: encryptData(parsedInput.contactNumber, aesKey),
+        address: encryptData(parsedInput.address, aesKey),
         email: parsedInput.email,
         firstName: parsedInput.firstName,
         image: parsedInput.image ?? null,
