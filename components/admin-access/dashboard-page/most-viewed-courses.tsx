@@ -30,7 +30,7 @@ const MostViewedCourses = ({ data }: MostViewedCoursesProps) => {
   return (
     <Card className="p-4 flex flex-col h-full">
       <div className="flex flex-col gap-1">
-        <h1 className="font-semibold text-xl">Top Courses</h1>
+        <h1 className="font-semibold text-xl">Most Viewed Courses</h1>
         <p className="text-muted-foreground text-sm">
           Courses with the highest views
         </p>
