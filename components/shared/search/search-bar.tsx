@@ -14,7 +14,7 @@ type SearchBarProps = {
 };
 
 const SearchBar = ({
-  entities = ["students", "instructors", "courses", "projects"],
+  entities = ["students", "instructors", "courses", "contents", "projects"],
   isInbox = false,
 }: SearchBarProps) => {
   const [isClicked, setIsClicked] = useState(false);
