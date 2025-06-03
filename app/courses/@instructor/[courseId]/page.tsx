@@ -1,10 +1,9 @@
 import CreateModuleBtn from "@/components/shared/courses-page/create-module-btn";
 import ModuleCard from "@/components/shared/courses-page/module-card/module-card";
+import TrackCourseEngagement from "@/components/shared/courses-page/track-course-engagement";
 import { getCourse } from "@/lib/course";
 import { getUnarchivedCourseModules } from "@/lib/module";
 import { getOptimisticUser } from "@/lib/user";
-import { logUserActivity } from "@/server/actions/log-user-activity";
-import { viewCourse } from "@/server/actions/view-course";
 
 const CoursePage = async ({
   params,
@@ -25,21 +24,6 @@ const CoursePage = async ({
     return <div>Loading...</div>;
   }
 
-  await logUserActivity({
-    type: "view_course",
-    userId: user.id,
-    targetId: courseId,
-    details: {
-      courseId,
-      courseName: course.name,
-      courseCode: course.courseCode,
-    },
-  });
-
-  await viewCourse({
-    courseId,
-  });
-
   return (
     <main className="p-6 flex flex-col gap-8">
       <header className="flex flex-col gap-3">
@@ -56,6 +40,7 @@ const CoursePage = async ({
           <ModuleCard key={module.id} {...module} />
         ))}
       </section>
+      <TrackCourseEngagement courseId={courseId} />
     </main>
   );
 };

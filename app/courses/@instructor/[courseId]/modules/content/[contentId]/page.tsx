@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { getContentFile, getModuleContent } from "@/lib/content";
 import Link from "next/link";
 import { getOptimisticUser } from "@/lib/user";
-import { logUserActivity } from "@/server/actions/log-user-activity";
+import ContentViewLogger from "@/components/shared/content-page/content-view-logger";
 
 const ContentPage = async ({
   params,
@@ -23,20 +23,11 @@ const ContentPage = async ({
     return <div>Loading...</div>;
   }
 
-  await logUserActivity({
-    userId: user.id,
-    type: "view_content",
-    targetId: contentId,
-    details: {
-      courseId: content.courseId,
-      title: content.title,
-    },
-  });
-
   const file = content.type === "file" ? await getContentFile(contentId) : null;
 
   return (
     <main className="p-6 flex gap-16">
+      <ContentViewLogger content={content} />
       <div className="flex-1">
         <div className="flex flex-col gap-3">
           <div className="flex justify-between items-center">

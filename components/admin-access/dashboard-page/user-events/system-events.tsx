@@ -35,7 +35,11 @@ const SystemEvents = () => {
   }, []);
 
   return (
-    <LogsTable columns={logsTableCols} data={logs} types={["update_profile"]} />
+    <LogsTable
+      columns={logsTableCols}
+      data={logs}
+      types={["update_profile", "enroll_course"]}
+    />
   );
 };
 

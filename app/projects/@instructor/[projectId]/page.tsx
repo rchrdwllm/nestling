@@ -19,7 +19,6 @@ import TasksTimeline from "@/components/shared/projects-page/tasks-timeline";
 import CreateTaskDialog from "@/components/shared/projects-page/create-task-dialog";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { logUserActivity } from "@/server/actions/log-user-activity";
 
 const ProjectPage = async ({
   params,
@@ -79,15 +78,6 @@ const ProjectPage = async ({
   if (!tasks || !owner) {
     return <div>No data available.</div>;
   }
-
-  await logUserActivity({
-    type: "view_project",
-    userId: user.id,
-    targetId: project.id,
-    details: {
-      title: project.title,
-    },
-  });
 
   return (
     <>

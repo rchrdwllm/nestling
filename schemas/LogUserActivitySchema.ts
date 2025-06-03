@@ -12,6 +12,7 @@ export const LogUserActivitySchema = z.object({
     "submit_assignment",
     "grade_submission",
     "update_profile",
+    "enroll_course",
   ]),
   targetId: z.string().optional(),
   details: z.record(z.unknown()).optional(),

@@ -4,6 +4,7 @@ import { db } from "@/lib/firebase";
 import { actionClient } from "../action-client";
 import { EnrollSchema } from "@/schemas/EnrollSchema";
 import { revalidatePath, revalidateTag } from "next/cache";
+import { logUserActivity } from "./log-user-activity";
 
 export const enrollStudent = actionClient
   .schema(EnrollSchema)
@@ -48,6 +49,12 @@ export const enrollStudent = actionClient
       batch.set(enrolledStudentsRef, enrollmentData);
 
       await batch.commit();
+
+      await logUserActivity({
+        type: "enroll_course",
+        userId: studentId,
+        targetId: courseId,
+      });
 
       revalidatePath("/courses");
       revalidateTag("students");

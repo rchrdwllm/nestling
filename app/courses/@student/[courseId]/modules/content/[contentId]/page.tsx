@@ -5,7 +5,7 @@ import { getContentFile, getModuleContent } from "@/lib/content";
 import { getStudentAssignmentSubmission } from "@/lib/submission";
 import { getOptimisticUser } from "@/lib/user";
 import StudentSubmission from "@/components/student-access/courses-page/student-submission";
-import { logUserActivity } from "@/server/actions/log-user-activity";
+import ContentViewLogger from "@/components/shared/content-page/content-view-logger";
 
 const ContentPage = async ({
   params,
@@ -26,16 +26,6 @@ const ContentPage = async ({
     return <div>Loading...</div>;
   }
 
-  await logUserActivity({
-    userId: user.id,
-    type: "view_content",
-    targetId: contentId,
-    details: {
-      courseId: content.courseId,
-      title: content.title,
-    },
-  });
-
   const file = content.type === "file" ? await getContentFile(contentId) : null;
   const { success: submissions } =
     content.type === "assignment"
@@ -53,6 +43,7 @@ const ContentPage = async ({
   if (isLocked) {
     return (
       <div className="flex gap-8 p-6">
+        <ContentViewLogger content={content} />
         <div>
           <div className="flex flex-col gap-3">
             <h1 className="text-3xl font-semibold">{content.title}</h1>
@@ -81,6 +72,7 @@ const ContentPage = async ({
 
   return (
     <main className="p-6 flex gap-8">
+      <ContentViewLogger content={content} />
       <div className="flex-1">
         <div className="flex flex-col gap-3">
           <div className="flex justify-between items-center">

@@ -272,7 +272,9 @@ export type UserActivity = {
     | "view_content"
     | "view_project"
     | "submit_assignment"
-    | "grade_submission";
+    | "grade_submission"
+    | "update_profile"
+    | "enroll_course";
   createdAt: string;
   targetId?: string | null;
   details?: Record<string, any> | null;

@@ -6,6 +6,10 @@ import { projectPriorities, projectStatuses } from "@/constants/project";
 import { Project, User } from "@/types";
 import { Badge } from "@/components/ui/badge";
 import { AlignLeft, Calendar, Flame, TrendingUp, UserIcon } from "lucide-react";
+import { useEffect } from "react";
+import { useAction } from "next-safe-action/hooks";
+import { logUserActivity } from "@/server/actions/log-user-activity";
+import { useCurrentUser } from "@/hooks/use-current-user";
 
 type ProjectDetailsProps = {
   project: Project;
@@ -13,6 +17,20 @@ type ProjectDetailsProps = {
 };
 
 const ProjectDetails = ({ project, owner }: ProjectDetailsProps) => {
+  const { execute } = useAction(logUserActivity);
+  const { user } = useCurrentUser();
+
+  useEffect(() => {
+    execute({
+      type: "view_project",
+      userId: user.id,
+      targetId: project.id,
+      details: {
+        title: project.title,
+      },
+    });
+  }, [project.id]);
+
   return (
     <section className="flex flex-col gap-1">
       {project.description && (
