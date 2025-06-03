@@ -105,8 +105,10 @@ const EditProfileForm = ({
     const file = target.files?.[0];
 
     if (file) {
+      console.log({ fileSize: file.size, maxSize: MAX_SIZE });
+
       if (file.size > MAX_SIZE) {
-        toast.error("File size exceeds 100MB limit.");
+        toast.error("File size exceeds 10MB limit.");
         return;
       }
 
