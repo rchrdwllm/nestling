@@ -1,17 +1,21 @@
+import MyCourses from "@/components/instructor-access/dashboard-page/my-courses";
 import SearchBar from "@/components/shared/search/search-bar";
-import { getOptimisticUser } from "@/lib/user";
 
 const InstructorDashboardPage = async () => {
-  const user = await getOptimisticUser();
-
   return (
-    <div className="relative h-screen w-full p-6 pt-8">
-      <SearchBar entities={["students", "courses", "contents", "projects"]} />
-      <div className="h-full flex flex-col gap-4 justify-center items-center">
-        <h1 className="text-3xl font-semibold">
-          Welcome to Nestling, instructor {user.firstName}!
-        </h1>
+    <div className="p-6 flex flex-col gap-8">
+      <div className="flex flex-col gap-4">
+        <div className="flex items-center gap-4">
+          <h1 className="text-3xl font-semibold">Dashboard</h1>
+          <div className="flex-1">
+            <SearchBar
+              entities={["students", "instructors", "courses", "contents"]}
+            />
+          </div>
+        </div>
+        <hr />
       </div>
+      <MyCourses />
     </div>
   );
 };

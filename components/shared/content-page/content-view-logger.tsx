@@ -24,7 +24,7 @@ const ContentViewLogger = ({ content }: ContentViewLoggerProps) => {
         title: content.title,
       },
     });
-  });
+  }, [content]);
 
   return null;
 };

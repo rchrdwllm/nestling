@@ -377,6 +377,37 @@ export const getSlicedCourses = unstable_cache(
   { revalidate: 60 * 60 * 24, tags: ["courses"] }
 );
 
+export const getSlicedInstructorCourses = unstable_cache(
+  async (instructorId: string, limit: number = 4) => {
+    try {
+      const snapshot = await db
+        .collection("users")
+        .doc(instructorId)
+        .collection("courses")
+        .limit(limit)
+        .get();
+      const courseIds = snapshot.docs.map((doc) => doc.data().courseId);
+      const courses = await Promise.all(
+        courseIds.map(async (courseId) => {
+          const courseSnapshot = await db
+            .collection("courses")
+            .doc(courseId)
+            .get();
+          return courseSnapshot.data() as Course;
+        })
+      );
+
+      const instructedCourses = courses.filter((course) => !course.isArchived);
+
+      return { success: instructedCourses };
+    } catch (error) {
+      console.error("Error fetching sliced instructor courses:", error);
+
+      return { error: "Error fetching instructor courses" };
+    }
+  }
+);
+
 export const getMostViewedCourses = unstable_cache(
   async () => {
     try {

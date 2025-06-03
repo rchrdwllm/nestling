@@ -3,7 +3,6 @@ import ModuleCard from "@/components/shared/courses-page/module-card/module-card
 import TrackCourseEngagement from "@/components/shared/courses-page/track-course-engagement";
 import { getCourse } from "@/lib/course";
 import { getUnarchivedCourseModules } from "@/lib/module";
-import { getOptimisticUser } from "@/lib/user";
 
 const CoursePage = async ({
   params,
@@ -14,7 +13,6 @@ const CoursePage = async ({
   const { success: course, error: courseError } = await getCourse(courseId);
   const { success: modules, error: moduleError } =
     await getUnarchivedCourseModules(courseId);
-  const user = await getOptimisticUser();
 
   if (moduleError || courseError) {
     return <div>{moduleError || courseError}</div>;
@@ -40,7 +38,7 @@ const CoursePage = async ({
           <ModuleCard key={module.id} {...module} />
         ))}
       </section>
-      <TrackCourseEngagement courseId={courseId} />
+      <TrackCourseEngagement course={course} />
     </main>
   );
 };
