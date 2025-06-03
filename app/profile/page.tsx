@@ -26,8 +26,6 @@ const ProfilePage = async ({
       ? await getInstructorCourses(user.id)
       : await getEnrolledCourses(user.id);
 
-  const isCurrentUser = currentUser?.id === user.id;
-
   if (contentsError || !contents) {
     console.error("Error fetching user details: ", contentsError);
 
@@ -36,12 +34,7 @@ const ProfilePage = async ({
 
   return (
     <main className="p-8 flex min-h-full justify-center items-center">
-      {!isCurrentUser && (
-        <ProfileDetails contentsLength={contents.length} user={user} />
-      )}
-      {isCurrentUser && (
-        <EditProfileForm contentsLength={contents.length} user={user} />
-      )}
+      <ProfileDetails contentsLength={contents.length} user={user} />
     </main>
   );
 };

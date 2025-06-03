@@ -16,6 +16,7 @@ type ProfileDetailsProps = {
 const ProfileDetails = ({ user, contentsLength }: ProfileDetailsProps) => {
   const { user: currentUser } = useCurrentUser();
   const [toggleEdit, setToggleEdit] = useState(false);
+  const isCurrentUser = currentUser?.id === user.id;
 
   return (
     <div className="flex flex-col gap-8 items-center">
@@ -42,7 +43,7 @@ const ProfileDetails = ({ user, contentsLength }: ProfileDetailsProps) => {
           {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
         </p>
       </div>
-      {user.role !== "admin" && (
+      {user.role !== "admin" && !toggleEdit && (
         <div className="p-4 bg-secondary rounded-lg border border-border flex flex-col gap-2 items-center">
           <h1 className="font-mono text-2xl font-semibold">{contentsLength}</h1>
           <p className="text-muted-foreground text-sm">
@@ -59,7 +60,7 @@ const ProfileDetails = ({ user, contentsLength }: ProfileDetailsProps) => {
           {user.contactNumber || "N/A"}
         </p>
       </div>
-      {!toggleEdit ? (
+      {!toggleEdit && isCurrentUser ? (
         <Button onClick={() => setToggleEdit(true)} variant="outline">
           Edit profile
         </Button>
