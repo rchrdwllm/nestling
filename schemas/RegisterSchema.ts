@@ -19,6 +19,9 @@ export const RegisterSchema = z
     contactNumber: z.string().nonempty().max(50, {
       message: "Contact number must be at most 50 characters long",
     }),
+    address: z.string().nonempty().max(200, {
+      message: "Address must be at most 200 characters long",
+    }),
     email: z.string().email({
       message: "Invalid email format",
     }),

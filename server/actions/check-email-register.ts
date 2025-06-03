@@ -4,6 +4,7 @@ import { RegisterSchema } from "@/schemas/RegisterSchema";
 import { db } from "@/lib/firebase";
 import bcrypt from "bcrypt";
 import * as z from "zod";
+import { encryptData } from "@/lib/aes";
 
 export const checkEmailRegister = async (
   data: z.infer<typeof RegisterSchema>
@@ -16,6 +17,7 @@ export const checkEmailRegister = async (
     middleName,
     lastName,
     contactNumber,
+    address,
   } = data;
 
   try {
@@ -28,6 +30,14 @@ export const checkEmailRegister = async (
 
     const hashedPassword = bcrypt.hashSync(password, 10);
     const id = crypto.randomUUID();
+    const aesKey = process.env.AES_ENCRYPTION_KEY;
+
+    if (!aesKey) {
+      return {
+        error:
+          "Failed to encrypt user information. AES encryption key not found.",
+      };
+    }
 
     const newUser = {
       email,
@@ -38,7 +48,8 @@ export const checkEmailRegister = async (
       firstName,
       middleName,
       lastName,
-      contactNumber,
+      contactNumber: encryptData(contactNumber, aesKey),
+      address: encryptData(address, aesKey),
       name: `${firstName} ${middleName} ${lastName}`,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),

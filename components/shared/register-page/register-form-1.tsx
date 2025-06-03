@@ -14,12 +14,14 @@ type RegisterForm1Props = {
     middleName: string;
     lastName: string;
     contactNumber: string;
+    address: string;
   };
   setDetails: (details: {
     firstName: string;
     middleName: string;
     lastName: string;
     contactNumber: string;
+    address: string;
   }) => void;
 };
 
@@ -102,6 +104,21 @@ const RegisterForm1 = ({
                   value={details.contactNumber}
                   onChange={(e) =>
                     setDetails({ ...details, contactNumber: e.target.value })
+                  }
+                  placeholder="Contact number"
+                />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="..."
+            render={() => (
+              <FormItem>
+                <Input
+                  value={details.address}
+                  onChange={(e) =>
+                    setDetails({ ...details, address: e.target.value })
                   }
                   placeholder="Contact number"
                 />

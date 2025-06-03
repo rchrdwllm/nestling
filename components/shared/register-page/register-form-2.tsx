@@ -24,6 +24,7 @@ type RegisterForm2Props = {
     middleName?: string;
     lastName: string;
     contactNumber: string;
+    address: string;
   };
 };
 
@@ -40,6 +41,7 @@ const RegisterForm2 = ({ setStep, role, details }: RegisterForm2Props) => {
       middleName: details.middleName,
       lastName: details.lastName,
       contactNumber: details.contactNumber,
+      address: details.address,
     },
     resolver: zodResolver(RegisterSchema),
   });

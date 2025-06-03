@@ -5,6 +5,7 @@ import { authOptions } from "./auth";
 import { unstable_cache } from "next/cache";
 import { db } from "./firebase";
 import { User } from "@/types";
+import { decryptData } from "./aes";
 
 export const getCurrentUser = async () => {
   const user = await getServerSession(authOptions);
@@ -28,8 +29,22 @@ export const getUserById = unstable_cache(
       }
 
       const user = userSnapshot.data() as User;
+      const aesKey = process.env.AES_ENCRYPTION_KEY;
 
-      return { success: user };
+      if (!aesKey) {
+        return {
+          error:
+            "Failed to decrypt user information. AES encryption key not found.",
+        };
+      }
+
+      return {
+        success: {
+          ...user,
+          contactNumber: decryptData(user.contactNumber, aesKey),
+          address: decryptData(user.address, aesKey),
+        },
+      };
     } catch (error) {
       console.error(error);
 
@@ -47,7 +62,20 @@ export const getAllStudents = unstable_cache(
         .collection("users")
         .where("role", "==", "student")
         .get();
-      const users = usersSnapshot.docs.map((doc) => doc.data()) as User[];
+      const aesKey = process.env.AES_ENCRYPTION_KEY;
+
+      if (!aesKey) {
+        return {
+          error:
+            "Failed to decrypt user information. AES encryption key not found.",
+        };
+      }
+
+      const users = usersSnapshot.docs.map((doc) => ({
+        ...doc.data(),
+        contactNumber: decryptData(doc.data().contactNumber, aesKey),
+        address: decryptData(doc.data().address, aesKey),
+      })) as User[];
 
       return { success: users };
     } catch (error) {
@@ -67,7 +95,20 @@ export const getAllInstructors = unstable_cache(
         .collection("users")
         .where("role", "==", "instructor")
         .get();
-      const users = usersSnapshot.docs.map((doc) => doc.data()) as User[];
+      const aesKey = process.env.AES_ENCRYPTION_KEY;
+
+      if (!aesKey) {
+        return {
+          error:
+            "Failed to decrypt user information. AES encryption key not found.",
+        };
+      }
+
+      const users = usersSnapshot.docs.map((doc) => ({
+        ...doc.data(),
+        contactNumber: decryptData(doc.data().contactNumber, aesKey),
+        address: decryptData(doc.data().address, aesKey),
+      })) as User[];
 
       return { success: users };
     } catch (error) {
@@ -87,7 +128,20 @@ export const getAllAdmins = unstable_cache(
         .collection("users")
         .where("role", "==", "admin")
         .get();
-      const users = usersSnapshot.docs.map((doc) => doc.data()) as User[];
+      const aesKey = process.env.AES_ENCRYPTION_KEY;
+
+      if (!aesKey) {
+        return {
+          error:
+            "Failed to decrypt user information. AES encryption key not found.",
+        };
+      }
+
+      const users = usersSnapshot.docs.map((doc) => ({
+        ...doc.data(),
+        contactNumber: decryptData(doc.data().contactNumber, aesKey),
+        address: decryptData(doc.data().address, aesKey),
+      })) as User[];
 
       return { success: users };
     } catch (error) {

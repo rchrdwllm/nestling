@@ -11,6 +11,7 @@ export type User = {
   middleName: string;
   lastName: string;
   contactNumber: string;
+  address: string;
   createdAt: string;
   updatedAt: string;
   name?: string;

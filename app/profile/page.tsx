@@ -1,8 +1,7 @@
-import EditProfileForm from "@/components/shared/profile-page/edit-profile-form";
 import ProfileDetails from "@/components/shared/profile-page/profile-details";
 
 import { getEnrolledCourses, getInstructorCourses } from "@/lib/course";
-import { getCurrentUser, getUserById } from "@/lib/user";
+import { getUserById } from "@/lib/user";
 
 const ProfilePage = async ({
   searchParams,
@@ -11,7 +10,6 @@ const ProfilePage = async ({
 }) => {
   const { userId } = await searchParams;
   const { success: user, error } = await getUserById(userId);
-  const currentUser = await getCurrentUser();
 
   if (error) {
     return <div>{error}</div>;
