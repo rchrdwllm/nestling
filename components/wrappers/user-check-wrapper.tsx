@@ -1,7 +1,8 @@
-import { getCurrentUser, getOptimisticUser, getUserById } from "@/lib/user";
+import { getCurrentUser, getUserById } from "@/lib/user";
 import { redirect } from "next/navigation";
+import { ReactNode } from "react";
 
-const UserCheckWrapper = async () => {
+const UserCheckWrapper = async ({ children }: { children: ReactNode }) => {
   const user = await getCurrentUser();
 
   if (!user) {
@@ -18,7 +19,7 @@ const UserCheckWrapper = async () => {
     return redirect("/api/auth/signin");
   }
 
-  return <div>UserCheckWrapper</div>;
+  return <>{children}</>;
 };
 
 export default UserCheckWrapper;

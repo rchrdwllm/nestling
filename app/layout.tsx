@@ -12,6 +12,7 @@ import NotificationWrapper from "@/components/wrappers/notification-wrapper";
 import NativeNotificationWrapper from "@/components/wrappers/native-notification-wrapper";
 import { getCurrentUser } from "@/lib/user";
 import LayoutWrapper from "@/components/ui/layout-wrapper";
+import UserCheckWrapper from "@/components/wrappers/user-check-wrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -59,7 +60,9 @@ export default async function RootLayout({
             <CacheRefresherWrapper>
               <NotificationWrapper authUser={JSON.stringify(user)}>
                 <NativeNotificationWrapper authUser={JSON.stringify(user)}>
-                  <LayoutWrapper>{children}</LayoutWrapper>
+                  <UserCheckWrapper>
+                    <LayoutWrapper>{children}</LayoutWrapper>
+                  </UserCheckWrapper>
                 </NativeNotificationWrapper>
               </NotificationWrapper>
             </CacheRefresherWrapper>
