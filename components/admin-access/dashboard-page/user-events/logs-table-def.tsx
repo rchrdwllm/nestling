@@ -51,7 +51,7 @@ export const logsTableColsWithDetails: ColumnDef<UserActivity>[] = [
       const userId = row.getValue("userId") as string;
 
       return (
-        <Link href={`/search/user/${userId}`}>
+        <Link href={`/profile?userId=${userId}`}>
           <Button variant="link" className="px-0">
             {userId}
           </Button>

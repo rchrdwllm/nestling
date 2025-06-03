@@ -64,10 +64,12 @@ const ProfileDetails = ({ user, contentsLength }: ProfileDetailsProps) => {
           {user.address || "N/A"}
         </p>
       </div>
-      {!toggleEdit && isCurrentUser ? (
-        <Button onClick={() => setToggleEdit(true)} variant="outline">
-          Edit profile
-        </Button>
+      {!toggleEdit ? (
+        (isCurrentUser || currentUser.role === "admin") && (
+          <Button onClick={() => setToggleEdit(true)} variant="outline">
+            Edit profile
+          </Button>
+        )
       ) : (
         <EditProfileForm
           setToggleEdit={setToggleEdit}

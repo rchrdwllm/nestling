@@ -36,116 +36,6 @@ export const createCourse = actionClient
       return { error: "Not authenticated" };
     }
 
-    // if (isAdmin && user.role === "admin") {
-    //   try {
-    //     const existingCourseCode = await db
-    //       .collection("courses")
-    //       .where("courseCode", "==", courseCode)
-    //       .get();
-    //     const existingCourseName = await db
-    //       .collection("courses")
-    //       .where("name", "==", name)
-    //       .get();
-
-    //     if (!isEdit) {
-    //       if (!existingCourseCode.empty) {
-    //         return { error: "Course code already exists" };
-    //       }
-
-    //       if (!existingCourseName.empty) {
-    //         return { error: "Course name already exists" };
-    //       }
-
-    //       if (!image) {
-    //         return { error: "Course image is required" };
-    //       }
-    //     }
-
-    //     if (image) {
-    //       await db.collection("courses").doc(id).set({
-    //         name,
-    //         description,
-    //         courseCode,
-    //         id,
-    //         createdAt: new Date().toISOString(),
-    //         updatedAt: new Date().toISOString(),
-    //         image: image.secure_url,
-    //         isArchived: false,
-    //       });
-
-    //       const data = await uploadImage({ ...image, course_id: id });
-
-    //       if (!data) {
-    //         console.error("Error uploading image");
-
-    //         return { error: "Error uploading image" };
-    //       }
-
-    //       if (data.data?.error) {
-    //         return { error: data.data.error };
-    //       }
-
-    //       if (!data.data?.success) {
-    //         return { error: "Error uploading image" };
-    //       }
-    //     }
-
-    //     const batch = db.batch();
-
-    //     instructors.forEach((instructorId) => {
-    //       const courseInstructorRef = db
-    //         .collection("courses")
-    //         .doc(id)
-    //         .collection("instructors")
-    //         .doc(instructorId);
-    //       const instructorCourseRef = db
-    //         .collection("users")
-    //         .doc(instructorId)
-    //         .collection("courses")
-    //         .doc(id);
-
-    //       const courseInstructorData = {
-    //         courseId: id,
-    //         instructorId,
-    //         createdAt: new Date().toISOString(),
-    //       };
-
-    //       batch.set(courseInstructorRef, courseInstructorData);
-    //       batch.set(instructorCourseRef, courseInstructorData);
-    //     });
-
-    //     if (defaultInstructors) {
-    //       const instructorsToRemove = defaultInstructors.filter(
-    //         (instructorId) => !instructors.includes(instructorId)
-    //       );
-
-    //       instructorsToRemove.forEach((instructorId) => {
-    //         const courseInstructorRef = db
-    //           .collection("courses")
-    //           .doc(id)
-    //           .collection("instructors")
-    //           .doc(instructorId);
-    //         const instructorCourseRef = db
-    //           .collection("users")
-    //           .doc(instructorId)
-    //           .collection("courses")
-    //           .doc(id);
-
-    //         batch.delete(courseInstructorRef);
-    //         batch.delete(instructorCourseRef);
-    //       });
-    //     }
-
-    //     await batch.commit();
-
-    //     revalidatePath("/courses");
-
-    //     return { success: "Course updated successfully" };
-    //   } catch (error) {
-    //     return { error: JSON.stringify(error) };
-    //   }
-    // }
-
     if (user.role === "student") {
       return {
         error:
@@ -311,6 +201,7 @@ export const createCourse = actionClient
         updatedAt: new Date().toISOString(),
         image: image.secure_url,
         isArchived: false,
+        viewCount: 0,
       });
 
       const data = await uploadImage({ ...image, course_id: id });

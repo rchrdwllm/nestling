@@ -376,3 +376,29 @@ export const getSlicedCourses = unstable_cache(
   ["studentId", "limit"],
   { revalidate: 60 * 60 * 24, tags: ["courses"] }
 );
+
+export const getMostViewedCourses = unstable_cache(
+  async () => {
+    try {
+      const coursesSnapshot = await db.collection("courses").get();
+      const courses = coursesSnapshot.docs.map((doc) => ({
+        title: doc.data().name,
+        viewCount: doc.data().viewCount,
+      })) as { title: string; viewCount: number }[];
+
+      courses.sort((a, b) => b.viewCount - a.viewCount);
+
+      const mostViewedCourses = courses
+        .slice(0, 5)
+        .filter((course) => course.viewCount > 0 && course.title);
+
+      return { success: mostViewedCourses };
+    } catch (error) {
+      console.error("Error fetching most viewed courses:", error);
+
+      return { error: "Error fetching most viewed courses" };
+    }
+  },
+  ["mostViewedCourses"],
+  { revalidate: 60 * 60 * 24, tags: ["courses"] }
+);

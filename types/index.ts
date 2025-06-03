@@ -36,6 +36,7 @@ export type Course = {
   image: string;
   isArchived: boolean;
   archivedAt: string | null;
+  viewCount: number;
 };
 
 export type EnrollmentData = {

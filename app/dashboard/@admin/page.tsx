@@ -1,11 +1,12 @@
 import ActiveUsers from "@/components/admin-access/dashboard-page/active-users";
+import MostViewedCourses from "@/components/admin-access/dashboard-page/most-viewed-courses";
 import TopCourses from "@/components/admin-access/dashboard-page/top-courses";
 import TotalInstructorsOverview from "@/components/admin-access/dashboard-page/total-instructors-overview";
 import TotalProjectsOverview from "@/components/admin-access/dashboard-page/total-projects-overview";
 import TotalStudentsOverview from "@/components/admin-access/dashboard-page/total-students-overview";
 import UserEventLogs from "@/components/admin-access/dashboard-page/user-events/user-event-logs";
 import SearchBar from "@/components/shared/search/search-bar";
-import { getTopCoursesByEnrollments } from "@/lib/course";
+import { getMostViewedCourses, getTopCoursesByEnrollments } from "@/lib/course";
 import { getActiveUsersFromMonths } from "@/lib/monthly-activity";
 
 const AdminDashboardPage = async () => {
@@ -13,8 +14,17 @@ const AdminDashboardPage = async () => {
     await getActiveUsersFromMonths(6);
   const { success: topCourses, error: topCoursesError } =
     await getTopCoursesByEnrollments();
+  const { success: mostViewedCourses, error: mostViewedCoursesError } =
+    await getMostViewedCourses();
 
-  if (!activeUsers || !topCourses || activeUsersError || topCoursesError)
+  if (
+    !activeUsers ||
+    !topCourses ||
+    activeUsersError ||
+    topCoursesError ||
+    !mostViewedCourses ||
+    mostViewedCoursesError
+  )
     return <h1>Error loading data</h1>;
 
   return (
@@ -43,6 +53,9 @@ const AdminDashboardPage = async () => {
         </article>
         <article className="col-span-3">
           <TopCourses data={topCourses} />
+        </article>
+        <article className="col-span-3">
+          <MostViewedCourses data={mostViewedCourses} />
         </article>
       </div>
       <div className="flex flex-col gap-4">

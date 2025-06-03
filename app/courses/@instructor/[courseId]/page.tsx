@@ -4,6 +4,7 @@ import { getCourse } from "@/lib/course";
 import { getUnarchivedCourseModules } from "@/lib/module";
 import { getOptimisticUser } from "@/lib/user";
 import { logUserActivity } from "@/server/actions/log-user-activity";
+import { viewCourse } from "@/server/actions/view-course";
 
 const CoursePage = async ({
   params,
@@ -33,6 +34,10 @@ const CoursePage = async ({
       courseName: course.name,
       courseCode: course.courseCode,
     },
+  });
+
+  await viewCourse({
+    courseId,
   });
 
   return (
