@@ -18,6 +18,7 @@ const RegisterSteps = () => {
     middleName: "",
     lastName: "",
     contactNumber: "",
+    address: "",
   });
 
   return (
