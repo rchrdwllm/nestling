@@ -4,7 +4,7 @@ import NextTopLoader from "nextjs-toploader";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import SessionWrapper from "@/components/wrappers/session-wrapper";
-import { getServerSession } from "next-auth";
+import { getServerSession, User } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import CacheRefresherWrapper from "@/components/wrappers/cache-refresher-wrapper";
 import ThemeWrapper from "@/components/wrappers/theme-wrapper";
@@ -12,7 +12,6 @@ import NotificationWrapper from "@/components/wrappers/notification-wrapper";
 import NativeNotificationWrapper from "@/components/wrappers/native-notification-wrapper";
 import { getCurrentUser } from "@/lib/user";
 import LayoutWrapper from "@/components/ui/layout-wrapper";
-import UserCheckWrapper from "@/components/wrappers/user-check-wrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -60,9 +59,7 @@ export default async function RootLayout({
             <CacheRefresherWrapper>
               <NotificationWrapper authUser={JSON.stringify(user)}>
                 <NativeNotificationWrapper authUser={JSON.stringify(user)}>
-                  <UserCheckWrapper>
-                    <LayoutWrapper>{children}</LayoutWrapper>
-                  </UserCheckWrapper>
+                  <LayoutWrapper>{children}</LayoutWrapper>
                 </NativeNotificationWrapper>
               </NotificationWrapper>
             </CacheRefresherWrapper>
