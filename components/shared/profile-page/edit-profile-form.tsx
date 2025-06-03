@@ -18,9 +18,15 @@ import * as z from "zod";
 
 type EditProfileFormProps = {
   user: User;
+  contentsLength: number;
+  setToggleEdit?: (value: boolean) => void;
 };
 
-const EditProfileForm = ({ user }: EditProfileFormProps) => {
+const EditProfileForm = ({
+  user,
+  contentsLength,
+  setToggleEdit,
+}: EditProfileFormProps) => {
   const [img, setImg] = useState<File | undefined>(undefined);
   const [isLoading, setIsLoading] = useState(false);
   const form = useForm<z.infer<typeof UpdateProfileSchema>>({
@@ -114,7 +120,7 @@ const EditProfileForm = ({ user }: EditProfileFormProps) => {
   };
 
   return (
-    <section>
+    <section className="min-w-[600px]">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(handleSubmit)}
@@ -127,7 +133,7 @@ const EditProfileForm = ({ user }: EditProfileFormProps) => {
                 <FormControl>
                   <div className="flex flex-col items-center justify-center gap-4">
                     {form.getValues("image") ? (
-                      <label htmlFor="image">
+                      <label htmlFor="image" className="cursor-pointer">
                         <Avatar className="size-32">
                           <AvatarImage
                             src={form.getValues("image")}
@@ -143,7 +149,7 @@ const EditProfileForm = ({ user }: EditProfileFormProps) => {
                         </Avatar>
                       </label>
                     ) : (
-                      <label htmlFor="image">
+                      <label htmlFor="image" className="cursor-pointer">
                         <div className="flex items-center justify-center size-32 bg-muted rounded-full">
                           <p className="text-xl font-bold">{user.name![0]}</p>
                         </div>
@@ -161,6 +167,30 @@ const EditProfileForm = ({ user }: EditProfileFormProps) => {
               </FormItem>
             )}
           />
+          {!setToggleEdit && (
+            <>
+              <div className="text-center">
+                <h1 className="text-3xl font-semibold mt-6">
+                  {user.name || `${user.firstName} ${user.lastName}`}
+                </h1>
+                <p className="text-muted-foreground mt-2">
+                  {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
+                </p>
+              </div>
+              {user.role !== "admin" && (
+                <div className="w-max mx-auto p-4 bg-secondary rounded-lg border border-border flex flex-col gap-2 items-center">
+                  <h1 className="font-mono text-2xl font-semibold">
+                    {contentsLength}
+                  </h1>
+                  <p className="text-muted-foreground text-sm">
+                    {user.role === "instructor"
+                      ? "Courses"
+                      : "Enrolled courses"}
+                  </p>
+                </div>
+              )}
+            </>
+          )}
           <FormField
             control={form.control}
             name="email"
@@ -229,8 +259,16 @@ const EditProfileForm = ({ user }: EditProfileFormProps) => {
               </FormItem>
             )}
           />
-
           <div className="w-full flex gap-4">
+            {setToggleEdit && (
+              <Button
+                className="w-full"
+                variant="secondary"
+                onClick={() => setToggleEdit(false)}
+              >
+                Cancel
+              </Button>
+            )}
             <Button
               disabled={isExecuting || isLoading}
               type="submit"
