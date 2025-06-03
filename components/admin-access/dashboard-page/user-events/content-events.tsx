@@ -11,15 +11,21 @@ import {
   where,
 } from "firebase/firestore";
 import LogsTable from "./logs-table";
-import { logsTableCols } from "./logs-table-def";
+import { logsTableColsWithDetails } from "./logs-table-def";
 
-const AuthenticationEvents = () => {
+const ContentEvents = () => {
   const [logs, setLogs] = useState<UserActivity[]>([]);
 
   useEffect(() => {
     const q = query(
       collection(clientDb, "userActivities"),
-      where("type", "in", ["login", "logout", "register"]),
+      where("type", "in", [
+        "view_course",
+        "view_content",
+        "view_project",
+        "submit_assignment",
+        "grade_submission",
+      ]),
       orderBy("createdAt", "desc")
     );
 
@@ -36,11 +42,17 @@ const AuthenticationEvents = () => {
 
   return (
     <LogsTable
-      columns={logsTableCols}
+      columns={logsTableColsWithDetails}
       data={logs}
-      types={["login", "logout", "register"]}
+      types={[
+        "view_course",
+        "view_content",
+        "view_project",
+        "submit_assignment",
+        "grade_submission",
+      ]}
     />
   );
 };
 
-export default AuthenticationEvents;
+export default ContentEvents;

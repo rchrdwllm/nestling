@@ -4,7 +4,12 @@ import {
   getProjectById,
   getProjectHeads,
 } from "@/lib/project";
-import { getAllAdmins, getAllInstructors, getUserById } from "@/lib/user";
+import {
+  getAllAdmins,
+  getAllInstructors,
+  getOptimisticUser,
+  getUserById,
+} from "@/lib/user";
 import ArchiveProjectBtn from "@/components/admin-access/projects-page/archive-project-btn";
 import CreateTaskBtn from "@/components/shared/projects-page/create-task-btn";
 import { getProjectTasks } from "@/lib/task";
@@ -14,6 +19,7 @@ import TasksTimeline from "@/components/shared/projects-page/tasks-timeline";
 import CreateTaskDialog from "@/components/shared/projects-page/create-task-dialog";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { logUserActivity } from "@/server/actions/log-user-activity";
 
 const ProjectPage = async ({
   params,
@@ -27,6 +33,7 @@ const ProjectPage = async ({
   const { success: admins, error: adminsError } = await getAllAdmins();
   const { success: instructors, error: instructorsError } =
     await getAllInstructors();
+  const user = await getOptimisticUser();
 
   if (adminsError || instructorsError || projectError) {
     console.error(
@@ -72,6 +79,15 @@ const ProjectPage = async ({
   if (!tasks || !owner) {
     return <div>No data available.</div>;
   }
+
+  await logUserActivity({
+    type: "view_project",
+    userId: user.id,
+    targetId: project.id,
+    details: {
+      title: project.title,
+    },
+  });
 
   return (
     <>

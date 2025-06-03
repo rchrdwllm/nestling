@@ -27,11 +27,15 @@ import { useAction } from "next-safe-action/hooks";
 import { deleteUserLogs } from "@/server/actions/delete-user-logs";
 import { toast } from "sonner";
 
-const LogsTable = ({ columns, data }: any) => {
+const LogsTable = ({ columns, data, types }: any) => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [showAll, setShowAll] = useState(false);
   const { execute } = useAction(deleteUserLogs, {
+    onExecute: () => {
+      toast.dismiss();
+      toast.loading("Clearing logs...");
+    },
     onSuccess: () => {
       toast.dismiss();
       toast.success("Logs deleted successfully");
@@ -106,7 +110,7 @@ const LogsTable = ({ columns, data }: any) => {
             variant="outline"
             size="sm"
             className="hover:text-primary"
-            onClick={() => execute({ types: ["login", "logout", "register"] })}
+            onClick={() => execute({ types })}
           >
             <X className="size-4" /> Clear logs
           </Button>

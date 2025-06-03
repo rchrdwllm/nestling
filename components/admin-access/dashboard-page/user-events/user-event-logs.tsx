@@ -1,5 +1,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import AuthenticationEvents from "./authentication-events";
+import ContentEvents from "./content-events";
+import SystemEvents from "./system-events";
 
 const UserEventLogs = () => {
   return (
@@ -21,10 +23,10 @@ const UserEventLogs = () => {
           <AuthenticationEvents />
         </TabsContent>
         <TabsContent value="content">
-          Make changes to your content interaction here.
+          <ContentEvents />
         </TabsContent>
         <TabsContent value="system">
-          Make changes to your system interaction here.
+          <SystemEvents />
         </TabsContent>
       </Tabs>
     </div>

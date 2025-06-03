@@ -3,6 +3,8 @@ import PdfViewer from "@/components/shared/content-page/pdf-viewer";
 import { Button } from "@/components/ui/button";
 import { getContentFile, getModuleContent } from "@/lib/content";
 import Link from "next/link";
+import { getOptimisticUser } from "@/lib/user";
+import { logUserActivity } from "@/server/actions/log-user-activity";
 
 const ContentPage = async ({
   params,
@@ -11,6 +13,7 @@ const ContentPage = async ({
 }) => {
   const { contentId, courseId } = await params;
   const { success: content, error } = await getModuleContent(contentId);
+  const user = await getOptimisticUser();
 
   if (error) {
     return <div>{error}</div>;
@@ -19,6 +22,16 @@ const ContentPage = async ({
   if (!content) {
     return <div>Loading...</div>;
   }
+
+  await logUserActivity({
+    userId: user.id,
+    type: "view_content",
+    targetId: contentId,
+    details: {
+      courseId: content.courseId,
+      title: content.title,
+    },
+  });
 
   const file = content.type === "file" ? await getContentFile(contentId) : null;
 

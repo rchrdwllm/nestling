@@ -1,6 +1,8 @@
 import ModuleCard from "@/components/student-access/courses-page/module-card";
 import { getCourse } from "@/lib/course";
 import { getPublishedCourseModules } from "@/lib/module";
+import { getOptimisticUser } from "@/lib/user";
+import { logUserActivity } from "@/server/actions/log-user-activity";
 
 const CoursePage = async ({
   params,
@@ -11,6 +13,7 @@ const CoursePage = async ({
   const { success: course, error: courseError } = await getCourse(courseId);
   const { success: modules, error: moduleError } =
     await getPublishedCourseModules(courseId);
+  const user = await getOptimisticUser();
 
   if (moduleError || courseError) {
     return <div>{moduleError || courseError}</div>;
@@ -19,6 +22,17 @@ const CoursePage = async ({
   if (!modules || !course) {
     return <div>Loading...</div>;
   }
+
+  await logUserActivity({
+    type: "view_course",
+    userId: user.id,
+    targetId: courseId,
+    details: {
+      courseId,
+      courseName: course.name,
+      courseCode: course.courseCode,
+    },
+  });
 
   return (
     <div className="p-6 flex flex-col gap-8">

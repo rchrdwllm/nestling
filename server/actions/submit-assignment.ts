@@ -9,6 +9,7 @@ import { SubmitAssignmentSchema } from "@/schemas/SubmitAssignmentSchema";
 import * as z from "zod";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { Content } from "@/types";
+import { logUserActivity } from "./log-user-activity";
 
 export const submitAssignment = actionClient
   .schema(SubmitAssignmentSchema)
@@ -90,7 +91,7 @@ export const submitAssignment = actionClient
 
           revalidatePath(
             "/courses/[courseId]/modules/content/[contentId]",
-            "page",
+            "page"
           );
           revalidatePath(`/courses/${courseId}/modules/content/${contentId}`);
           revalidateTag("submissions");
@@ -123,6 +124,17 @@ export const submitAssignment = actionClient
       });
 
       await batch.commit();
+
+      await logUserActivity({
+        type: "submit_assignment",
+        userId: user.id,
+        targetId: contentId,
+        details: {
+          submissionId,
+          courseId,
+          contentId,
+        },
+      });
 
       revalidatePath("/courses/[courseId]/modules/content/[contentId]", "page");
       revalidatePath(`/courses/${courseId}/modules/content/${contentId}`);

@@ -4,11 +4,15 @@ import { GradeSubmissionSchema } from "@/schemas/GradeSubmissionSchema";
 import { actionClient } from "../action-client";
 import { db } from "@/lib/firebase";
 import { revalidatePath, revalidateTag } from "next/cache";
+import { logUserActivity } from "./log-user-activity";
+import { getOptimisticUser } from "@/lib/user";
+import { Submission } from "@/types";
 
 export const gradeSubmission = actionClient
   .schema(GradeSubmissionSchema)
   .action(async ({ parsedInput }) => {
     const { grade, feedback, submissionId, regrade } = parsedInput;
+    const user = await getOptimisticUser();
 
     try {
       const submission = db.collection("submissions").doc(submissionId);
@@ -18,11 +22,25 @@ export const gradeSubmission = actionClient
         return { error: "Submission not found" };
       }
 
+      const submissionData = submissionRef.data() as Submission;
+
       await submission.update({
         grade: parseInt(grade),
         feedback: feedback || "",
         isGraded: true,
         gradedAt: new Date().toISOString(),
+      });
+
+      await logUserActivity({
+        type: "grade_submission",
+        userId: user.id,
+        targetId: submissionId,
+        details: {
+          grade: parseInt(grade),
+          feedback: feedback || "",
+          contentId: submissionData.contentId,
+          studentId: submissionData.studentId,
+        },
       });
 
       revalidatePath(

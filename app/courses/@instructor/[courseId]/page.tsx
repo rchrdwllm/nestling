@@ -2,6 +2,8 @@ import CreateModuleBtn from "@/components/shared/courses-page/create-module-btn"
 import ModuleCard from "@/components/shared/courses-page/module-card/module-card";
 import { getCourse } from "@/lib/course";
 import { getUnarchivedCourseModules } from "@/lib/module";
+import { getOptimisticUser } from "@/lib/user";
+import { logUserActivity } from "@/server/actions/log-user-activity";
 
 const CoursePage = async ({
   params,
@@ -12,6 +14,7 @@ const CoursePage = async ({
   const { success: course, error: courseError } = await getCourse(courseId);
   const { success: modules, error: moduleError } =
     await getUnarchivedCourseModules(courseId);
+  const user = await getOptimisticUser();
 
   if (moduleError || courseError) {
     return <div>{moduleError || courseError}</div>;
@@ -20,6 +23,17 @@ const CoursePage = async ({
   if (!modules || !course) {
     return <div>Loading...</div>;
   }
+
+  await logUserActivity({
+    type: "view_course",
+    userId: user.id,
+    targetId: courseId,
+    details: {
+      courseId,
+      courseName: course.name,
+      courseCode: course.courseCode,
+    },
+  });
 
   return (
     <main className="p-6 flex flex-col gap-8">

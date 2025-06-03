@@ -6,7 +6,7 @@ import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { MAX_SIZE } from "@/constants/file";
 import { UpdateProfileSchema } from "@/schemas/UpdateProfileSchema";
-import { updateInstructorProfile } from "@/server/actions/update-profile";
+import { updateProfile } from "@/server/actions/update-profile";
 import { uploadImgToCloudinary } from "@/server/actions/upload-to-cloudinary";
 import { User } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -37,7 +37,7 @@ const EditProfileForm = ({ user }: EditProfileFormProps) => {
     },
     resolver: zodResolver(UpdateProfileSchema),
   });
-  const { execute, isExecuting } = useAction(updateInstructorProfile, {
+  const { execute, isExecuting } = useAction(updateProfile, {
     onExecute: () => {
       setIsLoading(true);
     },

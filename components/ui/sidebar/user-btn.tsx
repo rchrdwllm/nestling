@@ -56,6 +56,9 @@ const UserBtn = () => {
         execute({
           userId: user.id,
           type: "logout",
+          details: {
+            role: user.role,
+          },
         });
       })
       .catch((error) => {

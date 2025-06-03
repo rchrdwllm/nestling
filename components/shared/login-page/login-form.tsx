@@ -61,6 +61,9 @@ const LoginForm = ({ role, setStep }: LoginFormProps) => {
           execute({
             userId: success.id,
             type: "login",
+            details: {
+              role: success.role,
+            },
           });
           toast.dismiss();
           toast.success("Login successful");

@@ -64,6 +64,9 @@ const RegisterForm2 = ({ setStep, role, details }: RegisterForm2Props) => {
           execute({
             userId: success.id,
             type: "register",
+            details: {
+              role: success.role,
+            },
           });
           toast.dismiss();
           toast.success("Account created successfully");

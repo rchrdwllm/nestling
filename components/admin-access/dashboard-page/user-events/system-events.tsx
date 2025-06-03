@@ -13,13 +13,13 @@ import {
 import LogsTable from "./logs-table";
 import { logsTableCols } from "./logs-table-def";
 
-const AuthenticationEvents = () => {
+const SystemEvents = () => {
   const [logs, setLogs] = useState<UserActivity[]>([]);
 
   useEffect(() => {
     const q = query(
       collection(clientDb, "userActivities"),
-      where("type", "in", ["login", "logout", "register"]),
+      where("type", "in", ["update_profile"]),
       orderBy("createdAt", "desc")
     );
 
@@ -35,12 +35,8 @@ const AuthenticationEvents = () => {
   }, []);
 
   return (
-    <LogsTable
-      columns={logsTableCols}
-      data={logs}
-      types={["login", "logout", "register"]}
-    />
+    <LogsTable columns={logsTableCols} data={logs} types={["update_profile"]} />
   );
 };
 
-export default AuthenticationEvents;
+export default SystemEvents;

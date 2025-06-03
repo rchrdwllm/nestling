@@ -262,6 +262,16 @@ export type Task = {
 export type UserActivity = {
   id: string;
   userId: string;
-  type: "login" | "logout" | "register";
+  type:
+    | "login"
+    | "logout"
+    | "register"
+    | "view_course"
+    | "view_content"
+    | "view_project"
+    | "submit_assignment"
+    | "grade_submission";
   createdAt: string;
+  targetId?: string | null;
+  details?: Record<string, any> | null;
 };

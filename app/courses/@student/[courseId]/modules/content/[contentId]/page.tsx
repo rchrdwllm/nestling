@@ -5,6 +5,7 @@ import { getContentFile, getModuleContent } from "@/lib/content";
 import { getStudentAssignmentSubmission } from "@/lib/submission";
 import { getOptimisticUser } from "@/lib/user";
 import StudentSubmission from "@/components/student-access/courses-page/student-submission";
+import { logUserActivity } from "@/server/actions/log-user-activity";
 
 const ContentPage = async ({
   params,
@@ -24,6 +25,16 @@ const ContentPage = async ({
   if (!content) {
     return <div>Loading...</div>;
   }
+
+  await logUserActivity({
+    userId: user.id,
+    type: "view_content",
+    targetId: contentId,
+    details: {
+      courseId: content.courseId,
+      title: content.title,
+    },
+  });
 
   const file = content.type === "file" ? await getContentFile(contentId) : null;
   const { success: submissions } =
