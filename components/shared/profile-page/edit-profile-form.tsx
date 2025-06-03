@@ -38,6 +38,7 @@ const EditProfileForm = ({
       middleName: user.middleName,
       lastName: user.lastName,
       contactNumber: user.contactNumber,
+      address: user.address,
       image: user.image ?? "",
       userId: user.id,
     },
@@ -71,6 +72,7 @@ const EditProfileForm = ({
     form.setValue("middleName", user.middleName ?? "");
     form.setValue("lastName", user.lastName ?? "");
     form.setValue("contactNumber", user.contactNumber ?? "");
+    form.setValue("address", user.address ?? "");
     form.setValue("email", user.email ?? "");
     form.setValue("image", user.image ?? undefined);
   }, []);
@@ -234,6 +236,15 @@ const EditProfileForm = ({
             render={({ field }) => (
               <FormItem>
                 <Input placeholder="Contact Number" {...field} />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="address"
+            render={({ field }) => (
+              <FormItem>
+                <Input placeholder="Address" {...field} />
               </FormItem>
             )}
           />

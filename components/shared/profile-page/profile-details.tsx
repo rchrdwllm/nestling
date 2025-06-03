@@ -1,7 +1,7 @@
 "use client";
 
 import { User } from "@/types";
-import { Mail, PhoneCall } from "lucide-react";
+import { Mail, MapPin, PhoneCall } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { useState } from "react";
@@ -58,6 +58,10 @@ const ProfileDetails = ({ user, contentsLength }: ProfileDetailsProps) => {
         <p className="flex items-center gap-3">
           <PhoneCall className="size-5 text-muted-foreground" />{" "}
           {user.contactNumber || "N/A"}
+        </p>
+        <p className="flex items-center gap-3">
+          <MapPin className="size-5 text-muted-foreground" />{" "}
+          {user.address || "N/A"}
         </p>
       </div>
       {!toggleEdit && isCurrentUser ? (

@@ -120,7 +120,7 @@ const RegisterForm1 = ({
                   onChange={(e) =>
                     setDetails({ ...details, address: e.target.value })
                   }
-                  placeholder="Contact number"
+                  placeholder="Address"
                 />
               </FormItem>
             )}
