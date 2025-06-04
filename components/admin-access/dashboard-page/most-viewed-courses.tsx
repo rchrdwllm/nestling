@@ -36,7 +36,7 @@ const MostViewedCourses = ({ data }: MostViewedCoursesProps) => {
         </p>
       </div>
       <CardContent className="h-full flex justify-center items-center">
-        <ChartContainer className="w-full" config={chartConfig}>
+        <ChartContainer className="w-[90%]" config={chartConfig}>
           <BarChart
             accessibilityLayer
             data={data}

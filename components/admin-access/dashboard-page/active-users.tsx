@@ -1,8 +1,7 @@
 "use client";
 
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
-import { use, useMemo } from "react";
-
+import { useMemo } from "react";
+import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 import {
   Card,
   CardContent,
@@ -19,8 +18,8 @@ import {
 import { MonthlyActiveUserRecord } from "@/types";
 
 const chartConfig = {
-  desktop: {
-    label: "Desktop",
+  activeUsers: {
+    label: "Active users",
     color: "hsl(var(--chart-1))",
   },
 } satisfies ChartConfig;
@@ -48,7 +47,7 @@ const ActiveUsers = ({ monthlyActiveUsers }: ActiveUserProps) => {
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
-          <BarChart accessibilityLayer data={monthlyActiveUsers}>
+          {/* <BarChart accessibilityLayer data={monthlyActiveUsers}>
             <CartesianGrid vertical={false} />
             <YAxis
               tickLine={false}
@@ -69,7 +68,35 @@ const ActiveUsers = ({ monthlyActiveUsers }: ActiveUserProps) => {
               content={<ChartTooltipContent hideLabel />}
             />
             <Bar dataKey="activeUsers" fill="hsl(var(--primary))" radius={8} />
-          </BarChart>
+          </BarChart> */}
+          <AreaChart
+            accessibilityLayer
+            data={monthlyActiveUsers}
+            margin={{
+              left: 12,
+              right: 12,
+            }}
+          >
+            <CartesianGrid vertical={false} />
+            <XAxis
+              dataKey="month"
+              tickLine={false}
+              axisLine={false}
+              tickMargin={8}
+              tickFormatter={(value) => value.slice(0, 3)}
+            />
+            <ChartTooltip
+              cursor={false}
+              content={<ChartTooltipContent indicator="dot" hideLabel />}
+            />
+            <Area
+              dataKey="activeUsers"
+              type="linear"
+              fill="hsl(var(--chart-1))"
+              fillOpacity={0.4}
+              stroke="hsl(var(--chart-1))"
+            />
+          </AreaChart>
         </ChartContainer>
       </CardContent>
     </Card>
