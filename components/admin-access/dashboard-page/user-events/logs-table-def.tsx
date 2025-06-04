@@ -23,8 +23,28 @@ export const logsTableCols: ColumnDef<UserActivity>[] = [
     },
   },
   {
+    accessorKey: "details",
+    header: "Role",
+    cell: ({ row }) => {
+      const details = row.getValue("details") as { role?: string };
+
+      if (!details || !details.role) {
+        return <p className="text-sm">N/A</p>;
+      }
+
+      const role = details.role;
+      const roleDisplay = role.charAt(0).toUpperCase() + role.slice(1);
+
+      return <p className="text-sm">{roleDisplay}</p>;
+    },
+  },
+  {
     accessorKey: "type",
     header: "Type",
+    cell: ({ row }) => {
+      const type = row.getValue("type") as string;
+      return <p className="text-sm font-mono">{type}</p>;
+    },
   },
   {
     accessorKey: "createdAt",
@@ -38,7 +58,7 @@ export const logsTableCols: ColumnDef<UserActivity>[] = [
         "MM-dd-yyyy h:mm a"
       );
 
-      return <p>{formattedDate}</p>;
+      return <p className="text-sm font-mono">{formattedDate}</p>;
     },
   },
 ];
@@ -62,6 +82,11 @@ export const logsTableColsWithDetails: ColumnDef<UserActivity>[] = [
   {
     accessorKey: "type",
     header: "Type",
+    cell: ({ row }) => {
+      const type = row.getValue("type") as string;
+
+      return <p className="text-sm font-mono">{type}</p>;
+    },
   },
   {
     accessorKey: "targetId",
@@ -118,7 +143,7 @@ export const logsTableColsWithDetails: ColumnDef<UserActivity>[] = [
         "MM-dd-yyyy h:mm a"
       );
 
-      return <p>{formattedDate}</p>;
+      return <p className="text-sm font-mono">{formattedDate}</p>;
     },
   },
 ];

@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/table";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { X } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
@@ -31,6 +31,19 @@ const LogsTable = ({ columns, data, types }: any) => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [showAll, setShowAll] = useState(false);
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 5,
+  });
+
+  // Update page size when showAll changes
+  useEffect(() => {
+    setPagination((prev) => ({
+      ...prev,
+      pageIndex: 0, // Reset to first page when changing page size
+      pageSize: showAll ? data.length : 5,
+    }));
+  }, [showAll, data.length]);
   const { execute } = useAction(deleteUserLogs, {
     onExecute: () => {
       toast.dismiss();
@@ -41,11 +54,11 @@ const LogsTable = ({ columns, data, types }: any) => {
       toast.success("Logs deleted successfully");
     },
     onError: (error) => {
+      console.error("Error deleting logs:", error);
       toast.dismiss();
       toast.error("Error deleting logs");
     },
   });
-
   const table = useReactTable({
     data,
     columns,
@@ -55,18 +68,11 @@ const LogsTable = ({ columns, data, types }: any) => {
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     onColumnFiltersChange: setColumnFilters,
-    initialState: {
-      pagination: {
-        pageSize: showAll ? data.length : 5,
-      },
-    },
+    onPaginationChange: setPagination,
     state: {
       sorting,
       columnFilters,
-      pagination: {
-        pageIndex: 0,
-        pageSize: showAll ? data.length : 5,
-      },
+      pagination,
     },
   });
 

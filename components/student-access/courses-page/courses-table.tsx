@@ -26,6 +26,10 @@ import { Input } from "@/components/ui/input";
 const CoursesTable = ({ columns, data }: any) => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 10,
+  });
   const table = useReactTable({
     data,
     columns,
@@ -35,9 +39,11 @@ const CoursesTable = ({ columns, data }: any) => {
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     onColumnFiltersChange: setColumnFilters,
+    onPaginationChange: setPagination,
     state: {
       sorting,
       columnFilters,
+      pagination,
     },
   });
 

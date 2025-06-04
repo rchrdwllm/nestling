@@ -11,7 +11,6 @@ import DateDisplay from "@/components/ui/date-display";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { projectPriorities, projectStatuses } from "@/constants/project";
-import TaskSheetBtn from "./task-sheet-btn";
 import TaskSheetBtnWrapper from "./task-sheet-btn-wrapper";
 
 type TasksTableProps = {
