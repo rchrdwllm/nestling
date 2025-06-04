@@ -36,11 +36,10 @@ const LogsTable = ({ columns, data, types }: any) => {
     pageSize: 5,
   });
 
-  // Update page size when showAll changes
   useEffect(() => {
     setPagination((prev) => ({
       ...prev,
-      pageIndex: 0, // Reset to first page when changing page size
+      pageIndex: 0,
       pageSize: showAll ? data.length : 5,
     }));
   }, [showAll, data.length]);

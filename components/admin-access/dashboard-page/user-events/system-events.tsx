@@ -19,7 +19,7 @@ const SystemEvents = () => {
   useEffect(() => {
     const q = query(
       collection(clientDb, "userActivities"),
-      where("type", "in", ["update_profile"]),
+      where("type", "in", ["update_profile", "enroll_course"]),
       orderBy("createdAt", "desc")
     );
 

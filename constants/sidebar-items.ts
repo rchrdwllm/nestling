@@ -98,14 +98,14 @@ export const adminSidebarItems: SidebarItem[] = [
     Icon: ChartColumnIncreasing,
   },
   {
-    label: "Projects",
-    href: "/projects",
-    Icon: KanbanSquare,
-  },
-  {
     label: "Course Management",
     href: "/courses",
     Icon: BookOpen,
+  },
+  {
+    label: "Projects",
+    href: "/projects",
+    Icon: KanbanSquare,
   },
   {
     label: "Calendar",

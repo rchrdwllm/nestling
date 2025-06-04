@@ -54,6 +54,9 @@ export const enrollStudent = actionClient
         type: "enroll_course",
         userId: studentId,
         targetId: courseId,
+        details: {
+          role: "student",
+        },
       });
 
       revalidatePath("/courses");

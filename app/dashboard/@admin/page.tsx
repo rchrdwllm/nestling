@@ -49,13 +49,13 @@ const AdminDashboardPage = async () => {
           <TotalProjectsOverview />
         </article>
         <article className="col-span-3">
-          <ActiveUsers monthlyActiveUsers={activeUsers.monthlyActiveUsers} />
+          <MostViewedCourses data={mostViewedCourses} />
         </article>
         <article className="col-span-3">
           <TopCourses data={topCourses} />
         </article>
-        <article className="col-span-3">
-          <MostViewedCourses data={mostViewedCourses} />
+        <article className="col-span-6">
+          <ActiveUsers monthlyActiveUsers={activeUsers.monthlyActiveUsers} />
         </article>
       </div>
       <div className="flex flex-col gap-4">
