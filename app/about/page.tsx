@@ -2,6 +2,10 @@
 
 import React, { useEffect, useState } from "react";
 import AboutLoadingScreen from "./loadingscreen";
+import Image from "next/image";
+import aldenImg from "@/assets/alden.jpg";
+import draeImg from "@/assets/drae.jpg";
+import darenImg from "@/assets/daren.jpg";
 
 const aboutStats = [
 	{
@@ -109,7 +113,7 @@ const AboutPage = () => {
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
-		const timer = setTimeout(() => setLoading(false), 1000);
+		const timer = setTimeout(() => setLoading(false), 1500); 
 		return () => clearTimeout(timer);
 	}, []);
 
@@ -189,8 +193,7 @@ const AboutPage = () => {
 				<div className="flex-1 flex items-center justify-center min-w-[220px]">
 					<iframe
 						title="Nestling Office Map"
-						src="https://www.google.com/maps?q=Unit+2103,+Orient+Square+Bldg.,+F.+Ortigas+Jr.+Rd.,+Ortigas+Center,
-            +Pasig+City+1600&output=embed"
+						src="https://www.google.com/maps?q=Unit+2103,+Orient+Square+Bldg.,+F.+Ortigas+Jr.+Rd.,+Ortigas+Center,+Pasig+City+1600&output=embed"
 						width="320"
 						height="220"
 						style={{ border: 0, borderRadius: '1rem' }}
@@ -348,6 +351,37 @@ const AboutPage = () => {
 								{branch.address}
 							</div>
 						)}
+					</div>
+				))}
+			</div>
+		</div>
+		{/* Meet The Team Section */}
+		<div className="w-full max-w-5xl mx-auto mt-20 flex flex-col items-center">
+			<h3 className="text-2xl font-bold text-primary mb-8 tracking-tight">Meet The Team</h3>
+			<div className="w-full flex flex-row flex-wrap justify-center gap-10 rounded-2xl py-10 px-4 animate-breath-slow">
+				{[
+					{
+						name: "William B. Flores",
+						course: "BS Computer Science",
+						image: aldenImg,
+					},
+					{
+						name: "John Andrae L. Tuaño",
+						course: "BS Computer Science",
+						image: draeImg,
+					},
+					{
+						name: "Darren L. Cabigao",
+						course: "BS Computer Science",
+						image: darenImg,
+					},
+				].map((dev) => (
+					<div key={dev.name} className="flex flex-col items-center w-[240px] bg-background border border-[color:var(--border,#e5e7eb)/35] rounded-2xl shadow-md p-6 transition-transform hover:scale-105">
+						<div className="w-[180px] h-[180px] mb-4 rounded-full overflow-hidden border-4 border-primary/30 shadow">
+							<Image src={dev.image} alt={dev.name + ' portrait'} width={180} height={180} className="w-full h-full object-cover" />
+						</div>
+						<span className="text-lg font-bold text-foreground mb-1 text-center tracking-tight">{dev.name}</span>
+						<span className="text-base text-muted-foreground text-center">{dev.course}</span>
 					</div>
 				))}
 			</div>
