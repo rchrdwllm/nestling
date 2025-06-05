@@ -24,13 +24,13 @@ const Loading = async () => {
           <Skeleton className="h-[150px] w-full" />
         </article>
         <article className="col-span-3">
-          <Skeleton className="h-[400px] w-full" />
+          <Skeleton className="h-[300px] w-full" />
         </article>
         <article className="col-span-3">
-          <Skeleton className="h-[400px] w-full" />
+          <Skeleton className="h-[300px] w-full" />
         </article>
         <article className="col-span-6">
-          <Skeleton className="h-[600px] w-full" />
+          <Skeleton className="h-[500px] w-full" />
         </article>
       </div>
       <div className="flex flex-col gap-4">
