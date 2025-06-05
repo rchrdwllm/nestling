@@ -8,22 +8,22 @@ import { Button } from "@/components/ui/button";
 
 const LoginPage = () => {
   return (
-    <main className="h-screen grid grid-cols-2 place-content-center justify-items-center overflow-x-hidden">
+    <main className="bg-primary p-4 lg:p-0 lg:bg-none h-screen grid grid-cols-2 place-content-center justify-items-center overflow-x-hidden">
       <Image
         src={loginBg}
         priority
         alt="Login Background"
-        className="w-full h-screen absolute object-cover"
+        className="hidden lg:block w-full h-screen absolute object-cover"
       />
-      <div></div>
-      <div className="z-[1] h-screen flex flex-col items-center p-12">
+      <div className="hidden lg:block"></div>
+      <div className="bg-card rounded-xl shadow-sm lg:bg-none lg:shadow-none col-span-2 lg:col-span-1 z-[1] h-[90vh] lg:h-screen flex flex-col items-center p-12">
         <div className="flex flex-col gap-2 items-center">
           <Image src={logoText} className="w-48" alt="Logo Text" />
           <div>
             <Image
               src={nestling}
               alt="Nestling logo"
-              className="h-[100px] object-contain"
+              className="h-[50px] lg:h-[100px] object-contain"
             />
           </div>
         </div>

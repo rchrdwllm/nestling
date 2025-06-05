@@ -36,7 +36,7 @@ const ProfileDetails = ({ user, contentsLength }: ProfileDetailsProps) => {
               <p className="text-xl font-bold">{user.name![0]}</p>
             </div>
           ))}
-        <h1 className="text-3xl font-semibold mt-6">
+        <h1 className="text-3xl font-semibold mt-6 text-center">
           {user.name || `${user.firstName} ${user.lastName}`}
         </h1>
         <p className="text-muted-foreground mt-2">
