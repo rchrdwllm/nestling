@@ -119,3 +119,35 @@ export const generateSubmissionsReport = unstable_cache(
   ["contentId"],
   { revalidate: 60 * 60, tags: ["submissions"] }
 );
+
+export const generateAnnouncementsReport = unstable_cache(
+  async (courseId: string) => {
+    try {
+      const announcementsSnapshot = await db
+        .collection("announcements")
+        .where("courseId", "==", courseId)
+        .orderBy("createdAt", "desc")
+        .get();
+
+      const announcements = announcementsSnapshot.docs.map((doc) => {
+        return doc.data();
+      });
+
+      const csvData = announcements.map((announcement) => {
+        return {
+          id: announcement.id,
+          title: announcement.title,
+          content: announcement.content,
+          createdAt: announcement.createdAt,
+        };
+      });
+
+      return { success: csvData };
+    } catch (error) {
+      console.error("Error generating announcements report: ", error);
+      return { error: "Error generating announcements report" };
+    }
+  },
+  ["courseId"],
+  { revalidate: 60 * 60, tags: ["announcements"] }
+);
