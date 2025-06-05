@@ -1,6 +1,7 @@
 import { getUnarchivedInstructorCourses } from "@/lib/course";
 import { getCurrentUser } from "@/lib/user";
 import CourseCard from "@/components/shared/courses-page/course-card";
+import ErrorToast from "@/components/ui/error-toast";
 
 const Courses = async () => {
   const user = await getCurrentUser();
@@ -8,14 +9,9 @@ const Courses = async () => {
     user!.id
   );
 
-  if (error)
-    return (
-      <div>
-        <h1>Error fetching courses</h1>
-      </div>
-    );
-
-  if (!courses) return <div>Loading...</div>;
+  if (error || !courses) {
+    return <ErrorToast error={"Error fetching courses: " + error} />;
+  }
 
   if (!courses.length) {
     return (
