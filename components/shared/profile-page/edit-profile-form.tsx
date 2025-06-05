@@ -124,7 +124,7 @@ const EditProfileForm = ({
   };
 
   return (
-    <section className="min-w-[600px]">
+    <section className="min-w-full lg:min-w-[600px]">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(handleSubmit)}
