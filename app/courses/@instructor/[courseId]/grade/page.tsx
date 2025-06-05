@@ -43,14 +43,18 @@ const GradePage = async ({
         <hr />
       </div>
       <section className="flex flex-col gap-4">
-        {enrolledStudents.map((student) => (
-          <GradeStudentCard
-            key={student.id}
-            {...student}
-            assignments={assignments}
-            courseId={courseId}
-          />
-        ))}
+        {!enrolledStudents.length ? (
+          <p className="text-muted-foreground">No students found</p>
+        ) : (
+          enrolledStudents.map((student) => (
+            <GradeStudentCard
+              key={student.id}
+              {...student}
+              assignments={assignments}
+              courseId={courseId}
+            />
+          ))
+        )}
       </section>
     </div>
   );

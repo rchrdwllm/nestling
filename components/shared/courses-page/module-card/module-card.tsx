@@ -7,6 +7,7 @@ import { Plus } from "lucide-react";
 import PublishModuleSwitch from "./publish-module-switch";
 import ModuleDetailsBtn from "./module-details-btn";
 import { getModule } from "@/lib/module";
+import ErrorToast from "@/components/ui/error-toast";
 
 const ModuleCard = async ({
   id,
@@ -18,12 +19,12 @@ const ModuleCard = async ({
   const { success: contents, error } = await getModuleContents(id);
   const { success: module, error: moduleError } = await getModule(id);
 
-  if (error || moduleError) {
-    return <div>{error}</div>;
-  }
-
-  if (!contents || !module) {
-    return <div>Loading...</div>;
+  if (error || moduleError || !contents || !module) {
+    return (
+      <ErrorToast
+        error={"Error fetching module data: " + (error || moduleError || "")}
+      />
+    );
   }
 
   return (

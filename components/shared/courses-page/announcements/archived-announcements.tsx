@@ -22,13 +22,17 @@ const ArchivedAnnouncements = async ({
 
   return (
     <section className="flex flex-col gap-4">
-      {announcements.map((announcement) => (
-        <AnnouncementCard
-          key={announcement.id}
-          announcement={announcement}
-          {...announcement}
-        />
-      ))}
+      {!announcements.length ? (
+        <p className="text-muted-foreground">No archived announcements found</p>
+      ) : (
+        announcements.map((announcement) => (
+          <AnnouncementCard
+            key={announcement.id}
+            announcement={announcement}
+            {...announcement}
+          />
+        ))
+      )}
     </section>
   );
 };

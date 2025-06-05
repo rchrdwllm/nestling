@@ -20,13 +20,17 @@ const RecentAnnouncements = async () => {
         <h1 className="text-xl font-semibold">Recent announcements</h1>
       </div>
       <section className="flex flex-col gap-4">
-        {announcements.map((announcement) => (
-          <AnnouncementCard
-            showCourseTitle
-            key={announcement.id}
-            announcement={announcement}
-          />
-        ))}
+        {!announcements.length ? (
+          <p className="text-muted-foreground">No announcements found</p>
+        ) : (
+          announcements.map((announcement) => (
+            <AnnouncementCard
+              showCourseTitle
+              key={announcement.id}
+              announcement={announcement}
+            />
+          ))
+        )}
       </section>
     </div>
   );

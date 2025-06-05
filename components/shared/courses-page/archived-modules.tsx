@@ -15,9 +15,13 @@ const ArchivedModules = async ({ courseId }: { courseId: string }) => {
 
   return (
     <div className="grid grid-cols-1 gap-4">
-      {archivedModules.map((module) => (
-        <ModuleCard key={module.id} {...module} />
-      ))}
+      {!archivedModules.length ? (
+        <p className="text-muted-foreground">No archived modules found</p>
+      ) : (
+        archivedModules.map((module) => (
+          <ModuleCard key={module.id} {...module} />
+        ))
+      )}
     </div>
   );
 };

@@ -8,6 +8,7 @@ import { Course, User } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
 import CourseDetailsBtn from "./course-details-btn";
+import ErrorToast from "@/components/ui/error-toast";
 
 type CourseCardProps = {
   isAdmin?: boolean;
@@ -30,14 +31,17 @@ const CourseCard = async ({
 
   if (courseError || enrolledStudentsError || courseInstructorsError) {
     return (
-      <div>
-        <h1>Error fetching course image</h1>
-      </div>
+      <ErrorToast
+        error={
+          "Error fetching course data: " +
+          (courseError || enrolledStudentsError || courseInstructorsError)
+        }
+      />
     );
   }
 
   if (!image || !course || !enrolledStudents || !courseInstructors)
-    return <div>Loading...</div>;
+    return <ErrorToast error="Error fetching course image" />;
 
   return (
     <article className="p-4 shadow-sm transition-shadow hover:shadow-md rounded-xl border border-border flex flex-col gap-4">

@@ -73,20 +73,24 @@ const SubmissionGrid = async ({
           <h1 className="font-semibold">Student submissions</h1>
           <ScrollArea>
             <div className="flex flex-col items-start gap-2 mt-4">
-              {enrolledStudents.map((student) => {
-                const studentSubmissions = submissions.some(
-                  (submission: Submission) =>
-                    submission.studentId === student.id
-                );
+              {!enrolledStudents.length ? (
+                <p className="text-muted-foreground">No students found</p>
+              ) : (
+                enrolledStudents.map((student) => {
+                  const studentSubmissions = submissions.some(
+                    (submission: Submission) =>
+                      submission.studentId === student.id
+                  );
 
-                return (
-                  <SubmissionCard
-                    noSubmission={!studentSubmissions}
-                    key={student.id}
-                    {...student}
-                  />
-                );
-              })}
+                  return (
+                    <SubmissionCard
+                      noSubmission={!studentSubmissions}
+                      key={student.id}
+                      {...student}
+                    />
+                  );
+                })
+              )}
             </div>
           </ScrollArea>
         </div>

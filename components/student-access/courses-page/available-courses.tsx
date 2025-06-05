@@ -8,6 +8,7 @@ import ErrorToast from "@/components/ui/error-toast";
 const AvailableCourses = async () => {
   const user = await getCurrentUser();
   const { success: courses, error } = await getAvailableCourses(user!.id);
+
   if (error || !courses) {
     return <ErrorToast error={"Error fetching available courses: " + error} />;
   }

@@ -6,6 +6,7 @@ import {
   getStudentAssignmentSubmission,
 } from "@/lib/submission";
 import { getOptimisticUser } from "@/lib/user";
+import ErrorToast from "@/components/ui/error-toast";
 
 type SubmissionGridProps = {
   studentId: string | undefined;
@@ -21,29 +22,27 @@ const SubmissionGrid = async ({ contentId, attempt }: SubmissionGridProps) => {
     await getAssignmentSubmissions(contentId);
   const user = await getOptimisticUser();
 
-  if (contentError || submissionsError) {
-    return <div>{contentError}</div>;
-  }
-
-  if (!content || !submissions) {
-    return <div>Loading...</div>;
+  if (contentError || !content || !submissions || !submissionsError) {
+    return (
+      <ErrorToast
+        error={
+          "Error fetching submission data: " +
+          (contentError || submissionsError || "")
+        }
+      />
+    );
   }
 
   const { success: enrolledStudents, error: enrolledStudentsError } =
     await getEnrolledStudents(content.courseId);
 
-  if (enrolledStudentsError) {
-    return <div>{enrolledStudentsError}</div>;
+  if (enrolledStudentsError || !enrolledStudents) {
+    return (
+      <ErrorToast
+        error={"Error fetching enrolled students: " + enrolledStudentsError}
+      />
+    );
   }
-
-  if (!enrolledStudents) {
-    return <div>Loading...</div>;
-  }
-
-  const { success: studentSubmissions } = await getStudentAssignmentSubmission(
-    contentId,
-    user.id
-  );
 
   return (
     <div className="flex gap-8">

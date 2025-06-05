@@ -27,9 +27,11 @@ const CoursePage = async ({
         <hr />
       </div>
       <div className="grid grid-cols-1 gap-4">
-        {modules.map((module) => (
-          <ModuleCard key={module.id} {...module} />
-        ))}
+        {!modules.length ? (
+          <p className="text-muted-foreground">No modules found</p>
+        ) : (
+          modules.map((module) => <ModuleCard key={module.id} {...module} />)
+        )}
       </div>
       <TrackCourseEngagement course={course} />
     </div>

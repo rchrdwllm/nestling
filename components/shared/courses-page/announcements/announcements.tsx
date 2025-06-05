@@ -19,9 +19,13 @@ const Announcements = async ({ courseId }: AnnouncementsProps) => {
 
   return (
     <section className="flex flex-col gap-4">
-      {announcements.map((announcement) => (
-        <AnnouncementCard key={announcement.id} announcement={announcement} />
-      ))}
+      {!announcements.length ? (
+        <p className="text-muted-foreground">No announcements found</p>
+      ) : (
+        announcements.map((announcement) => (
+          <AnnouncementCard key={announcement.id} announcement={announcement} />
+        ))
+      )}
     </section>
   );
 };

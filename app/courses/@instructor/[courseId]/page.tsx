@@ -14,6 +14,7 @@ const CoursePage = async ({
   const { success: course, error: courseError } = await getCourse(courseId);
   const { success: modules, error: moduleError } =
     await getUnarchivedCourseModules(courseId);
+
   if (courseError || !course || moduleError || !modules) {
     return (
       <ErrorToast
@@ -37,9 +38,11 @@ const CoursePage = async ({
         <hr />
       </header>
       <section className="grid grid-cols-1 gap-4">
-        {modules.map((module) => (
-          <ModuleCard key={module.id} {...module} />
-        ))}
+        {!modules.length ? (
+          <p className="text-muted-foreground">No modules found</p>
+        ) : (
+          modules.map((module) => <ModuleCard key={module.id} {...module} />)
+        )}
       </section>
       <TrackCourseEngagement course={course} />
     </main>
