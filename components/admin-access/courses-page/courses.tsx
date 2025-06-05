@@ -1,4 +1,5 @@
 import CourseCard from "@/components/shared/courses-page/course-card";
+import ErrorToast from "@/components/ui/error-toast";
 import { getAllCourses } from "@/lib/course";
 import { getAllInstructors } from "@/lib/user";
 
@@ -7,12 +8,15 @@ const Courses = async () => {
   const { success: instructors, error: instructorsError } =
     await getAllInstructors();
 
-  if (error || instructorsError) {
-    return <div>Error fetching courses: {error || instructorsError}</div>;
-  }
-
-  if (!courses || !instructors) {
-    return <h1>Loading...</h1>;
+  if (error || !courses || !instructors || instructorsError) {
+    return (
+      <ErrorToast
+        error={
+          "Error fetching courses: " + error ||
+          "Error fetching instructors: " + instructorsError
+        }
+      />
+    );
   }
 
   return (
