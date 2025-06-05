@@ -22,7 +22,7 @@ const LoginRoleBtn = ({
         onClick();
       }}
       whileTap={{ scale: 0.95 }}
-      className="relative flex rounded-xl flex-col border-2 gap-3 h-auto items-center aspect-square w-[150px] transition-colors group hover:bg-primary hover:text-primary-foreground"
+      className="relative flex rounded-xl flex-col border-2 gap-3 h-auto items-center aspect-square w-[100px] lg:w-[150px] transition-colors group hover:bg-primary hover:text-primary-foreground"
       variant="outline"
     >
       {children}

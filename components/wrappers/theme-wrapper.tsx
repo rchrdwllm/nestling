@@ -4,13 +4,20 @@ import { ThemeProvider } from "next-themes";
 import { usePathname } from "next/navigation";
 import { ComponentProps, useMemo } from "react";
 
+const excluded = [
+  "/api/auth/signin",
+  "/api/auth/signup",
+  "/api/auth/forgot-password",
+  "/api/auth/reset-password-verification",
+];
+
 const ThemeWrapper = ({
   children,
   ...props
 }: ComponentProps<typeof ThemeProvider>) => {
   const pathname = usePathname();
   const forceLight = useMemo(() => {
-    return pathname === "/api/auth/signin" || pathname === "/api/auth/signup";
+    return excluded.includes(pathname);
   }, [pathname]);
 
   return (

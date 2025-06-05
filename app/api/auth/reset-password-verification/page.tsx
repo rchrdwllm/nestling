@@ -16,15 +16,15 @@ const ResetPasswordVerificationPage = async ({
   if (!token) return redirect("/");
 
   return (
-    <main className="h-screen grid grid-cols-2 overflow-x-hidden">
+    <main className="bg-primary lg:bg-none h-screen grid grid-cols-2 overflow-x-hidden">
       <Image
         priority
         src={registerBg}
         alt="Register Background"
-        className="w-full h-screen absolute object-cover"
+        className="hidden lg:block w-full h-screen absolute object-cover"
       />
-      <div></div>
-      <div className="z-[1] h-screen flex flex-col items-center pb-12 pt-4 px-20 gap-4">
+      <div className="hidden lg:block"></div>
+      <div className="z-[1] col-span-2 lg:col-span-1 h-screen flex flex-col items-center pb-12 pt-4 px-4 lg:px-20 gap-4">
         <Image src={logoTextReversed} className="w-44" alt="Logo Text" />
         <div className="w-full h-full bg-background rounded-xl shadow-xl">
           <ResetTokenVerifier token={token} />
