@@ -1,17 +1,14 @@
 import { getEnrolledCourses } from "@/lib/course";
 import CourseCard from "./course-card/course-card";
 import { getCurrentUser } from "@/lib/user";
+import ErrorToast from "@/components/ui/error-toast";
 
 const EnrolledCourses = async () => {
   const user = await getCurrentUser();
   const { success: courses, error } = await getEnrolledCourses(user!.id);
 
-  if (error) {
-    return <p>{error}</p>;
-  }
-
-  if (!courses) {
-    return <p>Loading...</p>;
+  if (error || !courses) {
+    return <ErrorToast error={"Error fetching enrolled courses: " + error} />;
   }
 
   return (

@@ -6,6 +6,7 @@ import TotalProjectsOverview from "@/components/admin-access/dashboard-page/tota
 import TotalStudentsOverview from "@/components/admin-access/dashboard-page/total-students-overview";
 import UserEventLogs from "@/components/admin-access/dashboard-page/user-events/user-event-logs";
 import SearchBar from "@/components/shared/search/search-bar";
+import ErrorToast from "@/components/ui/error-toast";
 import { getMostViewedCourses, getTopCoursesByEnrollments } from "@/lib/course";
 import { getActiveUsersFromMonths } from "@/lib/monthly-activity";
 
@@ -25,7 +26,11 @@ const AdminDashboardPage = async () => {
     !mostViewedCourses ||
     mostViewedCoursesError
   )
-    return <h1>Error loading data</h1>;
+    return (
+      <ErrorToast
+        error={"Error fetching dashboard data: " + mostViewedCoursesError}
+      />
+    );
 
   return (
     <div className="p-6 flex flex-col gap-8">

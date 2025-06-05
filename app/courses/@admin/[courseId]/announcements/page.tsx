@@ -1,6 +1,5 @@
 import Announcements from "@/components/shared/courses-page/announcements/announcements";
 import CreateAnnouncementBtn from "@/components/shared/courses-page/announcements/create-announcement-btn";
-import { Suspense } from "react";
 
 const AnnouncementsPage = async ({
   params,

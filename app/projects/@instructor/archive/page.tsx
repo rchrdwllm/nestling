@@ -1,5 +1,6 @@
 import ProjectsTable from "@/components/shared/projects-page/projects-table";
 import { projectCols } from "@/components/shared/projects-page/projects-table-def";
+import ErrorToast from "@/components/ui/error-toast";
 import { getArchivedUserProjects } from "@/lib/project";
 import { getOptimisticUser } from "@/lib/user";
 
@@ -9,16 +10,12 @@ const ProjectsArchivePage = async () => {
     user.id
   );
 
-  if (error) {
-    console.error("Error fetching archived projects:", error);
-
-    return <h1>Error fetching archived projects</h1>;
-  }
-
-  if (!archivedProjects) {
-    console.error("Error fetching archived projects:", error);
-
-    return <h1>Error fetching archived projects</h1>;
+  if (error || !archivedProjects) {
+    return (
+      <ErrorToast
+        error={"Error fetching archived projects: " + (error || "")}
+      />
+    );
   }
 
   return (

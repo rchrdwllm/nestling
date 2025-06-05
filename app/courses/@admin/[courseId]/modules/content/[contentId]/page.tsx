@@ -3,6 +3,7 @@ import PdfViewer from "@/components/shared/content-page/pdf-viewer";
 import { Button } from "@/components/ui/button";
 import { getContentFile, getModuleContent } from "@/lib/content";
 import Link from "next/link";
+import ErrorToast from "@/components/ui/error-toast";
 
 const ContentPage = async ({
   params,
@@ -12,12 +13,8 @@ const ContentPage = async ({
   const { contentId, courseId } = await params;
   const { success: content, error } = await getModuleContent(contentId);
 
-  if (error) {
-    return <div>{error}</div>;
-  }
-
-  if (!content) {
-    return <div>Loading...</div>;
+  if (error || !content) {
+    return <ErrorToast error={"Error fetching content: " + (error || "")} />;
   }
 
   const file = content.type === "file" ? await getContentFile(contentId) : null;

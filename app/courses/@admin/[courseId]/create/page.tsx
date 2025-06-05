@@ -1,4 +1,5 @@
 import CreateContentForm from "@/components/shared/courses-page/create-content/create-content-form";
+import ErrorToast from "@/components/ui/error-toast";
 import { getModuleContent } from "@/lib/content";
 import { getModuleTitles } from "@/lib/module";
 
@@ -13,17 +14,21 @@ const CreatePage = async ({
   const { moduleId, contentId } = await searchParams;
   const { success: moduleTitles, error } = await getModuleTitles(courseId);
 
-  if (error) {
-    return <div>{error}</div>;
-  }
-
-  if (!moduleTitles) {
-    return <div>Loading...</div>;
+  if (error || !moduleTitles) {
+    return (
+      <ErrorToast error={"Error fetching module titles: " + (error || "")} />
+    );
   }
 
   const { success: content, error: contentError } = contentId
     ? await getModuleContent(contentId)
     : { success: null, error: null };
+
+  if (contentError) {
+    return (
+      <ErrorToast error={"Error fetching content: " + (contentError || "")} />
+    );
+  }
 
   return (
     <main className="p-6 flex flex-col gap-8">

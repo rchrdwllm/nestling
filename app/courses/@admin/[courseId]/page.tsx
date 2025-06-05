@@ -1,5 +1,6 @@
 import CreateModuleBtn from "@/components/shared/courses-page/create-module-btn";
 import ModuleCard from "@/components/shared/courses-page/module-card/module-card";
+import ErrorToast from "@/components/ui/error-toast";
 import { getCourse } from "@/lib/course";
 import { getUnarchivedCourseModules } from "@/lib/module";
 
@@ -13,12 +14,15 @@ const CoursePage = async ({
   const { success: modules, error: moduleError } =
     await getUnarchivedCourseModules(courseId);
 
-  if (moduleError || courseError) {
-    return <div>{moduleError || courseError}</div>;
-  }
-
-  if (!modules || !course) {
-    return <div>Loading...</div>;
+  if (courseError || moduleError || !modules || !course) {
+    return (
+      <ErrorToast
+        error={
+          "Error fetching course or modules: " +
+          (courseError || moduleError || "")
+        }
+      />
+    );
   }
 
   return (

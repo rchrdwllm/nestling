@@ -4,6 +4,7 @@ import { getOptimisticUser, getUserById } from "@/lib/user";
 import ChatForm from "./chat-form";
 import ChatWindow from "./chat-window";
 import Link from "next/link";
+import ErrorToast from "@/components/ui/error-toast";
 
 type ChannelProps = {
   channelId: string;
@@ -27,37 +28,8 @@ const Channel = async ({
     receiverId
   );
 
-  if (receiverError) {
-    return (
-      <main className="h-full flex flex-col">
-        <div className="flex-1 flex justify-center items-center">
-          <h1 className="text-muted-foreground">
-            {JSON.stringify(receiverError)}
-          </h1>
-        </div>
-      </main>
-    );
-  }
-
-  if (!receiver) {
-    return (
-      <main className="h-full flex flex-col">
-        <div className="flex-1 flex justify-center items-center">
-          <h1 className="text-muted-foreground">No receiver found</h1>
-        </div>
-      </main>
-    );
-  }
-
-  if (messagesError) {
-    return (
-      <main className="h-full flex flex-col">
-        <div className="flex-1 flex justify-center items-center">
-          <h1 className="text-muted-foreground">{messagesError}</h1>
-        </div>
-        <ChatForm receiverId={receiverId} />
-      </main>
-    );
+  if (receiverError || !receiver) {
+    return <ErrorToast error={"Error fetching receiver: " + receiverError} />;
   }
 
   if (!messages?.length && receiver) {

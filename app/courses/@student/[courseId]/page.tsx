@@ -1,5 +1,6 @@
 import TrackCourseEngagement from "@/components/shared/courses-page/track-course-engagement";
 import ModuleCard from "@/components/student-access/courses-page/module-card";
+import ErrorToast from "@/components/ui/error-toast";
 import { getCourse } from "@/lib/course";
 import { getPublishedCourseModules } from "@/lib/module";
 
@@ -13,12 +14,8 @@ const CoursePage = async ({
   const { success: modules, error: moduleError } =
     await getPublishedCourseModules(courseId);
 
-  if (moduleError || courseError) {
-    return <div>{moduleError || courseError}</div>;
-  }
-
-  if (!modules || !course) {
-    return <div>Loading...</div>;
+  if (courseError || !course || !modules || moduleError) {
+    return <ErrorToast error={"Error fetching course: " + courseError} />;
   }
 
   return (

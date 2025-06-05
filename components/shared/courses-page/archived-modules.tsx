@@ -1,18 +1,16 @@
 import { getArchivedCourseModules } from "@/lib/module";
 import React from "react";
 import ModuleCard from "./module-card/module-card";
+import ErrorToast from "@/components/ui/error-toast";
 
 const ArchivedModules = async ({ courseId }: { courseId: string }) => {
   const { success: archivedModules, error } = await getArchivedCourseModules(
     courseId
   );
-
-  if (error) {
-    return <div>{error}</div>;
-  }
-
-  if (!archivedModules) {
-    return <div>Loading...</div>;
+  if (error || !archivedModules) {
+    return (
+      <ErrorToast error={"Error fetching archived modules: " + (error || "")} />
+    );
   }
 
   return (

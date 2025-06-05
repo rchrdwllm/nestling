@@ -10,6 +10,7 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import GradeSubmissionForm from "./grade-submission-form";
 import GenerateSubmissionReport from "./generate-submission-report";
+import ErrorToast from "@/components/ui/error-toast";
 
 type SubmissionGridProps = {
   studentId: string | undefined;
@@ -28,23 +29,25 @@ const SubmissionGrid = async ({
   const { success: submissions, error: submissionsError } =
     await getAssignmentSubmissions(contentId);
 
-  if (contentError || submissionsError) {
-    return <div>{contentError}</div>;
-  }
-
-  if (!content || !submissions) {
-    return <div>Loading...</div>;
+  if (contentError || submissionsError || !content || !submissions) {
+    return (
+      <ErrorToast
+        error={"Error fetching submissions: " + (submissionsError || "")}
+      />
+    );
   }
 
   const { success: enrolledStudents, error: enrolledStudentsError } =
     await getEnrolledStudents(content.courseId);
 
-  if (enrolledStudentsError) {
-    return <div>{enrolledStudentsError}</div>;
-  }
-
-  if (!enrolledStudents) {
-    return <div>Loading...</div>;
+  if (enrolledStudentsError || !enrolledStudents) {
+    return (
+      <ErrorToast
+        error={
+          "Error fetching enrolled students: " + (enrolledStudentsError || "")
+        }
+      />
+    );
   }
 
   const { success: studentSubmissions } = studentId

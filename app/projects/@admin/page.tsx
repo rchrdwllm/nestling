@@ -4,6 +4,7 @@ import ProjectsTable from "@/components/shared/projects-page/projects-table";
 import { projectCols } from "@/components/shared/projects-page/projects-table-def";
 import ProjectsTimeline from "@/components/shared/projects-page/projects-timeline";
 import TasksPriorityGraph from "@/components/shared/projects-page/tasks-priority-graph";
+import ErrorToast from "@/components/ui/error-toast";
 import { getProjectsWithTasks, getUnarchivedProjects } from "@/lib/project";
 import { getIncompleteTasks } from "@/lib/task";
 import { getAllAdmins, getAllInstructors } from "@/lib/user";
@@ -19,37 +20,33 @@ const AdminProjectsPage = async () => {
     await getAllInstructors();
 
   if (adminsError || instructorsError || projectsError) {
-    console.error(
-      "Error fetching data:",
-      adminsError || instructorsError || projectsError
+    return (
+      <ErrorToast
+        error={
+          "Error fetching data: " +
+          (adminsError || instructorsError || projectsError)
+        }
+      />
     );
-    return <div>Error loading data. Please try again later.</div>;
   }
 
   if (!admins || !instructors || !projects) {
-    return <div>No data available.</div>;
+    return <ErrorToast error={"No data available."} />;
   }
 
   if (projectsError || !projects) {
-    console.error("Error fetching projects:", projectsError);
-
-    return <h1>Error fetching projects: {projectsError}</h1>;
+    return <ErrorToast error={"Error fetching projects: " + projectsError} />;
   }
 
   if (tasksError || !tasks) {
-    console.error("Error fetching tasks:", tasksError);
-
-    return <h1>Error fetching tasks: {tasksError}</h1>;
+    return <ErrorToast error={"Error fetching tasks: " + tasksError} />;
   }
 
   if (projectsWithTasksError || !projectsWithTasks) {
-    console.error(
-      "Error fetching projects with tasks:",
-      projectsWithTasksError
-    );
-
     return (
-      <h1>Error fetching projects with tasks: {projectsWithTasksError}</h1>
+      <ErrorToast
+        error={"Error fetching projects with tasks: " + projectsWithTasksError}
+      />
     );
   }
 

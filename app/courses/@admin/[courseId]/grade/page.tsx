@@ -1,5 +1,6 @@
 import GenerateGradesReport from "@/components/shared/courses-page/grading/generate-grades-report";
 import GradeStudentCard from "@/components/shared/courses-page/grading/grade-student-card";
+import ErrorToast from "@/components/ui/error-toast";
 import { getCourseAssignments } from "@/lib/content";
 import { getEnrolledStudents } from "@/lib/course";
 import { generateGradesReport } from "@/lib/report";
@@ -16,15 +17,17 @@ const GradePage = async ({
     await getEnrolledStudents(courseId);
 
   if (assignmentsError || !assignments) {
-    console.error("Error fetching assignments:", assignmentsError);
-
-    return <h1>Error fetching assignments. Please try again later.</h1>;
+    return (
+      <ErrorToast error={"Error fetching assignments: " + assignmentsError} />
+    );
   }
 
   if (enrolledStudentsError || !enrolledStudents) {
-    console.error("Error fetching enrolled students:", enrolledStudentsError);
-
-    return <h1>Error fetching enrolled students. Please try again later.</h1>;
+    return (
+      <ErrorToast
+        error={"Error fetching enrolled students: " + enrolledStudentsError}
+      />
+    );
   }
 
   return (

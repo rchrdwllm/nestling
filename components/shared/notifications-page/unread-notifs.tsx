@@ -1,6 +1,7 @@
 import { getUnreadNotifs } from "@/lib/notification";
 import { getOptimisticUser } from "@/lib/user";
 import NotifCard from "./notif-card";
+import ErrorToast from "@/components/ui/error-toast";
 
 const UnreadNotifs = async () => {
   const user = await getOptimisticUser();
@@ -8,9 +9,11 @@ const UnreadNotifs = async () => {
     await getUnreadNotifs(user.id);
 
   if (unreadNotifsError || !unreadNotifs) {
-    console.error("Error fetching unread notifications:", unreadNotifsError);
-
-    return <div>Error loading notifications, please try again later.</div>;
+    return (
+      <ErrorToast
+        error={"Error fetching unread notifications: " + unreadNotifsError}
+      />
+    );
   }
 
   return (

@@ -1,6 +1,7 @@
 import { getOptimisticUser } from "@/lib/user";
 import { getAllAnnouncements } from "@/lib/announcement";
 import AnnouncementCard from "../courses-page/announcements/announcement-card";
+import ErrorToast from "@/components/ui/error-toast";
 
 const RecentAnnouncements = async () => {
   const user = await getOptimisticUser();
@@ -10,9 +11,7 @@ const RecentAnnouncements = async () => {
   );
 
   if (error || !announcements) {
-    console.error("Error fetching announcements:", error);
-
-    return <p>Error fetching announcements: {error}</p>;
+    return <ErrorToast error={"Error fetching announcements: " + error} />;
   }
 
   return (

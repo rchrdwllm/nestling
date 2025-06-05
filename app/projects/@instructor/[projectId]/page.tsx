@@ -19,6 +19,7 @@ import TasksTimeline from "@/components/shared/projects-page/tasks-timeline";
 import CreateTaskDialog from "@/components/shared/projects-page/create-task-dialog";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import ErrorToast from "@/components/ui/error-toast";
 
 const ProjectPage = async ({
   params,
@@ -34,16 +35,22 @@ const ProjectPage = async ({
     await getAllInstructors();
   const user = await getOptimisticUser();
 
-  if (adminsError || instructorsError || projectError) {
-    console.error(
-      "Error fetching data:",
-      adminsError || instructorsError || projectError
+  if (
+    projectError ||
+    adminsError ||
+    instructorsError ||
+    !project ||
+    !admins ||
+    !instructors
+  ) {
+    return (
+      <ErrorToast
+        error={
+          "Error loading project data: " +
+          (projectError || adminsError || instructorsError)
+        }
+      />
     );
-    return <div>Error loading data. Please try again later.</div>;
-  }
-
-  if (!admins || !instructors || !project) {
-    return <div>No data available.</div>;
   }
 
   const { success: heads, error: headsError } = await getProjectHeads(
@@ -52,13 +59,14 @@ const ProjectPage = async ({
   const { success: associates, error: associatesError } =
     await getProjectAssociates(project.id);
 
-  if (headsError || associatesError) {
-    console.error("Error fetching data:", headsError || associatesError);
-    return <div>Error loading data. Please try again later.</div>;
-  }
-
-  if (!heads || !associates) {
-    return <div>No data available.</div>;
+  if (headsError || associatesError || !heads || !associates) {
+    return (
+      <ErrorToast
+        error={
+          "Error loading project members: " + (headsError || associatesError)
+        }
+      />
+    );
   }
 
   const availableAssignees = [...heads, ...associates];

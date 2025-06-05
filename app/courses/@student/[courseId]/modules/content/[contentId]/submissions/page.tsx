@@ -1,4 +1,5 @@
 import SubmissionGrid from "@/components/student-access/courses-page/submissions/submission-grid";
+import ErrorToast from "@/components/ui/error-toast";
 import { getModuleContent } from "@/lib/content";
 import { Suspense } from "react";
 
@@ -18,12 +19,8 @@ const SubmissionsPage = async ({
     contentId
   );
 
-  if (contentError) {
-    return <div>{contentError}</div>;
-  }
-
-  if (!content) {
-    return <div>Loading</div>;
+  if (contentError || !content) {
+    return <ErrorToast error={"Error fetching content: " + contentError} />;
   }
 
   return (

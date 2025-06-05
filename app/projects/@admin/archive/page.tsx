@@ -1,20 +1,17 @@
 import ProjectsTable from "@/components/shared/projects-page/projects-table";
 import { projectCols } from "@/components/shared/projects-page/projects-table-def";
+import ErrorToast from "@/components/ui/error-toast";
 import { getArchivedProjects } from "@/lib/project";
 
 const ProjectsArchivePage = async () => {
   const { success: archivedProjects, error } = await getArchivedProjects();
 
-  if (error) {
-    console.error("Error fetching archived projects:", error);
-
-    return <h1>Error fetching archived projects</h1>;
-  }
-
-  if (!archivedProjects) {
-    console.error("Error fetching archived projects:", error);
-
-    return <h1>Error fetching archived projects</h1>;
+  if (error || !archivedProjects) {
+    return (
+      <ErrorToast
+        error={"Error fetching archived projects: " + (error || "")}
+      />
+    );
   }
 
   return (

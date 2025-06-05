@@ -1,16 +1,17 @@
 import { getAllInstructors } from "@/lib/user";
 import DateDisplay from "../../ui/date-display";
+import ErrorToast from "@/components/ui/error-toast";
 
 const TotalInstructorsOverview = async () => {
   const { success: allInstructors, error: allInstructorsError } =
     await getAllInstructors();
 
-  if (allInstructorsError) {
-    return <div>{allInstructorsError}</div>;
-  }
-
-  if (!allInstructors) {
-    return <p>Loading...</p>;
+  if (allInstructorsError || !allInstructors) {
+    return (
+      <ErrorToast
+        error={"Error fetching total instructors: " + allInstructorsError}
+      />
+    );
   }
 
   return (

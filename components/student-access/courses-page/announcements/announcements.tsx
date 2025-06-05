@@ -1,5 +1,6 @@
 import { getCourseAnnouncements } from "@/lib/announcement";
 import AnnouncementCard from "./announcement-card";
+import ErrorToast from "@/components/ui/error-toast";
 
 type AnnouncementsProps = {
   courseId: string;
@@ -10,12 +11,8 @@ const Announcements = async ({ courseId }: AnnouncementsProps) => {
     courseId
   );
 
-  if (error) {
-    return <section>Error fetching announcements</section>;
-  }
-
-  if (!announcements) {
-    return <p>Loading...</p>;
+  if (error || !announcements) {
+    return <ErrorToast error={"Error fetching announcements: " + error} />;
   }
 
   return (

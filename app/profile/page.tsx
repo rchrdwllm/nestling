@@ -1,4 +1,5 @@
 import ProfileDetails from "@/components/shared/profile-page/profile-details";
+import ErrorToast from "@/components/ui/error-toast";
 
 import { getEnrolledCourses, getInstructorCourses } from "@/lib/course";
 import { getUserById } from "@/lib/user";
@@ -11,12 +12,8 @@ const ProfilePage = async ({
   const { userId } = await searchParams;
   const { success: user, error } = await getUserById(userId);
 
-  if (error) {
-    return <div>{error}</div>;
-  }
-
-  if (!user) {
-    return <div>Loading...</div>;
+  if (error || !user) {
+    return <ErrorToast error={"Error fetching user details: " + error} />;
   }
 
   const { success: contents, error: contentsError } =
@@ -25,9 +22,9 @@ const ProfilePage = async ({
       : await getEnrolledCourses(user.id);
 
   if (contentsError || !contents) {
-    console.error("Error fetching user details: ", contentsError);
-
-    return <h1>Error fetching user details</h1>;
+    return (
+      <ErrorToast error={"Error fetching user details: " + contentsError} />
+    );
   }
 
   return (

@@ -6,6 +6,7 @@ import { getStudentAssignmentSubmission } from "@/lib/submission";
 import { getOptimisticUser } from "@/lib/user";
 import StudentSubmission from "@/components/student-access/courses-page/student-submission";
 import ContentViewLogger from "@/components/shared/content-page/content-view-logger";
+import ErrorToast from "@/components/ui/error-toast";
 
 const ContentPage = async ({
   params,
@@ -18,12 +19,8 @@ const ContentPage = async ({
   );
   const user = await getOptimisticUser();
 
-  if (contentError) {
-    return <div>{contentError}</div>;
-  }
-
-  if (!content) {
-    return <div>Loading...</div>;
+  if (contentError || !content) {
+    return <ErrorToast error={"Error fetching content: " + contentError} />;
   }
 
   const file = content.type === "file" ? await getContentFile(contentId) : null;

@@ -3,15 +3,14 @@ import { getSlicedCourses } from "@/lib/course";
 import { getOptimisticUser } from "@/lib/user";
 import Link from "next/link";
 import CourseCard from "../courses-page/course-card/course-card";
+import ErrorToast from "@/components/ui/error-toast";
 
 const MyCourses = async () => {
   const user = await getOptimisticUser();
   const { success: courses, error } = await getSlicedCourses(user.id, 4);
 
   if (error || !courses) {
-    console.error("Error fetching courses:", error);
-
-    return <p>Error fetching courses: {error}</p>;
+    return <ErrorToast error={"Error fetching courses: " + error} />;
   }
 
   return (

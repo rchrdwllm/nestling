@@ -1,4 +1,5 @@
 import TasksTable from "@/components/shared/projects-page/tasks-table";
+import ErrorToast from "@/components/ui/error-toast";
 import { getProjectAssociates, getProjectHeads } from "@/lib/project";
 import { getArchivedProjectTasks } from "@/lib/task";
 
@@ -13,14 +14,10 @@ const ArchivedTasks = async ({
     projectId
   );
 
-  if (error) {
-    console.error("Error fetching archived tasks:", error);
-    return <div>Error loading archived tasks. Please try again later.</div>;
-  }
-
-  if (!archivedTasks) {
-    console.error("Error fetching archived tasks: No tasks found");
-    return <div>No archived tasks available.</div>;
+  if (error || !archivedTasks) {
+    return (
+      <ErrorToast error={"Error loading archived tasks: " + (error || "")} />
+    );
   }
 
   const { success: heads, error: headsError } = await getProjectHeads(
@@ -29,13 +26,14 @@ const ArchivedTasks = async ({
   const { success: associates, error: associatesError } =
     await getProjectAssociates(projectId);
 
-  if (headsError || associatesError) {
-    console.error("Error fetching data:", headsError || associatesError);
-    return <div>Error loading data. Please try again later.</div>;
-  }
-
-  if (!heads || !associates) {
-    return <div>No data available.</div>;
+  if (headsError || associatesError || !heads || !associates) {
+    return (
+      <ErrorToast
+        error={
+          "Error loading project members: " + (headsError || associatesError)
+        }
+      />
+    );
   }
 
   const availableAssignees = [...heads, ...associates];

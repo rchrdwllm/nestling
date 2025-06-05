@@ -1,15 +1,16 @@
 import { getProjects } from "@/lib/project";
 import DateDisplay from "../../ui/date-display";
+import ErrorToast from "@/components/ui/error-toast";
 
 const TotalProjectsOverview = async () => {
   const { success: allProjects, error: allProjectsError } = await getProjects();
 
-  if (allProjectsError) {
-    return <div>{allProjectsError}</div>;
-  }
-
-  if (!allProjects) {
-    return <p>Loading...</p>;
+  if (allProjectsError || !allProjects) {
+    return (
+      <ErrorToast
+        error={"Error fetching total projects: " + allProjectsError}
+      />
+    );
   }
 
   return (

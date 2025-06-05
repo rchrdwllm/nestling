@@ -1,5 +1,6 @@
 import CourseCard from "@/components/shared/courses-page/course-card";
 import { Button } from "@/components/ui/button";
+import ErrorToast from "@/components/ui/error-toast";
 import { getSlicedInstructorCourses } from "@/lib/course";
 import { getOptimisticUser } from "@/lib/user";
 import Link from "next/link";
@@ -12,9 +13,7 @@ const MyCourses = async () => {
   );
 
   if (error || !courses) {
-    console.error("Error fetching courses:", error);
-
-    return <p>Error fetching courses: {error}</p>;
+    return <ErrorToast error={"Error fetching courses: " + error} />;
   }
 
   return (

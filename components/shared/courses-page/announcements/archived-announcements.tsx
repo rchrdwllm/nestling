@@ -1,5 +1,6 @@
 import { getArchivedCourseAnnouncements } from "@/lib/announcement";
 import AnnouncementCard from "./announcement-card";
+import ErrorToast from "@/components/ui/error-toast";
 
 type ArchivedAnnouncementsProps = {
   courseId: string;
@@ -11,12 +12,12 @@ const ArchivedAnnouncements = async ({
   const { success: announcements, error } =
     await getArchivedCourseAnnouncements(courseId);
 
-  if (error) {
-    return <section>Error fetching announcements</section>;
-  }
-
-  if (!announcements) {
-    return <p>Loading...</p>;
+  if (error || !announcements) {
+    return (
+      <ErrorToast
+        error={"Error fetching archived announcements: " + (error || "")}
+      />
+    );
   }
 
   return (
