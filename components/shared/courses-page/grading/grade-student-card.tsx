@@ -21,9 +21,13 @@ const GradeStudentCard = async ({
   return (
     <Card className="p-4 flex flex-col gap-4">
       <h1 className="text-xl font-semibold">{name}</h1>
-      {assignments.map((assignment) => (
-        <AssignmentCard key={assignment.id} studentId={id} {...assignment} />
-      ))}
+      {!assignments.length ? (
+        <p className="text-muted-forground">No assignments found</p>
+      ) : (
+        assignments.map((assignment) => (
+          <AssignmentCard key={assignment.id} studentId={id} {...assignment} />
+        ))
+      )}
     </Card>
   );
 };
