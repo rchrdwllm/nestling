@@ -111,3 +111,81 @@ span {
 :root {
   --gray-bg: #d2d2d2;
 }
+
+@keyframes fadeinout {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.animate-fadeinout {
+  animation: fadeinout 600ms cubic-bezier(0.4,0,0.2,1);
+}
+
+@keyframes fadeout {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+.animate-fadeout {
+  animation: fadeout 600ms cubic-bezier(0.4,0,0.2,1);
+}
+
+/* FAQ slider animation */
+.slider-content {
+  transition-property: max-height, opacity, margin-top;
+  transition-duration: 400ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  max-height: 0;
+  opacity: 0;
+  margin-top: 0;
+}
+.slider-content.max-h-40 {
+  max-height: 10rem; 
+  opacity: 1;
+  margin-top: 0.5rem;
+}
+
+/* FAQ hover effect */
+button[aria-expanded] {
+  background: transparent;
+}
+button[aria-expanded]:hover {
+  background: var(--primary-bg, #f0f4ff);
+  color: var(--primary, #2563eb);
+}
+
+
+@keyframes breath {
+  0% { opacity: 0.82; transform: scale(1); }
+  20% { opacity: 0.88; }
+  50% { opacity: 1; transform: scale(1.018); }
+  80% { opacity: 0.88; }
+  100% { opacity: 0.82; transform: scale(1); }
+}
+.animate-breath {
+  animation: breath 2s ease-in-out infinite;
+}
+
+@keyframes slideDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-16px) scaleY(0.95) translateX(-50%);
+    max-height: 0;
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scaleY(1) translateX(-50%);
+    max-height: 500px;
+  }
+}
+.animate-slideDown {
+  animation: slideDown 0.35s cubic-bezier(0.4,0,0.2,1);
+}
+
+@keyframes breath-slow {
+  0%, 100% { opacity: 0.82; }
+  50% { opacity: 1; }
+}
+.animate-breath-slow {
+  animation: breath-slow 2.8s cubic-bezier(0.4,0,0.2,1) infinite;
+}
