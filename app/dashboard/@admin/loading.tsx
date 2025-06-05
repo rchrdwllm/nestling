@@ -1,0 +1,52 @@
+import SearchBar from "@/components/shared/search/search-bar";
+import { Skeleton } from "@/components/ui/skeleton";
+
+const Loading = async () => {
+  return (
+    <div className="p-6 flex flex-col gap-8">
+      <div className="flex flex-col gap-4">
+        <div className="flex items-center gap-6">
+          <h1 className="text-3xl font-semibold">Admin Dashboard</h1>
+          <div className="flex-1">
+            <SearchBar />
+          </div>
+        </div>
+        <hr />
+      </div>
+      <div className="grid grid-cols-6 gap-4">
+        <article className="col-span-2">
+          <Skeleton className="h-[150px] w-full" />
+        </article>
+        <article className="col-span-2">
+          <Skeleton className="h-[150px] w-full" />
+        </article>
+        <article className="col-span-2">
+          <Skeleton className="h-[150px] w-full" />
+        </article>
+        <article className="col-span-3">
+          <Skeleton className="h-[450px] w-full" />
+        </article>
+        <article className="col-span-3">
+          <Skeleton className="h-[450px] w-full" />
+        </article>
+        <article className="col-span-6">
+          <Skeleton className="h-[700px] w-full" />
+        </article>
+      </div>
+      <div className="flex flex-col gap-4">
+        <Skeleton className="w-40 h-7" />
+        <Skeleton className="w-full h-7" />
+        <div className="flex justify-between items-center">
+          <div className="flex items-center gap-4">
+            <Skeleton className="h-7 w-20" />
+            <Skeleton className="h-7 w-20" />
+            <Skeleton className="h-7 w-20" />
+            <Skeleton className="h-7 w-28" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Loading;
