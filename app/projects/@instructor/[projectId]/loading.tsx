@@ -15,7 +15,7 @@ const Loading = async () => {
           </div>
           <hr />
         </section>
-        <section className="flex flex-col gap-1">
+        <section className="flex flex-col gap-6">
           <Skeleton className="w-[500px] h-6" />
           <Skeleton className="w-[500px] h-6" />
           <Skeleton className="w-[500px] h-6" />
