@@ -2,7 +2,7 @@ import GenerateGradesReport from "@/components/shared/courses-page/grading/gener
 import GradeStudentCard from "@/components/shared/courses-page/grading/grade-student-card";
 import ErrorToast from "@/components/ui/error-toast";
 import { getCourseAssignments } from "@/lib/content";
-import { getEnrolledStudents } from "@/lib/course";
+import { getCourse, getEnrolledStudents } from "@/lib/course";
 import { generateGradesReport } from "@/lib/report";
 
 const GradePage = async ({
@@ -15,6 +15,7 @@ const GradePage = async ({
     await getCourseAssignments(courseId);
   const { success: enrolledStudents, error: enrolledStudentsError } =
     await getEnrolledStudents(courseId);
+  const { success: course, error: courseError } = await getCourse(courseId);
 
   if (assignmentsError || !assignments) {
     return (
@@ -30,6 +31,12 @@ const GradePage = async ({
     );
   }
 
+  if (courseError || !course) {
+    return (
+      <ErrorToast error={"Error fetching course information: " + courseError} />
+    );
+  }
+
   return (
     <div className="flex flex-col gap-8 p-6">
       <div className="flex flex-col gap-4">
@@ -38,6 +45,8 @@ const GradePage = async ({
           <GenerateGradesReport
             studentIds={enrolledStudents.map((student) => student.id)}
             courseId={courseId}
+            courseCode={course.courseCode}
+            courseTitle={course.name}
           />
         </div>
         <hr />
