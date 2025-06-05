@@ -268,7 +268,7 @@ const AboutPage = () => {
 						),
 						address: (
 							<div className="text-center">
-								<div className="font-bold text-primary">Leave a Nest Malaysia Sdn. Bhd.<br/>(201301036341 (1066170-P))</div>
+								<div className="font-bold text-primary">Leave a Nest Malaysia Sdn. Bhd.</div>
 								<div className="text-sm text-muted-foreground mt-1 mb-2">G-B, Block 2330, Century Square, Jalan Usahawan, Off Persiaran Multimedia, 63000 Cyberjaya, Selangor</div>
 								<div className="flex justify-center">
 									<iframe
