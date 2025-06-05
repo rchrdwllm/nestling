@@ -52,6 +52,8 @@
     "firebase": "^11.3.0",
     "firebase-admin": "^13.2.0",
     "jotai": "^2.12.4",
+    "jspdf": "^3.0.1",
+    "jspdf-autotable": "^5.0.2",
     "lodash.throttle": "^4.1.1",
     "lucide-react": "^0.511.0",
     "motion": "^12.4.1",

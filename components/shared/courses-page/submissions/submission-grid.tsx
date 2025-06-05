@@ -106,7 +106,10 @@ const SubmissionGrid = async ({
             isMultipleAttempts={content.maxAttempts! > 1}
           />
         )}
-        <GenerateSubmissionReport contentId={content.id} />
+        <GenerateSubmissionReport
+          contentId={content.id}
+          contentTitle={content.title}
+        />
       </div>
     </div>
   );

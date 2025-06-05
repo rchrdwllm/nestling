@@ -1,6 +1,6 @@
 "use server";
 
-import { Content, Submission, User } from "@/types";
+import { Announcement, Content, Submission, User } from "@/types";
 import { db } from "./firebase";
 import { unstable_cache } from "next/cache";
 
@@ -131,7 +131,7 @@ export const generateAnnouncementsReport = unstable_cache(
 
       const announcements = announcementsSnapshot.docs.map((doc) => {
         return doc.data();
-      });
+      }) as Announcement[];
 
       const csvData = announcements.map((announcement) => {
         return {
@@ -139,6 +139,7 @@ export const generateAnnouncementsReport = unstable_cache(
           title: announcement.title,
           content: announcement.content,
           createdAt: announcement.createdAt,
+          userId: announcement.senderId,
         };
       });
 
