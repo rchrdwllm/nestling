@@ -29,9 +29,7 @@ const CoursePage = async ({
     <main className="p-6 flex flex-col gap-8">
       <header className="flex flex-col gap-3">
         <div className="flex justify-between items-center">
-          <h1 className="text-3xl font-semibold">
-            {course.courseCode} - {course.name}
-          </h1>
+          <h1 className="text-3xl font-semibold">Modules</h1>
           <CreateModuleBtn courseId={courseId} />
         </div>
         <hr />
