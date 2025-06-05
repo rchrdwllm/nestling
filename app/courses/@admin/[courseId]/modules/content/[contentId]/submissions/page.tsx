@@ -1,7 +1,6 @@
 import SubmissionGrid from "@/components/shared/courses-page/submissions/submission-grid";
 import ErrorToast from "@/components/ui/error-toast";
 import { getModuleContent } from "@/lib/content";
-import { Suspense } from "react";
 
 const SubmissionsPage = async ({
   params,
@@ -33,13 +32,11 @@ const SubmissionsPage = async ({
         </h1>
         <hr />
       </div>
-      <Suspense fallback={<div>Loading...</div>}>
-        <SubmissionGrid
-          contentId={contentId}
-          studentId={studentId}
-          attempt={attempt}
-        />
-      </Suspense>
+      <SubmissionGrid
+        contentId={contentId}
+        studentId={studentId}
+        attempt={attempt}
+      />
     </main>
   );
 };

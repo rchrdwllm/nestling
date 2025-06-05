@@ -14,9 +14,7 @@ const ArchivePage = async ({
         <h1 className="text-3xl font-semibold">Archived modules</h1>
         <hr />
       </div>
-      <Suspense fallback={<div>Loading...</div>}>
-        <ArchivedModules courseId={courseId} />
-      </Suspense>
+      <ArchivedModules courseId={courseId} />
     </main>
   );
 };

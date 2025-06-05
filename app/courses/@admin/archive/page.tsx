@@ -1,5 +1,4 @@
 import ArchivedCourses from "@/components/shared/courses-page/archived-courses";
-import { Suspense } from "react";
 
 const ArchivedCoursesPage = () => {
   return (
@@ -8,9 +7,7 @@ const ArchivedCoursesPage = () => {
         <h1 className="text-3xl font-semibold">Archived Courses</h1>
         <hr />
       </div>
-      <Suspense fallback={<div>Loading...</div>}>
-        <ArchivedCourses />
-      </Suspense>
+      <ArchivedCourses />
     </main>
   );
 };

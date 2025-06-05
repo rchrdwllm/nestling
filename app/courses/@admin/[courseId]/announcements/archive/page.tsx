@@ -1,5 +1,4 @@
 import ArchivedAnnouncements from "@/components/shared/courses-page/announcements/archived-announcements";
-import { Suspense } from "react";
 
 const ArchivedAnnouncementsPage = async ({
   params,
@@ -16,9 +15,7 @@ const ArchivedAnnouncementsPage = async ({
         </div>
         <hr />
       </header>
-      <Suspense fallback={<div>Loading...</div>}>
-        <ArchivedAnnouncements courseId={courseId} />
-      </Suspense>
+      <ArchivedAnnouncements courseId={courseId} />
     </main>
   );
 };

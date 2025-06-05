@@ -31,13 +31,11 @@ const SubmissionsPage = async ({
         </h1>
         <hr />
       </div>
-      <Suspense fallback={<div>Loading...</div>}>
-        <SubmissionGrid
-          contentId={contentId}
-          studentId={studentId}
-          attempt={attempt}
-        />
-      </Suspense>
+      <SubmissionGrid
+        contentId={contentId}
+        studentId={studentId}
+        attempt={attempt}
+      />
     </main>
   );
 };
