@@ -7,6 +7,7 @@ import { getAllAdmins, getOptimisticUser } from "@/lib/user";
 import { revalidateTag } from "next/cache";
 import { createNotif } from "./create-notif";
 import { sendNotification } from "./send-notification";
+import { logUserActivity } from "./log-user-activity";
 
 export const createTicket = actionClient
   .schema(CreateTicketSchema)
@@ -55,6 +56,15 @@ export const createTicket = actionClient
         title: `New ticket: ${title}`,
         body: `A new ticket has been created by ${user.name}.`,
         userIds: adminIds,
+      });
+      await logUserActivity({
+        userId: user.id,
+        type: "ticket_created",
+        targetId: id,
+        details: {
+          title,
+          description,
+        },
       });
 
       revalidateTag("tickets");

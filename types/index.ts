@@ -274,7 +274,8 @@ export type UserActivity = {
     | "submit_assignment"
     | "grade_submission"
     | "update_profile"
-    | "enroll_course";
+    | "enroll_course"
+    | "ticket_created";
   createdAt: string;
   targetId?: string | null;
   details?: Record<string, any> | null;
