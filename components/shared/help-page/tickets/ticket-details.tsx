@@ -10,6 +10,8 @@ import {
   ticketStatuses,
 } from "@/constants/ticket";
 import { Badge } from "@/components/ui/badge";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 type TicketDetailsProps = {
   ticket: Ticket;
@@ -57,7 +59,19 @@ const TicketDetails = async ({ ticket }: TicketDetailsProps) => {
         <div>
           <h1 className="text-xl font-semibold">{ticket.title}</h1>
           <p className="text-sm text-muted-foreground">
-            Opened on <DateDisplay date={ticket.createdAt} />
+            Opened on{" "}
+            <DateDisplay
+              date={ticket.createdAt}
+              outputFormat="MMMM, d 'at' h:mm a"
+            />{" "}
+            by{" "}
+            <span>
+              <Link href={`/profile?userId=${ticket.userId}`}>
+                <Button variant="link" className="px-0">
+                  {ticketOwner.name}
+                </Button>
+              </Link>
+            </span>
           </p>
         </div>
       </div>

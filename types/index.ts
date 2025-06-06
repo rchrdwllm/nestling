@@ -298,3 +298,12 @@ export type Ticket = {
   createdAt: string;
   updatedAt: string;
 };
+
+export type TicketReply = {
+  id: string;
+  ticketId: string;
+  userId: string;
+  reply: string;
+  createdAt: string;
+  updatedAt: string;
+};

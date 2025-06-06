@@ -77,7 +77,7 @@ const CreateTicketForm = ({ setIsOpen }: CreateTicketFormProps) => {
           name="description"
           render={({ field }) => (
             <FormItem>
-              <Textarea placeholder="Ticket description" {...field} />
+              <Textarea placeholder="Describe your issue" {...field} />
             </FormItem>
           )}
         />
