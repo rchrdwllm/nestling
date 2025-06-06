@@ -4,8 +4,8 @@ import { db } from "@/lib/firebase";
 import { LoginSchema } from "@/schemas/LoginSchema";
 import bcrypt from "bcrypt";
 import { Role, User, MonthlyActivity } from "@/types";
-import { format } from "date-fns";
 import { formatInTimeZone } from "date-fns-tz";
+import { decryptData } from "./aes";
 
 export const authOptions = {
   providers: [
@@ -112,12 +112,19 @@ export const authOptions = {
         }
       }
 
+      const aesKey = process.env.AES_ENCRYPTION_KEY;
+
+      if (!aesKey) {
+        throw new Error("AES encryption key is not set");
+      }
+
       token.role = user.role;
       token.firstName = user.firstName;
       token.middleName = user.middleName;
       token.name = `${user.firstName} ${user.middleName} ${user.lastName}`;
       token.lastName = user.lastName;
-      token.contactNumber = user.contactNumber;
+      token.contactNumber = decryptData(user.contactNumber, aesKey);
+      token.address = decryptData(user.address, aesKey);
       token.email = user.email;
       token.image = user.image;
       token.notifsEnabled = user.notifsEnabled;
@@ -128,6 +135,11 @@ export const authOptions = {
       const userRef = db.collection("users").where("id", "==", token.sub);
       const userDoc = await userRef.get();
       const user = userDoc.docs[0].data() as User;
+      const aesKey = process.env.AES_ENCRYPTION_KEY;
+
+      if (!aesKey) {
+        throw new Error("AES encryption key is not set");
+      }
 
       if (token.sub) {
         session.user.id = token.sub;
@@ -140,7 +152,8 @@ export const authOptions = {
         session.user.firstName = user.firstName as string;
         session.user.middleName = user.middleName as string;
         session.user.lastName = user.lastName as string;
-        session.user.contactNumber = user.contactNumber as string;
+        session.user.contactNumber = decryptData(user.contactNumber, aesKey);
+        session.user.address = decryptData(user.address, aesKey);
         session.user.notifsEnabled = user.notifsEnabled as boolean;
 
         if (token.image) {

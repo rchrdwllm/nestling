@@ -1,210 +1,446 @@
+"use client";
+
+import React, { useState } from "react";
+import Image from "next/image";
+import willImg from "@/assets/will.jpg";
+import draeImg from "@/assets/drae.jpg";
+import darenImg from "@/assets/daren.jpg";
+import { Card } from "@/components/ui/card";
+
+const aboutStats = [
+  {
+    label: "Company Name",
+    value: "Nestling LMS",
+    color: "bg-pink-100",
+  },
+  {
+    label: "Modules",
+    value: (
+      <ul className="list-disc list-inside space-y-1 text-left text-base">
+        <li>Security Module</li>
+        <li>Registration Module</li>
+        <li>Validation Module</li>
+        <li>Search Module</li>
+        <li>Course Management Module</li>
+        <li>Project Management Tracker Module</li>
+        <li>Submission Module</li>
+        <li>Inbox Module</li>
+        <li>Data Analytics Module</li>
+        <li>About Module</li>
+        <li>Help Module</li>
+      </ul>
+    ),
+    color: "bg-pink-200",
+  },
+  {
+    label: "Support Hours",
+    value: "Monday - Friday, 9:00 AM - 5:00 PM",
+    color: "bg-pink-50",
+  },
+  {
+    label: "Contact Email",
+    value: "support@nestlingLMS.com",
+    color: "bg-pink-50",
+  },
+  {
+    label: "Contact Number",
+    value: "(+63) 993-277-5503",
+    color: "bg-indigo-50",
+  },
+];
+
+const missionVision = [
+  {
+    title: "Mission",
+    value: (
+      <span>
+        To empower educational initiatives with a dedicated platform that
+        enhances productivity, collaboration, and efficiency across diverse
+        learning projects.
+      </span>
+    ),
+  },
+  {
+    title: "Vision",
+    value: (
+      <span>
+        To create a collaborative and secure online space that enhances the
+        learning journey for educators and employees, with tools tailored to
+        meet modern educational needs.
+      </span>
+    ),
+  },
+];
+
+const AboutStatBox = ({
+  label,
+  value,
+  color,
+}: {
+  label: string;
+  value: React.ReactNode;
+  color: string;
+}) => {
+  const [hovered, setHovered] = useState(false);
+
+  return (
+    <Card
+      className={`relative w-full min-w-[260px] max-w-[320px] h-[120px] rounded-2xl p-6 flex flex-col items-center justify-center transition-all duration-300 cursor-pointer bg-background`}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{ zIndex: hovered ? 40 : 1 }}
+    >
+      <span className="text-lg text-foreground mb-2 text-center font-semibold">
+        {label}
+      </span>
+      <div
+        className={`absolute left-1/2 top-full w-full -translate-x-1/2 mt-2 bg-background rounded-2xl shadow-2xl p-6 flex flex-col items-center justify-center transition-all duration-300 overflow-hidden ${
+          hovered
+            ? "opacity-100 pointer-events-auto scale-100 max-h-[500px] animate-slideDown"
+            : "opacity-0 pointer-events-none scale-95 max-h-0"
+        }`}
+        style={{ minWidth: 220, zIndex: 50, maxWidth: 320 }}
+      >
+        <span className="text-foreground text-center break-words font-normal w-full block">
+          {value}
+        </span>
+      </div>
+    </Card>
+  );
+};
+
 const AboutPage = () => {
   return (
-    <div className="p-6 flex flex-col gap-10">
-      <div className="flex flex-col gap-4">
-        <h1 className="text-3xl font-semibold">
-          About <span className="text-primary">Nestling</span>
-        </h1>
-        <hr />
+    <div className="flex flex-col items-center w-full px-2 py-10">
+      <h1 className="text-5xl font-bold text-center mb-2 tracking-tight text-foreground">
+        About <span className="text-primary">Nestling</span>
+      </h1>
+      <h2 className="text-2xl font-semibold text-center mb-4 text-foreground">
+        All-in-one Learning Management System
+      </h2>
+      <p className="text-lg text-center mb-10 text-muted-foreground max-w-2xl">
+        An all-in-one Learning Management System designed to streamline
+        educational operations within Leave a Nest, particularly for the
+        Philippine branch. It offers a range of tools for course management,
+        project tracking, secure communication, and analytics.
+      </p>
+      {/* Top row of cards */}
+      <div className="w-full max-w-4xl mx-auto flex flex-row justify-center gap-8 mb-8">
+        {aboutStats.slice(0, 3).map((stat, i) => (
+          <AboutStatBox
+            key={i}
+            label={stat.label}
+            value={stat.value}
+            color={stat.color}
+          />
+        ))}
       </div>
-      <section className="flex flex-col gap-4">
-        <h1 className="text-2xl font-semibold">System Information</h1>
-        <p className="text-muted-foreground">
-          An all-in-one Learning Management System designed designed to
-          streamline educational operations within Leave a Nest, particularly
-          for the Philippine branch. It offers a range of tools for course
-          management, project tracking, secure communication, and analytics.
-        </p>
-        <p className="font-medium">Modules:</p>
-        <ul className="list-disc list-inside space-y-2 text-muted-foreground">
-          <li>Security Module</li>
-          <li>Registration Module</li>
-          <li>Validation Module</li>
-          <li>Search Module</li>
-          <li>Course Management Module</li>
-          <li>Project Management Tracker Module</li>
-          <li>Submission Module</li>
-          <li>Inbox Module</li>
-          <li>Data Analytics Module</li>
-          <li>About Module</li>
-          <li>Help Module</li>
-        </ul>
-      </section>
-      <section className="flex flex-col gap-4">
-        <h1 className="text-2xl font-semibold">Company Details</h1>
-        <div className="space-y-4">
-          <p className="text-muted-foreground">
-            <span className="font-medium text-foreground">Company Name:</span>{" "}
-            Nestling LMS
+      {/* Bottom row of cards */}
+      <div className="w-full max-w-2xl mx-auto flex flex-row justify-center gap-8 mb-12">
+        {aboutStats.slice(3).map((stat, i) => (
+          <AboutStatBox
+            key={i + 3}
+            label={stat.label}
+            value={stat.value}
+            color={stat.color}
+          />
+        ))}
+      </div>
+
+      {/* Mission & Vision Section */}
+      <div className="w-full max-w-3xl mx-auto flex flex-col md:flex-row items-center justify-center gap-8 mb-10">
+        {missionVision.map((item, i) => (
+          <div
+            key={i}
+            className="flex-1 flex flex-col items-center text-center"
+          >
+            <h3 className="text-xl font-bold text-primary mb-2">
+              {item.title}
+            </h3>
+            <p className="text-base text-muted-foreground max-w-xs">
+              {item.value}
+            </p>
+          </div>
+        ))}
+      </div>
+
+      {/* Office Address & Operations Location Section */}
+      <Card className="w-full max-w-4xl flex flex-col md:flex-row items-center justify-between gap-8 bg-background rounded-2xl p-8 mt-4">
+        <div className="flex-1 flex flex-col gap-2 min-w-[220px] items-center md:items-start">
+          <h3 className="text-xl font-bold text-primary mb-1">
+            Leave a Nest Philippines, Inc.
+          </h3>
+          <p className="text-base text-foreground font-semibold">
+            Office Address:
           </p>
-          <p className="text-muted-foreground">
-            <span className="font-medium text-foreground">
-              Operations Location:
-            </span>{" "}
+          <p className="text-base text-muted-foreground mb-2 text-center md:text-left">
+            Unit 2103, Orient Square Bldg., F. Ortigas Jr. Rd.,
+            <br />
+            Ortigas Center, Pasig City 1600
+          </p>
+          <p className="text-base text-foreground font-semibold">
+            Operations Location:
+          </p>
+          <p className="text-base text-muted-foreground text-center md:text-left">
             Philippines
           </p>
-          <p className="text-muted-foreground">
-            <span className="font-medium text-foreground">Mission:</span> To
-            empower educational initiatives with a dedicated platform that
-            enhances productivity, collaboration, and efficiency across diverse
-            learning projects.
-          </p>
-          <p className="text-muted-foreground">
-            <span className="font-medium text-foreground">Vision:</span> To
-            create a collaborative and secure online space that enhances the
-            learning journey for educators and employees, with tools tailored to
-            meet modern educational needs.
-          </p>
         </div>
-      </section>
-      <section className="flex flex-col gap-4">
-        <h1 className="text-2xl font-semibold">Contact Information</h1>
-        <div className="space-y-4">
-          <p className="text-muted-foreground">
-            <span className="font-medium text-foreground">Email:</span>{" "}
-            support@nestlingLMS.com
-          </p>
-          <p className="text-muted-foreground">
-            <span className="font-medium text-foreground">Contact Number:</span>{" "}
-            (+63) 993-277-5503
-          </p>
-          <p className="text-muted-foreground">
-            <span className="font-medium text-foreground">Office Address:</span>{" "}
-            Unit 2103, Orient Square Bldg., F. Ortigas Jr. Rd., Ortigas Center,
-            Pasig City 1600
-          </p>
-          <p className="text-muted-foreground">
-            <span className="font-medium text-foreground">Support Hours:</span>{" "}
-            Monday - Friday, 9:00 AM - 5:00 PM
-          </p>
+        <div className="flex-1 flex items-center justify-center min-w-[220px]">
+          <iframe
+            title="Nestling Office Map"
+            src="https://www.google.com/maps?q=Unit+2103,+Orient+Square+Bldg.,+F.+Ortigas+Jr.+Rd.,+Ortigas+Center,+Pasig+City+1600&output=embed"
+            width="320"
+            height="220"
+            style={{ border: 0, borderRadius: "1rem" }}
+            allowFullScreen={false}
+            loading="lazy"
+          ></iframe>
         </div>
-      </section>
+      </Card>
+      {/* Leave a Nest Branches Section */}
+      <div className="w-full max-w-6xl mx-auto mt-16 flex flex-col items-center">
+        <h3 className="text-2xl font-bold text-primary mb-8 tracking-tight">
+          Leave a Nest Branches
+        </h3>
+        <div className="w-full flex flex-row flex-wrap justify-center gap-12 rounded-2xl py-10 px-4">
+          {[
+            {
+              name: "AMERICA",
+              flag: (
+                <Card className="w-[140px] h-[84px] flex items-center justify-center mb-4 overflow-hidden bg-white rounded-lg">
+                  <img
+                    src="https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg"
+                    alt="USA Flag"
+                    className="w-full h-full object-contain"
+                  />
+                </Card>
+              ),
+              address: (
+                <div className="text-center">
+                  <div className="font-bold text-primary">
+                    Leave a Nest America Inc.
+                  </div>
+                  <div className="text-sm text-muted-foreground mt-1 mb-2">
+                    3350 Scott Blvd. #5502, Santa Clara, CA 95054
+                  </div>
+                  <div className="flex justify-center">
+                    <iframe
+                      title="America Office Map"
+                      src="https://www.google.com/maps?q=3350+Scott+Blvd.+%235502,+Santa+Clara,+CA+95054&output=embed"
+                      width="260"
+                      height="120"
+                      style={{ border: 0, borderRadius: "0.75rem" }}
+                      allowFullScreen={false}
+                      loading="lazy"
+                    ></iframe>
+                  </div>
+                </div>
+              ),
+            },
+            {
+              name: "SINGAPORE",
+              flag: (
+                <Card className="w-[140px] h-[84px] flex items-center justify-center mb-4 overflow-hidden bg-white rounded-lg">
+                  <img
+                    src="https://upload.wikimedia.org/wikipedia/commons/4/48/Flag_of_Singapore.svg"
+                    alt="Singapore Flag"
+                    className="w-full h-full object-contain"
+                  />
+                </Card>
+              ),
+              address: (
+                <div className="text-center">
+                  <div className="font-bold text-primary">
+                    Leave a Nest Singapore Pte. Ltd.
+                    <br />
+                    (201026851H)
+                  </div>
+                  <div className="text-sm text-muted-foreground mt-1 mb-2">
+                    71 Ayer Rajah Crescent, #06-11/12, Singapore 139951
+                  </div>
+                  <div className="flex justify-center">
+                    <iframe
+                      title="Singapore Office Map"
+                      src="https://www.google.com/maps?q=71+Ayer+Rajah+Crescent,+%2306-11%2F12,+Singapore+139951&output=embed"
+                      width="260"
+                      height="120"
+                      style={{ border: 0, borderRadius: "0.75rem" }}
+                      allowFullScreen={false}
+                      loading="lazy"
+                    ></iframe>
+                  </div>
+                </div>
+              ),
+            },
+            {
+              name: "MALAYSIA",
+              flag: (
+                <Card className="w-[140px] h-[84px] flex items-center justify-center mb-4 overflow-hidden bg-white rounded-lg">
+                  <img
+                    src="https://upload.wikimedia.org/wikipedia/commons/6/66/Flag_of_Malaysia.svg"
+                    alt="Malaysia Flag"
+                    className="w-full h-full object-contain"
+                  />
+                </Card>
+              ),
+              address: (
+                <div className="text-center">
+                  <div className="font-bold text-primary">
+                    Leave a Nest Malaysia Sdn. Bhd.
+                  </div>
+                  <div className="text-sm text-muted-foreground mt-1 mb-2">
+                    G-B, Block 2330, Century Square, Jalan Usahawan, Off
+                    Persiaran Multimedia, 63000 Cyberjaya, Selangor
+                  </div>
+                  <div className="flex justify-center">
+                    <iframe
+                      title="Malaysia Office Map"
+                      src="https://www.google.com/maps?q=G-B,+Block+2330,+Century+Square,+Jalan+Usahawan,+Off+Persiaran+Multimedia,+63000+Cyberjaya,+Selangor&output=embed"
+                      width="260"
+                      height="120"
+                      style={{ border: 0, borderRadius: "0.75rem" }}
+                      allowFullScreen={false}
+                      loading="lazy"
+                    ></iframe>
+                  </div>
+                </div>
+              ),
+            },
+            {
+              name: "UK",
+              flag: (
+                <Card className="w-[140px] h-[84px] flex items-center justify-center mb-4 overflow-hidden bg-white rounded-lg">
+                  <img
+                    src="https://upload.wikimedia.org/wikipedia/en/a/ae/Flag_of_the_United_Kingdom.svg"
+                    alt="UK Flag"
+                    className="w-full h-full object-contain"
+                  />
+                </Card>
+              ),
+              address: (
+                <div className="text-center">
+                  <div className="font-bold text-primary">
+                    Leave a Nest United Kingdom Ltd.
+                  </div>
+                  <div className="text-sm text-muted-foreground mt-1 mb-2">
+                    IDEALondon, 69 Wilson St, London EC2A 2BB, UK
+                  </div>
+                  <div className="flex justify-center">
+                    <iframe
+                      title="UK Office Map"
+                      src="https://www.google.com/maps?q=IDEALondon,+69+Wilson+St,+London+EC2A+2BB,+UK&output=embed"
+                      width="260"
+                      height="120"
+                      style={{ border: 0, borderRadius: "0.75rem" }}
+                      allowFullScreen={false}
+                      loading="lazy"
+                    ></iframe>
+                  </div>
+                </div>
+              ),
+            },
+            {
+              name: "JAPAN",
+              flag: (
+                <Card className="w-[140px] h-[84px] flex items-center justify-center mb-4 overflow-hidden bg-white rounded-lg">
+                  <img
+                    src="https://upload.wikimedia.org/wikipedia/en/9/9e/Flag_of_Japan.svg"
+                    alt="Japan Flag"
+                    className="w-full h-full object-contain"
+                  />
+                </Card>
+              ),
+              address: (
+                <div className="text-center">
+                  <div className="font-bold text-primary">
+                    Iidabasimiyuki Bld. (Reception : 4F floor)
+                  </div>
+                  <div className="text-sm text-muted-foreground mt-1 mb-2">
+                    1-4, Shimomiyabicho, Shinjuku-ku, Tokyo, 162-0822, Japan
+                  </div>
+                  <div className="flex justify-center">
+                    <iframe
+                      title="Japan Office Map"
+                      src="https://www.google.com/maps?q=Iidabasimiyuki+Bld.+1-4,+Shimomiyabicho,+Shinjuku-ku,+Tokyo,+162-0822,+Japan&output=embed"
+                      width="260"
+                      height="120"
+                      style={{ border: 0, borderRadius: "0.75rem" }}
+                      allowFullScreen={false}
+                      loading="lazy"
+                    ></iframe>
+                  </div>
+                </div>
+              ),
+            },
+          ].map((branch) => (
+            <div
+              key={branch.name}
+              className="flex flex-col items-center w-[180px] relative group"
+            >
+              {branch.flag}
+              <span className="text-2xl font-bold text-foreground tracking-tight">
+                {branch.name}
+              </span>
+              {branch.address && (
+                <div
+                  className="absolute left-1/2 top-full z-50 w-[320px] -translate-x-1/2 mt-2 bg-background rounded-2xl shadow-2xl p-4 flex flex-col items-center justify-center transition-all duration-300 overflow-hidden opacity-0 pointer-events-none scale-95 max-h-0 group-hover:opacity-100 group-hover:pointer-events-auto group-hover:scale-100 group-hover:max-h-[500px] animate-slideDown"
+                  style={{ minWidth: 220, maxWidth: 340 }}
+                >
+                  {branch.address}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+      {/* Meet The Team Section */}
+      <div className="w-full max-w-5xl mx-auto mt-20 flex flex-col items-center">
+        <h3 className="text-2xl font-bold text-primary mb-8 tracking-tight">
+          Meet The Team
+        </h3>
+        <div className="w-full flex flex-row flex-wrap justify-center gap-10 rounded-2xl py-10 px-4 animate-breath-slow">
+          {[
+            {
+              name: "William B. Flores",
+              course: "BS Computer Science",
+              image: willImg,
+            },
+            {
+              name: "John Andrae L. Tuaño",
+              course: "BS Computer Science",
+              image: draeImg,
+            },
+            {
+              name: "Darren L. Cabigao",
+              course: "BS Computer Science",
+              image: darenImg,
+            },
+          ].map((dev) => (
+            <Card
+              key={dev.name}
+              className="flex flex-col items-center w-[240px] bg-background rounded-2xl p-6 transition-transform hover:scale-105"
+            >
+              <div className="w-[180px] h-[180px] mb-4 rounded-full overflow-hidden border-4 border-primary/30 shadow">
+                <Image
+                  src={dev.image}
+                  alt={dev.name + " portrait"}
+                  width={180}
+                  height={180}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <span className="text-lg font-bold text-foreground mb-1 text-center tracking-tight">
+                {dev.name}
+              </span>
+              <span className="text-base text-muted-foreground text-center">
+                {dev.course}
+              </span>
+            </Card>
+          ))}
+        </div>
+      </div>
     </div>
   );
-
-  // return (
-  //   <div className="bg-[var(--gray-bg)] min-h-screen flex flex-col">
-  //     <div className="sticky top-0 z-50 bg-background py-6 shadow-md">
-  //       <div className="mx-auto max-w-2xl px-6 lg:max-w-7xl lg:px-8 flex flex-col justify-center items-center h-full">
-  //         <p className="mx-auto mt-2 max-w-full text-center text-4xl font-bold tracking-tight text-[var(--nestling-color)] sm:text-7xl break-words">
-  //           ABOUT
-  //         </p>
-  //       </div>
-  //     </div>
-  //     <div className="flex-1 flex flex-col lg:flex-row px-4 sm:px-6 lg:px-8 space-y-6 lg:space-y-0 lg:space-x-6 overflow-y-auto">
-  //       <div className="w-full lg:w-3/4 mt-6">
-  //         <div
-  //           className="w-full max-w-7xl mx-auto space-y-2 mb-12 border border-border
-  //         pr-[22px] bg-white rounded-xl p-8 shadow-2xl ml-1 mt-4 z-0 relative"
-  //         >
-  //           <h1 className="text-2xl font-bold"> SYSTEM INFORMATION </h1>
-  //           <div className="space-y-4">
-  //             <p>
-  //               <span className="font-bold">Name:</span> Nestling LMS
-  //             </p>
-  //             <p>
-  //               <span className="font-bold">Purpose:</span> An all-in-one
-  //               Learning Management System designed designed to streamline
-  //               educational operations within Leave a Nest, particularly for the
-  //               Philippine branch. It offers a range of tools for course
-  //               management, project tracking, secure communication, and
-  //               analytics.
-  //             </p>
-  //             <p>
-  //               <span className="font-bold">Modules:</span>
-  //             </p>
-  //             <ul className="list-disc list-inside space-y-2">
-  //               <li>Security Module</li>
-  //               <li>Registration Module</li>
-  //               <li>Validation Module</li>
-  //               <li>Search Module</li>
-  //               <li>Course Management Module</li>
-  //               <li>Project Management Tracker Module</li>
-  //               <li>Submission Module</li>
-  //               <li>Inbox Module</li>
-  //               <li>Data Analytics Module</li>
-  //               <li>About Module</li>
-  //               <li>Help Module</li>
-  //             </ul>
-  //             <h1 className="text-2xl font-bold"> COMPANY DETAILS </h1>
-  //             <div className="space-y-4">
-  //               <p>
-  //                 <span className="font-bold">Company Name:</span> Nestling LMS
-  //               </p>
-  //               <p>
-  //                 <span className="font-bold">Operations Location:</span>{" "}
-  //                 Philippines
-  //               </p>
-  //               <p>
-  //                 <span className="font-bold">Mission:</span> To empower
-  //                 educational initiatives with a dedicated platform that
-  //                 enhances productivity, collaboration, and efficiency across
-  //                 diverse learning projects.
-  //               </p>
-  //               <p>
-  //                 <span className="font-bold">Vision:</span> To create a
-  //                 collaborative and secure online space that enhances the
-  //                 learning journey for educators and employees, with tools
-  //                 tailored to meet modern educational needs.
-  //               </p>
-  //             </div>
-  //             <h1 className="text-2xl font-bold mt-4 mb-4">
-  //               {" "}
-  //               CONTACT INFORMATION{" "}
-  //             </h1>
-  //             <div className="space-y-4">
-  //               <p>
-  //                 <span className="font-bold">Email:</span>{" "}
-  //                 support@nestlingLMS.com
-  //               </p>
-  //               <p>
-  //                 <span className="font-bold">Contact Number:</span> (+63)
-  //                 993-277-5503
-  //               </p>
-  //               <p>
-  //                 <span className="font-bold">Office Address:</span> Unit 2103,
-  //                 Orient Square Bldg., F. Ortigas Jr. Rd., Ortigas Center, Pasig
-  //                 City 1600
-  //               </p>
-  //               <p>
-  //                 <span className="font-bold">Support Hours:</span> Monday -
-  //                 Friday, 9:00 AM - 5:00 PM
-  //               </p>
-  //             </div>
-  //           </div>
-  //         </div>
-  //       </div>
-  //       {/* SidePanel Section */}
-  //       <div className="w-full lg:w-1/4 lg:sticky lg:top-4 lg:bg-transparent bg-background rounded-lg shadow-md p-6 lg:p-0 lg:shadow-none lg:mt-0 mt-6">
-  //         <SidePanel
-  //           notifications={[
-  //             {
-  //               id: "1234-asdfasdf",
-  //               type: "inbox",
-  //               title: "From John Doe",
-  //               message: "asdfalksdghsg",
-  //               senderId: "use-uiry2i3uhfs",
-  //               url: "/inbox",
-  //               createdAt: new Date().toISOString(),
-  //               isRead: false,
-  //               isArchived: false,
-  //               archivedAt: null,
-  //               receiverIds: ["use-uiasdsdrew"],
-  //             },
-  //           ]}
-  //           pendingTasks={[
-  //             {
-  //               name: "Assignment 1.0 - Task Name",
-  //               courseCode: "CS101",
-  //               courseName: "Introduction to Computer Science",
-  //               timeAgo: "8 hours ago",
-  //             },
-  //           ]}
-  //         />
-  //       </div>
-  //     </div>
-  //   </div>
-  // );
 };
 
 export default AboutPage;

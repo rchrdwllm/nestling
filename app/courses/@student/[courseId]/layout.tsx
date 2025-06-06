@@ -10,7 +10,7 @@ const Layout = async ({
   children: ReactNode;
   params: { courseId: string };
 }) => {
-  const { courseId } = params;
+  const { courseId } = await params;
   const { success: course, error: courseError } = await getCourse(courseId);
 
   if (courseError || !course) {

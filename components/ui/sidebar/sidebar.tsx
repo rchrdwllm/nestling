@@ -12,6 +12,7 @@ import SidebarLink from "./sidebar-link";
 import UserBtn from "./user-btn";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { useMemo } from "react";
+import NotifLink from "./notif-link";
 
 const Sidebar = () => {
   const { user } = useCurrentUser();
@@ -35,9 +36,13 @@ const Sidebar = () => {
         <Image src={logo} alt="Logo" className="size-10 object-contain" />
       </Link>
       <div className="flex flex-col gap-4 mt-10">
-        {sidebarItems.map((item) => (
-          <SidebarLink key={item.href} {...item} />
-        ))}
+        {sidebarItems.map((item) => {
+          if (item.href === "/notifications") {
+            return <NotifLink key={item.href} {...item} />;
+          }
+
+          return <SidebarLink key={item.href} {...item} />;
+        })}
       </div>
       <UserBtn />
     </aside>

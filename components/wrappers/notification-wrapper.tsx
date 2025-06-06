@@ -15,6 +15,7 @@ import {
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { useUser } from "@/hooks/use-user";
+import { useNotifCountStore } from "@/context/notif-count-context";
 
 type NotificationWrapperProps = {
   authUser?: string;
@@ -27,8 +28,12 @@ const NotificationWrapper = ({
 }: NotificationWrapperProps) => {
   const { user } = useUser();
   const authUserData = authUser ? (JSON.parse(authUser) as User) : null;
+  const setNotifCount = useNotifCountStore((state) => state.setNotifCount);
+  const resetNotifCount = useNotifCountStore((state) => state.resetNotifCount);
+
   useEffect(() => {
     if (!user || !authUserData || !authUserData.notifsEnabled) return;
+
     const startTime = new Date().toISOString();
 
     const q = query(
@@ -43,12 +48,8 @@ const NotificationWrapper = ({
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
       snapshot.docChanges().forEach((change) => {
-        console.log("Notification change detected:", change);
-
         if (change.type === "added") {
           const notification = change.doc.data() as Notification;
-
-          console.log("New notification received:", notification);
 
           fetch("/api/revalidate", {
             method: "POST",
@@ -85,7 +86,28 @@ const NotificationWrapper = ({
       });
     });
 
-    return () => unsubscribe();
+    return () => {
+      unsubscribe();
+    };
+  }, [user, authUserData]);
+
+  useEffect(() => {
+    if (!user || !authUserData || !authUserData.notifsEnabled) return;
+
+    const q = query(
+      collection(clientDb, "notifications"),
+      and(where("receiverId", "==", user.id), where("isRead", "==", false)),
+      orderBy("createdAt", "desc")
+    );
+
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      setNotifCount(snapshot.size);
+    });
+
+    return () => {
+      unsubscribe();
+      resetNotifCount();
+    };
   }, [user, authUserData]);
 
   return <>{children}</>;
