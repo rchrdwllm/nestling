@@ -3,7 +3,7 @@ import React from "react";
 
 const Loading = () => {
   return (
-    <Skeleton className="w-full h-full flex flex-col p-6 gap-10">
+    <div className="flex flex-col p-6 gap-10">
       {/* Header skeleton */}
       <Skeleton className="h-10 w-1/3 mb-2" />
       <Skeleton className="h-1 w-full mb-6" />
@@ -19,7 +19,7 @@ const Loading = () => {
       <Skeleton className="flex justify-center mt-8">
         <Skeleton className="h-12 w-72 rounded-full" />
       </Skeleton>
-    </Skeleton>
+    </div>
   );
 };
 
