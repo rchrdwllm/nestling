@@ -12,6 +12,9 @@ export const DeleteUserLogsSchema = z.object({
       "submit_assignment",
       "grade_submission",
       "update_profile",
+      "enroll_course",
+      "ticket_created",
+      "ticket_reply",
     ])
   ),
 });
