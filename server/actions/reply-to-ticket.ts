@@ -5,6 +5,10 @@ import { actionClient } from "../action-client";
 import { getOptimisticUser } from "@/lib/user";
 import { db } from "@/lib/firebase";
 import { revalidateTag } from "next/cache";
+import { Ticket } from "@/types";
+import { createNotif } from "./create-notif";
+import { sendNotification } from "./send-notification";
+import { logUserActivity } from "./log-user-activity";
 
 export const replyToTicket = actionClient
   .schema(ReplyTicketSchema)
@@ -15,6 +19,13 @@ export const replyToTicket = actionClient
     try {
       const id = crypto.randomUUID();
       const replyRef = db.collection("ticketReplies").doc(id);
+      const ticketSnapshot = await db.collection("tickets").doc(ticketId).get();
+
+      if (!ticketSnapshot.exists) {
+        return { error: "Ticket not found" };
+      }
+
+      const ticket = ticketSnapshot.data() as Ticket;
       const batch = db.batch();
 
       const replyData = {
@@ -49,6 +60,30 @@ export const replyToTicket = actionClient
       batch.set(replyTicketRef, reference);
 
       await batch.commit();
+
+      await createNotif({
+        title: `New reply on ticket: ${ticket.title}`,
+        message: `You have a new reply on your ticket: ${ticket.title}.`,
+        type: "ticket_reply",
+        url: `/help/tickets/${ticketId}`,
+        receiverIds: [ticket.userId],
+        senderId: user.id,
+      });
+      await sendNotification({
+        title: `New reply on ticket: ${ticket.title}`,
+        body: `You have a new reply on your ticket: ${ticket.title}.`,
+        userIds: [ticket.userId],
+      });
+      await logUserActivity({
+        userId: user.id,
+        type: "ticket_reply",
+        targetId: ticketId,
+        details: {
+          reply,
+          ticketId,
+          role: user.role,
+        },
+      });
 
       revalidateTag("tickets");
       revalidateTag("ticketReplies");

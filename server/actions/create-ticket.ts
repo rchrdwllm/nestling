@@ -64,6 +64,7 @@ export const createTicket = actionClient
         details: {
           title,
           description,
+          role: user.role,
         },
       });
 
