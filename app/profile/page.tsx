@@ -3,6 +3,7 @@ import ErrorToast from "@/components/ui/error-toast";
 
 import { getEnrolledCourses, getInstructorCourses } from "@/lib/course";
 import { getUserById } from "@/lib/user";
+import FadeInWrapper from "@/components/wrappers/fadein-wrapper";
 
 const ProfilePage = async ({
   searchParams,
@@ -28,9 +29,11 @@ const ProfilePage = async ({
   }
 
   return (
-    <main className="p-8 flex min-h-full justify-center items-center">
-      <ProfileDetails contentsLength={contents.length} user={user} />
-    </main>
+    <FadeInWrapper className="p-8 flex min-h-full justify-center items-center">
+      <main>
+        <ProfileDetails contentsLength={contents.length} user={user} />
+      </main>
+    </FadeInWrapper>
   );
 };
 
