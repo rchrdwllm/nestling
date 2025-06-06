@@ -59,6 +59,9 @@ export const updateProfile = actionClient
         await logUserActivity({
           userId: parsedInput.userId,
           type: "update_profile",
+          details: {
+            role: user.role,
+          },
         });
 
         revalidatePath("/profile", "page");
