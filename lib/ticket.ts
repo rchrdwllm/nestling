@@ -24,3 +24,25 @@ export const getUserTickets = unstable_cache(
   ["userId"],
   { revalidate: 60 * 60, tags: ["tickets"] }
 );
+
+export const getTicketById = unstable_cache(
+  async (ticketId: string) => {
+    try {
+      const ticketRef = await db.collection("tickets").doc(ticketId).get();
+
+      if (!ticketRef.exists) {
+        return { error: "Ticket not found" };
+      }
+
+      const ticket = ticketRef.data() as Ticket;
+
+      return { success: ticket };
+    } catch (error) {
+      console.error("Error fetching ticket:", error);
+
+      return { error };
+    }
+  },
+  ["ticketId"],
+  { revalidate: 60 * 60, tags: ["tickets"] }
+);
