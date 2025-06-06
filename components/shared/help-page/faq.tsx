@@ -4,6 +4,7 @@ import { useState } from "react";
 import CreateTicketBtn from "./create-ticket-btn";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { useCurrentUser } from "@/hooks/use-current-user";
 
 // FAQDropdown component for animated dropdowns
 const FAQDropdown = ({
@@ -62,8 +63,7 @@ const FAQDropdown = ({
 };
 
 const Help = () => {
-  const [showRequestModal, setShowRequestModal] = useState(false);
-  const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const { user } = useCurrentUser();
 
   return (
     <div className="p-6 flex flex-col gap-10">
@@ -136,10 +136,16 @@ const Help = () => {
           />
         </div>
         <div className="flex flex-col items-center gap-4">
-          <CreateTicketBtn />
-          <Link href="/help/tickets">
-            <Button variant="link">View your tickets</Button>
-          </Link>
+          {user.role !== "admin" && <CreateTicketBtn />}
+          {user.role === "admin" ? (
+            <Link href="/help/tickets">
+              <Button variant="link">View all support tickets</Button>
+            </Link>
+          ) : (
+            <Link href="/help/tickets">
+              <Button variant="link">View your tickets</Button>
+            </Link>
+          )}
         </div>
       </section>
     </div>

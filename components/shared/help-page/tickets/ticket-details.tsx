@@ -4,6 +4,12 @@ import { getUserById } from "@/lib/user";
 import { Ticket } from "@/types";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import DateDisplay from "@/components/ui/date-display";
+import {
+  ticketCategories,
+  ticketPriorities,
+  ticketStatuses,
+} from "@/constants/ticket";
+import { Badge } from "@/components/ui/badge";
 
 type TicketDetailsProps = {
   ticket: Ticket;
@@ -13,6 +19,13 @@ const TicketDetails = async ({ ticket }: TicketDetailsProps) => {
   const { success: ticketOwner, error: ticketOwnerError } = await getUserById(
     ticket.userId
   );
+  const ticketPriority = ticketPriorities.find(
+    (p) => p.value === ticket.priority
+  )!;
+  const ticketStatus = ticketStatuses.find((s) => s.value === ticket.status)!;
+  const ticketCategory = ticketCategories.find(
+    (c) => c.value === ticket.category
+  )!;
 
   if (ticketOwnerError || !ticketOwner) {
     return (
@@ -48,7 +61,16 @@ const TicketDetails = async ({ ticket }: TicketDetailsProps) => {
           </p>
         </div>
       </div>
-      <div className="ml-14">
+      <div className="ml-14 flex flex-col gap-4">
+        <div className="flex gap-2 items-center">
+          <Badge style={{ backgroundColor: ticketStatus.color }}>
+            {ticketStatus.name}
+          </Badge>
+          <Badge style={{ backgroundColor: ticketPriority.color }}>
+            {ticketPriority.name}
+          </Badge>
+          <Badge variant="secondary">{ticketCategory.name}</Badge>
+        </div>
         <p>{ticket.description}</p>
       </div>
     </Card>

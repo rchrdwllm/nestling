@@ -1,7 +1,7 @@
 import TicketDetails from "@/components/shared/help-page/tickets/ticket-details";
 import ErrorToast from "@/components/ui/error-toast";
 import { getTicketById } from "@/lib/ticket";
-import MarkClosedBtn from "../../../../components/shared/help-page/tickets/update-ticket-btn";
+import UpdateTicketBtn from "@/components/shared/help-page/tickets/update-ticket-btn";
 
 const TicketPage = async ({
   params,
@@ -22,7 +22,7 @@ const TicketPage = async ({
           <h1 className="text-3xl flex-1 font-semibold">
             Ticket: {ticket.title}
           </h1>
-          <MarkClosedBtn ticketStatus={ticket.status} ticketId={ticket.id} />
+          <UpdateTicketBtn ticketStatus={ticket.status} ticketId={ticket.id} />
         </div>
         <hr />
       </div>
