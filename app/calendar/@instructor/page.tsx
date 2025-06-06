@@ -2,6 +2,7 @@ import FullCalendar from "@/components/ui/full-calendar";
 import { getProjectsOfUser } from "@/lib/project";
 import { getIncompleteUserTasks } from "@/lib/task";
 import { getOptimisticUser } from "@/lib/user";
+import FadeInWrapper from "@/components/wrappers/fadein-wrapper";
 
 const InstructorCalendarPage = async () => {
   const user = await getOptimisticUser();
@@ -43,7 +44,11 @@ const InstructorCalendarPage = async () => {
     })),
   ];
 
-  return <FullCalendar events={projectsAndTasks} />;
+  return (
+    <FadeInWrapper>
+      <FullCalendar events={projectsAndTasks} />
+    </FadeInWrapper>
+  );
 };
 
 export default InstructorCalendarPage;
