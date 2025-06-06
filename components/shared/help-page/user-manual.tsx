@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 const icons = [
   // Getting Started (Person)
@@ -93,24 +93,37 @@ const manualSections = [
   },
 ];
 
-const UserManual = () => (
-  <section className="w-full max-w-5xl mx-auto flex flex-col items-center mt-8">
-    <h2 className="text-3xl font-bold mb-8">User Manual</h2>
-    <div className="flex flex-col md:flex-row justify-center items-stretch gap-8 w-full">
-      {manualSections.map((section, idx) => (
-        <div
-          key={section.title}
-          className="flex flex-col items-center text-center flex-1 bg-background rounded-xl p-6 shadow"
-        >
-          <div className="mb-4">{icons[idx]}</div>
-          <h3 className="text-xl font-semibold mb-2">{section.title}</h3>
-          <p className="text-base text-muted-foreground">
-            {section.description}
-          </p>
-        </div>
-      ))}
-    </div>
-  </section>
-);
+const UserManual = () => {
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => setShow(true), 30);
+    return () => clearTimeout(timeout);
+  }, []);
+
+  return (
+    <section
+      className={`w-full max-w-5xl mx-auto flex flex-col items-center mt-8 transition-opacity duration-700 ${
+        show ? "opacity-100" : "opacity-0"
+      }`}
+    >
+      <h2 className="text-3xl font-bold mb-8">User Manual</h2>
+      <div className="flex flex-col md:flex-row justify-center items-stretch gap-8 w-full">
+        {manualSections.map((section, idx) => (
+          <div
+            key={section.title}
+            className="flex flex-col items-center text-center flex-1 bg-background rounded-xl p-6 shadow"
+          >
+            <div className="mb-4">{icons[idx]}</div>
+            <h3 className="text-xl font-semibold mb-2">{section.title}</h3>
+            <p className="text-base text-muted-foreground">
+              {section.description}
+            </p>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+};
 
 export default UserManual;
