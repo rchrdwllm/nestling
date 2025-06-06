@@ -139,7 +139,7 @@ const SidePanel = ({
               x: rightPanelToggled ? 0 : "100%",
             }}
             exit={{ opacity: 0, x: "100%" }}
-            className="absolute right-2 lg:right-auto h-[calc(100%-1rem)] border border-border rounded-xl w-[314px] lg:h-auto lg:w-[400px] lg:relative bg-background lg:p-0 shadow-sm"
+            className="absolute z-20 right-2 lg:right-auto h-[calc(100%-1rem)] border border-border rounded-xl w-[314px] lg:h-auto lg:w-[400px] lg:relative bg-background lg:p-0 shadow-sm"
           >
             <ScrollArea className="h-full">
               <div className="flex flex-col space-y-6 p-6">
