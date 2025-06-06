@@ -1,7 +1,7 @@
 "use client";
 
 import { User } from "@/types";
-import { Mail, MapPin, MessageSquare, PhoneCall } from "lucide-react";
+import { Mail, MapPin, MessageSquare, Pencil, PhoneCall } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { useMemo, useState } from "react";
@@ -70,26 +70,35 @@ const ProfileDetails = ({ user, contentsLength }: ProfileDetailsProps) => {
           {user.address || "N/A"}
         </p>
       </div>
-      {!toggleEdit ? (
-        (isCurrentUser || currentUser.role === "admin") && (
-          <Button onClick={() => setToggleEdit(true)} variant="outline">
-            Edit profile
-          </Button>
-        )
-      ) : (
-        <EditProfileForm
-          setToggleEdit={setToggleEdit}
-          user={user}
-          contentsLength={contentsLength}
-        />
-      )}
-      <Link
-        href={`/inbox/${channelId}?senderId=${currentUser.id}&receiverId=${user.id}`}
-      >
-        <Button variant="outline">
-          <MessageSquare className="size-4" /> Send message
-        </Button>
-      </Link>
+      <div className="flex flex-col gap-4 items-center w-full">
+        {!toggleEdit ? (
+          (isCurrentUser || currentUser.role === "admin") && (
+            <Button
+              className="w-full"
+              onClick={() => setToggleEdit(true)}
+              variant="outline"
+            >
+              <Pencil className="size-4" /> Edit profile
+            </Button>
+          )
+        ) : (
+          <EditProfileForm
+            setToggleEdit={setToggleEdit}
+            user={user}
+            contentsLength={contentsLength}
+          />
+        )}
+        {!isCurrentUser && (
+          <Link
+            href={`/inbox/${channelId}?senderId=${currentUser.id}&receiverId=${user.id}`}
+            className="block w-full"
+          >
+            <Button variant="outline" className="w-full">
+              <MessageSquare className="size-4" /> Send message
+            </Button>
+          </Link>
+        )}
+      </div>
     </div>
   );
 };

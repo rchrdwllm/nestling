@@ -129,6 +129,11 @@ export const adminSidebarItems: SidebarItem[] = [
     Icon: CalendarDays,
   },
   {
+    label: "Inbox",
+    href: "/inbox",
+    Icon: Mail,
+  },
+  {
     label: "Notifications",
     href: "/notifications",
     Icon: Bell,
