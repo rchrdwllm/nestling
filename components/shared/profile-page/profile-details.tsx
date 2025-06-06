@@ -1,12 +1,14 @@
 "use client";
 
 import { User } from "@/types";
-import { Mail, MapPin, PhoneCall } from "lucide-react";
+import { Mail, MapPin, MessageSquare, PhoneCall } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useCurrentUser } from "@/hooks/use-current-user";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import EditProfileForm from "./edit-profile-form";
+import Link from "next/link";
+import { generateChannelId } from "@/lib/utils";
 
 type ProfileDetailsProps = {
   user: User;
@@ -17,6 +19,10 @@ const ProfileDetails = ({ user, contentsLength }: ProfileDetailsProps) => {
   const { user: currentUser } = useCurrentUser();
   const [toggleEdit, setToggleEdit] = useState(false);
   const isCurrentUser = currentUser?.id === user.id;
+  const channelId = useMemo(
+    () => generateChannelId(currentUser.id, user.id),
+    [currentUser.id, user.id]
+  );
 
   return (
     <div className="flex flex-col gap-8 items-center">
@@ -77,6 +83,13 @@ const ProfileDetails = ({ user, contentsLength }: ProfileDetailsProps) => {
           contentsLength={contentsLength}
         />
       )}
+      <Link
+        href={`/inbox/${channelId}?senderId=${currentUser.id}&receiverId=${user.id}`}
+      >
+        <Button variant="outline">
+          <MessageSquare className="size-4" /> Send message
+        </Button>
+      </Link>
     </div>
   );
 };
