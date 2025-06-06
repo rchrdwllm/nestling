@@ -5,12 +5,14 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { SidebarItem } from "@/constants/sidebar-items";
+import { useNotifCountStore } from "@/context/notif-count-context";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useMemo } from "react";
 
-const SidebarLink = ({ Icon, href, label }: SidebarItem) => {
+const NotifLink = ({ Icon, href, label }: SidebarItem) => {
+  const { notifCount } = useNotifCountStore();
   const pathname = usePathname();
   const isActive = useMemo(() => {
     return pathname === href || pathname.startsWith(href);
@@ -23,7 +25,7 @@ const SidebarLink = ({ Icon, href, label }: SidebarItem) => {
           <Link
             href={href}
             className={cn(
-              "flex items-center justify-center rounded-lg border border-background p-2 transition-all group hover:border-border",
+              "relative flex items-center justify-center rounded-lg border border-background p-2 transition-all group hover:border-border",
               isActive ? "bg-primary" : null
             )}
           >
@@ -35,6 +37,17 @@ const SidebarLink = ({ Icon, href, label }: SidebarItem) => {
                   : null
               )}
             />
+            {notifCount > 0 && (
+              <span
+                className={cn(
+                  "absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground",
+                  pathname.includes("/notifications") &&
+                    "bg-card border border-border text-foreground"
+                )}
+              >
+                {notifCount}
+              </span>
+            )}
           </Link>
         </TooltipTrigger>
         <TooltipContent>{label}</TooltipContent>
@@ -43,4 +56,4 @@ const SidebarLink = ({ Icon, href, label }: SidebarItem) => {
   );
 };
 
-export default SidebarLink;
+export default NotifLink;
