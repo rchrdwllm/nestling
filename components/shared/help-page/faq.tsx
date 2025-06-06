@@ -3,7 +3,6 @@
 import { useState } from "react";
 import CreateTicketBtn from "./create-ticket-btn";
 
-// FAQDropdown component for animated dropdowns
 const FAQDropdown = ({
   question,
   answer,
