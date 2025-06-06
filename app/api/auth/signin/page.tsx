@@ -16,7 +16,7 @@ const LoginPage = () => {
         className="hidden lg:block w-full h-screen absolute object-cover"
       />
       <div className="hidden lg:block"></div>
-      <div className="bg-card rounded-xl shadow-sm lg:bg-none lg:shadow-none col-span-2 lg:col-span-1 z-[1] h-[90vh] lg:h-screen flex flex-col items-center p-12">
+      <div className="bg-card rounded-xl shadow-sm lg:bg-transparent lg:shadow-none col-span-2 lg:col-span-1 z-[1] h-[90vh] lg:h-screen flex flex-col items-center p-12">
         <div className="flex flex-col gap-2 items-center">
           <Image src={logoText} className="w-48" alt="Logo Text" />
           <div>
