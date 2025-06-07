@@ -2,7 +2,7 @@
 
 import { ThemeProvider } from "next-themes";
 import { usePathname } from "next/navigation";
-import { ComponentProps, useMemo } from "react";
+import { ComponentProps, useEffect, useMemo, useState } from "react";
 
 const excluded = [
   "/api/auth/signin",
@@ -19,6 +19,13 @@ const ThemeWrapper = ({
   const forceLight = useMemo(() => {
     return excluded.includes(pathname);
   }, [pathname]);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) return null;
 
   return (
     <ThemeProvider {...props} forcedTheme={forceLight ? "light" : undefined}>

@@ -47,7 +47,7 @@ const FAQDropdown = ({
       </button>
       <div
         className={`overflow-hidden transition-all duration-400 ease-in-out slider-content ${
-          open ? "max-h-40 opacity-100 mt-2" : "max-h-0 opacity-0 mt-0"
+          open ? "h-auto opacity-100 mt-2" : "h-0 opacity-0 mt-0"
         }`}
       >
         <div className="text-muted-foreground px-2 pb-2">{answer}</div>
