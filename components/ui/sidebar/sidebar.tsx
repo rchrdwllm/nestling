@@ -31,8 +31,8 @@ const Sidebar = () => {
   }, [user]);
 
   return (
-    <aside className="h-[calc(100vh-1rem)] shadow-sm sticky z-10 top-2 flex flex-col border border-border bg-background rounded-xl p-3 pt-8">
-      <Link href="/dashboard">
+    <aside className="h-[calc(100vh-1rem)] shadow-sm sticky z-10 top-2 flex flex-col items-center border border-border bg-background rounded-xl p-3 pt-8">
+      <Link href="/dashboard" className="block">
         <Image src={logo} alt="Logo" className="size-10 object-contain" />
       </Link>
       <div className="flex flex-col gap-4 mt-10">
