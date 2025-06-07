@@ -27,6 +27,12 @@ const Layout = async ({
           Modules
         </CourseSectionLink>
         <CourseSectionLink
+          segments={["discussions"]}
+          href={`/courses/${courseId}/discussions`}
+        >
+          Discussions
+        </CourseSectionLink>
+        <CourseSectionLink
           segments={["announcements"]}
           href={`/courses/${courseId}/announcements`}
         >

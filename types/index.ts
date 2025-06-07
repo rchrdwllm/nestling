@@ -76,6 +76,28 @@ export type Content = {
   isPublished: boolean;
 };
 
+export type Discussion = {
+  id: string;
+  courseId: string;
+  title: string;
+  content: string;
+  createdAt: string;
+  updatedAt: string;
+  userId: string;
+  isArchived: boolean;
+  archivedAt: string | null;
+};
+
+export type DiscussionReply = {
+  id: string;
+  discussionId: string;
+  content: string;
+  courseId: string;
+  createdAt: string;
+  updatedAt: string;
+  userId: string;
+};
+
 export type CloudinaryImage = {
   asset_id: string;
   public_id: string;
