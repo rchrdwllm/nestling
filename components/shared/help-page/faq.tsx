@@ -5,6 +5,7 @@ import CreateTicketBtn from "./create-ticket-btn";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useCurrentUser } from "@/hooks/use-current-user";
+import MotionWrapper from "@/components/wrappers/motion-wrapper";
 
 const FAQDropdown = ({
   question,
@@ -14,6 +15,7 @@ const FAQDropdown = ({
   answer: React.ReactNode;
 }) => {
   const [open, setOpen] = useState(false);
+
   return (
     <div className="py-4">
       <button
@@ -45,13 +47,15 @@ const FAQDropdown = ({
           </svg>
         </span>
       </button>
-      <div
-        className={`overflow-hidden transition-all duration-400 ease-in-out slider-content ${
-          open ? "h-auto opacity-100 mt-2" : "h-0 opacity-0 mt-0"
-        }`}
+      <MotionWrapper
+        initial={{ opacity: 0, height: 0 }}
+        animate={{ opacity: open ? 1 : 0, height: open ? "auto" : 0 }}
+        exit={{ opacity: 0, height: 0 }}
+        transition={{ duration: 0.3 }}
+        className="overflow-hidden"
       >
-        <div className="text-muted-foreground px-2 pb-2">{answer}</div>
-      </div>
+        <p className="text-muted-foreground p-2">{answer}</p>
+      </MotionWrapper>
     </div>
   );
 };

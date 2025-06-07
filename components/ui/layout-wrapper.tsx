@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useState } from "react";
 import Sidebar from "./sidebar/sidebar";
 import { ScrollArea } from "./scroll-area";
 import { useUser } from "@/hooks/use-user";
@@ -12,11 +12,6 @@ const LayoutWrapper = ({ children }: { children: ReactNode }) => {
   const pathname = usePathname();
   const { user } = useUser();
   const [rightPanelToggled, setRightPanelToggled] = useState(true);
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
 
   if (
     !user ||
@@ -24,8 +19,6 @@ const LayoutWrapper = ({ children }: { children: ReactNode }) => {
     pathname === "/api/auth/signup"
   )
     return children;
-
-  if (!isMounted) return null;
 
   return (
     <main className="relative h-screen flex items-stretch bg-secondary p-2 gap-2 overflow-x-hidden">
