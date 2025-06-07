@@ -19,13 +19,6 @@ const ThemeWrapper = ({
   const forceLight = useMemo(() => {
     return excluded.includes(pathname);
   }, [pathname]);
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  if (!isMounted) return null;
 
   return (
     <ThemeProvider {...props} forcedTheme={forceLight ? "light" : undefined}>
