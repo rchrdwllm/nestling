@@ -26,6 +26,7 @@ import { X } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
 import { deleteUserLogs } from "@/server/actions/delete-user-logs";
 import { toast } from "sonner";
+import GenerateLogsReport from "./generate-logs-report";
 
 const LogsTable = ({ columns, data, types }: any) => {
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -89,7 +90,6 @@ const LogsTable = ({ columns, data, types }: any) => {
         <div className="flex items-center gap-2">
           <Button
             variant="outline"
-            size="sm"
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage() || showAll}
           >
@@ -97,28 +97,23 @@ const LogsTable = ({ columns, data, types }: any) => {
           </Button>
           <Button
             variant="outline"
-            size="sm"
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage() || showAll}
           >
             Next
           </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setShowAll(!showAll)}
-          >
+          <Button variant="outline" onClick={() => setShowAll(!showAll)}>
             {showAll ? "Show less" : "Show all"}
           </Button>
           <Button
             disabled={!table.getRowModel().rows.length}
             variant="outline"
-            size="sm"
             className="hover:text-primary"
             onClick={() => execute({ types })}
           >
             <X className="size-4" /> Clear logs
           </Button>
+          <GenerateLogsReport data={data} />
         </div>
       </div>
       <Card>
