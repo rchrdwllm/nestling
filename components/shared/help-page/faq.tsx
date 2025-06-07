@@ -2,6 +2,9 @@
 
 import { useState, useEffect } from "react";
 import CreateTicketBtn from "./create-ticket-btn";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { useCurrentUser } from "@/hooks/use-current-user";
 
 const FAQDropdown = ({
   question,
@@ -54,8 +57,7 @@ const FAQDropdown = ({
 };
 
 const Help = () => {
-  const [showRequestModal, setShowRequestModal] = useState(false);
-  const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const { user } = useCurrentUser();
 
   // Animate on enter and fade in
   const [show, setShow] = useState(false);
@@ -138,77 +140,18 @@ const Help = () => {
             }
           />
         </div>
-        {/* <CreateTicketBtn /> */}
-        {showRequestModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 transition-opacity duration-600 ease-in-out animate-fadeinout">
-            <div className="bg-background rounded-xl p-8 w-full max-w-md shadow-lg relative transition-opacity duration-600 ease-in-out animate-fadeinout">
-              <button
-                className="absolute top-4 right-4 text-2xl font-bold text-gray-400 hover:text-gray-600"
-                onClick={() => {
-                  // Add a short timeout to allow the fade-out animation before unmounting
-                  const modal = document.querySelector(".animate-fadeinout");
-                  if (modal) {
-                    modal.classList.remove("animate-fadeinout");
-                    modal.classList.add("animate-fadeout");
-                  }
-                  setTimeout(() => setShowRequestModal(false), 600);
-                }}
-              >
-                ×
-              </button>
-              <h2 className="text-3xl font-bold text-center mb-2">
-                Send a Ticket!
-              </h2>
-              <p className="text-center mb-6 text-lg">
-                Tell us your concerns and we will get back to you soon.
-              </p>
-              <form
-                className="flex flex-col gap-4"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  // Implement backend integration here (send ticket to admin/database)
-                  console.log("Name:", form.name);
-                  console.log("Email:", form.email);
-                  console.log("Message:", form.message); //testing purposes
-                }}
-              >
-                <input
-                  type="text"
-                  placeholder="Name"
-                  className="bg-transparent border-b border-gray-300 focus:outline-none focus:border-pink-400 py-2 px-1 text-lg"
-                  value={form.name}
-                  onChange={(e) =>
-                    setForm((f) => ({ ...f, name: e.target.value }))
-                  }
-                />
-                <input
-                  type="email"
-                  placeholder="Email"
-                  className="bg-transparent border-b border-gray-300 focus:outline-none focus:border-pink-400 py-2 px-1 text-lg"
-                  value={form.email}
-                  onChange={(e) =>
-                    setForm((f) => ({ ...f, email: e.target.value }))
-                  }
-                />
-                <textarea
-                  placeholder="Message"
-                  className="bg-transparent border-b border-gray-300 focus:outline-none focus:border-pink-400 py-2 px-1 text-lg resize-none"
-                  rows={3}
-                  value={form.message}
-                  onChange={(e) =>
-                    setForm((f) => ({ ...f, message: e.target.value }))
-                  }
-                />
-                <button
-                  type="submit"
-                  className="mt-4 bg-primary text-white font-semibold py-3 rounded-full text-lg transition-colors flex items-center justify-center gap-2 hover:bg-primary/80"
-                >
-                  SUBMIT <span className="text-xl">→</span>
-                </button>
-              </form>
-            </div>
-          </div>
-        )}
+        <div className="flex flex-col items-center gap-4">
+          {user.role !== "admin" && <CreateTicketBtn />}
+          {user.role === "admin" ? (
+            <Link href="/help/tickets">
+              <Button variant="link">View all support tickets</Button>
+            </Link>
+          ) : (
+            <Link href="/help/tickets">
+              <Button variant="link">View your tickets</Button>
+            </Link>
+          )}
+        </div>
       </section>
     </div>
   );
