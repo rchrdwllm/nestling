@@ -2,19 +2,17 @@ import FullCalendar from "@/components/ui/full-calendar";
 import { getUpcomingAssignmentsForStudent } from "@/lib/content";
 import { getOptimisticUser } from "@/lib/user";
 import FadeInWrapper from "@/components/wrappers/fadein-wrapper";
+import ErrorToast from "@/components/ui/error-toast";
 
 const StudentCalendarPage = async () => {
   const user = await getOptimisticUser();
   const { success: upcomingAssignments, error } =
     await getUpcomingAssignmentsForStudent(user.id);
 
-  if (error) {
-    console.error("Error fetching upcoming assignments: ", error);
-    return <div>Error fetching upcoming assignments</div>;
-  }
-
-  if (!upcomingAssignments) {
-    return <div>Loading...</div>;
+  if (error || !upcomingAssignments) {
+    return (
+      <ErrorToast error={"Failed to fetch upcoming assignments: " + error} />
+    );
   }
 
   return (

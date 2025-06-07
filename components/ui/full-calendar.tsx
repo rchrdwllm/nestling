@@ -358,7 +358,7 @@ const CalendarMonthView = () => {
       <div className="grid overflow-hidden -mt-px flex-1 auto-rows-fr p-px grid-cols-7 gap-px">
         {monthDates.map((_date) => {
           const currentEvents = events.filter((event) =>
-            isSameDay(event.start, _date)
+            isSameDay(event.end, _date)
           );
 
           return (
@@ -390,7 +390,7 @@ const CalendarMonthView = () => {
 };
 
 const CalendarYearView = () => {
-  const { view, date, today, locale } = useCalendar();
+  const { view, date, today, locale, events } = useCalendar();
 
   const months = useMemo(() => {
     if (!view) {
@@ -411,7 +411,6 @@ const CalendarYearView = () => {
       {months.map((days, i) => (
         <div key={days[0].toString()}>
           <span className="text-xl">{i + 1}</span>
-
           <div className="grid grid-cols-7 gap-2 my-5">
             {weekDays.map((day) => (
               <div
@@ -422,13 +421,17 @@ const CalendarYearView = () => {
               </div>
             ))}
           </div>
-
           <div className="grid gap-x-2 text-center grid-cols-7 text-xs tabular-nums">
             {days.map((_date) => {
+              const hasEvents = events.some((event) =>
+                isSameDay(event.end, _date)
+              );
+
               return (
                 <div
                   key={_date.toString()}
                   className={cn(
+                    "relative flex flex-col items-center",
                     getMonth(_date) !== i && "text-muted-foreground"
                   )}
                 >
@@ -442,6 +445,9 @@ const CalendarYearView = () => {
                   >
                     {format(_date, "d")}
                   </div>
+                  {hasEvents && getMonth(_date) === i && (
+                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1 h-1 bg-red-500 rounded-full" />
+                  )}
                 </div>
               );
             })}
@@ -657,18 +663,6 @@ export default function FullCalendar({ events }: FullCalendarProps) {
       <div className="h-dvh py-6 flex flex-col">
         <div className="flex px-6 items-center gap-2 mb-6">
           <CalendarViewTrigger
-            className="aria-[current=true]:bg-accent"
-            view="day"
-          >
-            Day
-          </CalendarViewTrigger>
-          <CalendarViewTrigger
-            view="week"
-            className="aria-[current=true]:bg-accent"
-          >
-            Week
-          </CalendarViewTrigger>
-          <CalendarViewTrigger
             view="month"
             className="aria-[current=true]:bg-accent"
           >
@@ -693,8 +687,6 @@ export default function FullCalendar({ events }: FullCalendarProps) {
           </CalendarNextTrigger>
         </div>
         <div className="flex-1 overflow-auto px-6 relative">
-          <CalendarDayView />
-          <CalendarWeekView />
           <CalendarMonthView />
           <CalendarYearView />
         </div>

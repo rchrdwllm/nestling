@@ -1,3 +1,4 @@
+import ErrorToast from "@/components/ui/error-toast";
 import FullCalendar from "@/components/ui/full-calendar";
 import { getProjectsOfUser } from "@/lib/project";
 import { getIncompleteUserTasks } from "@/lib/task";
@@ -11,15 +12,18 @@ const AdminCalendarPage = async () => {
     await getIncompleteUserTasks(user.id);
 
   if (adminProjectsError || adminTasksError) {
-    console.error(
-      "Error fetching admin projects and tasks:",
-      adminProjectsError || adminTasksError
+    return (
+      <ErrorToast
+        error={
+          "Error fetching admin projects and tasks: " +
+          (adminProjectsError || adminTasksError)
+        }
+      />
     );
-    return <div>Error loading admin projects and tasks</div>;
   }
 
   if (!adminProjects || !adminTasks) {
-    return <div>No admin projects or tasks found</div>;
+    return <ErrorToast error="No admin projects or tasks found." />;
   }
 
   const projectsAndTasks = [

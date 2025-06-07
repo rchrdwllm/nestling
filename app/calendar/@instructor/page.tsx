@@ -3,6 +3,7 @@ import { getProjectsOfUser } from "@/lib/project";
 import { getIncompleteUserTasks } from "@/lib/task";
 import { getOptimisticUser } from "@/lib/user";
 import FadeInWrapper from "@/components/wrappers/fadein-wrapper";
+import ErrorToast from "@/components/ui/error-toast";
 
 const InstructorCalendarPage = async () => {
   const user = await getOptimisticUser();
@@ -12,15 +13,20 @@ const InstructorCalendarPage = async () => {
     await getIncompleteUserTasks(user.id);
 
   if (instructorProjectsError || instructorTasksError) {
-    console.error(
-      "Error fetching instructor projects and tasks:",
-      instructorProjectsError || instructorTasksError
+    return (
+      <ErrorToast
+        error={
+          "Failed to fetch instructor projects and tasks: " +
+          (instructorProjectsError || instructorTasksError)
+        }
+      />
     );
-    return <div>Error loading instructor projects and tasks</div>;
   }
 
   if (!instructorProjects || !instructorTasks) {
-    return <div>No instructor projects or tasks found</div>;
+    return (
+      <ErrorToast error="No projects or tasks found for the instructor." />
+    );
   }
 
   const projectsAndTasks = [
