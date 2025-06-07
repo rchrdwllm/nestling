@@ -84,7 +84,7 @@ const LogsTable = ({ columns, data, types }: any) => {
           onChange={(event) =>
             table.getColumn("userId")?.setFilterValue(event.target.value)
           }
-          className="w-full"
+          className="max-w-sm"
         />
         <div className="flex items-center gap-2">
           <Button
