@@ -2,7 +2,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 const Loading = () => {
   return (
-    <Skeleton className="flex flex-col items-center w-full px-2 py-10">
+    <div className="flex flex-col items-center w-full px-2 py-10">
       <Skeleton className="h-12 w-2/3 max-w-xl mb-4" />
       <Skeleton className="h-8 w-1/2 max-w-lg mb-4" />
       <Skeleton className="h-5 w-3/4 max-w-2xl mb-10" />
@@ -47,7 +47,7 @@ const Loading = () => {
           <Skeleton className="w-[320px] h-[220px]" />
         </Skeleton>
       </Skeleton>
-    </Skeleton>
+    </div>
   );
 };
 

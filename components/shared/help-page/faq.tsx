@@ -1,9 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CreateTicketBtn from "./create-ticket-btn";
 
-// FAQDropdown component for animated dropdowns
 const FAQDropdown = ({
   question,
   answer,
@@ -47,11 +46,6 @@ const FAQDropdown = ({
         className={`overflow-hidden transition-all duration-400 ease-in-out slider-content ${
           open ? "max-h-40 opacity-100 mt-2" : "max-h-0 opacity-0 mt-0"
         }`}
-        style={
-          {
-            // maxHeight is set by class, but you can adjust if needed
-          }
-        }
       >
         <div className="text-muted-foreground px-2 pb-2">{answer}</div>
       </div>
@@ -63,8 +57,19 @@ const Help = () => {
   const [showRequestModal, setShowRequestModal] = useState(false);
   const [form, setForm] = useState({ name: "", email: "", message: "" });
 
+  // Animate on enter and fade in
+  const [show, setShow] = useState(false);
+  useEffect(() => {
+    const timeout = setTimeout(() => setShow(true), 30);
+    return () => clearTimeout(timeout);
+  }, []);
+
   return (
-    <div className="p-6 flex flex-col gap-10">
+    <div
+      className={`p-6 flex flex-col gap-10 transition-opacity duration-700 ${
+        show ? "opacity-100" : "opacity-0"
+      }`}
+    >
       <div className="flex flex-col gap-4">
         <h1 className="text-3xl font-semibold">
           Help | <span className="text-primary">FAQs</span>
@@ -133,7 +138,7 @@ const Help = () => {
             }
           />
         </div>
-        <CreateTicketBtn />
+        {/* <CreateTicketBtn /> */}
         {showRequestModal && (
           <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 transition-opacity duration-600 ease-in-out animate-fadeinout">
             <div className="bg-background rounded-xl p-8 w-full max-w-md shadow-lg relative transition-opacity duration-600 ease-in-out animate-fadeinout">

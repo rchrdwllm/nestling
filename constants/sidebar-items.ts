@@ -9,6 +9,7 @@ import {
   KanbanSquare,
   ChartColumnIncreasing,
   Bell,
+  Users,
 } from "lucide-react";
 import { ForwardRefExoticComponent, RefAttributes } from "react";
 
@@ -25,6 +26,11 @@ export const studentSidebarItems: SidebarItem[] = [
     label: "Courses",
     href: "/courses",
     Icon: BookMarked,
+  },
+  {
+    label: "People",
+    href: "/people",
+    Icon: Users,
   },
   {
     label: "Calendar",
@@ -60,14 +66,19 @@ export const instructorSidebarItems: SidebarItem[] = [
     Icon: BookOpen,
   },
   {
-    label: "Calendar",
-    href: "/calendar",
-    Icon: CalendarDays,
-  },
-  {
     label: "Projects",
     href: "/projects",
     Icon: KanbanSquare,
+  },
+  {
+    label: "People",
+    href: "/people",
+    Icon: Users,
+  },
+  {
+    label: "Calendar",
+    href: "/calendar",
+    Icon: CalendarDays,
   },
   {
     label: "Inbox",
@@ -103,6 +114,11 @@ export const adminSidebarItems: SidebarItem[] = [
     Icon: BookOpen,
   },
   {
+    label: "People",
+    href: "/people",
+    Icon: Users,
+  },
+  {
     label: "Projects",
     href: "/projects",
     Icon: KanbanSquare,
@@ -111,6 +127,11 @@ export const adminSidebarItems: SidebarItem[] = [
     label: "Calendar",
     href: "/calendar",
     Icon: CalendarDays,
+  },
+  {
+    label: "Inbox",
+    href: "/inbox",
+    Icon: Mail,
   },
   {
     label: "Notifications",
