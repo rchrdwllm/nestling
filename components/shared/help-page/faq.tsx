@@ -68,20 +68,12 @@ const Help = () => {
 
   return (
     <div
-      className={`p-6 flex flex-col gap-10 transition-opacity duration-700 ${
+      className={`flex flex-col gap-10 transition-opacity duration-700 ${
         show ? "opacity-100" : "opacity-0"
-      }`}
+      } pb-20`}
     >
-      <div className="flex flex-col gap-4">
-        <h1 className="text-3xl font-semibold">
-          Help | <span className="text-primary">FAQs</span>
-        </h1>
-        <hr />
-      </div>
       <section className="flex flex-col gap-4">
-        <h2 className="text-2xl font-semibold mb-4">
-          Frequently Asked Questions:
-        </h2>
+        <h2 className="text-xl font-semibold">Frequently Asked Questions:</h2>
         <div className="divide-y">
           {/* General Questions */}
           <FAQDropdown
@@ -140,7 +132,7 @@ const Help = () => {
             }
           />
         </div>
-        <div className="flex flex-col items-center gap-4">
+        {/* <div className="flex flex-col items-center gap-4">
           {user.role !== "admin" && <CreateTicketBtn />}
           {user.role === "admin" ? (
             <Link href="/help/tickets">
@@ -151,7 +143,7 @@ const Help = () => {
               <Button variant="link">View your tickets</Button>
             </Link>
           )}
-        </div>
+        </div> */}
       </section>
     </div>
   );
