@@ -19,7 +19,11 @@ const SystemEvents = () => {
   useEffect(() => {
     const q = query(
       collection(clientDb, "userActivities"),
-      where("type", "in", ["update_profile", "enroll_course"]),
+      where("type", "in", [
+        "update_profile",
+        "enroll_course",
+        "ticket_created",
+      ]),
       orderBy("createdAt", "desc")
     );
 
@@ -38,7 +42,7 @@ const SystemEvents = () => {
     <LogsTable
       columns={logsTableCols}
       data={logs}
-      types={["update_profile", "enroll_course"]}
+      types={["update_profile", "enroll_course", "ticket_created"]}
     />
   );
 };

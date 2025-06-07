@@ -37,6 +37,7 @@ export const updateProfile = actionClient
         image: parsedInput.image ?? null,
         lastName: parsedInput.lastName,
         middleName: parsedInput.middleName,
+        name: `${parsedInput.firstName} ${parsedInput.middleName} ${parsedInput.lastName}`,
       };
 
       if (parsedInput.newPassword && parsedInput.currentPassword) {
@@ -77,6 +78,9 @@ export const updateProfile = actionClient
       await logUserActivity({
         userId: parsedInput.userId,
         type: "update_profile",
+        details: {
+          role: user.role,
+        },
       });
 
       revalidatePath("/profile", "page");

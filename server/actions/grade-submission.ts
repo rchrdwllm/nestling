@@ -7,6 +7,9 @@ import { revalidatePath, revalidateTag } from "next/cache";
 import { logUserActivity } from "./log-user-activity";
 import { getOptimisticUser } from "@/lib/user";
 import { Submission } from "@/types";
+import { createNotif } from "./create-notif";
+import { getModuleContent } from "@/lib/content";
+import { sendNotification } from "./send-notification";
 
 export const gradeSubmission = actionClient
   .schema(GradeSubmissionSchema)
@@ -41,6 +44,34 @@ export const gradeSubmission = actionClient
           contentId: submissionData.contentId,
           studentId: submissionData.studentId,
         },
+      });
+
+      const { success: content, error: contentError } = await getModuleContent(
+        submissionData.contentId
+      );
+
+      if (contentError) {
+        console.error("Error fetching content:", contentError);
+
+        return { error: contentError };
+      }
+
+      if (!content) {
+        return { error: "Failed to fetch content: Content not found" };
+      }
+
+      await createNotif({
+        type: "submission_graded",
+        message: `Your submission for ${content.title} has been graded.`,
+        senderId: user.id,
+        title: "Submission Graded",
+        url: `/courses/${content.courseId}/modules/content/${content.id}/submissions`,
+        receiverIds: [submissionData.studentId],
+      });
+      await sendNotification({
+        body: `Your submission for ${content.title} has been graded.`,
+        title: "Submission Graded",
+        userIds: [submissionData.studentId],
       });
 
       revalidatePath(

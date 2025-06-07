@@ -274,8 +274,38 @@ export type UserActivity = {
     | "submit_assignment"
     | "grade_submission"
     | "update_profile"
-    | "enroll_course";
+    | "enroll_course"
+    | "ticket_created"
+    | "ticket_reply";
   createdAt: string;
   targetId?: string | null;
   details?: Record<string, any> | null;
+};
+
+export type Ticket = {
+  id: string;
+  title: string;
+  description: string;
+  status: "open" | "in-progress" | "closed";
+  priority: "low" | "medium" | "high";
+  category:
+    | "course_content"
+    | "technical_issue"
+    | "enrollment"
+    | "grading"
+    | "account"
+    | "feedback"
+    | "other";
+  userId: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type TicketReply = {
+  id: string;
+  ticketId: string;
+  userId: string;
+  reply: string;
+  createdAt: string;
+  updatedAt: string;
 };

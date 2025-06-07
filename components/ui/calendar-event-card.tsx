@@ -19,6 +19,7 @@ import { Course } from "@/types";
 import { useEffect, useState } from "react";
 import { getCourse } from "@/lib/course";
 import { Badge } from "./badge";
+import DateDisplay from "./date-display";
 
 const CalendarEventCard = ({
   title,
@@ -58,9 +59,11 @@ const CalendarEventCard = ({
             )}
           ></div>
           <span className="flex-1 truncate">{title}</span>
-          <time className="tabular-nums text-muted-foreground/50 text-xs">
-            {format(start, "HH:mm")}
-          </time>
+          {type !== "project" && (
+            <time className="tabular-nums text-muted-foreground/50 text-xs">
+              {format(end, "HH:mm")}
+            </time>
+          )}
         </div>
       </DialogTrigger>
       <DialogContent>
@@ -78,7 +81,12 @@ const CalendarEventCard = ({
           <div>
             <p className="text-sm font-medium">Start Date</p>
             <p className="text-sm text-muted-foreground">
-              {format(start, "MMM d, yyyy h:mm a")}
+              <DateDisplay
+                date={start}
+                outputFormat={
+                  type === "project" ? "MMM d, yyyy" : "MMM d, yyyy h:mm a"
+                }
+              />
             </p>
           </div>
         </div>
@@ -87,7 +95,12 @@ const CalendarEventCard = ({
           <div>
             <p className="text-sm font-medium">End Date</p>
             <p className="text-sm text-muted-foreground">
-              {format(end, "MMM d, yyyy h:mm a")}
+              <DateDisplay
+                date={end}
+                outputFormat={
+                  type === "project" ? "MMM d, yyyy" : "MMM d, yyyy h:mm a"
+                }
+              />
             </p>
           </div>
         </div>
