@@ -3,6 +3,7 @@ import FullCalendar from "@/components/ui/full-calendar";
 import { getProjectsOfUser } from "@/lib/project";
 import { getIncompleteUserTasks } from "@/lib/task";
 import { getOptimisticUser } from "@/lib/user";
+import FadeInWrapper from "@/components/wrappers/fadein-wrapper";
 
 const AdminCalendarPage = async () => {
   const user = await getOptimisticUser();
@@ -47,7 +48,11 @@ const AdminCalendarPage = async () => {
     })),
   ];
 
-  return <FullCalendar events={projectsAndTasks} />;
+  return (
+    <FadeInWrapper>
+      <FullCalendar events={projectsAndTasks} />
+    </FadeInWrapper>
+  );
 };
 
 export default AdminCalendarPage;

@@ -8,6 +8,7 @@ import ErrorToast from "@/components/ui/error-toast";
 import { getProjectsWithTasks, getUnarchivedProjects } from "@/lib/project";
 import { getIncompleteTasks } from "@/lib/task";
 import { getAllAdmins, getAllInstructors } from "@/lib/user";
+import FadeInWrapper from "@/components/wrappers/fadein-wrapper";
 
 const AdminProjectsPage = async () => {
   const { success: projects, error: projectsError } =
@@ -51,33 +52,35 @@ const AdminProjectsPage = async () => {
   }
 
   return (
-    <main className="h-full p-6 flex flex-col gap-4">
-      <div className="flex flex-col gap-4">
-        <h1 className="text-3xl font-semibold">Projects Dashboard</h1>
-        <hr />
-      </div>
-      <section className="grid grid-cols-2 gap-4 pb-6">
-        <article className="col-span-2">
-          <ProjectsTimeline
-            admins={JSON.stringify(admins)}
-            instructors={JSON.stringify(instructors)}
-            projects={projects}
-          />
-        </article>
-        <article className="col-span-2">
-          <ProjectsTable columns={projectCols} data={projects} />
-        </article>
-        <article className="min-h-[378px]">
-          <ProjectsStatusGraph projects={projects} />
-        </article>
-        <article className="min-h-[378px]">
-          <TasksPriorityGraph tasks={tasks} />
-        </article>
-        <article className="min-h-[378px] col-span-2">
-          <ProjectsProgressGraph projects={projectsWithTasks} />
-        </article>
-      </section>
-    </main>
+    <FadeInWrapper>
+      <main className="h-full p-6 flex flex-col gap-4">
+        <div className="flex flex-col gap-4">
+          <h1 className="text-3xl font-semibold">Projects Dashboard</h1>
+          <hr />
+        </div>
+        <section className="grid grid-cols-2 gap-4 pb-6">
+          <article className="col-span-2">
+            <ProjectsTimeline
+              admins={JSON.stringify(admins)}
+              instructors={JSON.stringify(instructors)}
+              projects={projects}
+            />
+          </article>
+          <article className="col-span-2">
+            <ProjectsTable columns={projectCols} data={projects} />
+          </article>
+          <article className="min-h-[378px]">
+            <ProjectsStatusGraph projects={projects} />
+          </article>
+          <article className="min-h-[378px]">
+            <TasksPriorityGraph tasks={tasks} />
+          </article>
+          <article className="min-h-[378px] col-span-2">
+            <ProjectsProgressGraph projects={projectsWithTasks} />
+          </article>
+        </section>
+      </main>
+    </FadeInWrapper>
   );
 };
 
