@@ -118,6 +118,7 @@ const LoginForm = ({ role, setStep }: LoginFormProps) => {
                 <Input placeholder="Password" type="password" {...field} />
                 <Link href="/api/auth/forgot-password">
                   <Button
+                    type="button"
                     variant="link"
                     className="text-muted-foreground hover:text-primary text-xs px-3"
                   >
