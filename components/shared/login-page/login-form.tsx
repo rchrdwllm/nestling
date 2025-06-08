@@ -13,7 +13,7 @@ import { Role } from "@/types";
 import { toast } from "sonner";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAction } from "next-safe-action/hooks";
 import { logUserActivity } from "@/server/actions/log-user-activity";
 
@@ -81,6 +81,17 @@ const LoginForm = ({ role, setStep }: LoginFormProps) => {
       setIsLoading(false);
     }
   };
+  
+  // Added event listener for Enter key to submit the form
+  useEffect(() => {
+    const handleEnter = (e: KeyboardEvent) => {
+      if (e.key === "Enter") {
+        form.handleSubmit(handleSubmit)();
+      }
+    };
+    window.addEventListener("keydown", handleEnter);
+    return () => window.removeEventListener("keydown", handleEnter);
+  }, [form, handleSubmit]);
 
   return (
     <MotionWrapper
