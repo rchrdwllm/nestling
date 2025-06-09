@@ -289,3 +289,39 @@ export const getProjectsWithTasks = unstable_cache(
   ["allProjectsWithTasks"],
   { revalidate: 60 * 60, tags: ["projects", "tasks"] }
 );
+
+export const getUserProjectsWithTasks = unstable_cache(
+  async (userId: string) => {
+    try {
+      const { success: projects, error } = await getProjectsOfUser(userId);
+
+      if (error || !projects) {
+        console.error("Error fetching user projects:", error);
+
+        return { error };
+      }
+
+      const projectsWithTasks = await Promise.all(
+        projects.map(async (project) => {
+          const tasksSnapshot = await db
+            .collection("tasks")
+            .where("projectId", "==", project.id)
+            .get();
+          const tasks = tasksSnapshot.docs.map((doc) => doc.data()) as Task[];
+
+          return {
+            ...project,
+            tasks: tasks,
+          };
+        })
+      );
+
+      return { success: projectsWithTasks };
+    } catch (error) {
+      console.error("Error fetching user projects with tasks:", error);
+      return { error: "Failed to fetch user projects with tasks" };
+    }
+  },
+  ["userId"],
+  { revalidate: 60 * 60, tags: ["projects", "tasks"] }
+);

@@ -4,27 +4,30 @@ import ProjectsTable from "@/components/shared/projects-page/projects-table";
 import { projectCols } from "@/components/shared/projects-page/projects-table-def";
 import ProjectsTimeline from "@/components/shared/projects-page/projects-timeline";
 import TasksPriorityGraph from "@/components/shared/projects-page/tasks-priority-graph";
-import { getProjectsWithTasks, getUnarchivedProjects } from "@/lib/project";
+import {
+  getProjectsOfUser,
+  getProjectsWithTasks,
+  getUnarchivedProjects,
+  getUserProjectsWithTasks,
+} from "@/lib/project";
 import { getIncompleteTasks } from "@/lib/task";
-import { getAllAdmins, getAllInstructors } from "@/lib/user";
+import { getAllAdmins, getAllInstructors, getOptimisticUser } from "@/lib/user";
 import ErrorToast from "@/components/ui/error-toast";
 import FadeInWrapper from "@/components/wrappers/fadein-wrapper";
 
 const InstructorProjectsDashboard = async () => {
-  const { success: projects, error: projectsError } =
-    await getUnarchivedProjects();
+  const user = await getOptimisticUser();
+  const { success: projects, error: projectsError } = await getProjectsOfUser(
+    user.id
+  );
   const { success: tasks, error: tasksError } = await getIncompleteTasks();
   const { success: projectsWithTasks, error: projectsWithTasksError } =
-    await getProjectsWithTasks();
+    await getUserProjectsWithTasks(user.id);
   const { success: admins, error: adminsError } = await getAllAdmins();
   const { success: instructors, error: instructorsError } =
     await getAllInstructors();
 
   if (adminsError || instructorsError || projectsError) {
-    console.error(
-      "Error fetching data:",
-      adminsError || instructorsError || projectsError
-    );
     return (
       <ErrorToast
         error={
@@ -70,7 +73,7 @@ const InstructorProjectsDashboard = async () => {
 
   return (
     <FadeInWrapper className="h-full p-6 flex flex-col gap-4">
-      <main >
+      <main>
         <div className="flex flex-col gap-4">
           <h1 className="text-3xl font-semibold">Projects Dashboard</h1>
           <hr />
