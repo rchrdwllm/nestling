@@ -35,6 +35,7 @@ export const getDiscussionsByCourseId = unstable_cache(
       const discussionsSnapshot = await db
         .collection("discussions")
         .where("courseId", "==", courseId)
+        .where("isArchived", "==", false)
         .orderBy("createdAt", "desc")
         .get();
       const discussions: Discussion[] = discussionsSnapshot.docs.map((doc) => ({
@@ -45,6 +46,32 @@ export const getDiscussionsByCourseId = unstable_cache(
       return { success: discussions };
     } catch (error) {
       console.error("Error fetching discussions by course ID:", error);
+
+      return { error };
+    }
+  },
+  ["courseId"],
+  { revalidate: 60 * 60, tags: ["discussions"] }
+);
+
+export const getArchivedDiscussionsByCourseId = unstable_cache(
+  async (courseId: string) => {
+    try {
+      const archivedDiscussionsSnapshot = await db
+        .collection("discussions")
+        .where("courseId", "==", courseId)
+        .where("isArchived", "==", true)
+        .orderBy("createdAt", "desc")
+        .get();
+      const archivedDiscussions: Discussion[] =
+        archivedDiscussionsSnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        })) as Discussion[];
+
+      return { success: archivedDiscussions };
+    } catch (error) {
+      console.error("Error fetching archived discussions by course ID:", error);
 
       return { error };
     }
