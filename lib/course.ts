@@ -389,6 +389,7 @@ export const getSlicedCourses = unstable_cache(
             .collection("courses")
             .doc(courseId)
             .get();
+
           return courseSnapshot.data() as Course;
         })
       );

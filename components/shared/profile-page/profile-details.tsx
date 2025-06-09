@@ -118,7 +118,7 @@ const ProfileDetails = ({ user, courses }: ProfileDetailsProps) => {
         {!toggleEdit ? (
           (isCurrentUser || currentUser.role === "admin") && (
             <Button
-              className="w-full"
+              className="w-full max-w-[180px]"
               onClick={() => setToggleEdit(true)}
               variant="outline"
             >
@@ -135,7 +135,7 @@ const ProfileDetails = ({ user, courses }: ProfileDetailsProps) => {
         {!isCurrentUser && (
           <Link
             href={`/inbox/${channelId}?senderId=${currentUser.id}&receiverId=${user.id}`}
-            className="block w-full"
+            className="block w-full max-w-[180px]"
           >
             <Button variant="outline" className="w-full">
               <MessageSquare className="size-4" /> Send message
