@@ -10,6 +10,7 @@ import {
   ChartColumnIncreasing,
   Bell,
   Users,
+  LayoutDashboard,
 } from "lucide-react";
 import { ForwardRefExoticComponent, RefAttributes } from "react";
 
@@ -22,6 +23,11 @@ export type SidebarItem = {
 };
 
 export const studentSidebarItems: SidebarItem[] = [
+  {
+    label: "Dashboard",
+    href: "/dashboard",
+    Icon: LayoutDashboard,
+  },
   {
     label: "Courses",
     href: "/courses",
@@ -60,6 +66,11 @@ export const studentSidebarItems: SidebarItem[] = [
 ];
 
 export const instructorSidebarItems: SidebarItem[] = [
+  {
+    label: "Dashboard",
+    href: "/dashboard",
+    Icon: LayoutDashboard,
+  },
   {
     label: "Course Management",
     href: "/courses",
