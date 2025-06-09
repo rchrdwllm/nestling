@@ -17,21 +17,21 @@ const ProfilePage = async ({
     return <ErrorToast error={"Error fetching user details: " + error} />;
   }
 
-  const { success: contents, error: contentsError } =
+  const { success: courses, error: coursesError } =
     user.role === "instructor"
       ? await getInstructorCourses(user.id)
       : await getEnrolledCourses(user.id);
 
-  if (contentsError || !contents) {
+  if (coursesError || !courses) {
     return (
-      <ErrorToast error={"Error fetching user details: " + contentsError} />
+      <ErrorToast error={"Error fetching user details: " + coursesError} />
     );
   }
 
   return (
     <FadeInWrapper className="p-8 flex min-h-full justify-center items-center">
       <main>
-        <ProfileDetails contentsLength={contents.length} user={user} />
+        <ProfileDetails courses={courses} user={user} />
       </main>
     </FadeInWrapper>
   );

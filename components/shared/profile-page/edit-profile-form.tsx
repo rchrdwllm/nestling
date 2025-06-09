@@ -5,13 +5,14 @@ import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { MAX_SIZE } from "@/constants/file";
+import { useCurrentUser } from "@/hooks/use-current-user";
 import { UpdateProfileSchema } from "@/schemas/UpdateProfileSchema";
 import { updateProfile } from "@/server/actions/update-profile";
 import { uploadImgToCloudinary } from "@/server/actions/upload-to-cloudinary";
 import { User } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAction } from "next-safe-action/hooks";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
@@ -27,6 +28,7 @@ const EditProfileForm = ({
   contentsLength,
   setToggleEdit,
 }: EditProfileFormProps) => {
+  const { user: currentUser } = useCurrentUser();
   const [img, setImg] = useState<File | undefined>(undefined);
   const [isLoading, setIsLoading] = useState(false);
   const form = useForm<z.infer<typeof UpdateProfileSchema>>({
@@ -66,6 +68,9 @@ const EditProfileForm = ({
       setIsLoading(false);
     },
   });
+  const isUser = useMemo(() => {
+    return user.id === currentUser.id;
+  }, [user, currentUser]);
 
   useEffect(() => {
     form.setValue("firstName", user.firstName ?? "");
@@ -250,28 +255,36 @@ const EditProfileForm = ({
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="currentPassword"
-            render={({ field }) => (
-              <FormItem>
-                <Input
-                  type="password"
-                  placeholder="Current password"
-                  {...field}
-                />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="newPassword"
-            render={({ field }) => (
-              <FormItem>
-                <Input type="password" placeholder="New password" {...field} />
-              </FormItem>
-            )}
-          />
+          {isUser && (
+            <>
+              <FormField
+                control={form.control}
+                name="currentPassword"
+                render={({ field }) => (
+                  <FormItem>
+                    <Input
+                      type="password"
+                      placeholder="Current password"
+                      {...field}
+                    />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="newPassword"
+                render={({ field }) => (
+                  <FormItem>
+                    <Input
+                      type="password"
+                      placeholder="New password"
+                      {...field}
+                    />
+                  </FormItem>
+                )}
+              />
+            </>
+          )}
           <div className="w-full flex gap-4">
             {setToggleEdit && (
               <Button
