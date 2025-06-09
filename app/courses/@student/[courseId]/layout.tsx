@@ -38,6 +38,12 @@ const Layout = async ({
         >
           Announcements
         </CourseSectionLink>
+        <CourseSectionLink
+          segments={["people"]}
+          href={`/courses/${courseId}/people`}
+        >
+          People
+        </CourseSectionLink>
       </aside>
       <div className="col-span-8">{children}</div>
     </section>

@@ -4,6 +4,7 @@ import { Course, EnrollmentData, User } from "@/types";
 import { db } from "./firebase";
 import { unstable_cache } from "next/cache";
 import { getImage } from "./image";
+import { decryptData } from "./aes";
 
 export const getAllCourses = unstable_cache(
   async () => {
@@ -104,6 +105,13 @@ export const getEnrolledStudents = unstable_cache(
         .collection("enrolledStudents")
         .get();
       const studentIds = snapshot.docs.map((doc) => doc.id);
+
+      const aesKey = process.env.AES_ENCRYPTION_KEY;
+
+      if (!aesKey) {
+        return { error: "AES encryption key not found" };
+      }
+
       const students = await Promise.all(
         studentIds.map(async (studentId) => {
           const studentSnapshot = await db
@@ -111,7 +119,14 @@ export const getEnrolledStudents = unstable_cache(
             .doc(studentId)
             .get();
 
-          return studentSnapshot.data() as User;
+          return {
+            ...studentSnapshot.data(),
+            contactNumber: decryptData(
+              studentSnapshot.data()!.contactNumber,
+              aesKey
+            ),
+            address: decryptData(studentSnapshot.data()!.address, aesKey),
+          } as User;
         })
       );
 
@@ -291,6 +306,12 @@ export const getCourseInstructors = unstable_cache(async (courseId: string) => {
       .get();
     const instructorIds = courseInstructorSnapshot.docs.map((doc) => doc.id);
 
+    const aesKey = process.env.AES_ENCRYPTION_KEY;
+
+    if (!aesKey) {
+      return { error: "AES encryption key not found" };
+    }
+
     const instructors = await Promise.all(
       instructorIds.map(async (instructorId) => {
         const instructorSnapshot = await db
@@ -298,7 +319,14 @@ export const getCourseInstructors = unstable_cache(async (courseId: string) => {
           .doc(instructorId)
           .get();
 
-        return instructorSnapshot.data() as User;
+        return {
+          ...instructorSnapshot.data(),
+          contactNumber: decryptData(
+            instructorSnapshot.data()!.contactNumber,
+            aesKey
+          ),
+          address: decryptData(instructorSnapshot.data()!.address, aesKey),
+        } as User;
       })
     );
 

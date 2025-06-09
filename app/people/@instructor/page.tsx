@@ -1,8 +1,8 @@
 import { getAllStudents, getAllInstructors } from "@/lib/user";
 import ErrorToast from "@/components/ui/error-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import UserTable from "@/components/admin-access/people-page/user-table";
-import { userTableCols } from "@/components/admin-access/people-page/user-table-def";
+import UserTable from "@/components/shared/people-page/user-table";
+import { userTableCols } from "@/components/shared/people-page/user-table-def";
 import { Users, GraduationCap } from "lucide-react";
 import FadeInWrapper from "@/components/wrappers/fadein-wrapper";
 
@@ -23,8 +23,6 @@ const InstructorPeoplePage = async () => {
     return <ErrorToast error="No user data available." />;
   }
 
-  const totalUsers = students.length + instructors.length;
-
   return (
     <FadeInWrapper>
       <div className="p-6 flex flex-col gap-6">
@@ -38,7 +36,10 @@ const InstructorPeoplePage = async () => {
               <Users className="h-4 w-4" />
               Students ({students.length})
             </TabsTrigger>
-            <TabsTrigger value="instructors" className="flex items-center gap-2">
+            <TabsTrigger
+              value="instructors"
+              className="flex items-center gap-2"
+            >
               <GraduationCap className="h-4 w-4" />
               Instructors ({instructors.length})
             </TabsTrigger>

@@ -39,6 +39,12 @@ const Layout = async ({
           Announcements
         </CourseSectionLink>
         <CourseSectionLink
+          segments={["people"]}
+          href={`/courses/${courseId}/people`}
+        >
+          People
+        </CourseSectionLink>
+        <CourseSectionLink
           segments={["archive"]}
           href={`/courses/${courseId}/archive`}
         >
