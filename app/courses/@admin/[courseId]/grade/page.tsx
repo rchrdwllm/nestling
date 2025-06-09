@@ -52,7 +52,7 @@ const GradePage = async ({
         <hr />
       </div>
       <section className="flex flex-col gap-4">
-        {enrolledStudents.length ? (
+        {!enrolledStudents.length ? (
           <p className="text-muted-foreground">No students found</p>
         ) : (
           enrolledStudents.map((student) => (
