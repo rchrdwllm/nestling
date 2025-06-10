@@ -5,6 +5,8 @@ import { db } from "@/lib/firebase";
 import bcrypt from "bcrypt";
 import * as z from "zod";
 import { encryptData } from "@/lib/aes";
+import { getRegisteredEmail } from "@/lib/registered-email";
+import { revalidateTag } from "next/cache";
 
 export const checkEmailRegister = async (
   data: z.infer<typeof RegisterSchema>
@@ -21,6 +23,19 @@ export const checkEmailRegister = async (
   } = data;
 
   try {
+    const { success: registeredEmail, error: emailError } =
+      await getRegisteredEmail(email);
+
+    if (emailError || !registeredEmail) {
+      return { error: emailError };
+    }
+
+    if (registeredEmail.role !== role) {
+      return {
+        error: `Role mismatch. Registered email in system is for ${registeredEmail.role}, but provided role is ${role}.`,
+      };
+    }
+
     const usersRef = db.collection("users").where("email", "==", email);
     const users = await usersRef.get();
 
@@ -57,6 +72,10 @@ export const checkEmailRegister = async (
     };
 
     await db.collection("users").doc(id).set(newUser);
+    await db.collection("registeredEmails").doc(email).delete();
+
+    revalidateTag("users");
+    revalidateTag("registeredEmails");
 
     return { success: newUser };
   } catch (error) {

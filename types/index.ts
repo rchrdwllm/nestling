@@ -19,6 +19,14 @@ export type User = {
   lastLoginAt?: string;
 };
 
+export type RegisteredEmail = {
+  id: string;
+  email: string;
+  role: Role;
+  createdAt: string;
+  updatedAt: string;
+};
+
 export type PasswordResetToken = {
   token: string;
   email: string;
