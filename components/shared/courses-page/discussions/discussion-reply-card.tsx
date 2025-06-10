@@ -48,7 +48,10 @@ const DiscussionReplyCard = async ({
           </Link>
           <p className="text-sm text-muted-foreground">
             Replied on{" "}
-            <DateDisplay date={createdAt} outputFormat="MMMM, d 'at' h:mm a" />
+            <DateDisplay
+              date={createdAt}
+              outputFormat="MMMM d, yyyy 'at' h:mm a"
+            />
           </p>
         </div>
       </div>
