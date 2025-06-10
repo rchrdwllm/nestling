@@ -22,7 +22,7 @@ const SubmissionGrid = async ({ contentId, attempt }: SubmissionGridProps) => {
     await getAssignmentSubmissions(contentId);
   const user = await getOptimisticUser();
 
-  if (contentError || !content || !submissions || !submissionsError) {
+  if (contentError || !content || submissionsError || !submissions) {
     return (
       <ErrorToast
         error={
