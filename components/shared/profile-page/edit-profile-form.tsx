@@ -11,6 +11,7 @@ import { updateProfile } from "@/server/actions/update-profile";
 import { uploadImgToCloudinary } from "@/server/actions/upload-to-cloudinary";
 import { User } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Pencil } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
 import { ChangeEvent, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -142,7 +143,10 @@ const EditProfileForm = ({
                 <FormControl>
                   <div className="flex flex-col items-center justify-center gap-4">
                     {form.getValues("image") ? (
-                      <label htmlFor="image" className="cursor-pointer">
+                      <label
+                        htmlFor="image"
+                        className="relative cursor-pointer"
+                      >
                         <Avatar className="size-32">
                           <AvatarImage
                             src={form.getValues("image")}
@@ -156,12 +160,17 @@ const EditProfileForm = ({
                             </div>
                           </AvatarFallback>
                         </Avatar>
+                        <Pencil className="absolute bottom-2 right-0 size-6 text-muted-foreground" />
                       </label>
                     ) : (
-                      <label htmlFor="image" className="cursor-pointer">
+                      <label
+                        htmlFor="image"
+                        className="relative cursor-pointer"
+                      >
                         <div className="flex items-center justify-center size-32 bg-muted rounded-full">
                           <p className="text-xl font-bold">{user.name![0]}</p>
                         </div>
+                        <Pencil className="absolute bottom-2 right-0 size-6 text-muted-foreground" />
                       </label>
                     )}
                     <input
