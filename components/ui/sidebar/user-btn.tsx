@@ -18,6 +18,7 @@ import ThemeToggler from "../theme-toggler";
 import NotificationToggler from "@/components/shared/notifications/notification-toggler";
 import { useAction } from "next-safe-action/hooks";
 import { logUserActivity } from "@/server/actions/log-user-activity";
+import SignOutBtn from "./sign-out-btn";
 
 const UserBtn = () => {
   const { user } = useCurrentUser();
@@ -120,12 +121,8 @@ const UserBtn = () => {
           <DropdownMenuItem className="cursor-pointer">
             <ThemeToggler />
           </DropdownMenuItem>
-          <DropdownMenuItem
-            className="flex gap-2 cursor-pointer"
-            onClick={handleSignOut}
-          >
-            <LogOut className="w-4 h-4" />
-            <span>Log out</span>
+          <DropdownMenuItem asChild>
+            <SignOutBtn />
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
