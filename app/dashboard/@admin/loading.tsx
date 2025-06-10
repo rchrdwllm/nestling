@@ -1,4 +1,3 @@
-import SearchBar from "@/components/shared/search/search-bar";
 import { Skeleton } from "@/components/ui/skeleton";
 
 const Loading = async () => {
@@ -6,10 +5,8 @@ const Loading = async () => {
     <div className="p-6 flex flex-col gap-8">
       <div className="flex flex-col gap-4">
         <div className="flex items-center gap-6">
-          <h1 className="text-3xl font-semibold">Admin Dashboard</h1>
-          <div className="flex-1">
-            <SearchBar />
-          </div>
+          <Skeleton className="h-9 w-[281px]" />
+          <Skeleton className="h-9 w-full flex-1" />
         </div>
         <hr />
       </div>
