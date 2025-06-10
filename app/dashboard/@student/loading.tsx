@@ -1,28 +1,18 @@
-import SearchBar from "@/components/shared/search/search-bar";
-import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import Link from "next/link";
 
 const StudentDashboardPage = () => {
   return (
     <div className="p-6 flex flex-col gap-8">
       <div className="flex flex-col gap-4">
         <div className="flex items-center gap-4">
-          <h1 className="text-3xl font-semibold">Dashboard</h1>
-          <div className="flex-1">
-            <SearchBar entities={["students", "courses"]} />
-          </div>
+          <Skeleton className="h-9 w-36" />
+          <Skeleton className="h-9 w-full flex-1" />
         </div>
         <hr />
       </div>
       <div className="flex flex-col gap-4">
         <div className="flex items-center justify-between">
-          <h1 className="text-xl font-semibold">My courses</h1>
-          <Link href="/courses">
-            <Button variant="link" className="px-0">
-              View all
-            </Button>
-          </Link>
+          <Skeleton className="h-5 w-44" />
         </div>
         <section className="grid grid-cols-4 gap-8">
           <article className="p-4 rounded-xl border border-border flex flex-col gap-4">
@@ -73,7 +63,7 @@ const StudentDashboardPage = () => {
       </div>
       <div className="flex flex-col gap-4">
         <div className="flex items-center justify-between">
-          <h1 className="text-xl font-semibold">Recent announcements</h1>
+          <Skeleton className="h-5 w-64" />
         </div>
         <section className="flex flex-col gap-4">
           <article className="p-4 shadow-sm transition-shadow hover:shadow-md rounded-xl border border-border flex gap-4">
