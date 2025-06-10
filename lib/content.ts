@@ -21,7 +21,7 @@ export const getModuleContents = unstable_cache(
     }
   },
   ["contents"],
-  { revalidate: 3600 }
+  { revalidate: 3600, tags: ["contents"] }
 );
 
 export const getPublishedModuleContents = unstable_cache(
@@ -43,7 +43,7 @@ export const getPublishedModuleContents = unstable_cache(
     }
   },
   ["contents"],
-  { revalidate: 3600 }
+  { revalidate: 3600, tags: ["contents"] }
 );
 
 export const getContentFile = unstable_cache(
@@ -64,7 +64,7 @@ export const getContentFile = unstable_cache(
     }
   },
   ["contents"],
-  { revalidate: 3600 }
+  { revalidate: 3600, tags: ["contents", "files"] }
 );
 
 export const getModuleContent = unstable_cache(
@@ -81,7 +81,7 @@ export const getModuleContent = unstable_cache(
     }
   },
   ["contents"],
-  { revalidate: 3600 }
+  { revalidate: 3600, tags: ["contents"] }
 );
 
 export const getCourseAssignments = unstable_cache(
