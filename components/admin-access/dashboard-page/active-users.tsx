@@ -46,30 +46,9 @@ const ActiveUsers = ({ monthlyActiveUsers }: ActiveUserProps) => {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig}>
-          {/* <BarChart accessibilityLayer data={monthlyActiveUsers}>
-            <CartesianGrid vertical={false} />
-            <YAxis
-              tickLine={false}
-              axisLine={false}
-              tickMargin={8}
-              tickCount={3}
-              allowDecimals={false}
-            />
-            <XAxis
-              dataKey="month"
-              tickLine={false}
-              tickMargin={10}
-              axisLine={false}
-              tickFormatter={(value) => value.slice(0, 3)}
-            />
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent hideLabel />}
-            />
-            <Bar dataKey="activeUsers" fill="hsl(var(--primary))" radius={8} />
-          </BarChart> */}
+        <ChartContainer className="max-h-[450px] w-full" config={chartConfig}>
           <AreaChart
+            className="max-h-[450px] w-full"
             accessibilityLayer
             data={monthlyActiveUsers}
             margin={{
