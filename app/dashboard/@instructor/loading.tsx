@@ -10,11 +10,99 @@ export default function InstructorDashboardLoading() {
         </div>
         <Skeleton className="h-px w-full" />
       </div>
-      <div className="grid grid-cols-4 gap-8">
-        {[...Array(3)].map((_, i) => (
-          <Skeleton key={i} className="h-32 w-full rounded-xl" />
-        ))}
-      </div>
+      <section className="flex flex-col gap-4">
+        <Skeleton className="h-7 w-28" />
+        <div className="grid grid-cols-4 gap-8">
+          <article className="p-4 rounded-xl border border-border flex flex-col gap-4">
+            <div className="block h-40 relative rounded-lg overflow-hidden">
+              <Skeleton className="w-full h-full object-cover" />
+            </div>
+            <div className="flex flex-col gap-2">
+              <div className="flex justify-between items-center">
+                <Skeleton className="w-full h-4" />
+              </div>
+              <Skeleton className="w-1/2 h-4" />
+            </div>
+          </article>
+          <article className="p-4 rounded-xl border border-border flex flex-col gap-4">
+            <div className="block h-40 relative rounded-lg overflow-hidden">
+              <Skeleton className="w-full h-full object-cover" />
+            </div>
+            <div className="flex flex-col gap-2">
+              <div className="flex justify-between items-center">
+                <Skeleton className="w-full h-4" />
+              </div>
+              <Skeleton className="w-1/2 h-4" />
+            </div>
+          </article>
+          <article className="p-4 rounded-xl border border-border flex flex-col gap-4">
+            <div className="block h-40 relative rounded-lg overflow-hidden">
+              <Skeleton className="w-full h-full object-cover" />
+            </div>
+            <div className="flex flex-col gap-2">
+              <div className="flex justify-between items-center">
+                <Skeleton className="w-full h-4" />
+              </div>
+              <Skeleton className="w-1/2 h-4" />
+            </div>
+          </article>
+          <article className="p-4 rounded-xl border border-border flex flex-col gap-4">
+            <div className="block h-40 relative rounded-lg overflow-hidden">
+              <Skeleton className="w-full h-full object-cover" />
+            </div>
+            <div className="flex flex-col gap-2">
+              <div className="flex justify-between items-center">
+                <Skeleton className="w-full h-4" />
+              </div>
+              <Skeleton className="w-1/2 h-4" />
+            </div>
+          </article>
+          <article className="p-4 rounded-xl border border-border flex flex-col gap-4">
+            <div className="block h-40 relative rounded-lg overflow-hidden">
+              <Skeleton className="w-full h-full object-cover" />
+            </div>
+            <div className="flex flex-col gap-2">
+              <div className="flex justify-between items-center">
+                <Skeleton className="w-full h-4" />
+              </div>
+              <Skeleton className="w-1/2 h-4" />
+            </div>
+          </article>
+          <article className="p-4 rounded-xl border border-border flex flex-col gap-4">
+            <div className="block h-40 relative rounded-lg overflow-hidden">
+              <Skeleton className="w-full h-full object-cover" />
+            </div>
+            <div className="flex flex-col gap-2">
+              <div className="flex justify-between items-center">
+                <Skeleton className="w-full h-4" />
+              </div>
+              <Skeleton className="w-1/2 h-4" />
+            </div>
+          </article>
+          <article className="p-4 rounded-xl border border-border flex flex-col gap-4">
+            <div className="block h-40 relative rounded-lg overflow-hidden">
+              <Skeleton className="w-full h-full object-cover" />
+            </div>
+            <div className="flex flex-col gap-2">
+              <div className="flex justify-between items-center">
+                <Skeleton className="w-full h-4" />
+              </div>
+              <Skeleton className="w-1/2 h-4" />
+            </div>
+          </article>
+          <article className="p-4 rounded-xl border border-border flex flex-col gap-4">
+            <div className="block h-40 relative rounded-lg overflow-hidden">
+              <Skeleton className="w-full h-full object-cover" />
+            </div>
+            <div className="flex flex-col gap-2">
+              <div className="flex justify-between items-center">
+                <Skeleton className="w-full h-4" />
+              </div>
+              <Skeleton className="w-1/2 h-4" />
+            </div>
+          </article>
+        </div>
+      </section>
     </div>
   );
 }
