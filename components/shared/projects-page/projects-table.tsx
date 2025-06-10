@@ -20,15 +20,16 @@ import {
 } from "@/components/ui/table";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 
 const ProjectsTable = ({ columns, data }: any) => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [showAll, setShowAll] = useState(false);
   const [pagination, setPagination] = useState({
     pageIndex: 0,
-    pageSize: 10,
+    pageSize: 5,
   });
   const table = useReactTable({
     data,
@@ -47,6 +48,14 @@ const ProjectsTable = ({ columns, data }: any) => {
     },
   });
 
+  useEffect(() => {
+    setPagination((prev) => ({
+      ...prev,
+      pageIndex: 0,
+      pageSize: showAll ? data.length : 5,
+    }));
+  }, [showAll, data.length]);
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between">
@@ -61,7 +70,6 @@ const ProjectsTable = ({ columns, data }: any) => {
         <div className="flex items-center gap-2">
           <Button
             variant="outline"
-            size="sm"
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >
@@ -69,11 +77,13 @@ const ProjectsTable = ({ columns, data }: any) => {
           </Button>
           <Button
             variant="outline"
-            size="sm"
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           >
             Next
+          </Button>
+          <Button variant="outline" onClick={() => setShowAll(!showAll)}>
+            {showAll ? "Show less" : "Show all"}
           </Button>
         </div>
       </div>

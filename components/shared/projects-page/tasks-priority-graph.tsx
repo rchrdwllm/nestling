@@ -45,13 +45,13 @@ const TasksPriorityGraph = ({ tasks }: TasksPriorityGraphProps) => {
       label: "Count",
     },
     high: {
-      label: "High priority",
+      label: "High",
     },
     medium: {
-      label: "Medium priority",
+      label: "Medium",
     },
     low: {
-      label: "Low priority",
+      label: "Low",
     },
   } satisfies ChartConfig;
 
