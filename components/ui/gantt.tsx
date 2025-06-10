@@ -418,10 +418,11 @@ export const GanttContentHeader: FC<GanttContentHeaderProps> = ({
       style={{ height: "var(--gantt-header-height)" }}
     >
       <div className="h-8">
+        {" "}
         <div
           className="sticky inline-flex whitespace-nowrap px-3 py-2 text-muted-foreground text-xs"
           style={{
-            left: "var(--gantt-sidebar-width)",
+            left: "300px",
           }}
         >
           <p>{title}</p>
@@ -1308,12 +1309,11 @@ export const GanttProvider: FC<GanttProviderProps> = ({
       });
     });
   }, []);
-
   const sidebarElement = scrollRef.current?.querySelector(
     '[data-roadmap-ui="gantt-sidebar"]'
   );
   const headerHeight = 70;
-  const sidebarWidth = sidebarElement ? 300 : 0;
+  const sidebarWidth = 300; // Always set to 300 since we always have a sidebar
   const rowHeight = 36;
   let columnWidth = 50;
   if (range === "daily") {
@@ -1545,7 +1545,7 @@ export const GanttProvider: FC<GanttProviderProps> = ({
         )}
         style={{
           ...cssVariables,
-          gridTemplateColumns: "var(--gantt-sidebar-width) 1fr",
+          gridTemplateColumns: "300px 1fr",
           scrollSnapType: "none",
           overscrollBehavior: "auto",
         }}
