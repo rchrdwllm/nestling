@@ -6,8 +6,8 @@ const Loading = () => {
     <main className="p-6 flex flex-col gap-4 h-[calc(100vh-1rem)]">
       <div className="flex flex-col gap-3">
         <div className="flex justify-between items-center">
-          <h1 className="text-3xl font-semibold">Manage courses</h1>
-          <CreateCourseBtn />
+          <Skeleton className="h-9 w-64" />
+          <Skeleton className="h-10 w-36" />
         </div>
         <hr />
       </div>
