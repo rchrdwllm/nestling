@@ -101,7 +101,7 @@ const UserManual = () => {
       }`}
     >
       <h2 className="text-xl font-semibold mb-8">User Manual</h2>
-      <div className="flex flex-col lg:flex-row justify-center items-stretch gap-8 w-full">
+      <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
         {manualSections.map((section, idx) => (
           <Card
             key={section.title}

@@ -1,5 +1,4 @@
 import { Skeleton } from "@/components/ui/skeleton";
-import React from "react";
 
 const Loading = () => {
   return (
@@ -10,7 +9,7 @@ const Loading = () => {
       </div>
       <section className="flex flex-col gap-8">
         <Skeleton className="h-7 w-44" />
-        <div className="grid grid-cols-4">
+        <div className="grid grid-cols-4 gap-8">
           <Skeleton className="w-full h-[341px]" />
           <Skeleton className="w-full h-[341px]" />
           <Skeleton className="w-full h-[341px]" />
