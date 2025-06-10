@@ -6,9 +6,7 @@ import willImg from "@/assets/will.jpg";
 import draeImg from "@/assets/drae.jpg";
 import darenImg from "@/assets/daren.jpg";
 import { Card } from "@/components/ui/card";
-
-// Artificial delay for loading screen aesthetics
-await new Promise((resolve) => setTimeout(resolve, 700));
+import FadeInWrapper from "@/components/wrappers/fadein-wrapper";
 
 const aboutStats = [
   {
@@ -113,348 +111,346 @@ const AboutStatBox = ({
 };
 
 const AboutPage = () => {
-  const [show, setShow] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    // Trigger the animation after mount
-    const timeout = setTimeout(() => setShow(true), 50);
-    return () => clearTimeout(timeout);
+    setIsMounted(true);
   }, []);
 
+  if (!isMounted) return null;
+
   return (
-    <div
-      className={`flex flex-col items-center w-full px-2 py-10 transition-opacity duration-700 ${
-        show ? "opacity-100" : "opacity-0"
-      }`}
-    >
-      <h1 className="text-5xl font-bold text-center mb-2 tracking-tight text-foreground">
-        About <span className="text-primary">Nestling</span>
-      </h1>
-      <h2 className="text-2xl font-semibold text-center mb-4 text-foreground">
-        All-in-one Learning Management System
-      </h2>
-      <p className="text-lg text-center mb-10 text-muted-foreground max-w-2xl">
-        An all-in-one Learning Management System designed to streamline
-        educational operations within Leave a Nest, particularly for the
-        Philippine branch. It offers a range of tools for course management,
-        project tracking, secure communication, and analytics.
-      </p>
-      {/* Top row of cards */}
-      <div className="w-full max-w-4xl mx-auto flex flex-row justify-center gap-8 mb-8">
-        {aboutStats.slice(0, 3).map((stat, i) => (
-          <AboutStatBox
-            key={i}
-            label={stat.label}
-            value={stat.value}
-            color={stat.color}
-          />
-        ))}
-      </div>
-      {/* Bottom row of cards */}
-      <div className="w-full max-w-2xl mx-auto flex flex-row justify-center gap-8 mb-12">
-        {aboutStats.slice(3).map((stat, i) => (
-          <AboutStatBox
-            key={i + 3}
-            label={stat.label}
-            value={stat.value}
-            color={stat.color}
-          />
-        ))}
-      </div>
-
-      {/* Mission & Vision Section */}
-      <div className="w-full max-w-3xl mx-auto flex flex-col md:flex-row items-center justify-center gap-8 mb-10">
-        {missionVision.map((item, i) => (
-          <div
-            key={i}
-            className="flex-1 flex flex-col items-center text-center"
-          >
-            <h3 className="text-xl font-bold text-primary mb-2">
-              {item.title}
-            </h3>
-            <p className="text-base text-muted-foreground max-w-xs">
-              {item.value}
-            </p>
-          </div>
-        ))}
-      </div>
-
-      {/* Office Address & Operations Location Section */}
-      <Card className="w-full max-w-4xl flex flex-col md:flex-row items-center justify-between gap-8 bg-background rounded-2xl p-8 mt-4">
-        <div className="flex-1 flex flex-col gap-2 min-w-[220px] items-center md:items-start">
-          <h3 className="text-xl font-bold text-primary mb-1">
-            Leave a Nest Philippines, Inc.
-          </h3>
-          <p className="text-base text-foreground font-semibold">
-            Office Address:
-          </p>
-          <p className="text-base text-muted-foreground mb-2 text-center md:text-left">
-            Unit 2103, Orient Square Bldg., F. Ortigas Jr. Rd.,
-            <br />
-            Ortigas Center, Pasig City 1600
-          </p>
-          <p className="text-base text-foreground font-semibold">
-            Operations Location:
-          </p>
-          <p className="text-base text-muted-foreground text-center md:text-left">
-            Philippines
-          </p>
+    <FadeInWrapper>
+      <div className={`flex flex-col items-center w-full px-2 py-10`}>
+        <h1 className="text-5xl font-bold text-center mb-2 tracking-tight text-foreground">
+          About <span className="text-primary">Nestling</span>
+        </h1>
+        <h2 className="text-2xl font-semibold text-center mb-4 text-foreground">
+          All-in-one Learning Management System
+        </h2>
+        <p className="text-lg text-center mb-10 text-muted-foreground max-w-2xl">
+          An all-in-one Learning Management System designed to streamline
+          educational operations within Leave a Nest, particularly for the
+          Philippine branch. It offers a range of tools for course management,
+          project tracking, secure communication, and analytics.
+        </p>
+        {/* Top row of cards */}
+        <div className="w-full max-w-4xl mx-auto flex flex-row justify-center gap-8 mb-8">
+          {aboutStats.slice(0, 3).map((stat, i) => (
+            <AboutStatBox
+              key={i}
+              label={stat.label}
+              value={stat.value}
+              color={stat.color}
+            />
+          ))}
         </div>
-        <div className="flex-1 flex items-center justify-center min-w-[220px]">
-          <iframe
-            title="Nestling Office Map"
-            src="https://www.google.com/maps?q=Unit+2103,+Orient+Square+Bldg.,+F.+Ortigas+Jr.+Rd.,+Ortigas+Center,+Pasig+City+1600&output=embed"
-            width="320"
-            height="220"
-            style={{ border: 0, borderRadius: "1rem" }}
-            allowFullScreen={false}
-            loading="lazy"
-          ></iframe>
+        {/* Bottom row of cards */}
+        <div className="w-full max-w-2xl mx-auto flex flex-row justify-center gap-8 mb-12">
+          {aboutStats.slice(3).map((stat, i) => (
+            <AboutStatBox
+              key={i + 3}
+              label={stat.label}
+              value={stat.value}
+              color={stat.color}
+            />
+          ))}
         </div>
-      </Card>
-      {/* Leave a Nest Branches Section */}
-      <div className="w-full max-w-6xl mx-auto mt-16 flex flex-col items-center">
-        <h3 className="text-2xl font-bold text-primary mb-8 tracking-tight">
-          Leave a Nest Branches
-        </h3>
-        <div className="w-full flex flex-row flex-wrap justify-center gap-12 rounded-2xl py-10 px-4">
-          {[
-            {
-              name: "AMERICA",
-              flag: (
-                <Card className="w-[140px] h-[84px] flex items-center justify-center mb-4 overflow-hidden bg-white rounded-lg">
-                  <img
-                    src="https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg"
-                    alt="USA Flag"
-                    className="w-full h-full object-contain"
-                  />
-                </Card>
-              ),
-              address: (
-                <div className="text-center">
-                  <div className="font-bold text-primary">
-                    Leave a Nest America Inc.
-                  </div>
-                  <div className="text-sm text-muted-foreground mt-1 mb-2">
-                    3350 Scott Blvd. #5502, Santa Clara, CA 95054
-                  </div>
-                  <div className="flex justify-center">
-                    <iframe
-                      title="America Office Map"
-                      src="https://www.google.com/maps?q=3350+Scott+Blvd.+%235502,+Santa+Clara,+CA+95054&output=embed"
-                      width="260"
-                      height="120"
-                      style={{ border: 0, borderRadius: "0.75rem" }}
-                      allowFullScreen={false}
-                      loading="lazy"
-                    ></iframe>
-                  </div>
-                </div>
-              ),
-            },
-            {
-              name: "SINGAPORE",
-              flag: (
-                <Card className="w-[140px] h-[84px] flex items-center justify-center mb-4 overflow-hidden bg-white rounded-lg">
-                  <img
-                    src="https://upload.wikimedia.org/wikipedia/commons/4/48/Flag_of_Singapore.svg"
-                    alt="Singapore Flag"
-                    className="w-full h-full object-contain"
-                  />
-                </Card>
-              ),
-              address: (
-                <div className="text-center">
-                  <div className="font-bold text-primary">
-                    Leave a Nest Singapore Pte. Ltd.
-                    <br />
-                    (201026851H)
-                  </div>
-                  <div className="text-sm text-muted-foreground mt-1 mb-2">
-                    71 Ayer Rajah Crescent, #06-11/12, Singapore 139951
-                  </div>
-                  <div className="flex justify-center">
-                    <iframe
-                      title="Singapore Office Map"
-                      src="https://www.google.com/maps?q=71+Ayer+Rajah+Crescent,+%2306-11%2F12,+Singapore+139951&output=embed"
-                      width="260"
-                      height="120"
-                      style={{ border: 0, borderRadius: "0.75rem" }}
-                      allowFullScreen={false}
-                      loading="lazy"
-                    ></iframe>
-                  </div>
-                </div>
-              ),
-            },
-            {
-              name: "MALAYSIA",
-              flag: (
-                <Card className="w-[140px] h-[84px] flex items-center justify-center mb-4 overflow-hidden bg-white rounded-lg">
-                  <img
-                    src="https://upload.wikimedia.org/wikipedia/commons/6/66/Flag_of_Malaysia.svg"
-                    alt="Malaysia Flag"
-                    className="w-full h-full object-contain"
-                  />
-                </Card>
-              ),
-              address: (
-                <div className="text-center">
-                  <div className="font-bold text-primary">
-                    Leave a Nest Malaysia Sdn. Bhd.
-                  </div>
-                  <div className="text-sm text-muted-foreground mt-1 mb-2">
-                    G-B, Block 2330, Century Square, Jalan Usahawan, Off
-                    Persiaran Multimedia, 63000 Cyberjaya, Selangor
-                  </div>
-                  <div className="flex justify-center">
-                    <iframe
-                      title="Malaysia Office Map"
-                      src="https://www.google.com/maps?q=G-B,+Block+2330,+Century+Square,+Jalan+Usahawan,+Off+Persiaran+Multimedia,+63000+Cyberjaya,+Selangor&output=embed"
-                      width="260"
-                      height="120"
-                      style={{ border: 0, borderRadius: "0.75rem" }}
-                      allowFullScreen={false}
-                      loading="lazy"
-                    ></iframe>
-                  </div>
-                </div>
-              ),
-            },
-            {
-              name: "UK",
-              flag: (
-                <Card className="w-[140px] h-[84px] flex items-center justify-center mb-4 overflow-hidden bg-white rounded-lg">
-                  <img
-                    src="https://upload.wikimedia.org/wikipedia/en/a/ae/Flag_of_the_United_Kingdom.svg"
-                    alt="UK Flag"
-                    className="w-full h-full object-contain"
-                  />
-                </Card>
-              ),
-              address: (
-                <div className="text-center">
-                  <div className="font-bold text-primary">
-                    Leave a Nest United Kingdom Ltd.
-                  </div>
-                  <div className="text-sm text-muted-foreground mt-1 mb-2">
-                    IDEALondon, 69 Wilson St, London EC2A 2BB, UK
-                  </div>
-                  <div className="flex justify-center">
-                    <iframe
-                      title="UK Office Map"
-                      src="https://www.google.com/maps?q=IDEALondon,+69+Wilson+St,+London+EC2A+2BB,+UK&output=embed"
-                      width="260"
-                      height="120"
-                      style={{ border: 0, borderRadius: "0.75rem" }}
-                      allowFullScreen={false}
-                      loading="lazy"
-                    ></iframe>
-                  </div>
-                </div>
-              ),
-            },
-            {
-              name: "JAPAN",
-              flag: (
-                <Card className="w-[140px] h-[84px] flex items-center justify-center mb-4 overflow-hidden bg-white rounded-lg">
-                  <img
-                    src="https://upload.wikimedia.org/wikipedia/en/9/9e/Flag_of_Japan.svg"
-                    alt="Japan Flag"
-                    className="w-full h-full object-contain"
-                  />
-                </Card>
-              ),
-              address: (
-                <div className="text-center">
-                  <div className="font-bold text-primary">
-                    Iidabasimiyuki Bld. (Reception : 4F floor)
-                  </div>
-                  <div className="text-sm text-muted-foreground mt-1 mb-2">
-                    1-4, Shimomiyabicho, Shinjuku-ku, Tokyo, 162-0822, Japan
-                  </div>
-                  <div className="flex justify-center">
-                    <iframe
-                      title="Japan Office Map"
-                      src="https://www.google.com/maps?q=Iidabasimiyuki+Bld.+1-4,+Shimomiyabicho,+Shinjuku-ku,+Tokyo,+162-0822,+Japan&output=embed"
-                      width="260"
-                      height="120"
-                      style={{ border: 0, borderRadius: "0.75rem" }}
-                      allowFullScreen={false}
-                      loading="lazy"
-                    ></iframe>
-                  </div>
-                </div>
-              ),
-            },
-          ].map((branch) => (
+
+        {/* Mission & Vision Section */}
+        <div className="w-full max-w-3xl mx-auto flex flex-col md:flex-row items-center justify-center gap-8 mb-10">
+          {missionVision.map((item, i) => (
             <div
-              key={branch.name}
-              className="flex flex-col items-center w-[180px] relative group"
+              key={i}
+              className="flex-1 flex flex-col items-center text-center"
             >
-              {branch.flag}
-              <span className="text-2xl font-bold text-foreground tracking-tight">
-                {branch.name}
-              </span>
-              {branch.address && (
-                <div
-                  className="absolute left-1/2 top-full z-50 w-[320px] -translate-x-1/2 mt-2 bg-background rounded-2xl shadow-2xl p-4 flex flex-col items-center justify-center transition-all duration-300 overflow-hidden opacity-0 pointer-events-none scale-95 max-h-0 group-hover:opacity-100 group-hover:pointer-events-auto group-hover:scale-100 group-hover:max-h-[500px] animate-slideDown"
-                  style={{ minWidth: 220, maxWidth: 340 }}
-                >
-                  {branch.address}
-                </div>
-              )}
+              <h3 className="text-xl font-bold text-primary mb-2">
+                {item.title}
+              </h3>
+              <p className="text-base text-muted-foreground max-w-xs">
+                {item.value}
+              </p>
             </div>
           ))}
         </div>
-      </div>
-      {/* Meet The Team Section */}
-      <div className="w-full max-w-5xl mx-auto mt-20 flex flex-col items-center">
-        <h3 className="text-2xl font-bold text-primary mb-8 tracking-tight">
-          Meet The Team
-        </h3>
-        <div className="w-full flex flex-row flex-wrap justify-center gap-10 rounded-2xl py-10 px-4 animate-breath-slow">
-          {[
-            {
-              name: "William B. Flores",
-              course: "BS Computer Science",
-              image: willImg,
-            },
-            {
-              name: "John Andrae L. Tuaño",
-              course: "BS Computer Science",
-              image: draeImg,
-            },
-            {
-              name: "Darren L. Cabigao",
-              course: "BS Computer Science",
-              image: darenImg,
-            },
-          ].map((dev) => (
-            <Card
-              key={dev.name}
-              className="flex flex-col items-center w-[240px] bg-background rounded-2xl p-6 transition-transform hover:scale-105"
-            >
-              <div className="w-[180px] h-[180px] mb-4 rounded-full overflow-hidden border-4 border-primary/30 shadow">
-                <Image
-                  src={dev.image}
-                  alt={dev.name + " portrait"}
-                  width={180}
-                  height={180}
-                  className="w-full h-full object-cover"
-                />
+
+        {/* Office Address & Operations Location Section */}
+        <Card className="w-full max-w-4xl flex flex-col md:flex-row items-center justify-between gap-8 bg-background rounded-2xl p-8 mt-4">
+          <div className="flex-1 flex flex-col gap-2 min-w-[220px] items-center md:items-start">
+            <h3 className="text-xl font-bold text-primary mb-1">
+              Leave a Nest Philippines, Inc.
+            </h3>
+            <p className="text-base text-foreground font-semibold">
+              Office Address:
+            </p>
+            <p className="text-base text-muted-foreground mb-2 text-center md:text-left">
+              Unit 2103, Orient Square Bldg., F. Ortigas Jr. Rd.,
+              <br />
+              Ortigas Center, Pasig City 1600
+            </p>
+            <p className="text-base text-foreground font-semibold">
+              Operations Location:
+            </p>
+            <p className="text-base text-muted-foreground text-center md:text-left">
+              Philippines
+            </p>
+          </div>
+          <div className="flex-1 flex items-center justify-center min-w-[220px]">
+            <iframe
+              title="Nestling Office Map"
+              src="https://www.google.com/maps?q=Unit+2103,+Orient+Square+Bldg.,+F.+Ortigas+Jr.+Rd.,+Ortigas+Center,+Pasig+City+1600&output=embed"
+              width="320"
+              height="220"
+              style={{ border: 0, borderRadius: "1rem" }}
+              allowFullScreen={false}
+              loading="lazy"
+            ></iframe>
+          </div>
+        </Card>
+        {/* Leave a Nest Branches Section */}
+        <div className="w-full max-w-6xl mx-auto mt-16 flex flex-col items-center">
+          <h3 className="text-2xl font-bold text-primary mb-8 tracking-tight">
+            Leave a Nest Branches
+          </h3>
+          <div className="w-full flex flex-row flex-wrap justify-center gap-12 rounded-2xl py-10 px-4">
+            {[
+              {
+                name: "AMERICA",
+                flag: (
+                  <Card className="w-[140px] h-[84px] flex items-center justify-center mb-4 overflow-hidden bg-white rounded-lg">
+                    <img
+                      src="https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg"
+                      alt="USA Flag"
+                      className="w-full h-full object-contain"
+                    />
+                  </Card>
+                ),
+                address: (
+                  <div className="text-center">
+                    <div className="font-bold text-primary">
+                      Leave a Nest America Inc.
+                    </div>
+                    <div className="text-sm text-muted-foreground mt-1 mb-2">
+                      3350 Scott Blvd. #5502, Santa Clara, CA 95054
+                    </div>
+                    <div className="flex justify-center">
+                      <iframe
+                        title="America Office Map"
+                        src="https://www.google.com/maps?q=3350+Scott+Blvd.+%235502,+Santa+Clara,+CA+95054&output=embed"
+                        width="260"
+                        height="120"
+                        style={{ border: 0, borderRadius: "0.75rem" }}
+                        allowFullScreen={false}
+                        loading="lazy"
+                      ></iframe>
+                    </div>
+                  </div>
+                ),
+              },
+              {
+                name: "SINGAPORE",
+                flag: (
+                  <Card className="w-[140px] h-[84px] flex items-center justify-center mb-4 overflow-hidden bg-white rounded-lg">
+                    <img
+                      src="https://upload.wikimedia.org/wikipedia/commons/4/48/Flag_of_Singapore.svg"
+                      alt="Singapore Flag"
+                      className="w-full h-full object-contain"
+                    />
+                  </Card>
+                ),
+                address: (
+                  <div className="text-center">
+                    <div className="font-bold text-primary">
+                      Leave a Nest Singapore Pte. Ltd.
+                      <br />
+                      (201026851H)
+                    </div>
+                    <div className="text-sm text-muted-foreground mt-1 mb-2">
+                      71 Ayer Rajah Crescent, #06-11/12, Singapore 139951
+                    </div>
+                    <div className="flex justify-center">
+                      <iframe
+                        title="Singapore Office Map"
+                        src="https://www.google.com/maps?q=71+Ayer+Rajah+Crescent,+%2306-11%2F12,+Singapore+139951&output=embed"
+                        width="260"
+                        height="120"
+                        style={{ border: 0, borderRadius: "0.75rem" }}
+                        allowFullScreen={false}
+                        loading="lazy"
+                      ></iframe>
+                    </div>
+                  </div>
+                ),
+              },
+              {
+                name: "MALAYSIA",
+                flag: (
+                  <Card className="w-[140px] h-[84px] flex items-center justify-center mb-4 overflow-hidden bg-white rounded-lg">
+                    <img
+                      src="https://upload.wikimedia.org/wikipedia/commons/6/66/Flag_of_Malaysia.svg"
+                      alt="Malaysia Flag"
+                      className="w-full h-full object-contain"
+                    />
+                  </Card>
+                ),
+                address: (
+                  <div className="text-center">
+                    <div className="font-bold text-primary">
+                      Leave a Nest Malaysia Sdn. Bhd.
+                    </div>
+                    <div className="text-sm text-muted-foreground mt-1 mb-2">
+                      G-B, Block 2330, Century Square, Jalan Usahawan, Off
+                      Persiaran Multimedia, 63000 Cyberjaya, Selangor
+                    </div>
+                    <div className="flex justify-center">
+                      <iframe
+                        title="Malaysia Office Map"
+                        src="https://www.google.com/maps?q=G-B,+Block+2330,+Century+Square,+Jalan+Usahawan,+Off+Persiaran+Multimedia,+63000+Cyberjaya,+Selangor&output=embed"
+                        width="260"
+                        height="120"
+                        style={{ border: 0, borderRadius: "0.75rem" }}
+                        allowFullScreen={false}
+                        loading="lazy"
+                      ></iframe>
+                    </div>
+                  </div>
+                ),
+              },
+              {
+                name: "UK",
+                flag: (
+                  <Card className="w-[140px] h-[84px] flex items-center justify-center mb-4 overflow-hidden bg-white rounded-lg">
+                    <img
+                      src="https://upload.wikimedia.org/wikipedia/en/a/ae/Flag_of_the_United_Kingdom.svg"
+                      alt="UK Flag"
+                      className="w-full h-full object-contain"
+                    />
+                  </Card>
+                ),
+                address: (
+                  <div className="text-center">
+                    <div className="font-bold text-primary">
+                      Leave a Nest United Kingdom Ltd.
+                    </div>
+                    <div className="text-sm text-muted-foreground mt-1 mb-2">
+                      IDEALondon, 69 Wilson St, London EC2A 2BB, UK
+                    </div>
+                    <div className="flex justify-center">
+                      <iframe
+                        title="UK Office Map"
+                        src="https://www.google.com/maps?q=IDEALondon,+69+Wilson+St,+London+EC2A+2BB,+UK&output=embed"
+                        width="260"
+                        height="120"
+                        style={{ border: 0, borderRadius: "0.75rem" }}
+                        allowFullScreen={false}
+                        loading="lazy"
+                      ></iframe>
+                    </div>
+                  </div>
+                ),
+              },
+              {
+                name: "JAPAN",
+                flag: (
+                  <Card className="w-[140px] h-[84px] flex items-center justify-center mb-4 overflow-hidden bg-white rounded-lg">
+                    <img
+                      src="https://upload.wikimedia.org/wikipedia/en/9/9e/Flag_of_Japan.svg"
+                      alt="Japan Flag"
+                      className="w-full h-full object-contain"
+                    />
+                  </Card>
+                ),
+                address: (
+                  <div className="text-center">
+                    <div className="font-bold text-primary">
+                      Iidabasimiyuki Bld. (Reception : 4F floor)
+                    </div>
+                    <div className="text-sm text-muted-foreground mt-1 mb-2">
+                      1-4, Shimomiyabicho, Shinjuku-ku, Tokyo, 162-0822, Japan
+                    </div>
+                    <div className="flex justify-center">
+                      <iframe
+                        title="Japan Office Map"
+                        src="https://www.google.com/maps?q=Iidabasimiyuki+Bld.+1-4,+Shimomiyabicho,+Shinjuku-ku,+Tokyo,+162-0822,+Japan&output=embed"
+                        width="260"
+                        height="120"
+                        style={{ border: 0, borderRadius: "0.75rem" }}
+                        allowFullScreen={false}
+                        loading="lazy"
+                      ></iframe>
+                    </div>
+                  </div>
+                ),
+              },
+            ].map((branch) => (
+              <div
+                key={branch.name}
+                className="flex flex-col items-center w-[180px] relative group"
+              >
+                {branch.flag}
+                <span className="text-2xl font-bold text-foreground tracking-tight">
+                  {branch.name}
+                </span>
+                {branch.address && (
+                  <div
+                    className="absolute left-1/2 top-full z-50 w-[320px] -translate-x-1/2 mt-2 bg-background rounded-2xl shadow-2xl p-4 flex flex-col items-center justify-center transition-all duration-300 overflow-hidden opacity-0 pointer-events-none scale-95 max-h-0 group-hover:opacity-100 group-hover:pointer-events-auto group-hover:scale-100 group-hover:max-h-[500px] animate-slideDown"
+                    style={{ minWidth: 220, maxWidth: 340 }}
+                  >
+                    {branch.address}
+                  </div>
+                )}
               </div>
-              <span className="text-lg font-bold text-foreground mb-1 text-center tracking-tight">
-                {dev.name}
-              </span>
-              <span className="text-base text-muted-foreground text-center">
-                {dev.course}
-              </span>
-            </Card>
-          ))}
+            ))}
+          </div>
+        </div>
+        {/* Meet The Team Section */}
+        <div className="w-full max-w-5xl mx-auto mt-20 flex flex-col items-center">
+          <h3 className="text-2xl font-bold text-primary mb-8 tracking-tight">
+            Meet The Team
+          </h3>
+          <div className="w-full flex flex-row flex-wrap justify-center gap-10 rounded-2xl py-10 px-4 animate-breath-slow">
+            {[
+              {
+                name: "William B. Flores",
+                course: "BS Computer Science",
+                image: willImg,
+              },
+              {
+                name: "John Andrae L. Tuaño",
+                course: "BS Computer Science",
+                image: draeImg,
+              },
+              {
+                name: "Darren L. Cabigao",
+                course: "BS Computer Science",
+                image: darenImg,
+              },
+            ].map((dev) => (
+              <Card
+                key={dev.name}
+                className="flex flex-col items-center w-[240px] bg-background rounded-2xl p-6 transition-transform hover:scale-105"
+              >
+                <div className="w-[180px] h-[180px] mb-4 rounded-full overflow-hidden border-4 border-primary/30 shadow">
+                  <Image
+                    src={dev.image}
+                    alt={dev.name + " portrait"}
+                    width={180}
+                    height={180}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <span className="text-lg font-bold text-foreground mb-1 text-center tracking-tight">
+                  {dev.name}
+                </span>
+                <span className="text-base text-muted-foreground text-center">
+                  {dev.course}
+                </span>
+              </Card>
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+    </FadeInWrapper>
   );
 };
 

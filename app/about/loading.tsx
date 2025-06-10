@@ -12,7 +12,7 @@ const Loading = () => {
         {[...Array(3)].map((_, i) => (
           <Skeleton
             key={i}
-            className="w-full min-w-[260px] max-w-[320px] h-[120px]-2xl"
+            className="w-full min-w-[260px] max-w-[320px] h-[120px]"
           />
         ))}
       </Skeleton>
@@ -21,7 +21,7 @@ const Loading = () => {
         {[...Array(2)].map((_, i) => (
           <Skeleton
             key={i}
-            className="w-full min-w-[260px] max-w-[320px] h-[120px]-2xl"
+            className="w-full min-w-[260px] max-w-[320px] h-[120px]"
           />
         ))}
       </Skeleton>
