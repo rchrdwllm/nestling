@@ -4,7 +4,7 @@ const NotificationsPage = () => {
   return (
     <div className="p-6 flex flex-col gap-4">
       <div className="flex flex-col gap-4">
-        <Skeleton className="h-9 w-64">Notifications</Skeleton>
+        <Skeleton className="h-9 w-64" />
         <hr />
       </div>
       <section className="flex items-center justify-between mb-4">
