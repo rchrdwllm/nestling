@@ -10,9 +10,9 @@ const StudentDashboardPage = () => {
         </div>
         <hr />
       </div>
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-8">
         <div className="flex items-center justify-between">
-          <Skeleton className="h-5 w-44" />
+          <Skeleton className="h-7 w-44" />
         </div>
         <section className="grid grid-cols-4 gap-8">
           <article className="p-4 rounded-xl border border-border flex flex-col gap-4">
@@ -61,9 +61,9 @@ const StudentDashboardPage = () => {
           </article>
         </section>
       </div>
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-8">
         <div className="flex items-center justify-between">
-          <Skeleton className="h-5 w-64" />
+          <Skeleton className="h-7 w-64" />
         </div>
         <section className="flex flex-col gap-4">
           <article className="p-4 shadow-sm transition-shadow hover:shadow-md rounded-xl border border-border flex gap-4">
