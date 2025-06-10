@@ -34,38 +34,33 @@ const SidePanel = ({
   const [isHovered, setIsHovered] = useState(false);
   const { user } = useCurrentUser();
   const [notifications, setNotifications] = useState<Notification[]>([]);
-  const [isPending, startTransition] = useTransition();
   const [studentTasks, setStudentTasks] = useState<Content[]>([]);
   const [employeeTasks, setEmployeeTasks] = useState<Task[]>([]);
 
   const fetchStudentTasks = async () => {
-    startTransition(async () => {
-      const { success: tasks, error } = await getUpcomingAssignmentsForStudent(
-        user.id
-      );
+    const { success: tasks, error } = await getUpcomingAssignmentsForStudent(
+      user.id
+    );
 
-      if (error || !tasks) {
-        console.error("Error fetching student tasks: ", error);
+    if (error || !tasks) {
+      console.error("Error fetching student tasks: ", error);
 
-        return;
-      }
+      return;
+    }
 
-      setStudentTasks(studentTasks);
-    });
+    setStudentTasks(studentTasks);
   };
 
   const fetchEmployeeTasks = async () => {
-    startTransition(async () => {
-      const { success: tasks, error } = await getIncompleteUserTasks(user.id);
+    const { success: tasks, error } = await getIncompleteUserTasks(user.id);
 
-      if (error || !tasks) {
-        console.error("Error fetching employee tasks: ", error);
+    if (error || !tasks) {
+      console.error("Error fetching employee tasks: ", error);
 
-        return;
-      }
+      return;
+    }
 
-      setEmployeeTasks(tasks);
-    });
+    setEmployeeTasks(tasks);
   };
 
   useEffect(() => {
