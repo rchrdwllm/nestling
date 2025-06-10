@@ -56,7 +56,7 @@ const ProjectsTable = ({ columns, data }: any) => {
           onChange={(event) =>
             table.getColumn("title")?.setFilterValue(event.target.value)
           }
-          className="w-full"
+          className="max-w-md"
         />
         <div className="flex items-center gap-2">
           <Button
