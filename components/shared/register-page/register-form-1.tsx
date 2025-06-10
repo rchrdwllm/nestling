@@ -128,7 +128,7 @@ const RegisterForm1 = ({
         </form>
       </Form>
       <div className="flex gap-4">
-        <Button onClick={() => setStep(1)} variant="secondary">
+        <Button type="button" onClick={() => setStep(1)} variant="secondary">
           <ArrowLeft />
         </Button>
         <Button

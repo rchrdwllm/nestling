@@ -145,6 +145,7 @@ const RegisterForm2 = ({ setStep, role, details }: RegisterForm2Props) => {
               onClick={() => setStep(2)}
               variant="secondary"
               disabled={isLoading}
+              type="button"
             >
               Go back
             </Button>
