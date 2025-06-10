@@ -56,7 +56,7 @@ const CoursesTable = ({ columns, data }: any) => {
           onChange={(event) =>
             table.getColumn("name")?.setFilterValue(event.target.value)
           }
-          className="w-full"
+          className="max-w-sm"
         />
         <div className="flex items-center gap-2">
           <Button
