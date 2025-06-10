@@ -73,12 +73,7 @@ const ProfileDetails = ({ user, courses }: ProfileDetailsProps) => {
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Courses</DialogTitle>
-              <DialogDescription>
-                {user.role === "instructor"
-                  ? "Courses created"
-                  : "Courses enrolled in"}{" "}
-                by {user.name}:
-              </DialogDescription>
+              <DialogDescription></DialogDescription>
             </DialogHeader>
             <ScrollArea className="max-h-[400px]">
               {courses.length > 0 ? (
