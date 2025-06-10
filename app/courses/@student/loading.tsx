@@ -56,10 +56,10 @@ const CoursesPage = () => {
       </section>
       <Skeleton className="h-7 w-48" />
       <section className="flex justify-between items-center">
-        <Skeleton className="h-10 max-w-sm" />
+        <Skeleton className="h-10 w-full max-w-sm" />
         <div className="flex items-center gap-4">
-          <Skeleton className="w-36 h-10" />
-          <Skeleton className="w-36 h-10" />
+          <Skeleton className="w-28 h-10" />
+          <Skeleton className="w-28 h-10" />
         </div>
       </section>
     </main>
