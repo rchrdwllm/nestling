@@ -3,6 +3,8 @@ import CreateCourseBtn from "@/components/shared/courses-page/create-course-btn"
 import ErrorToast from "@/components/ui/error-toast";
 import { getAllInstructors } from "@/lib/user";
 import FadeInWrapper from "@/components/wrappers/fadein-wrapper";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 const AdminCoursesPage = async () => {
   const { success: instructors, error } = await getAllInstructors();
@@ -23,6 +25,9 @@ const AdminCoursesPage = async () => {
           </div>
           <hr />
         </div>
+        <Link href="/courses/archive">
+          <Button variant="link">View archived courses</Button>
+        </Link>
         <Courses />
       </div>
     </FadeInWrapper>
