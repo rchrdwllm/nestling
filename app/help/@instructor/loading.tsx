@@ -10,10 +10,10 @@ const Loading = () => {
       <section className="flex flex-col gap-8">
         <Skeleton className="h-7 w-44" />
         <div className="grid grid-cols-4 gap-8">
-          <Skeleton className="w-full h-[341px]" />
-          <Skeleton className="w-full h-[341px]" />
-          <Skeleton className="w-full h-[341px]" />
-          <Skeleton className="w-full h-[341px]" />
+          <Skeleton className="w-full h-[247px]" />
+          <Skeleton className="w-full h-[247px]" />
+          <Skeleton className="w-full h-[247px]" />
+          <Skeleton className="w-full h-[247px]" />
         </div>
       </section>
       <section className="flex flex-col gap-4">
