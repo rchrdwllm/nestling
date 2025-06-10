@@ -8,23 +8,23 @@ const Loading = () => {
       <Skeleton className="h-5 w-3/4 max-w-2xl mb-10" />
       <Skeleton className="h-5 w-2/3 max-w-xl mb-10" />
       {/* Top row of cards skeleton */}
-      <Skeleton className="w-full max-w-4xl flex flex-row justify-center gap-8 mb-8">
+      <div className="w-full max-w-4xl flex flex-row justify-center gap-8 mb-8">
         {[...Array(3)].map((_, i) => (
           <Skeleton
             key={i}
             className="w-full min-w-[260px] max-w-[320px] h-[120px]"
           />
         ))}
-      </Skeleton>
+      </div>
       {/* Bottom row of cards skeleton */}
-      <Skeleton className="w-full max-w-2xl flex flex-row justify-center gap-8 mb-12">
+      <div className="w-full max-w-2xl flex flex-row justify-center gap-8 mb-12">
         {[...Array(2)].map((_, i) => (
           <Skeleton
             key={i}
             className="w-full min-w-[260px] max-w-[320px] h-[120px]"
           />
         ))}
-      </Skeleton>
+      </div>
       {/* Mission & Vision skeleton */}
       <Skeleton className="w-full max-w-3xl flex flex-col md:flex-row items-center justify-center gap-8 mb-10">
         {[...Array(2)].map((_, i) => (
