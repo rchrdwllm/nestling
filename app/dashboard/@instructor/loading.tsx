@@ -10,7 +10,7 @@ export default function InstructorDashboardLoading() {
         </div>
         <Skeleton className="h-px w-full" />
       </div>
-      <div className="flex flex-col gap-6">
+      <div className="grid grid-cols-4 gap-8">
         {[...Array(3)].map((_, i) => (
           <Skeleton key={i} className="h-32 w-full rounded-xl" />
         ))}
