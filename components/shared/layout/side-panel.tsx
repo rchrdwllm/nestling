@@ -59,7 +59,7 @@ const SidePanel = ({
       const { success: tasks, error } = await getIncompleteUserTasks(user.id);
 
       if (error || !tasks) {
-        console.error("Error fetching student tasks: ", error);
+        console.error("Error fetching employee tasks: ", error);
 
         return;
       }
