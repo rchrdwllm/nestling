@@ -10,8 +10,8 @@ export const CreateContentSchema = z.object({
   points: z.number().optional(),
   date: z
     .object({
-      from: z.date(),
-      to: z.date(),
+      from: z.date().optional(),
+      to: z.date().optional(),
     })
     .optional(),
   maxAttempts: z.number().optional(),

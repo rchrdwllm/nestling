@@ -207,7 +207,6 @@ const RichTextEditor = ({ content }: RichTextEditorProps) => {
             </Toggle>
             <button
               type="button"
-              onClick={() => console.log("clicked")}
               className="flex justify-center items-center hover:bg-accent hover:text-accent-foreground rounded-md transition-colors p-0 size-[36px] cursor-pointer"
             >
               <label htmlFor="img-input" className="px-2 py-2 cursor-pointer">
