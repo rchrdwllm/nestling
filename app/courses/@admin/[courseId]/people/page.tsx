@@ -4,6 +4,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import UserTable from "@/components/shared/people-page/user-table";
 import { userTableCols } from "@/components/shared/people-page/user-table-def";
 import { Users, GraduationCap } from "lucide-react";
+import AddUserBtn from "@/components/admin-access/courses-page/add-user-btn";
+import { getAllInstructors, getAllStudents } from "@/lib/user";
 
 const PeoplePage = async ({
   params,
@@ -15,6 +17,10 @@ const PeoplePage = async ({
     await getEnrolledStudents(courseId);
   const { success: courseInstructors, error: courseInstructorsError } =
     await getCourseInstructors(courseId);
+  const { success: allStudents, error: allStudentsError } =
+    await getAllStudents();
+  const { success: allInstructors, error: allInstructorsError } =
+    await getAllInstructors();
 
   if (enrolledStudentsError || !enrolledStudents) {
     return (
@@ -32,10 +38,38 @@ const PeoplePage = async ({
     );
   }
 
+  if (allStudentsError || !allStudents) {
+    return (
+      <ErrorToast error={"Error fetching all students: " + allStudentsError} />
+    );
+  }
+
+  if (allInstructorsError || !allInstructors) {
+    return (
+      <ErrorToast
+        error={"Error fetching all instructors: " + allInstructorsError}
+      />
+    );
+  }
+
+  const availableStudents = allStudents.filter(
+    (student) => !enrolledStudents.some((s) => s.id === student.id)
+  );
+  const availableInstructors = allInstructors.filter(
+    (instructor) => !courseInstructors.some((i) => i.id === instructor.id)
+  );
+
   return (
     <div className="p-6 flex flex-col gap-8">
       <div className="flex flex-col gap-4">
-        <h1 className="text-3xl font-semibold">People</h1>
+        <div className="flex justify-between items-center">
+          <h1 className="text-3xl font-semibold">People</h1>
+          <AddUserBtn
+            courseId={courseId}
+            availableStudents={availableStudents}
+            availableInstructors={availableInstructors}
+          />
+        </div>
         <hr />
       </div>
       <Tabs defaultValue="students" className="space-y-6">

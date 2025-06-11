@@ -136,7 +136,7 @@ export const getEnrolledStudents = unstable_cache(
     }
   },
   ["enrolledStudents"],
-  { revalidate: 60, tags: ["students"] }
+  { revalidate: 60, tags: ["students", "user"] }
 );
 
 export const getEnrolledStudentIds = unstable_cache(
@@ -155,7 +155,7 @@ export const getEnrolledStudentIds = unstable_cache(
     }
   },
   ["courseId"],
-  { revalidate: 60, tags: ["students"] }
+  { revalidate: 60, tags: ["students", "user"] }
 );
 
 export const getInstructorCourses = unstable_cache(
@@ -297,46 +297,50 @@ export const getEnrollmentDetails = unstable_cache(
   { revalidate: 60 * 60 * 24, tags: ["enrollmentDetails"] }
 );
 
-export const getCourseInstructors = unstable_cache(async (courseId: string) => {
-  try {
-    const courseInstructorSnapshot = await db
-      .collection("courses")
-      .doc(courseId)
-      .collection("instructors")
-      .get();
-    const instructorIds = courseInstructorSnapshot.docs.map((doc) => doc.id);
+export const getCourseInstructors = unstable_cache(
+  async (courseId: string) => {
+    try {
+      const courseInstructorSnapshot = await db
+        .collection("courses")
+        .doc(courseId)
+        .collection("instructors")
+        .get();
+      const instructorIds = courseInstructorSnapshot.docs.map((doc) => doc.id);
 
-    const aesKey = process.env.AES_ENCRYPTION_KEY;
+      const aesKey = process.env.AES_ENCRYPTION_KEY;
 
-    if (!aesKey) {
-      return { error: "AES encryption key not found" };
+      if (!aesKey) {
+        return { error: "AES encryption key not found" };
+      }
+
+      const instructors = await Promise.all(
+        instructorIds.map(async (instructorId) => {
+          const instructorSnapshot = await db
+            .collection("users")
+            .doc(instructorId)
+            .get();
+
+          return {
+            ...instructorSnapshot.data(),
+            contactNumber: decryptData(
+              instructorSnapshot.data()!.contactNumber,
+              aesKey
+            ),
+            address: decryptData(instructorSnapshot.data()!.address, aesKey),
+          } as User;
+        })
+      );
+
+      return { success: instructors };
+    } catch (error) {
+      console.error("Error fetching course instructors:", error);
+
+      return { error: "Error fetching course instructors" };
     }
-
-    const instructors = await Promise.all(
-      instructorIds.map(async (instructorId) => {
-        const instructorSnapshot = await db
-          .collection("users")
-          .doc(instructorId)
-          .get();
-
-        return {
-          ...instructorSnapshot.data(),
-          contactNumber: decryptData(
-            instructorSnapshot.data()!.contactNumber,
-            aesKey
-          ),
-          address: decryptData(instructorSnapshot.data()!.address, aesKey),
-        } as User;
-      })
-    );
-
-    return { success: instructors };
-  } catch (error) {
-    console.error("Error fetching course instructors:", error);
-
-    return { error: "Error fetching course instructors" };
-  }
-});
+  },
+  ["courseId"],
+  { revalidate: 60 * 60 * 24, tags: ["instructors", "user"] }
+);
 
 export const getTopCoursesByEnrollments = unstable_cache(
   async () => {
