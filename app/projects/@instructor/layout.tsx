@@ -1,11 +1,11 @@
 import CreateProjectDialog from "@/components/admin-access/projects-page/create-project-dialog";
-import { getAllAdmins, getAllInstructors } from "@/lib/user";
+import { getUnarchivedAdmins, getUnarchivedInstructors } from "@/lib/user";
 import { ReactNode } from "react";
 
 const Layout = async ({ children }: { children: ReactNode }) => {
-  const { success: admins, error: adminsError } = await getAllAdmins();
+  const { success: admins, error: adminsError } = await getUnarchivedAdmins();
   const { success: instructors, error: instructorsError } =
-    await getAllInstructors();
+    await getUnarchivedInstructors();
 
   if (adminsError || instructorsError) {
     console.error("Error fetching data:", adminsError || instructorsError);

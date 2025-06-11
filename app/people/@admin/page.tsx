@@ -8,7 +8,7 @@ import ErrorToast from "@/components/ui/error-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import UserTable from "@/components/shared/people-page/user-table";
 import {
-  adminUserTableCols,
+  userColsWithArchive,
   userTableCols,
 } from "@/components/shared/people-page/user-table-def";
 import { Users, GraduationCap, Shield, CircleDashed } from "lucide-react";
@@ -91,7 +91,7 @@ const AdminPeoplePage = async () => {
             </div>
             <UserTable
               columns={
-                user.role === "admin" ? adminUserTableCols : userTableCols
+                user.role === "admin" ? userColsWithArchive : userTableCols
               }
               data={students}
               searchPlaceholder="Search students by name..."
@@ -106,7 +106,7 @@ const AdminPeoplePage = async () => {
             </div>
             <UserTable
               columns={
-                user.role === "admin" ? adminUserTableCols : userTableCols
+                user.role === "admin" ? userColsWithArchive : userTableCols
               }
               data={instructors}
               searchPlaceholder="Search instructors by name..."
@@ -121,7 +121,7 @@ const AdminPeoplePage = async () => {
             </div>
             <UserTable
               columns={
-                user.role === "admin" ? adminUserTableCols : userTableCols
+                user.role === "admin" ? userColsWithArchive : userTableCols
               }
               data={admins}
               searchPlaceholder="Search administrators by name..."

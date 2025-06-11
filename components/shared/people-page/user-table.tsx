@@ -24,23 +24,49 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { User } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { MoreHorizontal } from "lucide-react";
+import { useAction } from "next-safe-action/hooks";
+import { removeFromCourse } from "@/server/actions/remove-from-course";
+import { toast } from "sonner";
 
 interface UserTableProps {
   columns: ColumnDef<User>[];
   data: User[];
   searchPlaceholder?: string;
+  courseId?: string;
 }
 
 const UserTable = ({
   columns,
   data,
   searchPlaceholder = "Search users...",
+  courseId,
 }: UserTableProps) => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 10,
+  });
+  const { execute } = useAction(removeFromCourse, {
+    onSuccess: () => {
+      toast.dismiss();
+      toast.success("User removed from course successfully");
+    },
+    onError: (error) => {
+      toast.dismiss();
+      toast.error("Error removing user from course: " + error);
+    },
+    onExecute: () => {
+      toast.dismiss();
+      toast.loading("Removing user from course...");
+    },
   });
 
   const table = useReactTable({
@@ -125,6 +151,31 @@ const UserTable = ({
                       )}
                     </TableCell>
                   ))}
+                  {courseId && (
+                    <TableCell>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button
+                            notAnimated
+                            variant="ghost"
+                            className="h-8 w-8 p-0"
+                          >
+                            <span className="sr-only">Open menu</span>
+                            <MoreHorizontal />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem
+                            onClick={() =>
+                              execute({ userId: row.original.id, courseId })
+                            }
+                          >
+                            Remove from course
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  )}
                 </TableRow>
               ))
             ) : (

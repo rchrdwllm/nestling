@@ -60,6 +60,7 @@ const PeoplePage = async ({
             columns={userTableCols}
             data={enrolledStudents}
             searchPlaceholder="Search students by name..."
+            courseId={courseId}
           />
         </TabsContent>
         <TabsContent value="instructors" className="space-y-4">
@@ -73,6 +74,7 @@ const PeoplePage = async ({
             columns={userTableCols}
             data={courseInstructors}
             searchPlaceholder="Search instructors by name..."
+            courseId={courseId}
           />
         </TabsContent>
       </Tabs>

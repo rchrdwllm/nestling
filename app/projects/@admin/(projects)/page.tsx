@@ -7,7 +7,7 @@ import TasksPriorityGraph from "@/components/shared/projects-page/tasks-priority
 import ErrorToast from "@/components/ui/error-toast";
 import { getProjectsWithTasks, getUnarchivedProjects } from "@/lib/project";
 import { getIncompleteTasks } from "@/lib/task";
-import { getAllAdmins, getAllInstructors } from "@/lib/user";
+import { getUnarchivedAdmins, getUnarchivedInstructors } from "@/lib/user";
 import FadeInWrapper from "@/components/wrappers/fadein-wrapper";
 
 const AdminProjectsPage = async () => {
@@ -16,9 +16,9 @@ const AdminProjectsPage = async () => {
   const { success: tasks, error: tasksError } = await getIncompleteTasks();
   const { success: projectsWithTasks, error: projectsWithTasksError } =
     await getProjectsWithTasks();
-  const { success: admins, error: adminsError } = await getAllAdmins();
+  const { success: admins, error: adminsError } = await getUnarchivedAdmins();
   const { success: instructors, error: instructorsError } =
-    await getAllInstructors();
+    await getUnarchivedInstructors();
 
   if (adminsError || instructorsError || projectsError) {
     return (

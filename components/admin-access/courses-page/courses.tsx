@@ -1,12 +1,12 @@
 import CourseCard from "@/components/shared/courses-page/course-card";
 import ErrorToast from "@/components/ui/error-toast";
 import { getAllCourses } from "@/lib/course";
-import { getAllInstructors } from "@/lib/user";
+import { getUnarchivedInstructors } from "@/lib/user";
 
 const Courses = async () => {
   const { success: courses, error } = await getAllCourses();
   const { success: instructors, error: instructorsError } =
-    await getAllInstructors();
+    await getUnarchivedInstructors();
 
   if (error || !courses || !instructors || instructorsError) {
     return (

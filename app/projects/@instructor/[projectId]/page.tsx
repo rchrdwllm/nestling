@@ -5,8 +5,8 @@ import {
   getProjectHeads,
 } from "@/lib/project";
 import {
-  getAllAdmins,
-  getAllInstructors,
+  getUnarchivedAdmins,
+  getUnarchivedInstructors,
   getOptimisticUser,
   getUserById,
 } from "@/lib/user";
@@ -30,9 +30,9 @@ const ProjectPage = async ({
   const { success: project, error: projectError } = await getProjectById(
     projectId
   );
-  const { success: admins, error: adminsError } = await getAllAdmins();
+  const { success: admins, error: adminsError } = await getUnarchivedAdmins();
   const { success: instructors, error: instructorsError } =
-    await getAllInstructors();
+    await getUnarchivedInstructors();
   const user = await getOptimisticUser();
 
   if (

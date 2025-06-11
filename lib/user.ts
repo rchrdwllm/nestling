@@ -55,7 +55,7 @@ export const getUserById = unstable_cache(
   { revalidate: 60 * 60 * 24, tags: ["user"] }
 );
 
-export const getAllStudents = unstable_cache(
+export const getUnarchivedStudents = unstable_cache(
   async () => {
     try {
       const usersSnapshot = await db
@@ -89,7 +89,7 @@ export const getAllStudents = unstable_cache(
   { revalidate: 60 * 60 * 24, tags: ["user", "students"] }
 );
 
-export const getAllInstructors = unstable_cache(
+export const getUnarchivedInstructors = unstable_cache(
   async () => {
     try {
       const usersSnapshot = await db
@@ -123,13 +123,112 @@ export const getAllInstructors = unstable_cache(
   { revalidate: 60 * 60 * 24, tags: ["user", "instructors"] }
 );
 
-export const getAllAdmins = unstable_cache(
+export const getUnarchivedAdmins = unstable_cache(
   async () => {
     try {
       const usersSnapshot = await db
         .collection("users")
         .where("role", "==", "admin")
         .where("isArchived", "==", false)
+        .get();
+      const aesKey = process.env.AES_ENCRYPTION_KEY;
+
+      if (!aesKey) {
+        return {
+          error:
+            "Failed to decrypt user information. AES encryption key not found.",
+        };
+      }
+
+      const users = usersSnapshot.docs.map((doc) => ({
+        ...doc.data(),
+        contactNumber: decryptData(doc.data().contactNumber, aesKey),
+        address: decryptData(doc.data().address, aesKey),
+      })) as User[];
+
+      return { success: users };
+    } catch (error) {
+      console.error(error);
+
+      return { error: JSON.stringify(error) };
+    }
+  },
+  ["allAdmins"],
+  { revalidate: 60 * 60 * 24, tags: ["user", "admins"] }
+);
+
+export const getAllStudents = unstable_cache(
+  async () => {
+    try {
+      const usersSnapshot = await db
+        .collection("users")
+        .where("role", "==", "student")
+        .get();
+      const aesKey = process.env.AES_ENCRYPTION_KEY;
+
+      if (!aesKey) {
+        return {
+          error:
+            "Failed to decrypt user information. AES encryption key not found.",
+        };
+      }
+
+      const users = usersSnapshot.docs.map((doc) => ({
+        ...doc.data(),
+        contactNumber: decryptData(doc.data().contactNumber, aesKey),
+        address: decryptData(doc.data().address, aesKey),
+      })) as User[];
+
+      return { success: users };
+    } catch (error) {
+      console.error(error);
+
+      return { error: JSON.stringify(error) };
+    }
+  },
+  ["allStudents"],
+  { revalidate: 60 * 60 * 24, tags: ["user", "students"] }
+);
+
+export const getAllInstructors = unstable_cache(
+  async () => {
+    try {
+      const usersSnapshot = await db
+        .collection("users")
+        .where("role", "==", "instructor")
+        .get();
+      const aesKey = process.env.AES_ENCRYPTION_KEY;
+
+      if (!aesKey) {
+        return {
+          error:
+            "Failed to decrypt user information. AES encryption key not found.",
+        };
+      }
+
+      const users = usersSnapshot.docs.map((doc) => ({
+        ...doc.data(),
+        contactNumber: decryptData(doc.data().contactNumber, aesKey),
+        address: decryptData(doc.data().address, aesKey),
+      })) as User[];
+
+      return { success: users };
+    } catch (error) {
+      console.error(error);
+
+      return { error: JSON.stringify(error) };
+    }
+  },
+  ["allInstructors"],
+  { revalidate: 60 * 60 * 24, tags: ["user", "instructors"] }
+);
+
+export const getAllAdmins = unstable_cache(
+  async () => {
+    try {
+      const usersSnapshot = await db
+        .collection("users")
+        .where("role", "==", "admin")
         .get();
       const aesKey = process.env.AES_ENCRYPTION_KEY;
 

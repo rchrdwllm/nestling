@@ -1,10 +1,10 @@
-import { getAllInstructors } from "@/lib/user";
+import { getUnarchivedInstructors } from "@/lib/user";
 import DateDisplay from "../../ui/date-display";
 import ErrorToast from "@/components/ui/error-toast";
 
 const TotalInstructorsOverview = async () => {
   const { success: allInstructors, error: allInstructorsError } =
-    await getAllInstructors();
+    await getUnarchivedInstructors();
 
   if (allInstructorsError || !allInstructors) {
     return (

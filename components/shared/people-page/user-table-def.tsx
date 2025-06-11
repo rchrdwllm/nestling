@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useAction } from "next-safe-action/hooks";
 import { archiveUser } from "@/server/actions/archive-user";
+import { removeFromCourse } from "@/server/actions/remove-from-course";
 import { toast } from "sonner";
 
 export const userTableCols: ColumnDef<User>[] = [
@@ -127,7 +128,7 @@ export const userTableCols: ColumnDef<User>[] = [
   },
 ];
 
-export const adminUserTableCols: ColumnDef<User>[] = [
+export const userColsWithArchive: ColumnDef<User>[] = [
   {
     accessorFn: (row) => `${row.firstName} ${row.lastName}`,
     id: "name",
@@ -248,6 +249,7 @@ export const adminUserTableCols: ColumnDef<User>[] = [
     enableHiding: false,
     cell: ({ row }) => {
       const userId = row.original.id as string;
+      const isArchived = row.original.isArchived as boolean;
       const { execute } = useAction(archiveUser, {
         onSuccess: ({ data }) => {
           toast.dismiss();
@@ -258,9 +260,17 @@ export const adminUserTableCols: ColumnDef<User>[] = [
             toast.error(data.error as any);
           }
         },
-        onError: (error) => {
+        onError: () => {
           toast.dismiss();
-          toast.error("Failed to archive user. Please try again.");
+          toast.error(
+            `Failed to ${
+              isArchived ? "unarchive" : "archive"
+            } user. Please try again.`
+          );
+        },
+        onExecute: () => {
+          toast.dismiss();
+          toast.loading(`${isArchived ? "Unarchiving" : "Archiving"} user...`);
         },
       });
 
@@ -274,7 +284,7 @@ export const adminUserTableCols: ColumnDef<User>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem onClick={() => execute({ userId })}>
-              Archive user
+              {isArchived ? "Unarchive" : "Archive"} user
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

@@ -11,7 +11,11 @@ import {
   getUserProjectsWithTasks,
 } from "@/lib/project";
 import { getIncompleteTasks } from "@/lib/task";
-import { getAllAdmins, getAllInstructors, getOptimisticUser } from "@/lib/user";
+import {
+  getUnarchivedAdmins,
+  getUnarchivedInstructors,
+  getOptimisticUser,
+} from "@/lib/user";
 import ErrorToast from "@/components/ui/error-toast";
 import FadeInWrapper from "@/components/wrappers/fadein-wrapper";
 
@@ -23,9 +27,9 @@ const InstructorProjectsDashboard = async () => {
   const { success: tasks, error: tasksError } = await getIncompleteTasks();
   const { success: projectsWithTasks, error: projectsWithTasksError } =
     await getUserProjectsWithTasks(user.id);
-  const { success: admins, error: adminsError } = await getAllAdmins();
+  const { success: admins, error: adminsError } = await getUnarchivedAdmins();
   const { success: instructors, error: instructorsError } =
-    await getAllInstructors();
+    await getUnarchivedInstructors();
 
   if (adminsError || instructorsError || projectsError) {
     return (

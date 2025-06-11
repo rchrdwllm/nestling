@@ -1,10 +1,10 @@
-import { getAllStudents } from "@/lib/user";
+import { getUnarchivedStudents } from "@/lib/user";
 import DateDisplay from "../../ui/date-display";
 import ErrorToast from "@/components/ui/error-toast";
 
 const TotalStudentsOverview = async () => {
   const { success: allStudents, error: allStudentsError } =
-    await getAllStudents();
+    await getUnarchivedStudents();
   if (allStudentsError || !allStudents) {
     return (
       <ErrorToast

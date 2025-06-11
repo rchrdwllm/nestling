@@ -3,7 +3,7 @@
 import { CreateTicketSchema } from "@/schemas/CreateTicketSchema";
 import { actionClient } from "../action-client";
 import { db } from "@/lib/firebase";
-import { getAllAdmins, getOptimisticUser } from "@/lib/user";
+import { getUnarchivedAdmins, getOptimisticUser } from "@/lib/user";
 import { revalidateTag } from "next/cache";
 import { createNotif } from "./create-notif";
 import { sendNotification } from "./send-notification";
@@ -31,7 +31,8 @@ export const createTicket = actionClient
         userId: user.id,
       });
 
-      const { success: admins, error: adminsError } = await getAllAdmins();
+      const { success: admins, error: adminsError } =
+        await getUnarchivedAdmins();
 
       if (adminsError || !admins) {
         console.error(

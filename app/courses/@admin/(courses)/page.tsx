@@ -1,13 +1,13 @@
 import Courses from "@/components/admin-access/courses-page/courses";
 import CreateCourseBtn from "@/components/shared/courses-page/create-course-btn";
 import ErrorToast from "@/components/ui/error-toast";
-import { getAllInstructors } from "@/lib/user";
+import { getUnarchivedInstructors } from "@/lib/user";
 import FadeInWrapper from "@/components/wrappers/fadein-wrapper";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
 const AdminCoursesPage = async () => {
-  const { success: instructors, error } = await getAllInstructors();
+  const { success: instructors, error } = await getUnarchivedInstructors();
 
   if (error || !instructors) {
     return (

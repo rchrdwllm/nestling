@@ -1,4 +1,4 @@
-import { getAllStudents, getAllInstructors } from "@/lib/user";
+import { getUnarchivedStudents, getUnarchivedInstructors } from "@/lib/user";
 import ErrorToast from "@/components/ui/error-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import UserTable from "@/components/shared/people-page/user-table";
@@ -7,9 +7,10 @@ import { Users, GraduationCap } from "lucide-react";
 import FadeInWrapper from "@/components/wrappers/fadein-wrapper";
 
 const StudentPeoplePage = async () => {
-  const { success: students, error: studentsError } = await getAllStudents();
+  const { success: students, error: studentsError } =
+    await getUnarchivedStudents();
   const { success: instructors, error: instructorsError } =
-    await getAllInstructors();
+    await getUnarchivedInstructors();
 
   if (studentsError || instructorsError) {
     return (
