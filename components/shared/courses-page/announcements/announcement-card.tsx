@@ -21,37 +21,31 @@ const AnnouncementCard = async ({ announcement }: AnnouncementCardProps) => {
   if (senderError || !sender) {
     return <p>Error fetching sender information</p>;
   }
-
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        <article className="p-4 shadow-sm transition-shadow hover:shadow-md rounded-xl border border-border flex gap-4">
-          {sender.image ? (
-            <Avatar className="size-10">
-              <AvatarImage src={sender.image} className="object-cover" />
-              <AvatarFallback>
-                <div className="group flex items-center justify-center size-10 bg-muted rounded-full transition-colors hover:bg-primary">
-                  <p className="text-sm font-semibold transition-colors group-hover:text-primary-foreground">
-                    {sender.name![0]}
-                  </p>
-                </div>
-              </AvatarFallback>
-            </Avatar>
-          ) : (
-            <div className="group flex items-center justify-center size-10 bg-muted rounded-full transition-colors hover:bg-primary">
-              <p className="text-sm font-semibold transition-colors group-hover:text-primary-foreground">
-                {sender.name![0]}
-              </p>
-            </div>
-          )}
+      <article className="p-4 shadow-sm transition-shadow hover:shadow-md rounded-xl border border-border flex gap-4 relative">
+        {sender.image ? (
+          <Avatar className="size-10">
+            <AvatarImage src={sender.image} className="object-cover" />
+            <AvatarFallback>
+              <div className="group flex items-center justify-center size-10 bg-muted rounded-full transition-colors hover:bg-primary">
+                <p className="text-sm font-semibold transition-colors group-hover:text-primary-foreground">
+                  {sender.name![0]}
+                </p>
+              </div>
+            </AvatarFallback>
+          </Avatar>
+        ) : (
+          <div className="group flex items-center justify-center size-10 bg-muted rounded-full transition-colors hover:bg-primary">
+            <p className="text-sm font-semibold transition-colors group-hover:text-primary-foreground">
+              {sender.name![0]}
+            </p>
+          </div>
+        )}
+        <DialogTrigger asChild>
           <div className="cursor-pointer flex-1 flex flex-col gap-2">
             <div className="flex items-center justify-between">
               <h1 className="text-xl font-semibold">{title}</h1>
-              <AnnouncementDetailsBtn
-                announcement={announcement}
-                isArchived={isArchived}
-                announcementId={id}
-              />
             </div>
             <p className="text-sm text-muted-foreground">
               <DateDisplay
@@ -61,8 +55,15 @@ const AnnouncementCard = async ({ announcement }: AnnouncementCardProps) => {
             </p>
             <p className="text-muted-foreground">{content}</p>
           </div>
-        </article>
-      </DialogTrigger>
+        </DialogTrigger>
+        <div className="absolute top-4 right-4">
+          <AnnouncementDetailsBtn
+            announcement={announcement}
+            isArchived={isArchived}
+            announcementId={id}
+          />
+        </div>
+      </article>
       <DialogContent>
         <DialogTitle asChild>
           <div className="flex items-center gap-4">

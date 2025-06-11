@@ -22,9 +22,13 @@ const AnnouncementDetailsBtn = ({
   isArchived,
   announcement,
 }: AnnouncementDetailsBtnProps) => {
+  const handleClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+  };
+
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>
+      <DropdownMenuTrigger onClick={handleClick}>
         <EllipsisVertical className="size-4 text-muted-foreground transition-colors hover:text-foreground" />
       </DropdownMenuTrigger>
       <DropdownMenuContent>
