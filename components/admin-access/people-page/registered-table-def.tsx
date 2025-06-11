@@ -2,9 +2,18 @@
 
 import { Button } from "@/components/ui/button";
 import DateDisplay from "@/components/ui/date-display";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { deleteEmail } from "@/server/actions/delete-email";
 import { RegisteredEmail } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown } from "lucide-react";
+import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { useAction } from "next-safe-action/hooks";
+import { toast } from "sonner";
 
 export const registeredTableCols: ColumnDef<RegisteredEmail>[] = [
   {
@@ -73,6 +82,48 @@ export const registeredTableCols: ColumnDef<RegisteredEmail>[] = [
         <p className="text-sm font-mono">
           <DateDisplay date={createdAt} outputFormat="MMMM d, yyyy h:mm a" />
         </p>
+      );
+    },
+  },
+  {
+    id: "actions",
+    enableHiding: false,
+    cell: ({ row }) => {
+      const email = row.getValue("email") as string;
+      const { execute } = useAction(deleteEmail, {
+        onSuccess: ({ data }) => {
+          toast.dismiss();
+
+          if (data?.success) {
+            toast.success(data.success);
+          } else if (data?.error) {
+            toast.error(data.error as any);
+          }
+        },
+        onError: (error) => {
+          toast.dismiss();
+          toast.error("Failed to delete email. Please try again.");
+        },
+        onExecute: () => {
+          toast.dismiss();
+          toast.loading("Deleting email...");
+        },
+      });
+
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button notAnimated variant="ghost" className="h-8 w-8 p-0">
+              <span className="sr-only">Open menu</span>
+              <MoreHorizontal />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem onClick={() => execute({ email })}>
+              Delete email
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       );
     },
   },
