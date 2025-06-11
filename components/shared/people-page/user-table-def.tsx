@@ -7,16 +7,12 @@ import { ArrowUpDown, Mail, Phone, MapPin, MoreHorizontal } from "lucide-react";
 import Link from "next/link";
 import {
   DropdownMenu,
-  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useAction } from "next-safe-action/hooks";
 import { archiveUser } from "@/server/actions/archive-user";
-import { removeFromCourse } from "@/server/actions/remove-from-course";
 import { toast } from "sonner";
 
 export const userTableCols: ColumnDef<User>[] = [
