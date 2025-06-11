@@ -38,7 +38,7 @@ const SidePanelNotifications = ({ notifications }: SidePanelNotifications) => {
           <X className="size-5" />
         </Button>
       </section>
-      <div className="flex flex-col gap-4 mt-4">
+      <div className="flex flex-col gap-2 mt-4">
         {notifications.length ? (
           notifications.map((notification) => (
             <NotificationCard key={notification.id} {...notification} />

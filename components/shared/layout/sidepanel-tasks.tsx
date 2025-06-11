@@ -16,7 +16,7 @@ const SidePanelTasks = ({ tasks }: SidePanelTasksProps) => {
       <section className="flex justify-between items-center">
         <h1 className="font-semibold">Pending tasks</h1>
       </section>
-      <div className="flex flex-col gap-4 mt-4">
+      <div className="flex flex-col gap-2 mt-4">
         {tasks.length ? (
           user.role === "student" ? (
             tasks.map((task) => <StudentTaskCard key={task.id} {...task} />)
