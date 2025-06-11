@@ -1,7 +1,7 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { Form, FormField, FormItem } from "@/components/ui/form";
+import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ResetPasswordSchema } from "@/schemas/ResetPasswordSchema";
@@ -71,6 +71,7 @@ const ResetPasswordForm = () => {
             render={({ field }) => (
               <FormItem>
                 <Input placeholder="Email" type="email" {...field} />
+                <FormMessage />
               </FormItem>
             )}
           />

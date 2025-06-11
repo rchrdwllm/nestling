@@ -1,6 +1,12 @@
 "use client";
 
-import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import RichTextEditor from "../create-content/rich-text-editor";
 import * as z from "zod";
@@ -69,6 +75,7 @@ const ReplyDiscussionForm = ({
               <FormControl>
                 <RichTextEditor content={field.value || ""} />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />

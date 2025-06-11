@@ -6,6 +6,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import { CreateContentSchema } from "@/schemas/CreateContentSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -160,6 +161,7 @@ const CreateContentForm = ({
                   </SelectGroup>
                 </SelectContent>
               </Select>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -171,6 +173,7 @@ const CreateContentForm = ({
               <FormItem>
                 <Input placeholder="Title" {...field} />
               </FormItem>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -194,6 +197,7 @@ const CreateContentForm = ({
                   </SelectGroup>
                 </SelectContent>
               </Select>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -210,6 +214,7 @@ const CreateContentForm = ({
                   className="[margin-top:_0_!important]"
                 />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -225,6 +230,7 @@ const CreateContentForm = ({
                 <FormControl>
                   <RichTextEditor content={field.value || ""} />
                 </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />

@@ -5,14 +5,13 @@ export const UpdateProfileSchema = z.object({
   firstName: z.string().nonempty().max(50, {
     message: "First name must be at most 50 characters long",
   }),
-  middleName: z.optional(
-    z
-      .string()
-      .max(50, {
-        message: "Middle name must be at most 50 characters long",
-      })
-      .default("")
-  ),
+  middleName: z
+    .string()
+    .max(50, {
+      message: "Middle name must be at most 50 characters long",
+    })
+    .optional()
+    .default(""),
   lastName: z.string().nonempty().max(50, {
     message: "Last name must be at most 50 characters long",
   }),
@@ -25,7 +24,15 @@ export const UpdateProfileSchema = z.object({
   email: z.string().email({
     message: "Invalid email format",
   }),
-  currentPassword: z.optional(z.string()),
-  newPassword: z.optional(z.string()),
-  image: z.optional(z.string()),
+  currentPassword: z.string().optional(),
+  newPassword: z
+    .string()
+    .min(8, { message: "Password must be at least 8 characters long" })
+    .regex(/^(?=.*[0-9])(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).*$/, {
+      message:
+        "Password must contain at least one special character and one number",
+    })
+    .optional()
+    .or(z.literal("")),
+  image: z.string().optional(),
 });

@@ -2,7 +2,13 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { MAX_SIZE } from "@/constants/file";
 import { useCurrentUser } from "@/hooks/use-current-user";
@@ -215,6 +221,7 @@ const EditProfileForm = ({
             render={({ field }) => (
               <FormItem>
                 <Input placeholder="Email" {...field} />
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -224,6 +231,7 @@ const EditProfileForm = ({
             render={({ field }) => (
               <FormItem>
                 <Input placeholder="First Name" {...field} />
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -233,6 +241,7 @@ const EditProfileForm = ({
             render={({ field }) => (
               <FormItem>
                 <Input placeholder="Middle Name" {...field} />
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -243,6 +252,7 @@ const EditProfileForm = ({
             render={({ field }) => (
               <FormItem>
                 <Input placeholder="Last Name" {...field} />
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -252,6 +262,7 @@ const EditProfileForm = ({
             render={({ field }) => (
               <FormItem>
                 <Input placeholder="Contact Number" {...field} />
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -261,6 +272,7 @@ const EditProfileForm = ({
             render={({ field }) => (
               <FormItem>
                 <Input placeholder="Address" {...field} />
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -289,6 +301,7 @@ const EditProfileForm = ({
                       placeholder="New password"
                       {...field}
                     />
+                    <FormMessage />
                   </FormItem>
                 )}
               />

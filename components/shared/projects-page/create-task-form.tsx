@@ -223,6 +223,7 @@ const CreateTaskForm = ({
           render={({ field }) => (
             <FormItem>
               <Input placeholder="Task title" {...field} />
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -232,6 +233,7 @@ const CreateTaskForm = ({
           render={({ field }) => (
             <FormItem>
               <Input placeholder="Task description" {...field} />
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -266,6 +268,7 @@ const CreateTaskForm = ({
                   </SelectContent>
                 </Select>
               </Select>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -300,6 +303,7 @@ const CreateTaskForm = ({
                   </SelectContent>
                 </Select>
               </Select>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -398,6 +402,7 @@ const CreateTaskForm = ({
                 placeholder="Select assignees"
                 variant="inverted"
               />
+              <FormMessage />
             </FormItem>
           )}
         />

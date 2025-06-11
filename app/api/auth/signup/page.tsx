@@ -19,9 +19,9 @@ const RegisterPage = async () => {
         className="hidden lg:block w-full h-screen absolute object-cover"
       />
       <div className="hidden lg:block"></div>
-      <div className="z-[1] col-span-2 lg:col-span-1 h-screen flex flex-col items-center pb-12 pt-4 px-4 lg:px-20 gap-4">
+      <div className="z-[1] col-span-2 lg:col-span-1 min-h-screen flex flex-col items-center pb-12 pt-4 px-4 lg:px-20 gap-4">
         <Image src={logoTextReversed} className="w-44" alt="Logo Text" />
-        <div className="w-full h-full bg-background rounded-xl shadow-xl">
+        <div className="flex-1 flex items-center justify-center w-full h-full bg-background rounded-xl shadow-xl py-6">
           <RegisterSteps />
         </div>
       </div>

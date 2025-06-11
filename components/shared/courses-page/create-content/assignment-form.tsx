@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import { FormField, FormItem } from "@/components/ui/form";
+import { FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import {
   Popover,
@@ -38,6 +38,7 @@ const AssignmentForm = () => {
               {...field}
               onChange={(e) => field.onChange(e.target.valueAsNumber)}
             />
+            <FormMessage />
           </FormItem>
         )}
       />
@@ -52,6 +53,7 @@ const AssignmentForm = () => {
               {...field}
               onChange={(e) => field.onChange(e.target.valueAsNumber)}
             />
+            <FormMessage />
           </FormItem>
         )}
       />
@@ -110,6 +112,7 @@ const AssignmentForm = () => {
                 </div>
               </PopoverContent>
             </Popover>
+            <FormMessage />
           </FormItem>
         )}
       />
@@ -135,6 +138,7 @@ const AssignmentForm = () => {
                 </SelectGroup>
               </SelectContent>
             </Select>
+            <FormMessage />
           </FormItem>
         )}
       />

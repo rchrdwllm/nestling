@@ -16,9 +16,9 @@ const RoleSelector = ({ setRole, setStep }: RoleSelectorProps) => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5, ease: easings.easeOutExpo }}
-      className="flex flex-col gap-8 items-center -mt-8"
+      className="flex flex-col gap-8 items-center"
     >
-      <div>
+      <div key="role-selector-header" className="text-center">
         <h1 className="font-semibold text-2xl text-center">Select a role</h1>
         <p className="text-muted-foreground w-2/3 text-center mx-auto text-sm">
           Please choose whether you are a student, an instructor, or an admin

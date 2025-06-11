@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Form, FormField, FormItem } from "@/components/ui/form";
+import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { RegisterEmailSchema } from "@/schemas/RegisterEmailSchema";
 import { createModule } from "@/server/actions/create-module";
@@ -82,6 +82,7 @@ const AddPeopleForm = ({ setIsOpen, isEdit }: AddPeopleForm) => {
           render={({ field }) => (
             <FormItem>
               <Input placeholder="Email" {...field} />
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -100,6 +101,7 @@ const AddPeopleForm = ({ setIsOpen, isEdit }: AddPeopleForm) => {
                   <SelectItem value="admin">Admin</SelectItem>
                 </SelectContent>
               </Select>
+              <FormMessage />
             </FormItem>
           )}
         />

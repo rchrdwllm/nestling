@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import MotionWrapper from "@/components/wrappers/motion-wrapper";
 import { easings } from "@/constants/animations";
-import { Form, FormField, FormItem } from "@/components/ui/form";
+import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import * as z from "zod";
@@ -114,6 +114,7 @@ const RegisterForm2 = ({ setStep, role, details }: RegisterForm2Props) => {
             render={({ field }) => (
               <FormItem>
                 <Input placeholder="Email" {...field} />
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -123,6 +124,7 @@ const RegisterForm2 = ({ setStep, role, details }: RegisterForm2Props) => {
             render={({ field }) => (
               <FormItem>
                 <Input type="password" placeholder="Password" {...field} />
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -136,6 +138,7 @@ const RegisterForm2 = ({ setStep, role, details }: RegisterForm2Props) => {
                   placeholder="Confirm password"
                   {...field}
                 />
+                <FormMessage />
               </FormItem>
             )}
           />

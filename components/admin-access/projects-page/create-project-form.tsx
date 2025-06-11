@@ -139,6 +139,7 @@ const CreateProjectForm = ({
           render={({ field }) => (
             <FormItem>
               <Input placeholder="Project title" {...field} />
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -148,6 +149,7 @@ const CreateProjectForm = ({
           render={({ field }) => (
             <FormItem>
               <Input placeholder="Project description" {...field} />
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -182,6 +184,7 @@ const CreateProjectForm = ({
                   </SelectContent>
                 </Select>
               </Select>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -216,6 +219,7 @@ const CreateProjectForm = ({
                   </SelectContent>
                 </Select>
               </Select>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -314,6 +318,7 @@ const CreateProjectForm = ({
                 placeholder="Select project heads"
                 variant="inverted"
               />
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -332,6 +337,7 @@ const CreateProjectForm = ({
                 placeholder="Select project associates"
                 variant="inverted"
               />
+              <FormMessage />
             </FormItem>
           )}
         />

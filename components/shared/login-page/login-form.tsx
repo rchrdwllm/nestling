@@ -1,7 +1,7 @@
 import { Button } from "../../ui/button";
 import MotionWrapper from "../../wrappers/motion-wrapper";
 import { easings } from "@/constants/animations";
-import { Form, FormField, FormItem } from "../../ui/form";
+import { Form, FormField, FormItem, FormMessage } from "../../ui/form";
 import { useForm } from "react-hook-form";
 import { Input } from "../../ui/input";
 import Link from "next/link";
@@ -81,8 +81,7 @@ const LoginForm = ({ role, setStep }: LoginFormProps) => {
       setIsLoading(false);
     }
   };
-  
-  // Added event listener for Enter key to submit the form
+
   useEffect(() => {
     const handleEnter = (e: KeyboardEvent) => {
       if (e.key === "Enter") {
@@ -118,6 +117,7 @@ const LoginForm = ({ role, setStep }: LoginFormProps) => {
             render={({ field }) => (
               <FormItem>
                 <Input placeholder="Email address" {...field} />
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -127,6 +127,7 @@ const LoginForm = ({ role, setStep }: LoginFormProps) => {
             render={({ field }) => (
               <FormItem>
                 <Input placeholder="Password" type="password" {...field} />
+                <FormMessage />
                 <Link href="/api/auth/forgot-password">
                   <Button
                     type="button"

@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Form, FormField, FormItem } from "@/components/ui/form";
+import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { CreateModuleSchema } from "@/schemas/CreateModuleSchema";
 import { createModule } from "@/server/actions/create-module";
@@ -83,6 +83,7 @@ const CreateModuleForm = ({
           render={({ field }) => (
             <FormItem>
               <Input placeholder="Module title" {...field} />
+              <FormMessage />
             </FormItem>
           )}
         />

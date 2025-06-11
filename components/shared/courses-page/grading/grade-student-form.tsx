@@ -1,6 +1,12 @@
 "use client";
 
-import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { GradeSubmissionSchema } from "@/schemas/GradeSubmissionSchema";
 import { gradeSubmission } from "@/server/actions/grade-submission";
@@ -84,12 +90,13 @@ const GradeStudentForm = ({
         onKeyDown={handleKeyDown}
         className="flex flex-col gap-4"
       >
+        {" "}
         <FormField
           control={form.control}
           name="grade"
           render={({ field }) => (
-            <FormControl>
-              <FormItem className="flex items-center gap-2 text-sm">
+            <FormItem className="flex items-center gap-2 text-sm">
+              <FormControl>
                 <Input
                   max={points}
                   placeholder="Grade"
@@ -97,12 +104,13 @@ const GradeStudentForm = ({
                   className="w-16"
                   {...field}
                 />
-                <span className="block w-full [margin-top:_0_!important]">
-                  {" "}
-                  out of {points} points
-                </span>
-              </FormItem>
-            </FormControl>
+              </FormControl>
+              <span className="block w-full [margin-top:_0_!important]">
+                {" "}
+                out of {points} points
+              </span>
+              <FormMessage />
+            </FormItem>
           )}
         />
       </form>

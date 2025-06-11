@@ -1,7 +1,13 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { GradeSubmissionSchema } from "@/schemas/GradeSubmissionSchema";
@@ -90,36 +96,41 @@ const GradeSubmissionForm = ({
           onSubmit={form.handleSubmit(handleSubmit)}
           className="flex flex-col gap-4"
         >
+          {" "}
           <FormField
             control={form.control}
             name="grade"
             render={({ field }) => (
-              <FormControl>
-                <FormItem className="flex items-center gap-2">
-                  <Input
-                    max={points}
-                    placeholder="Grade"
-                    type="number"
-                    {...field}
-                  />
+              <FormItem>
+                <div className="flex items-center gap-2">
+                  <FormControl>
+                    <Input
+                      max={points}
+                      placeholder="Grade"
+                      type="number"
+                      {...field}
+                    />
+                  </FormControl>
                   <span className="block w-full [margin-top:_0_!important]">
                     {" "}
                     out of {points} points
                   </span>
-                </FormItem>
-              </FormControl>
+                </div>
+                <FormMessage />
+              </FormItem>
             )}
-          />
+          />{" "}
           <FormField
             control={form.control}
             name="feedback"
             defaultValue={feedback || ""}
             render={({ field }) => (
-              <FormControl>
-                <FormItem>
+              <FormItem>
+                <FormControl>
                   <Textarea placeholder="Feedback" {...field} />
-                </FormItem>
-              </FormControl>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
             )}
           />
           <Button type="submit" disabled={isExecuting}>

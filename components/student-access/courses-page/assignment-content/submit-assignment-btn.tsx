@@ -10,7 +10,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
 import { MAX_SIZE } from "@/constants/file";
 import { getSHA256 } from "@/lib/sha-256";
 import { SubmitAssignmentSchema } from "@/schemas/SubmitAssignmentSchema";
@@ -232,6 +238,7 @@ const SubmitAssignmentBtn = ({
                     <FormControl>
                       <RichTextEditor content={field.value || ""} />
                     </FormControl>
+                    <FormMessage />
                   </FormItem>
                 )}
               />

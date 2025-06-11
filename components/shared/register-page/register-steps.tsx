@@ -22,7 +22,7 @@ const RegisterSteps = () => {
   });
 
   return (
-    <section className="flex flex-col items-center justify-between pb-8 h-full w-full overflow-x-hidden">
+    <section className="flex flex-col items-center justify-between flex-1 h-full w-full overflow-x-hidden">
       <div className="h-full flex items-center w-full overflow-x-hidden">
         <AnimatePresence mode="popLayout" initial={false}>
           {step === 1 ? (
@@ -44,7 +44,7 @@ const RegisterSteps = () => {
           )}
         </AnimatePresence>
       </div>
-      <div className="flex items-center justify-center gap-1">
+      <div className="flex items-center justify-center gap-1 mt-8">
         <Step step={1} currentStep={step} />
         <Step step={2} currentStep={step} />
         <Step step={3} currentStep={step} />

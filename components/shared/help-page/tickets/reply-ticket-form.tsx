@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Form, FormField, FormItem } from "@/components/ui/form";
+import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
 import { CreateTicketSchema } from "@/schemas/CreateTicketSchema";
 import { ReplyTicketSchema } from "@/schemas/ReplyTicketSchema";
@@ -67,6 +67,7 @@ const ReplyTicketForm = ({ setIsOpen, ticketId }: ReplyTicketFormProps) => {
           render={({ field }) => (
             <FormItem>
               <Textarea placeholder="Add your reply here" {...field} />
+              <FormMessage />
             </FormItem>
           )}
         />

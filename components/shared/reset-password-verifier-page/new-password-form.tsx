@@ -1,7 +1,7 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { Form, FormField, FormItem } from "@/components/ui/form";
+import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { NewPasswordSchema } from "@/schemas/NewPasswordSchema";
@@ -76,6 +76,7 @@ const NewPasswordForm = ({ email }: { email: string }) => {
             render={({ field }) => (
               <FormItem>
                 <Input type="password" placeholder="New password" {...field} />
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -89,6 +90,7 @@ const NewPasswordForm = ({ email }: { email: string }) => {
                   placeholder="Confirm new password"
                   {...field}
                 />
+                <FormMessage />
               </FormItem>
             )}
           />

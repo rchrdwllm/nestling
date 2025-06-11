@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Form, FormField, FormItem } from "@/components/ui/form";
+import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { MultiSelect } from "@/components/ui/multi-select";
 import { MAX_SIZE } from "@/constants/file";
@@ -170,6 +170,7 @@ const CreateCourseForm = ({
           render={({ field }) => (
             <FormItem>
               <Input placeholder="Course name" {...field} />
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -179,6 +180,7 @@ const CreateCourseForm = ({
           render={({ field }) => (
             <FormItem>
               <Input placeholder="Course code" {...field} />
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -188,6 +190,7 @@ const CreateCourseForm = ({
           render={({ field }) => (
             <FormItem>
               <Input placeholder="Course description" {...field} />
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -209,6 +212,7 @@ const CreateCourseForm = ({
                   placeholder="Select instructors"
                   variant="inverted"
                 />
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -247,6 +251,7 @@ const CreateCourseForm = ({
                 className="hidden"
                 onChange={handleImageChange}
               />
+              <FormMessage />
             </FormItem>
           )}
         />

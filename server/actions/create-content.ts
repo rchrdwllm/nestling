@@ -30,21 +30,24 @@ export const createContent = actionClient
 
     if (isEdit) {
       if (type === "assignment") {
-        await db.collection("contents").doc(id).update({
-          title,
-          type,
-          moduleId,
-          courseId,
-          content,
-          startDate: date?.from?.toISOString(),
-          endDate: date?.to?.toISOString(),
-          submissionType,
-          points,
-          maxAttempts,
-          id,
-          isPublished,
-          updatedAt: new Date().toISOString(),
-        });
+        await db
+          .collection("contents")
+          .doc(id)
+          .update({
+            title: title || "Untitled content",
+            type,
+            moduleId,
+            courseId,
+            content,
+            startDate: date?.from?.toISOString(),
+            endDate: date?.to?.toISOString(),
+            submissionType,
+            points,
+            maxAttempts,
+            id,
+            isPublished,
+            updatedAt: new Date().toISOString(),
+          });
 
         revalidatePath(
           "/courses/[courseId]/modules/content/[contentId]",
@@ -59,16 +62,19 @@ export const createContent = actionClient
       }
 
       if (type === "lesson") {
-        await db.collection("contents").doc(id).update({
-          title,
-          type,
-          moduleId,
-          courseId,
-          content,
-          id,
-          isPublished,
-          updatedAt: new Date().toISOString(),
-        });
+        await db
+          .collection("contents")
+          .doc(id)
+          .update({
+            title: title || "Untitled content",
+            type,
+            moduleId,
+            courseId,
+            content,
+            id,
+            isPublished,
+            updatedAt: new Date().toISOString(),
+          });
 
         revalidatePath(
           "/courses/[courseId]/modules/content/[contentId]",
@@ -86,7 +92,7 @@ export const createContent = actionClient
       const newContent =
         type === "lesson"
           ? {
-              title,
+              title: title || "Untitled content",
               type,
               moduleId,
               id,
@@ -99,7 +105,7 @@ export const createContent = actionClient
             }
           : type === "assignment"
           ? {
-              title,
+              title: title || "Untitled content",
               type,
               moduleId,
               id,
@@ -116,7 +122,7 @@ export const createContent = actionClient
               isPublished,
             }
           : {
-              title,
+              title: title || "Untitled content",
               type,
               moduleId,
               id,
@@ -170,7 +176,7 @@ export const createContent = actionClient
         }
 
         await createNotif({
-          title: `New assignment: ${title}`,
+          title: `New assignment: ${title || "Untitled content"}`,
           message: `A new assignment has been created!`,
           senderId: user.id,
           type: "assignment",
@@ -178,7 +184,7 @@ export const createContent = actionClient
           receiverIds: enrolledStudentIds,
         });
         await sendNotification({
-          title: `New assignment: ${title}`,
+          title: `New assignment: ${title || "Untitled content"}`,
           body: "A new assignment has been created!",
           userIds: enrolledStudentIds ?? [],
         });

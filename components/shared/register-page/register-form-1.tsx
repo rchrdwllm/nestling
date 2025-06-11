@@ -2,10 +2,13 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import MotionWrapper from "@/components/wrappers/motion-wrapper";
 import { easings } from "@/constants/animations";
-import { Form, FormField, FormItem } from "@/components/ui/form";
+import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { RegisterStep1Schema } from "@/schemas/RegisterStep1Schema";
+import * as z from "zod";
 
 type RegisterForm1Props = {
   setStep: (step: number) => void;
@@ -30,7 +33,17 @@ const RegisterForm1 = ({
   details,
   setDetails,
 }: RegisterForm1Props) => {
-  const form = useForm();
+  const form = useForm<z.infer<typeof RegisterStep1Schema>>({
+    resolver: zodResolver(RegisterStep1Schema),
+    defaultValues: details,
+    mode: "onTouched",
+  });
+
+  // Keep details in sync with form state
+  const syncDetails = (field: keyof typeof details, value: string) => {
+    setDetails({ ...details, [field]: value });
+    form.setValue(field, value, { shouldValidate: true });
+  };
 
   return (
     <MotionWrapper
@@ -52,76 +65,76 @@ const RegisterForm1 = ({
         <form className="w-full max-w-[300px] flex flex-col gap-4">
           <FormField
             control={form.control}
-            name="..."
-            render={() => (
+            name="firstName"
+            render={({ field }) => (
               <FormItem>
                 <Input
                   placeholder="First name"
+                  {...field}
                   value={details.firstName}
-                  onChange={(e) =>
-                    setDetails({ ...details, firstName: e.target.value })
-                  }
+                  onChange={(e) => syncDetails("firstName", e.target.value)}
                 />
+                <FormMessage />
               </FormItem>
             )}
           />
           <FormField
             control={form.control}
-            name="..."
-            render={() => (
+            name="middleName"
+            render={({ field }) => (
               <FormItem>
                 <Input
                   placeholder="Middle name"
+                  {...field}
                   value={details.middleName}
-                  onChange={(e) =>
-                    setDetails({ ...details, middleName: e.target.value })
-                  }
+                  onChange={(e) => syncDetails("middleName", e.target.value)}
                 />
+                <FormMessage />
               </FormItem>
             )}
           />
           <FormField
             control={form.control}
-            name="..."
-            render={() => (
+            name="lastName"
+            render={({ field }) => (
               <FormItem>
                 <Input
-                  value={details.lastName}
-                  onChange={(e) =>
-                    setDetails({ ...details, lastName: e.target.value })
-                  }
                   placeholder="Last name"
+                  {...field}
+                  value={details.lastName}
+                  onChange={(e) => syncDetails("lastName", e.target.value)}
                 />
+                <FormMessage />
               </FormItem>
             )}
           />
           <FormField
             control={form.control}
-            name="..."
-            render={() => (
+            name="contactNumber"
+            render={({ field }) => (
               <FormItem>
                 <Input
-                  value={details.contactNumber}
-                  onChange={(e) =>
-                    setDetails({ ...details, contactNumber: e.target.value })
-                  }
                   placeholder="Contact number"
+                  {...field}
+                  value={details.contactNumber}
+                  onChange={(e) => syncDetails("contactNumber", e.target.value)}
                 />
+                <FormMessage />
               </FormItem>
             )}
           />
           <FormField
             control={form.control}
-            name="..."
-            render={() => (
+            name="address"
+            render={({ field }) => (
               <FormItem>
                 <Input
-                  value={details.address}
-                  onChange={(e) =>
-                    setDetails({ ...details, address: e.target.value })
-                  }
                   placeholder="Address"
+                  {...field}
+                  value={details.address}
+                  onChange={(e) => syncDetails("address", e.target.value)}
                 />
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -132,19 +145,12 @@ const RegisterForm1 = ({
           <ArrowLeft />
         </Button>
         <Button
-          onClick={() => {
-            if (
-              !details.firstName ||
-              !details.lastName ||
-              !details.contactNumber ||
-              !details.middleName
-            ) {
-              toast.error("Please fill in all fields");
-
-              return;
+          type="button"
+          onClick={async () => {
+            const valid = await form.trigger();
+            if (valid) {
+              setStep(3);
             }
-
-            setStep(3);
           }}
         >
           <ArrowRight />
