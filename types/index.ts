@@ -17,6 +17,8 @@ export type User = {
   name?: string;
   notifsEnabled: boolean;
   lastLoginAt?: string;
+  isArchived: boolean;
+  archivedAt?: string | null;
 };
 
 export type RegisteredEmail = {

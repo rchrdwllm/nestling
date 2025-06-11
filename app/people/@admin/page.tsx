@@ -1,8 +1,16 @@
-import { getAllStudents, getAllInstructors, getAllAdmins } from "@/lib/user";
+import {
+  getAllStudents,
+  getAllInstructors,
+  getAllAdmins,
+  getOptimisticUser,
+} from "@/lib/user";
 import ErrorToast from "@/components/ui/error-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import UserTable from "@/components/shared/people-page/user-table";
-import { userTableCols } from "@/components/shared/people-page/user-table-def";
+import {
+  adminUserTableCols,
+  userTableCols,
+} from "@/components/shared/people-page/user-table-def";
 import { Users, GraduationCap, Shield, CircleDashed } from "lucide-react";
 import FadeInWrapper from "@/components/wrappers/fadein-wrapper";
 import { getRegisteredEmails } from "@/lib/registered-email";
@@ -17,6 +25,7 @@ const AdminPeoplePage = async () => {
   const { success: admins, error: adminsError } = await getAllAdmins();
   const { success: registeredEmails, error: registeredEmailsError } =
     await getRegisteredEmails();
+  const user = await getOptimisticUser();
 
   if (studentsError || instructorsError || adminsError) {
     return (
@@ -81,7 +90,9 @@ const AdminPeoplePage = async () => {
               </p>
             </div>
             <UserTable
-              columns={userTableCols}
+              columns={
+                user.role === "admin" ? adminUserTableCols : userTableCols
+              }
               data={students}
               searchPlaceholder="Search students by name..."
             />
@@ -94,7 +105,9 @@ const AdminPeoplePage = async () => {
               </p>
             </div>
             <UserTable
-              columns={userTableCols}
+              columns={
+                user.role === "admin" ? adminUserTableCols : userTableCols
+              }
               data={instructors}
               searchPlaceholder="Search instructors by name..."
             />
@@ -107,14 +120,16 @@ const AdminPeoplePage = async () => {
               </p>
             </div>
             <UserTable
-              columns={userTableCols}
+              columns={
+                user.role === "admin" ? adminUserTableCols : userTableCols
+              }
               data={admins}
               searchPlaceholder="Search administrators by name..."
             />
           </TabsContent>
           <TabsContent value="registered" className="space-y-4">
             <div className="flex flex-col gap-2">
-              <h2 className="text-xl font-semibold">Registered Emails</h2>
+              <h2 className="text-xl font-semibold">Registered</h2>
               <p className="text-muted-foreground">
                 All registered emails in the system
               </p>

@@ -69,6 +69,25 @@ async function seedUsers() {
   console.log("Seeding completed.");
 }
 
-seedUsers().catch((error) => {
+async function updateUsers() {
+  const usersCollection = db.collection("users");
+  const snapshot = await usersCollection.get();
+
+  for (const doc of snapshot.docs) {
+    try {
+      await doc.ref.update({
+        isArchived: false,
+        archivedAt: null,
+      });
+      console.log(`Updated user with ID ${doc.id}`);
+    } catch (error) {
+      console.error(`Error updating user with ID ${doc.id}:`, error);
+    }
+  }
+
+  console.log("Update completed.");
+}
+
+updateUsers().catch((error) => {
   console.error("Error during seeding:", error);
 });

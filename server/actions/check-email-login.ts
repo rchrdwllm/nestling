@@ -19,6 +19,10 @@ export const checkEmailLogin = async (data: z.infer<typeof LoginSchema>) => {
 
     const user = users.docs[0].data() as User;
 
+    if (user.isArchived) {
+      return { error: "User account is archived" };
+    }
+
     const passwordMatch = await bcrypt.compare(password, user.password);
 
     if (!passwordMatch) {

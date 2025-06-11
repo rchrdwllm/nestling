@@ -61,6 +61,7 @@ export const getAllStudents = unstable_cache(
       const usersSnapshot = await db
         .collection("users")
         .where("role", "==", "student")
+        .where("isArchived", "==", false)
         .get();
       const aesKey = process.env.AES_ENCRYPTION_KEY;
 
@@ -94,6 +95,7 @@ export const getAllInstructors = unstable_cache(
       const usersSnapshot = await db
         .collection("users")
         .where("role", "==", "instructor")
+        .where("isArchived", "==", false)
         .get();
       const aesKey = process.env.AES_ENCRYPTION_KEY;
 
@@ -127,6 +129,7 @@ export const getAllAdmins = unstable_cache(
       const usersSnapshot = await db
         .collection("users")
         .where("role", "==", "admin")
+        .where("isArchived", "==", false)
         .get();
       const aesKey = process.env.AES_ENCRYPTION_KEY;
 
