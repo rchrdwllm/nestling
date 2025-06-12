@@ -111,7 +111,7 @@ const SidePanel = ({
               setIsHovered(false);
             }}
             variant="outline"
-            className="rounded-lg shadow-lg bg-white text-black border border-gray-200 hover:bg-gray-100 transition"
+            className="rounded-lg shadow-lg bg-white text-black border border-gray-200 transition-opacity opacity-40 hover:opacity-100 hover:bg-white"
             style={{
               width: 64,
               height: 120,
@@ -119,6 +119,7 @@ const SidePanel = ({
               alignItems: "center",
               justifyContent: "center",
               boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+              backgroundColor: "white",
             }}
           >
             <ChevronsLeft className="size-6" />
