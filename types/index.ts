@@ -202,6 +202,16 @@ export type Announcement = {
   senderId: string;
 };
 
+export type UniversalAnnouncement = {
+  title: string;
+  description: string;
+  image:string;
+  createdAt: string;
+  updatedAt: string;
+  isArchived: boolean;
+  archivedAt: string | null;
+};
+
 export type Message = {
   id: string;
   message?: string;

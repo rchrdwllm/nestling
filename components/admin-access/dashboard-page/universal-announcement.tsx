@@ -1,25 +1,29 @@
 "use client";
 import { useState, ChangeEvent, FormEvent } from "react";
 import { Button } from "@/components/ui/button";
+import { db, storage } from "@/lib/firebase";
+import { collection, addDoc } from "firebase/firestore";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const UniversalAnnouncement = () => {
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
-  const [files, setFiles] = useState<File[]>([]);
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [dragActive, setDragActive] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      setFiles(Array.from(e.target.files));
+    if (e.target.files && e.target.files[0]) {
+      setImageFile(e.target.files[0]);
     }
   };
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setDragActive(false);
-    if (e.dataTransfer.files) {
-      setFiles(Array.from(e.dataTransfer.files));
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      setImageFile(e.dataTransfer.files[0]);
     }
   };
 
@@ -33,19 +37,44 @@ const UniversalAnnouncement = () => {
     setDragActive(false);
   };
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    // TODO: Handle announcement creation logic here
-    setOpen(false);
-    setTitle("");
-    setDesc("");
-    setFiles([]);
+    if (!title.trim() || !desc.trim()) return;
+    setLoading(true);
+    try {
+      let imageUrl = "";
+      if (imageFile) {
+        const storageRef = ref(storage, `universalAnnouncements/${Date.now()}_${imageFile.name}`);
+        await uploadBytes(storageRef, imageFile);
+        imageUrl = await getDownloadURL(storageRef);
+      }
+
+      await addDoc(collection(db, "universalAnnouncements"), {
+        title,
+        description: desc,
+        image: imageUrl,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        isArchived: false,
+        archivedAt: null,
+      });
+
+      setOpen(false);
+      setTitle("");
+      setDesc("");
+      setImageFile(null);
+      setDragActive(false);
+    } catch (error) {
+      alert("Failed to create announcement");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <>
       <Button onClick={() => setOpen(true)} className="bg-red-600 text-white">
-        + Create Announcement
+        Create Announcement
       </Button>
       {open && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
@@ -54,11 +83,11 @@ const UniversalAnnouncement = () => {
               className="absolute top-4 right-4 text-2xl text-gray-400 hover:text-black"
               onClick={() => setOpen(false)}
               aria-label="Close"
+              type="button"
             >
               ×
             </button>
             <h2 className="text-2xl font-semibold mb-1">Create announcement</h2>
-            <p className="mb-4 text-gray-500">Fill in the form below to create a new announcement</p>
             <form onSubmit={handleSubmit} className="flex flex-col gap-3">
               <input
                 className="border rounded px-3 py-2 outline-none focus:border-red-500"
@@ -85,20 +114,26 @@ const UniversalAnnouncement = () => {
               >
                 <input
                   type="file"
-                  multiple
+                  accept="image/*"
                   className="hidden"
-                  id="announcement-files"
+                  id="announcement-image"
                   onChange={handleFileChange}
                 />
-                <label htmlFor="announcement-files" className="flex flex-col items-center cursor-pointer">
+                <label htmlFor="announcement-image" className="flex flex-col items-center cursor-pointer">
                   <span className="text-3xl mb-2 text-gray-400">📎</span>
                   <span className="text-gray-500">
-                    {files.length === 0 ? "Drag & drop files or images here, or click to upload" : `${files.length} file(s) selected`}
+                    {imageFile
+                      ? imageFile.name
+                      : "Drag & drop an image here, or click to upload"}
                   </span>
                 </label>
               </div>
-              <Button type="submit" className="bg-red-600 text-white w-full mt-2">
-                Create announcement
+              <Button
+                type="submit"
+                className="bg-red-600 text-white w-full mt-2"
+                disabled={loading}
+              >
+                {loading ? "Creating..." : "Create announcement"}
               </Button>
             </form>
           </div>
