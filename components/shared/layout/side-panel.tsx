@@ -21,12 +21,6 @@ import SidePanelTasks from "./sidepanel-tasks";
 import { getUpcomingAssignmentsForStudent } from "@/lib/content";
 import { getIncompleteUserTasks } from "@/lib/task";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 
 type SidePanelProps = {
   setRightPanelToggled: (toggled: boolean) => void;
