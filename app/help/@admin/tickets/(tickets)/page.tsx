@@ -1,7 +1,6 @@
 import ClosedTickets from "@/components/admin-access/help-page/closed-tickets";
 import InProgressTickets from "@/components/admin-access/help-page/in-progress-tickets";
 import OpenTickets from "@/components/admin-access/help-page/open-tickets";
-import CreateTicketBtn from "@/components/shared/help-page/tickets/create-ticket-btn";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const Tickets = async () => {

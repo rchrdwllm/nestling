@@ -65,12 +65,11 @@ const TicketsTable = ({ columns, data }: any) => {
           onChange={(event) =>
             table.getColumn("title")?.setFilterValue(event.target.value)
           }
-          className="w-full"
+          className="w-full max-w-md"
         />
         <div className="flex items-center gap-2">
           <Button
             variant="outline"
-            size="sm"
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage() || showAll}
           >
@@ -78,17 +77,12 @@ const TicketsTable = ({ columns, data }: any) => {
           </Button>
           <Button
             variant="outline"
-            size="sm"
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage() || showAll}
           >
             Next
           </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setShowAll(!showAll)}
-          >
+          <Button variant="outline" onClick={() => setShowAll(!showAll)}>
             {showAll ? "Show less" : "Show all"}
           </Button>
         </div>
