@@ -15,7 +15,7 @@ const Loading = () => {
         <Card className="p-6 flex flex-col gap-4">
           <div className="flex items-center gap-4">
             <Skeleton className="size-10 rounded-full" />
-            <div>
+            <div className="flex flex-col gap-4">
               <Skeleton className="h-7 w-64" />
               <Skeleton className="w-80 h-4" />
             </div>
@@ -35,7 +35,7 @@ const Loading = () => {
         <Card className="p-6 flex flex-col gap-4">
           <div className="flex items-center gap-4">
             <Skeleton className="size-10 rounded-full" />
-            <div>
+            <div className="flex flex-col gap-4">
               <Skeleton className="h-7 w-64" />
               <Skeleton className="w-80 h-4" />
             </div>
@@ -55,7 +55,7 @@ const Loading = () => {
         <Card className="p-6 flex flex-col gap-4">
           <div className="flex items-center gap-4">
             <Skeleton className="size-10 rounded-full" />
-            <div>
+            <div className="flex flex-col gap-4">
               <Skeleton className="h-7 w-64" />
               <Skeleton className="w-80 h-4" />
             </div>
