@@ -21,6 +21,12 @@ import SidePanelTasks from "./sidepanel-tasks";
 import { getUpcomingAssignmentsForStudent } from "@/lib/content";
 import { getIncompleteUserTasks } from "@/lib/task";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 type SidePanelProps = {
   setRightPanelToggled: (toggled: boolean) => void;
@@ -44,11 +50,10 @@ const SidePanel = ({
 
     if (error || !tasks) {
       console.error("Error fetching student tasks: ", error);
-
       return;
     }
 
-    setStudentTasks(studentTasks);
+    setStudentTasks(tasks); // <-- Correct: set to the fetched tasks!
   };
 
   const fetchEmployeeTasks = async () => {
@@ -64,12 +69,15 @@ const SidePanel = ({
   };
 
   useEffect(() => {
+    if (!user || !user.id) return;
+
     if (user.role === "student") {
       fetchStudentTasks();
     } else if (user.role === "admin" || user.role === "instructor") {
       fetchEmployeeTasks();
     }
-  }, [user]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.id, user?.role]);
 
   useEffect(() => {
     const q = query(
@@ -102,28 +110,26 @@ const SidePanel = ({
   return (
     <>
       {!rightPanelToggled && (
-        <MotionWrapper
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-          className="absolute w-[calc(50px+2rem)] top-1/2 right-0 h-[25vh] z-10 p-4 -translate-y-1/2"
-        >
-          <MotionWrapper
-            initial={{ opacity: 0, x: "100%" }}
-            animate={{ opacity: isHovered ? 1 : 0, x: isHovered ? 0 : "100%" }}
-            className="h-full"
+        <div className="fixed top-1/2 right-3 z-50 p-2 -translate-y-1/2">
+          <Button
+            onClick={() => {
+              setRightPanelToggled(true);
+              setIsHovered(false);
+            }}
+            variant="outline"
+            className="rounded-lg shadow-lg bg-white text-black border border-gray-200 hover:bg-gray-100 transition"
+            style={{
+              width: 64,
+              height: 120,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+            }}
           >
-            <Button
-              onClick={() => {
-                setRightPanelToggled(true);
-                setIsHovered(false);
-              }}
-              variant="outline"
-              className="px-4 h-full"
-            >
-              <ChevronsLeft className="size-5" />
-            </Button>
-          </MotionWrapper>
-        </MotionWrapper>
+            <ChevronsLeft className="size-6" />
+          </Button>
+        </div>
       )}
       <AnimatePresence initial={false} mode="popLayout">
         {rightPanelToggled && (
