@@ -19,6 +19,7 @@ import NotificationToggler from "@/components/shared/notifications/notification-
 import { useAction } from "next-safe-action/hooks";
 import { logUserActivity } from "@/server/actions/log-user-activity";
 import SignOutBtn from "./sign-out-btn";
+import { cn } from "@/lib/utils";
 
 const UserBtn = () => {
   const { user } = useCurrentUser();
@@ -35,68 +36,36 @@ const UserBtn = () => {
 
     return "";
   }, [user]);
-  const { execute } = useAction(logUserActivity);
 
   if (!user) return null;
 
-  const handleSignOut = () => {
-    toast.dismiss();
-    toast.loading("Signing you out...");
-
-    signOut()
-      .then(() => {
-        fetch("/api/revalidate", {
-          method: "POST",
-          body: JSON.stringify({
-            tags: ["courses", "students", "contents", "modules"],
-          }),
-        });
-
-        toast.dismiss();
-        toast.success("You have been signed out successfully!");
-        execute({
-          userId: user.id,
-          type: "logout",
-          details: {
-            role: user.role,
-          },
-        });
-      })
-      .catch((error) => {
-        toast.error(error);
-
-        toast.dismiss();
-        toast.success("Error signing you out: " + error);
-      });
-  };
-
   return (
-    <div className="mt-auto">
+    <div className={cn("size-10", user.role !== "admin" && "mt-auto")}>
       <DropdownMenu>
         <DropdownMenuTrigger>
           {user.image ? (
             <Avatar className="size-10">
               <AvatarImage src={user.image} className="object-cover" />
               <AvatarFallback>
-                <div className="group flex items-center justify-center size-10 bg-muted rounded-full transition-colors hover:bg-primary">
-                  <p className="text-sm font-semibold transition-colors group-hover:text-primary-foreground">
+                <div className="group flex justify-center items-center bg-muted hover:bg-primary rounded-full size-10 transition-colors">
+                  <p className="font-semibold group-hover:text-primary-foreground text-sm transition-colors">
                     {user.name![0]}
                   </p>
                 </div>
               </AvatarFallback>
             </Avatar>
           ) : (
-            <div className="group flex items-center justify-center size-10 bg-muted rounded-full transition-colors hover:bg-primary">
-              <p className="text-sm font-semibold transition-colors group-hover:text-primary-foreground">
+            <div className="group flex justify-center items-center bg-muted hover:bg-primary rounded-full size-10 transition-colors">
+              <p className="font-semibold group-hover:text-primary-foreground text-sm transition-colors">
                 {user.name![0]}
               </p>
             </div>
           )}
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="p-4 min-w-[250px]">
-          <div className="group flex flex-col gap-2 items-center justify-center rounded-md w-full py-6 bg-muted">
+          <div className="group flex flex-col justify-center items-center gap-2 bg-muted py-6 rounded-md w-full">
             {user.image ? (
-              <Avatar className="h-8 w-8">
+              <Avatar className="w-8 h-8">
                 <AvatarImage src={user.image} className="object-cover" />
                 <AvatarFallback>
                   <p className="font-medium">{user.name![0]}</p>
@@ -105,7 +74,7 @@ const UserBtn = () => {
             ) : (
               <p className="font-medium">{user.name![0]}</p>
             )}
-            <p className="text-xs font-medium">{user.name}</p>
+            <p className="font-medium text-xs">{user.name}</p>
             <p className="text-xs">{user.email}</p>
           </div>
           <DropdownMenuSeparator className="my-4" />
