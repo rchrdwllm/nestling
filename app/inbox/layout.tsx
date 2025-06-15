@@ -11,83 +11,83 @@ const Layout = async ({ children }: { children: ReactNode }) => {
   if (!user) return redirect("/api/auth/signin");
 
   return (
-    <main className="grid grid-cols-8 gap-x-2 bg-secondary h-[calc(100vh-1.1rem)]">
-      <aside className="flex flex-col col-span-2 border rounded-xl border-border bg-background">
+    <main className="gap-x-2 grid grid-cols-8 bg-secondary h-[calc(100vh-1.1rem)]">
+      <aside className="flex flex-col col-span-2 bg-background border border-border rounded-xl">
         <div className="p-4 border-b border-border">
-          <SearchBar isInbox entities={["students", "instructors"]} />
+          <SearchBar isInbox />
         </div>
         <Suspense
           fallback={
-            <aside className="flex flex-col col-span-2 border rounded-xl border-border bg-background">
+            <aside className="flex flex-col col-span-2 bg-background border border-border rounded-xl">
               <div className="p-4 border-b border-border">
-                <SearchBar isInbox entities={["students", "instructors"]} />
+                <SearchBar isInbox />
               </div>
-              <div className="overflow-y-hidden h-[calc(100vh-1rem-72.8px)]">
-                <article className="p-4 border-b flex flex-col gap-2">
+              <div className="h-[calc(100vh-1rem-72.8px)] overflow-y-hidden">
+                <article className="flex flex-col gap-2 p-4 border-b">
                   <Skeleton className="w-full h-4" />
                   <Skeleton className="w-full h-4" />
                 </article>
-                <article className="p-4 border-b flex flex-col gap-2">
+                <article className="flex flex-col gap-2 p-4 border-b">
                   <Skeleton className="w-full h-4" />
                   <Skeleton className="w-full h-4" />
                 </article>
-                <article className="p-4 border-b flex flex-col gap-2">
+                <article className="flex flex-col gap-2 p-4 border-b">
                   <Skeleton className="w-full h-4" />
                   <Skeleton className="w-full h-4" />
                 </article>
-                <article className="p-4 border-b flex flex-col gap-2">
+                <article className="flex flex-col gap-2 p-4 border-b">
                   <Skeleton className="w-full h-4" />
                   <Skeleton className="w-full h-4" />
                 </article>
-                <article className="p-4 border-b flex flex-col gap-2">
+                <article className="flex flex-col gap-2 p-4 border-b">
                   <Skeleton className="w-full h-4" />
                   <Skeleton className="w-full h-4" />
                 </article>
-                <article className="p-4 border-b flex flex-col gap-2">
+                <article className="flex flex-col gap-2 p-4 border-b">
                   <Skeleton className="w-full h-4" />
                   <Skeleton className="w-full h-4" />
                 </article>
-                <article className="p-4 border-b flex flex-col gap-2">
+                <article className="flex flex-col gap-2 p-4 border-b">
                   <Skeleton className="w-full h-4" />
                   <Skeleton className="w-full h-4" />
                 </article>
-                <article className="p-4 border-b flex flex-col gap-2">
+                <article className="flex flex-col gap-2 p-4 border-b">
                   <Skeleton className="w-full h-4" />
                   <Skeleton className="w-full h-4" />
                 </article>
-                <article className="p-4 border-b flex flex-col gap-2">
+                <article className="flex flex-col gap-2 p-4 border-b">
                   <Skeleton className="w-full h-4" />
                   <Skeleton className="w-full h-4" />
                 </article>
-                <article className="p-4 border-b flex flex-col gap-2">
+                <article className="flex flex-col gap-2 p-4 border-b">
                   <Skeleton className="w-full h-4" />
                   <Skeleton className="w-full h-4" />
                 </article>
-                <article className="p-4 border-b flex flex-col gap-2">
+                <article className="flex flex-col gap-2 p-4 border-b">
                   <Skeleton className="w-full h-4" />
                   <Skeleton className="w-full h-4" />
                 </article>
-                <article className="p-4 border-b flex flex-col gap-2">
+                <article className="flex flex-col gap-2 p-4 border-b">
                   <Skeleton className="w-full h-4" />
                   <Skeleton className="w-full h-4" />
                 </article>
-                <article className="p-4 border-b flex flex-col gap-2">
+                <article className="flex flex-col gap-2 p-4 border-b">
                   <Skeleton className="w-full h-4" />
                   <Skeleton className="w-full h-4" />
                 </article>
-                <article className="p-4 border-b flex flex-col gap-2">
+                <article className="flex flex-col gap-2 p-4 border-b">
                   <Skeleton className="w-full h-4" />
                   <Skeleton className="w-full h-4" />
                 </article>
-                <article className="p-4 border-b flex flex-col gap-2">
+                <article className="flex flex-col gap-2 p-4 border-b">
                   <Skeleton className="w-full h-4" />
                   <Skeleton className="w-full h-4" />
                 </article>
-                <article className="p-4 border-b flex flex-col gap-2">
+                <article className="flex flex-col gap-2 p-4 border-b">
                   <Skeleton className="w-full h-4" />
                   <Skeleton className="w-full h-4" />
                 </article>
-                <article className="p-4 border-b flex flex-col gap-2">
+                <article className="flex flex-col gap-2 p-4 border-b">
                   <Skeleton className="w-full h-4" />
                   <Skeleton className="w-full h-4" />
                 </article>

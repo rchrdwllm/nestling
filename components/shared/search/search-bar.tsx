@@ -7,7 +7,6 @@ import SearchResults from "./search-results";
 import { AnimatePresence } from "motion/react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
-import { ScrollArea } from "@/components/ui/scroll-area";
 
 type SearchBarProps = {
   isInbox?: boolean;
@@ -18,6 +17,23 @@ const SearchBar = ({ isInbox = false }: SearchBarProps) => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
+  const searchBarRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        searchBarRef.current &&
+        !searchBarRef.current.contains(event.target as Node)
+      ) {
+        setIsClicked(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const handleSearch = useDebouncedCallback(
     async (term: string, page: number = 1) => {
@@ -53,9 +69,9 @@ const SearchBar = ({ isInbox = false }: SearchBarProps) => {
         onClick={() => setIsClicked(true)}
         defaultValue={searchParams.get("query") || ""}
       />
-      {/* <AnimatePresence>
-        {isClicked && <SearchResults isInbox={isInbox} entities={entities} />}
-      </AnimatePresence> */}
+      <AnimatePresence>
+        {isClicked && <SearchResults isInbox={isInbox} />}
+      </AnimatePresence>
     </div>
   );
 };
