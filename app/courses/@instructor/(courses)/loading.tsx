@@ -14,7 +14,6 @@ const Loading = () => {
         <hr />
       </div>
       <section className="flex flex-col gap-4">
-        <Skeleton className="w-28 h-7" />
         <div className="gap-8 grid grid-cols-4">
           <article className="flex flex-col gap-4 p-4 border border-border rounded-xl">
             <div className="block relative rounded-lg h-40 overflow-hidden">
