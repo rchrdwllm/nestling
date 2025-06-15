@@ -18,7 +18,7 @@ const Tickets = async () => {
             Open tickets
           </TabsTrigger>
           <TabsTrigger className="w-full" value="in-progress">
-            In progress events
+            In progress tickets
           </TabsTrigger>
           <TabsTrigger className="w-full" value="closed">
             Closed tickets
