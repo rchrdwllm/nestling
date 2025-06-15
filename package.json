@@ -103,5 +103,10 @@
   },
   "overrides": {
     "react-is": "^19.0.0"
-  }
+  },
+  "browser": {
+"child_process": false
+}  
 }
+
+
