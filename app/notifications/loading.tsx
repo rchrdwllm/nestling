@@ -19,6 +19,20 @@ const NotificationsPage = () => {
           <Skeleton className="w-40 h-3.5" />
         </div>
       </Card>
+      <Card className="flex justify-between items-center p-4">
+        <div className="flex flex-col gap-2">
+          <Skeleton className="w-72 h-7" />
+          <Skeleton className="w-full h-4" />
+          <Skeleton className="w-40 h-3.5" />
+        </div>
+      </Card>
+      <Card className="flex justify-between items-center p-4">
+        <div className="flex flex-col gap-2">
+          <Skeleton className="w-72 h-7" />
+          <Skeleton className="w-full h-4" />
+          <Skeleton className="w-40 h-3.5" />
+        </div>
+      </Card>
     </div>
   );
 };
