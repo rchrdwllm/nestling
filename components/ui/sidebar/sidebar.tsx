@@ -14,6 +14,7 @@ import { useCurrentUser } from "@/hooks/use-current-user";
 import { useMemo } from "react";
 import NotifLink from "./notif-link";
 import { cn } from "@/lib/utils";
+import SearchBtn from "@/components/shared/search/search-btn";
 
 const Sidebar = () => {
   const { user } = useCurrentUser();
@@ -50,6 +51,10 @@ const Sidebar = () => {
         {sidebarItems.map((item) => {
           if (item.href === "/notifications") {
             return <NotifLink key={item.href} {...item} />;
+          }
+
+          if (item.href === "/search") {
+            return <SearchBtn key={item.href} />;
           }
 
           return <SidebarLink key={item.href} {...item} />;

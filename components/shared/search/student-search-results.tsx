@@ -84,7 +84,7 @@ const StudentSearchResults = memo(({ isInbox }: StudentSearchResultsProps) => {
 
   return (
     <div>
-      <ScrollArea className="flex h-72 flex-col gap-1 items-start">
+      <ScrollArea className="flex flex-col items-start gap-1">
         {searchResults.students.length > 0 ? (
           searchResults.students.map((student: User) => (
             <StudentCard isInbox={isInbox} key={student.id} {...student} />

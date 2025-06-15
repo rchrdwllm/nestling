@@ -25,6 +25,11 @@ export type SidebarItem = {
 
 export const studentSidebarItems: SidebarItem[] = [
   {
+    label: "Search",
+    href: "/search",
+    Icon: Search,
+  },
+  {
     label: "Dashboard",
     href: "/dashboard",
     Icon: LayoutDashboard,
@@ -67,6 +72,11 @@ export const studentSidebarItems: SidebarItem[] = [
 ];
 
 export const instructorSidebarItems: SidebarItem[] = [
+  {
+    label: "Search",
+    href: "/search",
+    Icon: Search,
+  },
   {
     label: "Dashboard",
     href: "/dashboard",

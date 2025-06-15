@@ -81,7 +81,7 @@ const ProjectsSearchResults = () => {
 
   return (
     <div>
-      <ScrollArea className="flex h-72 flex-col gap-1 items-start">
+      <ScrollArea className="flex flex-col items-start gap-1">
         {searchResults.projects.length > 0 ? (
           <div className="flex flex-col gap-1 pt-2">
             {searchResults.projects.map((project) => (

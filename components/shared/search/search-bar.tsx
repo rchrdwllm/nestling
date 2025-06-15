@@ -7,37 +7,17 @@ import SearchResults from "./search-results";
 import { AnimatePresence } from "motion/react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 type SearchBarProps = {
-  entities?: string[];
   isInbox?: boolean;
 };
 
-const SearchBar = ({
-  entities = ["students", "instructors", "courses", "contents", "projects"],
-  isInbox = false,
-}: SearchBarProps) => {
+const SearchBar = ({ isInbox = false }: SearchBarProps) => {
   const [isClicked, setIsClicked] = useState(false);
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
-  const searchBarRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        searchBarRef.current &&
-        !searchBarRef.current.contains(event.target as Node)
-      ) {
-        setIsClicked(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
 
   const handleSearch = useDebouncedCallback(
     async (term: string, page: number = 1) => {
@@ -65,7 +45,7 @@ const SearchBar = ({
   }, [isClicked]);
 
   return (
-    <div className="relative" ref={searchBarRef}>
+    <div className="relative">
       <Input
         Icon={Search}
         placeholder="Search"
@@ -73,9 +53,9 @@ const SearchBar = ({
         onClick={() => setIsClicked(true)}
         defaultValue={searchParams.get("query") || ""}
       />
-      <AnimatePresence>
+      {/* <AnimatePresence>
         {isClicked && <SearchResults isInbox={isInbox} entities={entities} />}
-      </AnimatePresence>
+      </AnimatePresence> */}
     </div>
   );
 };

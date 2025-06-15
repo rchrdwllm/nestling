@@ -86,7 +86,7 @@ const InstructorSearchResults = ({ isInbox }: InstructorSearchResultsProps) => {
 
   return (
     <div>
-      <ScrollArea className="flex h-72 flex-col gap-1 items-start">
+      <ScrollArea className="flex flex-col items-start gap-1">
         {searchResults.instructors.length > 0 ? (
           searchResults.instructors.map((instructor: User) => (
             <InstructorCard
