@@ -17,17 +17,17 @@ const AdminCoursesPage = async () => {
 
   return (
     <FadeInWrapper>
-      <div className="p-6 flex flex-col gap-4">
-        <div className="flex flex-col gap-4">
-          <div className="flex items-center justify-between">
-            <h1 className="text-3xl font-semibold">Courses</h1>
+      <div className="flex flex-col gap-10 p-6">
+        <div className="flex flex-col gap-3">
+          <div className="flex flex-1 justify-between items-center gap-4">
+            <h1 className="flex-1 font-semibold text-3xl">Manage courses</h1>
+            <Link href="/courses/archive">
+              <Button variant="outline">View archive</Button>
+            </Link>
             <CreateCourseBtn instructors={instructors} isAdmin />
           </div>
           <hr />
         </div>
-        <Link href="/courses/archive">
-          <Button variant="link">View archived courses</Button>
-        </Link>
         <Courses />
       </div>
     </FadeInWrapper>
