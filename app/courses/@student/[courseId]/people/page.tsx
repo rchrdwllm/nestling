@@ -4,13 +4,17 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import UserTable from "@/components/shared/people-page/user-table";
 import { userTableCols } from "@/components/shared/people-page/user-table-def";
 import { Users, GraduationCap } from "lucide-react";
+import Searcher from "@/components/shared/search/general-search/searcher";
 
 const PeoplePage = async ({
   params,
+  searchParams,
 }: {
   params: Promise<{ courseId: string }>;
+  searchParams?: Promise<{ query?: string; page?: string; tab?: string }>;
 }) => {
   const { courseId } = await params;
+  const { query, page, tab } = (await searchParams) || {};
   const { success: enrolledStudents, error: enrolledStudentsError } =
     await getEnrolledStudents(courseId);
   const { success: courseInstructors, error: courseInstructorsError } =
@@ -31,9 +35,9 @@ const PeoplePage = async ({
       />
     );
   }
-
   return (
     <div className="p-6 flex flex-col gap-8">
+      <Searcher query={query} page={page} tab={tab} />
       <div className="flex flex-col gap-4">
         <h1 className="text-3xl font-semibold">People</h1>
         <hr />

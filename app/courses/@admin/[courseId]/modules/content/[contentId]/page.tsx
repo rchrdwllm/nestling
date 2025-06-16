@@ -23,12 +23,12 @@ const ContentPage = async ({
 
   const file = content.type === "file" ? await getContentFile(contentId) : null;
   return (
-    <main className="p-6 flex gap-16">
+    <main className="flex gap-16 p-6">
       <Searcher query={query} page={page} tab={tab} />
       <div className="flex-1">
         <div className="flex flex-col gap-3">
           <div className="flex justify-between items-center">
-            <h1 className="text-3xl font-semibold">{content.title}</h1>
+            <h1 className="font-semibold text-3xl">{content.title}</h1>
             <Link
               href={`/courses/${courseId}/create?moduleId=${content.moduleId}&contentId=${contentId}`}
             >

@@ -108,6 +108,7 @@ const SearchBar = ({ isInbox }: SearchBarProps) => {
                 value={field.value || "all"}
                 onValueChange={(value) => field.onChange(value)}
                 className="w-full"
+                defaultValue={entities[0]}
               >
                 <TabsList className="w-full">
                   {entities.map((entity) => (

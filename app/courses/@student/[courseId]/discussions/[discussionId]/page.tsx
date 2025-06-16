@@ -9,13 +9,17 @@ import { getDiscussionById } from "@/lib/discussion";
 import { getDiscussionReplies } from "@/lib/discussion-reply";
 import { getUserById } from "@/lib/user";
 import Link from "next/link";
+import Searcher from "@/components/shared/search/general-search/searcher";
 
 const DiscussionPage = async ({
   params,
+  searchParams,
 }: {
   params: Promise<{ courseId: string; discussionId: string }>;
+  searchParams?: Promise<{ query?: string; page?: string; tab?: string }>;
 }) => {
   const { discussionId, courseId } = await params;
+  const { query, page, tab } = (await searchParams) || {};
   const { success: discussion, error } = await getDiscussionById(discussionId);
 
   if (error || !discussion) {
@@ -37,9 +41,9 @@ const DiscussionPage = async ({
   if (repliesError || !replies) {
     return <ErrorToast error={"Error fetching replies: " + repliesError} />;
   }
-
   return (
     <div className="p-6 flex flex-col gap-8">
+      <Searcher query={query} page={page} tab={tab} />
       <div className="flex flex-col gap-4">
         <div className="flex items-center justify-between">
           <h1 className="text-3xl font-semibold">Discussion</h1>

@@ -11,11 +11,11 @@ const ArchivedCoursesPage = async ({
   const { query, page, tab } = (await searchParams) || {};
 
   return (
-    <FadeInWrapper className="p-6 flex flex-col gap-10">
-      <main >
+    <FadeInWrapper className="flex flex-col gap-10 p-6">
+      <main>
         <Searcher query={query} page={page} tab={tab} />
         <div className="flex flex-col gap-3">
-          <h1 className="text-3xl font-semibold">Archived Courses</h1>
+          <h1 className="font-semibold text-3xl">Archived Courses</h1>
           <hr />
         </div>
         <ArchivedCourses />

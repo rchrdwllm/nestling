@@ -7,13 +7,17 @@ import { getOptimisticUser } from "@/lib/user";
 import StudentSubmission from "@/components/student-access/courses-page/student-submission";
 import ContentViewLogger from "@/components/shared/content-page/content-view-logger";
 import ErrorToast from "@/components/ui/error-toast";
+import Searcher from "@/components/shared/search/general-search/searcher";
 
 const ContentPage = async ({
   params,
+  searchParams,
 }: {
   params: Promise<{ contentId: string }>;
+  searchParams?: Promise<{ query?: string; page?: string; tab?: string }>;
 }) => {
   const { contentId } = await params;
+  const { query, page, tab } = (await searchParams) || {};
   const { success: content, error: contentError } = await getModuleContent(
     contentId
   );
@@ -36,11 +40,11 @@ const ContentPage = async ({
   const currentDate = content.type === "assignment" ? new Date() : new Date();
 
   const isLocked = currentDate < startDate || currentDate > endDate || false;
-
   if (isLocked) {
     return (
       <div className="flex gap-8 p-6">
         <ContentViewLogger content={content} />
+        <Searcher query={query} page={page} tab={tab} />
         <div>
           <div className="flex flex-col gap-3">
             <h1 className="text-3xl font-semibold">{content.title}</h1>
@@ -66,10 +70,10 @@ const ContentPage = async ({
       </div>
     );
   }
-
   return (
     <main className="p-6 flex gap-8">
       <ContentViewLogger content={content} />
+      <Searcher query={query} page={page} tab={tab} />
       <div className="flex-1">
         <div className="flex flex-col gap-3">
           <div className="flex justify-between items-center">

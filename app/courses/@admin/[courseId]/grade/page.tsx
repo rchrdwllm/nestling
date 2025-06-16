@@ -45,7 +45,7 @@ const GradePage = async ({
       <Searcher query={query} page={page} tab={tab} />
       <div className="flex flex-col gap-4">
         <div className="flex justify-between items-center">
-          <h1 className="text-3xl font-semibold">Grade assignments</h1>
+          <h1 className="font-semibold text-3xl">Grade assignments</h1>
           <GenerateGradesReport
             studentIds={enrolledStudents.map((student) => student.id)}
             courseId={courseId}

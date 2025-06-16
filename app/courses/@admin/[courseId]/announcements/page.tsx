@@ -12,11 +12,11 @@ const AnnouncementsPage = async ({
   const { courseId } = await params;
   const { query, page, tab } = (await searchParams) || {};
   return (
-    <main className="p-6 flex flex-col gap-6">
+    <main className="flex flex-col gap-6 p-6">
       <Searcher query={query} page={page} tab={tab} />
       <header className="flex flex-col gap-3">
         <div className="flex justify-between items-center">
-          <h1 className="text-3xl font-semibold">Announcements</h1>
+          <h1 className="font-semibold text-3xl">Announcements</h1>
           <CreateAnnouncementBtn />
         </div>
         <hr />

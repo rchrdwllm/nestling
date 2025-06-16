@@ -9,8 +9,8 @@ const CreatePage = async ({
   searchParams,
 }: {
   params: Promise<{ courseId: string }>;
-  searchParams: Promise<{ 
-    moduleId?: string; 
+  searchParams: Promise<{
+    moduleId?: string;
     contentId?: string;
     query?: string;
     page?: string;
@@ -33,10 +33,10 @@ const CreatePage = async ({
     return <ErrorToast error={"Error fetching content: " + contentError} />;
   }
   return (
-    <main className="p-6 flex flex-col gap-8">
+    <main className="flex flex-col gap-8 p-6">
       <Searcher query={query} page={page} tab={tab} />
       <div className="flex flex-col gap-3">
-        <h1 className="text-3xl font-semibold">
+        <h1 className="font-semibold text-3xl">
           {moduleId
             ? "Add content"
             : content

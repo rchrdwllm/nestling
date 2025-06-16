@@ -19,10 +19,10 @@ const ArchivedDiscussions = async ({
     return <ErrorToast error={archivedDiscussionsError} />;
   }
   return (
-    <div className="p-6 flex flex-col gap-8">
+    <div className="flex flex-col gap-8 p-6">
       <Searcher query={query} page={page} tab={tab} />
       <div className="flex flex-col gap-4">
-        <h1 className="text-3xl font-semibold">Archived discussions</h1>
+        <h1 className="font-semibold text-3xl">Archived discussions</h1>
         <hr />
       </div>
       <section className="flex flex-col gap-4">
