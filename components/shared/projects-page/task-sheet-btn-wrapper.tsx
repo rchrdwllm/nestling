@@ -2,6 +2,7 @@ import { Task, User } from "@/types";
 import React from "react";
 import TaskSheetBtn from "./task-sheet-btn";
 import { getTaskAttachments } from "@/lib/task";
+import ErrorToast from "@/components/ui/error-toast";
 
 type TaskSheetBtnWrapperProps = {
   availableAssignees: User[];
@@ -15,7 +16,7 @@ const TaskSheetBtnWrapper = async ({
   const { success, error } = await getTaskAttachments(task.id);
 
   if (error || !success) {
-    console.error("Error fetching task attachments: ", error);
+    return <ErrorToast error={"Error fetching task attachments: " + error} />;
   }
 
   return (

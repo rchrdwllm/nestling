@@ -41,6 +41,7 @@ import { addAttachment } from "@/server/actions/add-attachment";
 import AttachmentPreview from "./attachment-preview";
 import { archiveTask } from "@/server/actions/archive-task";
 import { deleteTask } from "@/server/actions/delete-task";
+import { useCurrentUser } from "@/hooks/use-current-user";
 
 type CreateTaskFormProps = {
   projectId: string;
@@ -63,6 +64,8 @@ const CreateTaskForm = ({
   selectedEndDate,
   attachments = [],
 }: CreateTaskFormProps) => {
+  const { user } = useCurrentUser();
+  const isOwner = useMemo(() => user.id === task?.ownerId, [user, task]);
   const [isLoading, setIsLoading] = useState(false);
   const initialPreviewUrls = useMemo(
     () =>
@@ -475,16 +478,29 @@ const CreateTaskForm = ({
         )}
         {task && isEdit && (
           <>
-            <Button
-              type="button"
-              variant="outline"
-              className="text-primary hover:text-primary"
-              onClick={() => {
-                taskDelete({ taskId: task.id });
-              }}
-            >
-              Delete task
-            </Button>
+            {user.role === "admin" ? (
+              <Button
+                type="button"
+                variant="outline"
+                className="text-primary hover:text-primary"
+                onClick={() => {
+                  taskDelete({ taskId: task.id });
+                }}
+              >
+                Delete task
+              </Button>
+            ) : user.role === "instructor" && isOwner ? (
+              <Button
+                type="button"
+                variant="outline"
+                className="text-primary hover:text-primary"
+                onClick={() => {
+                  taskDelete({ taskId: task.id });
+                }}
+              >
+                Delete task
+              </Button>
+            ) : null}
             <Button
               type="button"
               variant="outline"
