@@ -71,19 +71,22 @@ export const createProject = actionClient
         new Set([...(projectHeads ?? []), ...(projectAssociates ?? [])])
       ).filter((id) => user.id !== id);
 
-      await createNotif({
-        title: `New project: ${title}`,
-        message: "You're part of a new project!",
-        senderId: user.id,
-        type: "project",
-        url: `/projects/${id}`,
-        receiverIds: uniqueUserIds,
-      });
-      await sendNotification({
-        title: `New project: ${title}`,
-        body: "You're part of a new project!",
-        userIds: uniqueUserIds,
-      });
+      if (uniqueUserIds.length > 0) {
+        await createNotif({
+          title: `New project: ${title}`,
+          message: "You're part of a new project!",
+          senderId: user.id,
+          type: "project",
+          url: `/projects/${id}`,
+          receiverIds: uniqueUserIds,
+        });
+
+        await sendNotification({
+          title: `New project: ${title}`,
+          body: "You're part of a new project!",
+          userIds: uniqueUserIds,
+        });
+      }
 
       revalidateTag("projects");
 

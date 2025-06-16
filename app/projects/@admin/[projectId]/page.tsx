@@ -38,7 +38,8 @@ const ProjectPage = async ({
   const { success: admins, error: adminsError } = await getUnarchivedAdmins();
   const { success: instructors, error: instructorsError } =
     await getUnarchivedInstructors();
-  const user = await getOptimisticUser();
+
+  console.log("Fetching project details for projectId:", projectId);
 
   if (
     projectError ||
