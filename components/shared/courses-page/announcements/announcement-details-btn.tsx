@@ -10,6 +10,7 @@ import { EllipsisVertical } from "lucide-react";
 import ArchiveAnnouncementBtn from "./archive-announcement-btn";
 import EditAnnouncementBtn from "./edit-announcement-btn";
 import { Announcement } from "@/types";
+import DeleteAnnouncementBtn from "./delete-announcement-btn";
 
 type AnnouncementDetailsBtnProps = {
   announcementId: string;
@@ -29,7 +30,7 @@ const AnnouncementDetailsBtn = ({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger onClick={handleClick}>
-        <EllipsisVertical className="size-4 text-muted-foreground transition-colors hover:text-foreground" />
+        <EllipsisVertical className="size-4 text-muted-foreground hover:text-foreground transition-colors" />
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuItem asChild>
@@ -40,6 +41,9 @@ const AnnouncementDetailsBtn = ({
             announcementId={announcementId}
             isArchived={isArchived}
           />
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <DeleteAnnouncementBtn announcementId={announcementId} />
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
