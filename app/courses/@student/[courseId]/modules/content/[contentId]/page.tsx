@@ -47,7 +47,7 @@ const ContentPage = async ({
         <Searcher query={query} page={page} tab={tab} />
         <div>
           <div className="flex flex-col gap-3">
-            <h1 className="text-3xl font-semibold">{content.title}</h1>
+            <h1 className="font-semibold text-3xl">{content.title}</h1>
             <hr />
           </div>
           {content.type === "assignment" && (
@@ -71,13 +71,13 @@ const ContentPage = async ({
     );
   }
   return (
-    <main className="p-6 flex gap-8">
+    <main className="flex gap-8 p-6">
       <ContentViewLogger content={content} />
       <Searcher query={query} page={page} tab={tab} />
       <div className="flex-1">
         <div className="flex flex-col gap-3">
           <div className="flex justify-between items-center">
-            <h1 className="text-3xl font-semibold">{content.title}</h1>
+            <h1 className="font-semibold text-3xl">{content.title}</h1>
             {content.type === "assignment" && (
               <SubmitAssignmentBtn
                 submissionType={content.submissionType!}
