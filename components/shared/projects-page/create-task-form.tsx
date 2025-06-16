@@ -40,6 +40,7 @@ import { uploadFileToCloudinary } from "@/server/actions/upload-to-cloudinary";
 import { addAttachment } from "@/server/actions/add-attachment";
 import AttachmentPreview from "./attachment-preview";
 import { archiveTask } from "@/server/actions/archive-task";
+import { deleteTask } from "@/server/actions/delete-task";
 
 type CreateTaskFormProps = {
   projectId: string;
@@ -125,6 +126,21 @@ const CreateTaskForm = ({
     onError: (error) => {
       toast.dismiss();
       toast.error(`Error archiving task: ${error}`);
+    },
+  });
+  const { execute: taskDelete } = useAction(deleteTask, {
+    onSuccess: () => {
+      toast.dismiss();
+      toast.success("Task deleted successfully");
+      setIsOpen(false);
+    },
+    onError: (error) => {
+      toast.dismiss();
+      toast.error(`Error deleting task: ${error}`);
+    },
+    onExecute: () => {
+      toast.dismiss();
+      toast.loading("Deleting task...");
     },
   });
 
@@ -257,7 +273,7 @@ const CreateTaskForm = ({
                         <SelectItem key={status.id} value={status.value}>
                           <div className="flex items-center gap-2">
                             <span
-                              className="inline-block size-2 rounded-md"
+                              className="inline-block rounded-md size-2"
                               style={{ backgroundColor: status.color }}
                             ></span>{" "}
                             <span>{status.name}</span>
@@ -292,7 +308,7 @@ const CreateTaskForm = ({
                         <SelectItem key={priority.id} value={priority.value}>
                           <div className="flex items-center gap-2">
                             <span
-                              className="inline-block size-2 rounded-md"
+                              className="inline-block rounded-md size-2"
                               style={{ backgroundColor: priority.color }}
                             ></span>{" "}
                             <span>{priority.name}</span>
@@ -328,11 +344,11 @@ const CreateTaskForm = ({
                       ) : (
                         <span>Start date</span>
                       )}
-                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                      <CalendarIcon className="opacity-50 ml-auto w-4 h-4" />
                     </Button>
                   </FormControl>
                 </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
+                <PopoverContent className="p-0 w-auto" align="start">
                   <Calendar
                     mode="single"
                     selected={field.value}
@@ -366,11 +382,11 @@ const CreateTaskForm = ({
                       ) : (
                         <span>End date</span>
                       )}
-                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                      <CalendarIcon className="opacity-50 ml-auto w-4 h-4" />
                     </Button>
                   </FormControl>
                 </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
+                <PopoverContent className="p-0 w-auto" align="start">
                   <Calendar
                     mode="single"
                     selected={field.value}
@@ -408,19 +424,19 @@ const CreateTaskForm = ({
         />
         {isEdit && task && (
           <div className="flex flex-col gap-4">
-            <div className="flex items-center justify-between">
+            <div className="flex justify-between items-center">
               <h1 className="font-semibold">Attachments</h1>
               <div>
                 <button
                   type="button"
-                  className="aspect-square hover:bg-accent hover:text-accent-foreground rounded-md cursor-pointer group transition-colors"
+                  className="group hover:bg-accent rounded-md aspect-square transition-colors hover:text-accent-foreground cursor-pointer"
                 >
                   <label
-                    className="flex flex-col justify-center items-center gap-2 w-full p-2 cursor-pointer text-muted-foreground transition-colors group-hover:text-foreground"
+                    className="flex flex-col justify-center items-center gap-2 p-2 w-full text-muted-foreground group-hover:text-foreground transition-colors cursor-pointer"
                     htmlFor="submission"
                   >
                     <>
-                      <span className="flex items-center gap-2 text-sm font-medium">
+                      <span className="flex items-center gap-2 font-medium text-sm">
                         <Plus className="size-4" />
                       </span>
                     </>
@@ -450,7 +466,7 @@ const CreateTaskForm = ({
                   </article>
                 ))
               ) : (
-                <p className="text-muted-foreground text-center my-8">
+                <p className="my-8 text-muted-foreground text-center">
                   No attachments
                 </p>
               )}
@@ -458,16 +474,28 @@ const CreateTaskForm = ({
           </div>
         )}
         {task && isEdit && (
-          <Button
-            type="button"
-            variant="outline"
-            className="hover:text-primary"
-            onClick={() => {
-              taskArchive({ taskId: task.id });
-            }}
-          >
-            {task.isArchived ? "Unarchive" : "Archive"} task
-          </Button>
+          <>
+            <Button
+              type="button"
+              variant="outline"
+              className="text-primary hover:text-primary"
+              onClick={() => {
+                taskDelete({ taskId: task.id });
+              }}
+            >
+              Delete task
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              className="hover:text-primary"
+              onClick={() => {
+                taskArchive({ taskId: task.id });
+              }}
+            >
+              {task.isArchived ? "Unarchive" : "Archive"} task
+            </Button>
+          </>
         )}
         <Button type="submit" disabled={isExecuting || isLoading}>
           {isEdit ? "Update task" : "Create task"}

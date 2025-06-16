@@ -63,6 +63,7 @@ export const deleteTask = actionClient
 
       revalidateTag("tasks");
       revalidateTag("files");
+      revalidateTag("projects");
 
       return { success: "Task deleted successfully" };
     } catch (error) {
