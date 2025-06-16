@@ -1,22 +1,26 @@
 import DiscussionCard from "@/components/shared/courses-page/discussions/discussion-card";
 import ErrorToast from "@/components/ui/error-toast";
 import { getArchivedDiscussionsByCourseId } from "@/lib/discussion";
+import Searcher from "@/components/shared/search/general-search/searcher";
 
 const ArchivedDiscussions = async ({
   params,
+  searchParams,
 }: {
   params: Promise<{ courseId: string }>;
+  searchParams?: Promise<{ query?: string; page?: string; tab?: string }>;
 }) => {
   const { courseId } = await params;
+  const { query, page, tab } = (await searchParams) || {};
   const { success: archivedDiscussions, error: archivedDiscussionsError } =
     await getArchivedDiscussionsByCourseId(courseId);
 
   if (archivedDiscussionsError || !archivedDiscussions) {
     return <ErrorToast error={archivedDiscussionsError} />;
   }
-
   return (
     <div className="p-6 flex flex-col gap-8">
+      <Searcher query={query} page={page} tab={tab} />
       <div className="flex flex-col gap-4">
         <h1 className="text-3xl font-semibold">Archived discussions</h1>
         <hr />

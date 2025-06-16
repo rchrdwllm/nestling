@@ -10,12 +10,12 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { memo } from "react";
 
-type StudentCardProps = {
+type AdminCardProps = {
   isInbox?: boolean;
 } & User;
 
-const StudentCard = memo(
-  ({ id, name, email, image, isInbox }: StudentCardProps) => {
+const AdminCard = memo(
+  ({ id, name, email, image, isInbox }: AdminCardProps) => {
     const { user } = useCurrentUser();
     const channelName = generateChannelId(user.id, id);
     const router = useRouter();
@@ -90,4 +90,4 @@ const StudentCard = memo(
   }
 );
 
-export default StudentCard;
+export default AdminCard;

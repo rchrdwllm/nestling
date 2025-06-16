@@ -20,13 +20,17 @@ import CreateTaskDialog from "@/components/shared/projects-page/create-task-dial
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import ErrorToast from "@/components/ui/error-toast";
+import Searcher from "@/components/shared/search/general-search/searcher";
 
 const ProjectPage = async ({
   params,
+  searchParams,
 }: {
   params: Promise<{ projectId: string }>;
+  searchParams?: Promise<{ query?: string; page?: string; tab?: string }>;
 }) => {
   const { projectId } = await params;
+  const { query, page, tab } = (await searchParams) || {};
   const { success: project, error: projectError } = await getProjectById(
     projectId
   );
@@ -86,17 +90,17 @@ const ProjectPage = async ({
   if (!tasks || !owner) {
     return <div>No data available.</div>;
   }
-
   return (
     <>
+      <Searcher query={query} page={page} tab={tab} />
       <CreateTaskDialog
         availableAssignees={availableAssignees}
         projectId={project.id}
       />
-      <div className="p-6 flex flex-col gap-8">
+      <div className="flex flex-col gap-8 p-6">
         <div className="flex flex-col gap-4">
-          <div className="flex items-stretch justify-between gap-2">
-            <h1 className="text-3xl font-semibold flex-1">{project.title}</h1>
+          <div className="flex justify-between items-stretch gap-2">
+            <h1 className="flex-1 font-semibold text-3xl">{project.title}</h1>
             <ArchiveProjectBtn
               projectId={project.id}
               isArchived={project.isArchived}
@@ -111,14 +115,14 @@ const ProjectPage = async ({
           <hr />
         </div>
         <ProjectDetails project={project} owner={owner} />
-        <h3 className="text-xl font-semibold">Project timeline</h3>
+        <h3 className="font-semibold text-xl">Project timeline</h3>
         <section className="grid grid-cols-2">
           <article className="col-span-2">
             <TasksTimeline tasks={tasks} />
           </article>
         </section>
-        <div className="flex items-center justify-between">
-          <h3 className="text-xl font-semibold">Tasks</h3>
+        <div className="flex justify-between items-center">
+          <h3 className="font-semibold text-xl">Tasks</h3>
           <Link href={`/projects/${project.id}/tasks/archive`}>
             <Button variant="link" className="px-0">
               Archived tasks

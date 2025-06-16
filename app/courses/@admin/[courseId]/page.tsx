@@ -3,13 +3,17 @@ import ModuleCard from "@/components/shared/courses-page/module-card/module-card
 import ErrorToast from "@/components/ui/error-toast";
 import { getCourse } from "@/lib/course";
 import { getUnarchivedCourseModules } from "@/lib/module";
+import Searcher from "@/components/shared/search/general-search/searcher";
 
 const CoursePage = async ({
   params,
+  searchParams,
 }: {
   params: Promise<{ courseId: string }>;
+  searchParams?: Promise<{ query?: string; page?: string; tab?: string }>;
 }) => {
   const { courseId } = await params;
+  const { query, page, tab } = (await searchParams) || {};
   const { success: course, error: courseError } = await getCourse(courseId);
   const { success: modules, error: moduleError } =
     await getUnarchivedCourseModules(courseId);
@@ -24,17 +28,17 @@ const CoursePage = async ({
       />
     );
   }
-
   return (
-    <main className="p-6 flex flex-col gap-8">
+    <main className="flex flex-col gap-8 p-6">
+      <Searcher query={query} page={page} tab={tab} />
       <header className="flex flex-col gap-3">
         <div className="flex justify-between items-center">
-          <h1 className="text-3xl font-semibold">Modules</h1>
+          <h1 className="font-semibold text-3xl">Modules</h1>
           <CreateModuleBtn courseId={courseId} />
         </div>
         <hr />
       </header>
-      <section className="grid grid-cols-1 gap-4">
+      <section className="gap-4 grid grid-cols-1">
         {!modules.length ? (
           <p className="text-muted-foreground">No modules found</p>
         ) : (

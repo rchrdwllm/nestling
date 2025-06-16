@@ -4,13 +4,17 @@ import ErrorToast from "@/components/ui/error-toast";
 import { getCourseAssignments } from "@/lib/content";
 import { getCourse, getEnrolledStudents } from "@/lib/course";
 import { generateGradesReport } from "@/lib/report";
+import Searcher from "@/components/shared/search/general-search/searcher";
 
 const GradePage = async ({
   params,
+  searchParams,
 }: {
   params: Promise<{ courseId: string }>;
+  searchParams?: Promise<{ query?: string; page?: string; tab?: string }>;
 }) => {
   const { courseId } = await params;
+  const { query, page, tab } = (await searchParams) || {};
   const { success: assignments, error: assignmentsError } =
     await getCourseAssignments(courseId);
   const { success: enrolledStudents, error: enrolledStudentsError } =
@@ -36,9 +40,9 @@ const GradePage = async ({
       <ErrorToast error={"Error fetching course information: " + courseError} />
     );
   }
-
   return (
     <div className="flex flex-col gap-8 p-6">
+      <Searcher query={query} page={page} tab={tab} />
       <div className="flex flex-col gap-4">
         <div className="flex justify-between items-center">
           <h1 className="text-3xl font-semibold">Grade assignments</h1>

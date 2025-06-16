@@ -4,13 +4,17 @@ import { Button } from "@/components/ui/button";
 import { getContentFile, getModuleContent } from "@/lib/content";
 import Link from "next/link";
 import ErrorToast from "@/components/ui/error-toast";
+import Searcher from "@/components/shared/search/general-search/searcher";
 
 const ContentPage = async ({
   params,
+  searchParams,
 }: {
   params: Promise<{ contentId: string; courseId: string }>;
+  searchParams?: Promise<{ query?: string; page?: string; tab?: string }>;
 }) => {
   const { contentId, courseId } = await params;
+  const { query, page, tab } = (await searchParams) || {};
   const { success: content, error } = await getModuleContent(contentId);
 
   if (error || !content) {
@@ -18,9 +22,9 @@ const ContentPage = async ({
   }
 
   const file = content.type === "file" ? await getContentFile(contentId) : null;
-
   return (
     <main className="p-6 flex gap-16">
+      <Searcher query={query} page={page} tab={tab} />
       <div className="flex-1">
         <div className="flex flex-col gap-3">
           <div className="flex justify-between items-center">

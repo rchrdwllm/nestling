@@ -17,8 +17,14 @@ import { getRegisteredEmails } from "@/lib/registered-email";
 import RegisteredTable from "@/components/admin-access/people-page/registered-table";
 import { registeredTableCols } from "@/components/admin-access/people-page/registered-table-def";
 import AddPeopleBtn from "@/components/admin-access/people-page/add-people-btn";
+import Searcher from "@/components/shared/search/general-search/searcher";
 
-const AdminPeoplePage = async () => {
+const AdminPeoplePage = async ({
+  searchParams,
+}: {
+  searchParams?: Promise<{ query?: string; page?: string; tab?: string }>;
+}) => {
+  const { query, page, tab } = (await searchParams) || {};
   const { success: students, error: studentsError } = await getAllStudents();
   const { success: instructors, error: instructorsError } =
     await getAllInstructors();
@@ -49,42 +55,42 @@ const AdminPeoplePage = async () => {
       />
     );
   }
-
   return (
     <FadeInWrapper>
-      <div className="p-6 flex flex-col gap-6">
+      <Searcher query={query} page={page} tab={tab} />
+      <div className="flex flex-col gap-6 p-6">
         <div className="flex flex-col gap-4">
           <div className="flex justify-between items-center">
-            <h1 className="text-3xl font-semibold">People</h1>
+            <h1 className="font-semibold text-3xl">People</h1>
             <AddPeopleBtn />
           </div>
           <hr />
         </div>
         <Tabs defaultValue="students" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid grid-cols-4 w-full">
             <TabsTrigger value="students" className="flex items-center gap-2">
-              <Users className="h-4 w-4" />
+              <Users className="w-4 h-4" />
               Students ({students.length})
             </TabsTrigger>
             <TabsTrigger
               value="instructors"
               className="flex items-center gap-2"
             >
-              <GraduationCap className="h-4 w-4" />
+              <GraduationCap className="w-4 h-4" />
               Instructors ({instructors.length})
             </TabsTrigger>
             <TabsTrigger value="admins" className="flex items-center gap-2">
-              <Shield className="h-4 w-4" />
+              <Shield className="w-4 h-4" />
               Admins ({admins.length})
             </TabsTrigger>
             <TabsTrigger value="registered" className="flex items-center gap-2">
-              <CircleDashed className="h-4 w-4" />
+              <CircleDashed className="w-4 h-4" />
               Registered Emails ({registeredEmails.length})
             </TabsTrigger>
           </TabsList>
           <TabsContent value="students" className="space-y-4">
             <div className="flex flex-col gap-2">
-              <h2 className="text-xl font-semibold">Students</h2>
+              <h2 className="font-semibold text-xl">Students</h2>
               <p className="text-muted-foreground">
                 All registered students in the system
               </p>
@@ -99,7 +105,7 @@ const AdminPeoplePage = async () => {
           </TabsContent>
           <TabsContent value="instructors" className="space-y-4">
             <div className="flex flex-col gap-2">
-              <h2 className="text-xl font-semibold">Instructors</h2>
+              <h2 className="font-semibold text-xl">Instructors</h2>
               <p className="text-muted-foreground">
                 All registered instructors in the system
               </p>
@@ -114,7 +120,7 @@ const AdminPeoplePage = async () => {
           </TabsContent>
           <TabsContent value="admins" className="space-y-4">
             <div className="flex flex-col gap-2">
-              <h2 className="text-xl font-semibold">Administrators</h2>
+              <h2 className="font-semibold text-xl">Administrators</h2>
               <p className="text-muted-foreground">
                 All registered administrators in the system
               </p>
@@ -129,7 +135,7 @@ const AdminPeoplePage = async () => {
           </TabsContent>
           <TabsContent value="registered" className="space-y-4">
             <div className="flex flex-col gap-2">
-              <h2 className="text-xl font-semibold">Registered</h2>
+              <h2 className="font-semibold text-xl">Registered</h2>
               <p className="text-muted-foreground">
                 All registered emails in the system
               </p>

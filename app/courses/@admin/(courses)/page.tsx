@@ -5,8 +5,14 @@ import { getUnarchivedInstructors } from "@/lib/user";
 import FadeInWrapper from "@/components/wrappers/fadein-wrapper";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import Searcher from "@/components/shared/search/general-search/searcher";
 
-const AdminCoursesPage = async () => {
+const AdminCoursesPage = async ({
+  searchParams,
+}: {
+  searchParams?: Promise<{ query?: string; page?: string; tab?: string }>;
+}) => {
+  const { query, page, tab } = (await searchParams) || {};
   const { success: instructors, error } = await getUnarchivedInstructors();
 
   if (error || !instructors) {
@@ -14,9 +20,9 @@ const AdminCoursesPage = async () => {
       <ErrorToast error={"Error fetching instructors: " + (error || "")} />
     );
   }
-
   return (
     <FadeInWrapper>
+      <Searcher query={query} page={page} tab={tab} />
       <div className="flex flex-col gap-10 p-6">
         <div className="flex flex-col gap-3">
           <div className="flex flex-1 justify-between items-center gap-4">

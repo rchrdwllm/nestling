@@ -1,5 +1,5 @@
 import Threads from "@/components/shared/inbox-page/threads";
-import SearchBar from "@/components/shared/search/search-bar";
+import SearchBtn from "@/components/shared/search/inbox-search/search-btn";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getCurrentUser } from "@/lib/user";
 import { redirect } from "next/navigation";
@@ -14,13 +14,13 @@ const Layout = async ({ children }: { children: ReactNode }) => {
     <main className="gap-x-2 grid grid-cols-8 bg-secondary h-[calc(100vh-1.1rem)]">
       <aside className="flex flex-col col-span-2 bg-background border border-border rounded-xl">
         <div className="p-4 border-b border-border">
-          <SearchBar isInbox />
+          <SearchBtn isInbox />
         </div>
         <Suspense
           fallback={
             <aside className="flex flex-col col-span-2 bg-background border border-border rounded-xl">
               <div className="p-4 border-b border-border">
-                <SearchBar isInbox />
+                <SearchBtn isInbox />
               </div>
               <div className="h-[calc(100vh-1rem-72.8px)] overflow-y-hidden">
                 <article className="flex flex-col gap-2 p-4 border-b">

@@ -4,8 +4,14 @@ import { getIncompleteUserTasks } from "@/lib/task";
 import { getOptimisticUser } from "@/lib/user";
 import FadeInWrapper from "@/components/wrappers/fadein-wrapper";
 import ErrorToast from "@/components/ui/error-toast";
+import Searcher from "@/components/shared/search/general-search/searcher";
 
-const InstructorCalendarPage = async () => {
+const InstructorCalendarPage = async ({
+  searchParams,
+}: {
+  searchParams?: Promise<{ query?: string; page?: string; tab?: string }>;
+}) => {
+  const { query, page, tab } = (await searchParams) || {};
   const user = await getOptimisticUser();
   const { success: instructorProjects, error: instructorProjectsError } =
     await getProjectsOfUser(user.id);
@@ -49,9 +55,9 @@ const InstructorCalendarPage = async () => {
       description: task.description,
     })),
   ];
-
   return (
     <FadeInWrapper>
+      <Searcher query={query} page={page} tab={tab} />
       <FullCalendar events={projectsAndTasks} />
     </FadeInWrapper>
   );

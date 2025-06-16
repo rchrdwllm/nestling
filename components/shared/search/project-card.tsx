@@ -1,16 +1,27 @@
+"use client";
+
 import { Project } from "@/types";
 import Link from "next/link";
 import { Briefcase } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { projectStatuses, projectPriorities } from "@/constants/project";
 import { Badge } from "@/components/ui/badge";
+import { useSearchStore } from "@/context/search-context";
 
 const ProjectCard = ({ id, title, status, priority }: Project) => {
+  const { setSearchItemClicked } = useSearchStore();
+
   return (
-    <Link href={`/projects/${id}`} className="w-full">
+    <Link
+      href={`/projects/${id}`}
+      onClick={() => {
+        setSearchItemClicked(true);
+      }}
+      className="w-full"
+    >
       <Button
         variant="link"
-        className="text-left inline-flex justify-between items-center p-0 w-full"
+        className="inline-flex justify-between items-center p-0 w-full text-left"
       >
         <div className="flex items-center gap-3">
           <span>

@@ -1,10 +1,17 @@
 import MyCourses from "@/components/instructor-access/dashboard-page/my-courses";
-import SearchBar from "@/components/shared/search/search-bar";
 import FadeInWrapper from "@/components/wrappers/fadein-wrapper";
+import Searcher from "@/components/shared/search/general-search/searcher";
 
-const InstructorDashboardPage = async () => {
+const InstructorDashboardPage = async ({
+  searchParams,
+}: {
+  searchParams?: Promise<{ query?: string; page?: string; tab?: string }>;
+}) => {
+  const { query, page, tab } = (await searchParams) || {};
+
   return (
     <FadeInWrapper>
+      <Searcher query={query} page={page} tab={tab} />
       <div className="flex flex-col gap-8 p-6">
         <div className="flex flex-col gap-4">
           <div className="flex items-center gap-4">

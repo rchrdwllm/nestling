@@ -14,7 +14,7 @@ import { useCurrentUser } from "@/hooks/use-current-user";
 import { useMemo } from "react";
 import NotifLink from "./notif-link";
 import { cn } from "@/lib/utils";
-import SearchBtn from "@/components/shared/search/search-btn";
+import SearchBtn from "@/components/shared/search/general-search/search-btn";
 
 const Sidebar = () => {
   const { user } = useCurrentUser();

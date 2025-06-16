@@ -6,13 +6,16 @@ import { userTableCols } from "@/components/shared/people-page/user-table-def";
 import { Users, GraduationCap } from "lucide-react";
 import AddUserBtn from "@/components/admin-access/courses-page/add-user-btn";
 import { getAllInstructors, getAllStudents } from "@/lib/user";
+import Searcher from "@/components/shared/search/general-search/searcher";
 
 const PeoplePage = async ({
   params,
+  searchParams,
 }: {
   params: Promise<{ courseId: string }>;
-}) => {
-  const { courseId } = await params;
+  searchParams?: Promise<{ query?: string; page?: string; tab?: string }>;
+}) => {  const { courseId } = await params;
+  const { query, page, tab } = (await searchParams) || {};
   const { success: enrolledStudents, error: enrolledStudentsError } =
     await getEnrolledStudents(courseId);
   const { success: courseInstructors, error: courseInstructorsError } =
@@ -58,9 +61,9 @@ const PeoplePage = async ({
   const availableInstructors = allInstructors.filter(
     (instructor) => !courseInstructors.some((i) => i.id === instructor.id)
   );
-
   return (
     <div className="p-6 flex flex-col gap-8">
+      <Searcher query={query} page={page} tab={tab} />
       <div className="flex flex-col gap-4">
         <div className="flex justify-between items-center">
           <h1 className="text-3xl font-semibold">People</h1>

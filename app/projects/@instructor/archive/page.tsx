@@ -3,8 +3,14 @@ import { projectCols } from "@/components/shared/projects-page/projects-table-de
 import ErrorToast from "@/components/ui/error-toast";
 import { getArchivedUserProjects } from "@/lib/project";
 import { getOptimisticUser } from "@/lib/user";
+import Searcher from "@/components/shared/search/general-search/searcher";
 
-const ProjectsArchivePage = async () => {
+const ProjectsArchivePage = async ({
+  searchParams,
+}: {
+  searchParams?: Promise<{ query?: string; page?: string; tab?: string }>;
+}) => {
+  const { query, page, tab } = (await searchParams) || {};
   const user = await getOptimisticUser();
   const { success: archivedProjects, error } = await getArchivedUserProjects(
     user.id
@@ -17,11 +23,11 @@ const ProjectsArchivePage = async () => {
       />
     );
   }
-
   return (
-    <div className="p-6 flex flex-col gap-8">
+    <div className="flex flex-col gap-8 p-6">
+      <Searcher query={query} page={page} tab={tab} />
       <div className="flex flex-col gap-4">
-        <h1 className="text-3xl font-semibold">Archived Projects</h1>
+        <h1 className="font-semibold text-3xl">Archived Projects</h1>
         <hr />
       </div>
       <ProjectsTable columns={projectCols} data={archivedProjects} />

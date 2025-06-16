@@ -5,13 +5,17 @@ import UpdateTicketBtn from "@/components/shared/help-page/tickets/update-ticket
 import CreateReplyBtn from "@/components/shared/help-page/tickets/create-reply-btn";
 import { getTicketReplies } from "@/lib/ticket-reply";
 import TicketReplyCard from "@/components/shared/help-page/tickets/ticket-reply-card";
+import Searcher from "@/components/shared/search/general-search/searcher";
 
 const TicketPage = async ({
   params,
+  searchParams,
 }: {
   params: Promise<{ ticketId: string }>;
+  searchParams?: Promise<{ query?: string; page?: string; tab?: string }>;
 }) => {
   const { ticketId } = await params;
+  const { query, page, tab } = (await searchParams) || {};
   const { success: ticket, error: ticketError } = await getTicketById(ticketId);
 
   if (ticketError || !ticket) {
@@ -28,10 +32,11 @@ const TicketPage = async ({
   }
 
   return (
-    <div className="p-6 flex flex-col gap-8">
+    <div className="flex flex-col gap-8 p-6">
+      <Searcher query={query} page={page} tab={tab} />
       <div className="flex flex-col gap-4">
         <div className="flex justify-between items-center gap-4">
-          <h1 className="text-3xl flex-1 font-semibold">
+          <h1 className="flex-1 font-semibold text-3xl">
             Ticket: {ticket.title}
           </h1>
         </div>
@@ -46,12 +51,12 @@ const TicketPage = async ({
             ))}
         {ticket.status !== "closed" && <CreateReplyBtn ticketId={ticket.id} />}
         {ticket.status === "closed" && (
-          <p className="text-muted-foreground text-sm text-center py-20">
+          <p className="py-20 text-muted-foreground text-sm text-center">
             This ticket has been closed
           </p>
         )}
         {!ticketReplies.length && ticket.status !== "closed" && (
-          <p className="text-muted-foreground text-sm text-center py-20">
+          <p className="py-20 text-muted-foreground text-sm text-center">
             No replies yet
           </p>
         )}

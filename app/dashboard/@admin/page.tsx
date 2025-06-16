@@ -5,14 +5,18 @@ import TotalInstructorsOverview from "@/components/admin-access/dashboard-page/t
 import TotalProjectsOverview from "@/components/admin-access/dashboard-page/total-projects-overview";
 import TotalStudentsOverview from "@/components/admin-access/dashboard-page/total-students-overview";
 import UserEventLogs from "@/components/admin-access/dashboard-page/user-events/user-event-logs";
-import SearchBar from "@/components/shared/search/search-bar";
 import ErrorToast from "@/components/ui/error-toast";
 import { getMostViewedCourses, getTopCoursesByEnrollments } from "@/lib/course";
 import { getActiveUsersFromMonths } from "@/lib/monthly-activity";
 import FadeInWrapper from "@/components/wrappers/fadein-wrapper";
 import UniversalAnnouncement from "@/components/admin-access/dashboard-page/universal-announcement";
+import Searcher from "@/components/shared/search/general-search/searcher";
 
-const AdminDashboardPage = async () => {
+const AdminDashboardPage = async ({
+  searchParams,
+}: {
+  searchParams?: Promise<{ query?: string; page?: string; tab?: string }>;
+}) => {
   const { success: activeUsers, error: activeUsersError } =
     await getActiveUsersFromMonths(6);
   const { success: topCourses, error: topCoursesError } =
@@ -34,8 +38,11 @@ const AdminDashboardPage = async () => {
       />
     );
 
+  const { query, page, tab } = (await searchParams) || {};
+
   return (
     <FadeInWrapper>
+      <Searcher query={query} page={page} tab={tab} />
       <div className="flex flex-col gap-8 p-6">
         <div className="flex flex-col gap-4">
           <div className="flex items-center gap-6">

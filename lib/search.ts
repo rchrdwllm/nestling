@@ -1,16 +1,15 @@
 "use server";
 
 import { db } from "./firebase";
-import { Content, Course, Project, Role, User } from "@/types";
+import { Content, Course, Project, User } from "@/types";
 import { unstable_cache } from "next/cache";
-import { getProjectsOfUser } from "./project";
 
 export const searchStudents = unstable_cache(
   async (
     query: string,
     page: number = 1,
     itemsPerPage: number = 10
-  ): Promise<{ students: string[]; totalStudents: number }> => {
+  ): Promise<{ students: User[]; totalStudents: number }> => {
     const studentsSnapshot = await db
       .collection("users")
       .where("role", "==", "student")
@@ -27,9 +26,10 @@ export const searchStudents = unstable_cache(
 
     const totalStudents = allStudents.length;
 
-    const paginatedStudents = allStudents
-      .slice((page - 1) * itemsPerPage, page * itemsPerPage)
-      .map((student) => JSON.stringify(student));
+    const paginatedStudents = allStudents.slice(
+      (page - 1) * itemsPerPage,
+      page * itemsPerPage
+    );
 
     return { students: paginatedStudents, totalStudents };
   },
@@ -41,7 +41,7 @@ export const searchInstructors = unstable_cache(
     query: string,
     page: number = 1,
     itemsPerPage: number = 10
-  ): Promise<{ instructors: string[]; totalInstructors: number }> => {
+  ): Promise<{ instructors: User[]; totalInstructors: number }> => {
     const instructorsSnapshot = await db
       .collection("users")
       .where("role", "==", "instructor")
@@ -58,256 +58,121 @@ export const searchInstructors = unstable_cache(
 
     const totalInstructors = allInstructors.length;
 
-    const paginatedInstructors = allInstructors
-      .slice((page - 1) * itemsPerPage, page * itemsPerPage)
-      .map((instructor) => JSON.stringify(instructor));
+    const paginatedInstructors = allInstructors.slice(
+      (page - 1) * itemsPerPage,
+      page * itemsPerPage
+    );
 
     return { instructors: paginatedInstructors, totalInstructors };
   },
   ["query", "page", "itemsPerPage"]
 );
 
-export const searchCourses = unstable_cache(
+export const searchAdmins = unstable_cache(
   async (
-    role: Role,
-    userId: string,
     query: string,
     page: number = 1,
     itemsPerPage: number = 10
-  ): Promise<{ courses: string[]; totalCourses: number }> => {
-    if (role === "student") {
-      const courseRefsSnapshot = await db
-        .collection("users")
-        .doc(userId)
-        .collection("enrolledCourses")
-        .get();
+  ): Promise<{ admins: User[]; totalAdmins: number }> => {
+    const adminsSnapshot = await db
+      .collection("users")
+      .where("role", "==", "admin")
+      .get();
 
-      const courseIds = courseRefsSnapshot.docs.map(
-        (doc) => doc.data().courseId
+    const allAdmins = adminsSnapshot.docs
+      .map((doc) => doc.data() as User)
+      .filter(
+        (admin) =>
+          admin.name?.toLowerCase().includes(query.toLowerCase()) ||
+          admin.email?.toLowerCase().includes(query.toLowerCase()) ||
+          admin.id?.toLowerCase().includes(query.toLowerCase())
       );
 
-      const coursePromises = courseIds.map(async (courseId) => {
-        const courseDoc = await db.collection("courses").doc(courseId).get();
-        return courseDoc.data() as Course;
-      });
+    const totalAdmins = allAdmins.length;
 
-      const allCourses = await Promise.all(coursePromises);
+    const paginatedAdmins = allAdmins.slice(
+      (page - 1) * itemsPerPage,
+      page * itemsPerPage
+    );
 
-      const filteredCourses = allCourses.filter(
-        (course) =>
-          course.name?.toLowerCase().includes(query.toLowerCase()) ||
-          course.courseCode?.toLowerCase().includes(query.toLowerCase())
-      );
-
-      const totalCourses = filteredCourses.length;
-
-      const paginatedCourses = filteredCourses
-        .slice((page - 1) * itemsPerPage, page * itemsPerPage)
-        .map((course) => JSON.stringify(course));
-
-      return { courses: paginatedCourses, totalCourses };
-    } else if (role === "instructor") {
-      const courseRefsSnapshot = await db
-        .collection("users")
-        .doc(userId)
-        .collection("courses")
-        .get();
-
-      const courseIds = courseRefsSnapshot.docs.map(
-        (doc) => doc.data().courseId
-      );
-
-      const coursePromises = courseIds.map(async (courseId) => {
-        const courseDoc = await db.collection("courses").doc(courseId).get();
-        return courseDoc.data() as Course;
-      });
-
-      const allCourses = await Promise.all(coursePromises);
-
-      const filteredCourses = allCourses.filter(
-        (course) =>
-          course.name?.toLowerCase().includes(query.toLowerCase()) ||
-          course.courseCode?.toLowerCase().includes(query.toLowerCase())
-      );
-
-      const totalCourses = filteredCourses.length;
-
-      const paginatedCourses = filteredCourses
-        .slice((page - 1) * itemsPerPage, page * itemsPerPage)
-        .map((course) => JSON.stringify(course));
-
-      return { courses: paginatedCourses, totalCourses };
-    } else {
-      const courseRefsSnapshot = await db.collection("courses").get();
-
-      const courses = courseRefsSnapshot.docs.map(
-        (doc) => doc.data() as Course
-      );
-
-      const filteredCourses = courses.filter(
-        (course) =>
-          course.name?.toLowerCase().includes(query.toLowerCase()) ||
-          course.courseCode?.toLowerCase().includes(query.toLowerCase())
-      );
-
-      const totalCourses = filteredCourses.length;
-
-      const paginatedCourses = filteredCourses
-        .slice((page - 1) * itemsPerPage, page * itemsPerPage)
-        .map((course) => JSON.stringify(course));
-
-      return { courses: paginatedCourses, totalCourses };
-    }
+    return { admins: paginatedAdmins, totalAdmins };
   },
-  ["role", "userId", "query", "page", "itemsPerPage"]
+  ["query", "page", "itemsPerPage"]
+);
+
+export const searchCourses = unstable_cache(
+  async (
+    query: string,
+    page: number = 1,
+    itemsPerPage: number = 10
+  ): Promise<{ courses: Course[]; totalCourses: number }> => {
+    const courseRefsSnapshot = await db.collection("courses").get();
+
+    const courses = courseRefsSnapshot.docs.map((doc) => doc.data() as Course);
+
+    const filteredCourses = courses.filter(
+      (course) =>
+        course.name?.toLowerCase().includes(query.toLowerCase()) ||
+        course.courseCode?.toLowerCase().includes(query.toLowerCase())
+    );
+
+    const totalCourses = filteredCourses.length;
+
+    const paginatedCourses = filteredCourses.slice(
+      (page - 1) * itemsPerPage,
+      page * itemsPerPage
+    );
+
+    return { courses: paginatedCourses, totalCourses };
+  },
+  ["query", "page", "itemsPerPage"]
 );
 
 export const searchContents = unstable_cache(
-  async (
-    role: Role,
-    userId: string,
-    query: string,
-    page: number = 1,
-    itemsPerPage: number = 10
-  ) => {
-    if (role === "student") {
-      const courseRefsSnapshot = await db
-        .collection("users")
-        .doc(userId)
-        .collection("enrolledCourses")
-        .get();
-      const courseIds = courseRefsSnapshot.docs.map(
-        (doc) => doc.data().courseId
-      );
+  async (query: string, page: number = 1, itemsPerPage: number = 10) => {
+    const contentsRefSnapshot = await db.collection("contents").get();
+    const allContents = contentsRefSnapshot.docs.map(
+      (doc) => doc.data() as Content
+    );
 
-      const contentPromises = courseIds.map(async (courseId) => {
-        const contentsRefSnapshot = await db
-          .collection("contents")
-          .where("courseId", "==", courseId)
-          .get();
+    const filteredContents = allContents.filter((content) =>
+      content.title?.toLowerCase().includes(query.toLowerCase())
+    );
 
-        const contents = contentsRefSnapshot.docs.map(
-          (doc) => doc.data() as Content
-        );
+    const totalContents = filteredContents.length;
 
-        return contents.filter((content) =>
-          content.title?.toLowerCase().includes(query.toLowerCase())
-        );
-      });
+    const paginatedContents = filteredContents.slice(
+      (page - 1) * itemsPerPage,
+      page * itemsPerPage
+    );
 
-      const allContents = await Promise.all(contentPromises);
-
-      const flattenedContents = allContents.flat();
-      const totalContents = flattenedContents.length;
-
-      const paginatedContents = flattenedContents
-        .slice((page - 1) * itemsPerPage, page * itemsPerPage)
-        .map((content) => JSON.stringify(content));
-
-      return { contents: paginatedContents, totalContents };
-    } else if (role === "instructor") {
-      const courseRefsSnapshot = await db
-        .collection("users")
-        .doc(userId)
-        .collection("courses")
-        .get();
-      const courseIds = courseRefsSnapshot.docs.map(
-        (doc) => doc.data().courseId
-      );
-
-      const contentPromises = courseIds.map(async (courseId) => {
-        const contentsRefSnapshot = await db
-          .collection("contents")
-          .where("courseId", "==", courseId)
-          .get();
-
-        const contents = contentsRefSnapshot.docs.map(
-          (doc) => doc.data() as Content
-        );
-
-        return contents.filter((content) =>
-          content.title?.toLowerCase().includes(query.toLowerCase())
-        );
-      });
-
-      const allContents = await Promise.all(contentPromises);
-
-      const flattenedContents = allContents.flat();
-      const totalContents = flattenedContents.length;
-
-      const paginatedContents = flattenedContents
-        .slice((page - 1) * itemsPerPage, page * itemsPerPage)
-        .map((content) => JSON.stringify(content));
-
-      return { contents: paginatedContents, totalContents };
-    } else {
-      const contentsRefSnapshot = await db.collection("contents").get();
-      const allContents = contentsRefSnapshot.docs.map(
-        (doc) => doc.data() as Content
-      );
-
-      const filteredContents = allContents.filter((content) =>
-        content.title?.toLowerCase().includes(query.toLowerCase())
-      );
-
-      const totalContents = filteredContents.length;
-
-      const paginatedContents = filteredContents
-        .slice((page - 1) * itemsPerPage, page * itemsPerPage)
-        .map((content) => JSON.stringify(content));
-
-      return { contents: paginatedContents, totalContents };
-    }
+    return { contents: paginatedContents, totalContents };
   },
-  ["role", "userId", "query", "page", "itemsPerPage"]
+  ["query", "page", "itemsPerPage"]
 );
 
 export const searchProjects = unstable_cache(
   async (
-    role: Role,
-    userId: string,
     query: string,
     page: number = 1,
     itemsPerPage: number = 10
-  ): Promise<{ projects: string[]; totalProjects: number }> => {
-    if (role === "admin") {
-      const projectsSnapshot = await db.collection("projects").get();
+  ): Promise<{ projects: Project[]; totalProjects: number }> => {
+    const projectsSnapshot = await db.collection("projects").get();
 
-      const projects = projectsSnapshot.docs.map(
-        (doc) => doc.data() as Project
-      );
+    const projects = projectsSnapshot.docs.map((doc) => doc.data() as Project);
 
-      const filteredProjects = projects.filter(
-        (project) =>
-          project.title?.toLowerCase().includes(query.toLowerCase()) ||
-          project.description?.toLowerCase().includes(query.toLowerCase())
-      );
+    const filteredProjects = projects.filter(
+      (project) =>
+        project.title?.toLowerCase().includes(query.toLowerCase()) ||
+        project.description?.toLowerCase().includes(query.toLowerCase())
+    );
 
-      const paginatedProjects = filteredProjects
-        .slice((page - 1) * itemsPerPage, page * itemsPerPage)
-        .map((project) => JSON.stringify(project));
-      const totalProjects = filteredProjects.length;
+    const paginatedProjects = filteredProjects.slice(
+      (page - 1) * itemsPerPage,
+      page * itemsPerPage
+    );
+    const totalProjects = filteredProjects.length;
 
-      return { projects: paginatedProjects, totalProjects };
-    } else {
-      const { success: projects } = await getProjectsOfUser(userId);
-
-      if (!projects) {
-        return { projects: [], totalProjects: 0 };
-      }
-
-      const filteredProjects = projects.filter(
-        (project) =>
-          project.title?.toLowerCase().includes(query.toLowerCase()) ||
-          project.description?.toLowerCase().includes(query.toLowerCase())
-      );
-
-      const paginatedProjects = filteredProjects
-        .slice((page - 1) * itemsPerPage, page * itemsPerPage)
-        .map((project) => JSON.stringify(project));
-      const totalProjects = filteredProjects.length;
-
-      return { projects: paginatedProjects, totalProjects };
-    }
+    return { projects: paginatedProjects, totalProjects };
   }
 );

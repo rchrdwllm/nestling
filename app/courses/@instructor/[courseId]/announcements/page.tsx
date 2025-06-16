@@ -3,21 +3,25 @@ import CreateAnnouncementBtn from "@/components/shared/courses-page/announcement
 import GenerateAnnouncementsReport from "@/components/shared/courses-page/announcements/generate-announcements-report";
 import ErrorToast from "@/components/ui/error-toast";
 import { getCourse } from "@/lib/course";
+import Searcher from "@/components/shared/search/general-search/searcher";
 
 const AnnouncementsPage = async ({
   params,
+  searchParams,
 }: {
   params: Promise<{ courseId: string }>;
+  searchParams?: Promise<{ query?: string; page?: string; tab?: string }>;
 }) => {
   const { courseId } = await params;
+  const { query, page, tab } = (await searchParams) || {};
   const { success: course, error } = await getCourse(courseId);
 
   if (error || !course) {
     return <ErrorToast error={"Error fetching course information: " + error} />;
   }
-
   return (
     <main className="p-6 flex flex-col gap-6">
+      <Searcher query={query} page={page} tab={tab} />
       <header className="flex flex-col gap-3">
         <div className="flex justify-between items-center">
           <h1 className="text-3xl font-semibold">Announcements</h1>
