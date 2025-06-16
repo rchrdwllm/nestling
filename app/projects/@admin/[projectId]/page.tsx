@@ -21,6 +21,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import ErrorToast from "@/components/ui/error-toast";
 import Searcher from "@/components/shared/search/general-search/searcher";
+import DeleteProjectBtn from "@/components/shared/projects-page/delete-project-btn";
 
 const ProjectPage = async ({
   params,
@@ -98,6 +99,7 @@ const ProjectPage = async ({
         <div className="flex flex-col gap-4">
           <div className="flex justify-between items-stretch gap-2">
             <h1 className="flex-1 font-semibold text-3xl">{project.title}</h1>
+            <DeleteProjectBtn projectId={project.id} />
             <ArchiveProjectBtn
               projectId={project.id}
               isArchived={project.isArchived}
