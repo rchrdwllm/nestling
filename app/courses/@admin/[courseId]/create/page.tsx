@@ -36,15 +36,16 @@ const CreatePage = async ({
       <ErrorToast error={"Error fetching content: " + (contentError || "")} />
     );
   }
+
   return (
     <main className="flex flex-col gap-8 p-6">
       <Searcher query={query} page={page} tab={tab} />
       <div className="flex flex-col gap-3">
         <h1 className="font-semibold text-3xl">
-          {moduleId
-            ? "Add content"
-            : content
+          {content
             ? "Edit content"
+            : moduleId
+            ? "Add content"
             : "Create content"}
         </h1>
         <hr />

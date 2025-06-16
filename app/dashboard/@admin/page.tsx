@@ -9,7 +9,6 @@ import ErrorToast from "@/components/ui/error-toast";
 import { getMostViewedCourses, getTopCoursesByEnrollments } from "@/lib/course";
 import { getActiveUsersFromMonths } from "@/lib/monthly-activity";
 import FadeInWrapper from "@/components/wrappers/fadein-wrapper";
-import UniversalAnnouncement from "@/components/admin-access/dashboard-page/universal-announcement";
 import Searcher from "@/components/shared/search/general-search/searcher";
 
 const AdminDashboardPage = async ({
@@ -50,7 +49,6 @@ const AdminDashboardPage = async ({
           </div>
           <hr />
         </div>
-        <UniversalAnnouncement />
         <div className="gap-4 grid grid-cols-6">
           <article className="col-span-2">
             <TotalStudentsOverview />
