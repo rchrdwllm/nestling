@@ -9,7 +9,10 @@ import { decryptData } from "./aes";
 export const getAllCourses = unstable_cache(
   async () => {
     try {
-      const snapshot = await db.collection("courses").get();
+      const snapshot = await db
+        .collection("courses")
+        .where("isArchived", "==", false)
+        .get();
       const courses = snapshot.docs.map((doc) => doc.data()) as Course[];
 
       return { success: courses };
