@@ -1,20 +1,21 @@
-import { getArchivedInstructorCourses } from "@/lib/course";
-import { getCurrentUser } from "@/lib/user";
+import { getArchivedCourses, getArchivedInstructorCourses } from "@/lib/course";
+import { getOptimisticUser } from "@/lib/user";
 import CourseCard from "./course-card";
 import ErrorToast from "@/components/ui/error-toast";
 
 const ArchivedCourses = async () => {
-  const user = await getCurrentUser();
-  const { success: courses, error } = await getArchivedInstructorCourses(
-    user!.id
-  );
+  const user = await getOptimisticUser();
+  const { success: courses, error } =
+    user.role === "instructor"
+      ? await getArchivedInstructorCourses(user.id)
+      : await getArchivedCourses();
 
   if (error || !courses) {
     return <ErrorToast error={"Error fetching archived courses: " + error} />;
   }
 
   return (
-    <section className="grid grid-cols-4 gap-8">
+    <section className="gap-8 grid grid-cols-4">
       {!courses.length ? (
         <p className="text-muted-foreground">No courses found</p>
       ) : (

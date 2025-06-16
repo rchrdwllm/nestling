@@ -24,6 +24,24 @@ export const getAllCourses = unstable_cache(
   { revalidate: 3600, tags: ["courses"] }
 );
 
+export const getArchivedCourses = unstable_cache(
+  async () => {
+    try {
+      const snapshot = await db
+        .collection("courses")
+        .where("isArchived", "==", true)
+        .get();
+      const courses = snapshot.docs.map((doc) => doc.data()) as Course[];
+
+      return { success: courses };
+    } catch (error) {
+      return { error: "Error fetching archived courses" };
+    }
+  },
+  ["archivedCourses"],
+  { revalidate: 3600, tags: ["courses"] }
+);
+
 export const getCourse = unstable_cache(
   async (courseId: string) => {
     try {
