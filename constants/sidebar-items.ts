@@ -40,11 +40,6 @@ export const studentSidebarItems: SidebarItem[] = [
     Icon: BookMarked,
   },
   {
-    label: "People",
-    href: "/people",
-    Icon: Users,
-  },
-  {
     label: "Calendar",
     href: "/calendar",
     Icon: CalendarDays,

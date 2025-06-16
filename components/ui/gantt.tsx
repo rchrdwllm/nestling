@@ -414,13 +414,13 @@ export const GanttContentHeader: FC<GanttContentHeaderProps> = ({
 
   return (
     <div
-      className="sticky top-0 z-20 flex flex-col w-full shrink-0 bg-backdrop/90 backdrop-blur-sm"
+      className="top-0 z-20 sticky flex flex-col bg-backdrop/90 backdrop-blur-sm w-full shrink-0"
       style={{ height: "var(--gantt-header-height)" }}
     >
       <div className="h-8">
         {" "}
         <div
-          className="sticky inline-flex whitespace-nowrap px-3 py-2 text-muted-foreground text-xs"
+          className="inline-flex sticky px-3 py-2 text-muted-foreground text-xs whitespace-nowrap"
           style={{
             left: "300px",
           }}
@@ -429,7 +429,7 @@ export const GanttContentHeader: FC<GanttContentHeaderProps> = ({
         </div>
       </div>
       <div
-        className="grid w-full flex-1"
+        className="flex-1 grid w-full"
         style={{
           gridTemplateColumns: `repeat(${columns}, var(--gantt-column-width))`,
         }}
@@ -437,7 +437,7 @@ export const GanttContentHeader: FC<GanttContentHeaderProps> = ({
         {Array.from({ length: columns }).map((_, index) => (
           <div
             key={`${id}-${index}`}
-            className="shrink-0 border-border/50 border-b flex flex-col justify-center text-center text-xs"
+            className="flex flex-col justify-center border-b border-border/50 text-xs text-center shrink-0"
           >
             {renderHeaderItem(index)}
           </div>
@@ -502,7 +502,7 @@ const DailyHeader: FC = () => {
               >
                 {item + 1}
               </span>
-              <span className="text-xs text-muted-foreground">
+              <span className="text-muted-foreground text-xs">
                 {format(date, "EEE")}
               </span>
             </div>
@@ -615,27 +615,27 @@ export const GanttSidebarItem: FC<GanttSidebarItemProps> = ({
       }}
     >
       <div
-        className="pointer-events-none h-2 w-2 shrink-0 rounded-full"
+        className="rounded-full w-2 h-2 pointer-events-none shrink-0"
         style={{
           backgroundColor: statusMapping.color,
         }}
       />
       <div className="flex items-center gap-2">
-        <p className="pointer-events-none flex-1 truncate text-left font-medium">
+        <p className="flex-1 font-medium text-left truncate pointer-events-none">
           {feature.title}
         </p>
         {feature.owner && feature.owner.image ? (
-          <Avatar className="h-4 w-4">
+          <Avatar className="w-4 h-4">
             <AvatarImage src={feature.owner.image} />
             <AvatarFallback>{feature.owner.name?.slice(0, 2)}</AvatarFallback>
           </Avatar>
         ) : feature.ownwer ? (
-          <div className="flex items-center justify-center size-6 bg-muted rounded-full">
-            <p className="text-xs font-semibold">{feature.owner!.name![0]}</p>
+          <div className="flex justify-center items-center bg-muted rounded-full size-6">
+            <p className="font-semibold text-xs">{feature.owner!.name![0]}</p>
           </div>
         ) : null}
       </div>
-      <p className="ml-auto pointer-events-none text-muted-foreground">
+      <p className="ml-auto text-muted-foreground pointer-events-none">
         {duration}
       </p>
     </Link>
@@ -647,14 +647,14 @@ export const GanttSidebarHeader: FC = () => {
 
   return (
     <div
-      className="sticky top-0 z-10 flex shrink-0 flex-col justify-between border-border/50 border-b bg-backdrop/90 font-medium text-muted-foreground text-xs backdrop-blur-sm"
+      className="top-0 z-10 sticky flex flex-col justify-between bg-backdrop/90 backdrop-blur-sm border-b border-border/50 font-medium text-muted-foreground text-xs shrink-0"
       style={{ height: "var(--gantt-header-height)" }}
     >
-      <div className="h-8 flex items-center justify-between px-3 py-2">
-        <p className="flex-1 truncate text-left">Projects</p>
+      <div className="flex justify-between items-center px-3 py-2 h-8">
+        <p className="flex-1 text-left truncate">Projects</p>
         <p className="shrink-0">Duration</p>
       </div>
-      <div className="flex-1 flex items-end"></div>
+      <div className="flex flex-1 items-end"></div>
     </div>
   );
 };
@@ -673,7 +673,7 @@ export const GanttSidebarGroup: FC<GanttSidebarGroupProps> = ({
   <div className={className}>
     <p
       style={{ height: "var(--gantt-row-height)" }}
-      className="w-full truncate p-2.5 text-left font-medium text-muted-foreground text-xs"
+      className="p-2.5 w-full font-medium text-muted-foreground text-xs text-left truncate"
     >
       {name}
     </p>
@@ -736,11 +736,11 @@ export const GanttAddFeatureHelper: FC<GanttAddFeatureHelperProps> = ({
       <button
         onClick={handleClick}
         type="button"
-        className="flex h-full w-full items-center justify-center rounded-md border border-dashed p-2"
+        className="flex justify-center items-center p-2 border border-dashed rounded-md w-full h-full"
       >
         <PlusIcon
           size={16}
-          className="pointer-events-none select-none text-muted-foreground"
+          className="text-muted-foreground pointer-events-none select-none"
         />
       </button>
     </div>
@@ -802,7 +802,7 @@ export const GanttColumns: FC<GanttColumnsProps> = ({
 
   return (
     <div
-      className="divide grid h-full w-full divide-x divide-border/50"
+      className="grid divide-x divide-border/50 w-full h-full divide"
       style={{
         gridTemplateColumns: `repeat(${columns}, var(--gantt-column-width))`,
       }}
@@ -850,17 +850,17 @@ export const GanttCreateMarkerTrigger: FC<GanttCreateMarkerTriggerProps> = ({
       ref={mouseRef}
     >
       <div
-        className="-ml-2 pointer-events-auto sticky top-6 z-20 flex w-4 flex-col items-center justify-center gap-1 overflow-visible opacity-0 group-hover:opacity-100"
+        className="top-6 z-20 sticky flex flex-col justify-center items-center gap-1 opacity-0 group-hover:opacity-100 -ml-2 w-4 overflow-visible pointer-events-auto"
         style={{ transform: `translateX(${x}px)` }}
       >
         <button
           type="button"
-          className="z-50 inline-flex h-4 w-4 items-center justify-center rounded-full bg-card"
+          className="inline-flex z-50 justify-center items-center bg-card rounded-full w-4 h-4"
           onClick={handleClick}
         >
           <PlusIcon size={12} className="text-muted-foreground" />
         </button>
-        <div className="whitespace-nowrap rounded-full border border-border/50 bg-background/90 px-2 py-1 text-foreground text-xs backdrop-blur-lg">
+        <div className="bg-background/90 backdrop-blur-lg px-2 py-1 border border-border/50 rounded-full text-foreground text-xs whitespace-nowrap">
           {formatDate(date, "MMM dd, yyyy")}
         </div>
       </div>
@@ -937,7 +937,7 @@ export const GanttFeatureItemCard: FC<GanttFeatureItemCardProps> = ({
   useEffect(() => setDragging(isPressed), [isPressed, setDragging]);
 
   return (
-    <Card className="h-full w-full rounded-md bg-background p-2 text-xs shadow-sm">
+    <Card className="bg-background shadow-sm p-2 rounded-md w-full h-full text-xs">
       <div
         className={cn(
           "flex h-full w-full items-center justify-between gap-2 text-left",
@@ -1097,7 +1097,7 @@ export const GanttFeatureItem: FC<GanttFeatureItemProps> = ({
       style={{ height: "var(--gantt-row-height)" }}
     >
       <div
-        className="pointer-events-auto absolute top-0.5"
+        className="top-0.5 absolute pointer-events-auto"
         style={{
           height: "calc(var(--gantt-row-height) - 4px)",
           width: Math.round(width),
@@ -1127,7 +1127,7 @@ export const GanttFeatureItem: FC<GanttFeatureItemProps> = ({
         >
           <GanttFeatureItemCard id={feature.id}>
             {children ?? (
-              <p className="flex-1 truncate text-xs">{feature.title}</p>
+              <p className="flex-1 text-xs truncate">{feature.title}</p>
             )}
           </GanttFeatureItemCard>
         </DndContext>
@@ -1146,7 +1146,7 @@ export const GanttFeatureItem: FC<GanttFeatureItemProps> = ({
           </DndContext>
         )}
         {width < 100 && (
-          <p className="absolute top-1/2 left-0 -translate-y-1/2 -translate-x-[calc(100%+0.5rem)] text-xs whitespace-nowrap">
+          <p className="top-1/2 left-0 absolute text-xs whitespace-nowrap -translate-x-[calc(100%+0.5rem)] -translate-y-1/2">
             {feature.title}
           </p>
         )}
@@ -1205,7 +1205,7 @@ export const GanttMarker: FC<
 
   return (
     <div
-      className="pointer-events-none absolute top-0 left-0 z-20 flex h-full select-none flex-col items-center justify-center overflow-visible"
+      className="top-0 left-0 z-20 absolute flex flex-col justify-center items-center h-full overflow-visible pointer-events-none select-none"
       style={{
         width: 0,
         transform: `translateX(calc(var(--gantt-column-width) * ${offset} + ${innerOffset}px))`,
@@ -1215,12 +1215,12 @@ export const GanttMarker: FC<
         <ContextMenuTrigger asChild>
           <div
             className={cn(
-              "group pointer-events-auto sticky top-0 flex select-auto flex-col flex-nowrap items-center justify-center whitespace-nowrap rounded-b-md bg-card px-2 py-1 text-foreground text-xs",
+              "group pointer-events-auto sticky top-0 flex select-auto flex-col flex-nowrap items-center justify-center whitespace-nowrap rounded-b-md bg-primary px-2 py-1 text-primary-foreground text-xs",
               className
             )}
           >
             {label}
-            <span className="max-h-[0] overflow-hidden opacity-80 transition-all group-hover:max-h-[2rem]">
+            <span className="opacity-80 max-h-[0] group-hover:max-h-[2rem] overflow-hidden transition-all">
               {formatDate(date, "MMM dd, yyyy")}
             </span>
           </div>
@@ -1237,7 +1237,7 @@ export const GanttMarker: FC<
           ) : null}
         </ContextMenuContent>
       </ContextMenu>
-      <div className={cn("h-full w-px bg-card", className)} />
+      <div className={cn("h-full w-px bg-primary", className)} />
     </div>
   );
 };
@@ -1637,7 +1637,7 @@ export const GanttToday: FC<GanttTodayProps> = ({ className }) => {
 
       return (
         <div
-          className="pointer-events-none absolute top-0 left-0 z-20 flex h-full select-none flex-col items-center justify-center overflow-visible"
+          className="top-0 left-0 z-20 absolute flex flex-col justify-center items-center h-full overflow-visible pointer-events-none select-none"
           style={{
             width: 0,
             transform: `translateX(calc(var(--gantt-column-width) * ${offset} + ${
@@ -1648,16 +1648,16 @@ export const GanttToday: FC<GanttTodayProps> = ({ className }) => {
         >
           <div
             className={cn(
-              "group pointer-events-auto sticky top-0 flex select-auto flex-col flex-nowrap items-center justify-center whitespace-nowrap rounded-b-md bg-card px-2 py-1 text-foreground text-xs",
+              "group pointer-events-auto sticky top-0 flex select-auto flex-col flex-nowrap items-center justify-center whitespace-nowrap rounded-b-md bg-primary px-2 py-1 text-primary-foreground text-xs",
               className
             )}
           >
             {label}
-            <span className="max-h-[0] overflow-hidden opacity-80 transition-all group-hover:max-h-[2rem]">
+            <span className="opacity-80 max-h-[0] group-hover:max-h-[2rem] overflow-hidden transition-all">
               {formatDate(date, "MMM dd, yyyy")}
             </span>
           </div>
-          <div className={cn("h-full w-px bg-card", className)} />
+          <div className={cn("h-full w-px bg-primary", className)} />
         </div>
       );
     }
@@ -1676,7 +1676,7 @@ export const GanttToday: FC<GanttTodayProps> = ({ className }) => {
 
   return (
     <div
-      className="pointer-events-none absolute top-0 left-0 z-20 flex h-full select-none flex-col items-center justify-center overflow-visible"
+      className="top-0 left-0 z-20 absolute flex flex-col justify-center items-center h-full overflow-visible pointer-events-none select-none"
       style={{
         width: 0,
         transform: `translateX(calc(var(--gantt-column-width) * ${offset} + ${innerOffset}px))`,
@@ -1684,16 +1684,16 @@ export const GanttToday: FC<GanttTodayProps> = ({ className }) => {
     >
       <div
         className={cn(
-          "group pointer-events-auto sticky top-0 flex select-auto flex-col flex-nowrap items-center justify-center whitespace-nowrap rounded-b-md bg-card px-2 py-1 text-foreground text-xs",
+          "group pointer-events-auto sticky top-0 flex select-auto flex-col flex-nowrap items-center justify-center whitespace-nowrap rounded-b-md bg-primary px-2 py-1 text-primary-foreground text-xs",
           className
         )}
       >
         {label}
-        <span className="max-h-[0] overflow-hidden opacity-80 transition-all group-hover:max-h-[2rem]">
+        <span className="opacity-80 max-h-[0] group-hover:max-h-[2rem] overflow-hidden transition-all">
           {formatDate(date, "MMM dd, yyyy")}
         </span>
       </div>
-      <div className={cn("h-full w-px bg-card", className)} />
+      <div className={cn("h-full w-px bg-primary", className)} />
     </div>
   );
 };

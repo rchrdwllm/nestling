@@ -102,6 +102,10 @@ span {
   .sidebar-scroll-area > div[data-radix-scroll-area-viewport] > div {
     @apply block h-full !important;
   }
+
+  .scroll-area > div[data-radix-scroll-area-viewport] > div {
+    @apply block h-full !important;
+  }
 }
 
 :root {

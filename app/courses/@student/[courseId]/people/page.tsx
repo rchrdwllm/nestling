@@ -63,6 +63,7 @@ const PeoplePage = async ({
           <UserTable
             columns={userTableCols}
             data={enrolledStudents}
+            hide={["address", "contactNumber", "createdAt"]}
             searchPlaceholder="Search students by name..."
           />
         </TabsContent>
@@ -76,6 +77,7 @@ const PeoplePage = async ({
           <UserTable
             columns={userTableCols}
             data={courseInstructors}
+            hide={["address", "contactNumber", "createdAt"]}
             searchPlaceholder="Search instructors by name..."
           />
         </TabsContent>
