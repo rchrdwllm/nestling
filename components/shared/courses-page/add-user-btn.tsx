@@ -13,14 +13,18 @@ import AddUserForm from "@/components/admin-access/courses-page/add-user-form";
 
 type AddUserBtnProps = {
   course: string;
-  availableStudents: User[];
-  availableInstructors: User[];
+  students: User[];
+  instructors: User[];
+  enrolledStudents: User[];
+  courseInstructors: User[];
 };
 
 const AddUserBtn = ({
   course,
-  availableStudents,
-  availableInstructors,
+  students,
+  instructors,
+  enrolledStudents,
+  courseInstructors,
 }: AddUserBtnProps) => {
   const courseData = JSON.parse(course) as Course;
   const [isOpen, setIsOpen] = useState(false);
@@ -46,8 +50,10 @@ const AddUserBtn = ({
         <AddUserForm
           setIsOpen={setIsOpen}
           courseId={courseData.id}
-          availableInstructors={availableInstructors}
-          availableStudents={availableStudents}
+          students={students}
+          instructors={instructors}
+          enrolledStudents={enrolledStudents}
+          courseInstructors={courseInstructors}
         />
       </DialogContent>
     </Dialog>

@@ -15,12 +15,11 @@ import AddUserBtn from "./add-user-btn";
 
 type CourseDetailsBtnProps = {
   course: string;
-  enrolledStudents: string;
+  enrolledStudents: User[];
   isAdmin?: boolean;
   instructors?: User[];
+  students?: User[];
   defaultInstructors?: User[];
-  availableStudents?: User[];
-  availableInstructors?: User[];
 };
 
 const CourseDetailsBtn = ({
@@ -29,8 +28,7 @@ const CourseDetailsBtn = ({
   isAdmin,
   instructors,
   defaultInstructors = [],
-  availableStudents = [],
-  availableInstructors = [],
+  students = [],
 }: CourseDetailsBtnProps) => {
   return (
     <DropdownMenu>
@@ -52,8 +50,10 @@ const CourseDetailsBtn = ({
         <DropdownMenuItem asChild>
           <AddUserBtn
             course={course}
-            availableStudents={availableStudents}
-            availableInstructors={availableInstructors}
+            instructors={instructors || []}
+            students={students}
+            enrolledStudents={enrolledStudents}
+            courseInstructors={defaultInstructors}
           />
         </DropdownMenuItem>
         <DropdownMenuItem asChild>

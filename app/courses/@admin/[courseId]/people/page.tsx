@@ -71,8 +71,10 @@ const PeoplePage = async ({
           <h1 className="font-semibold text-3xl">People</h1>
           <AddUserBtn
             courseId={courseId}
-            availableStudents={availableStudents}
-            availableInstructors={availableInstructors}
+            students={allStudents}
+            instructors={allInstructors}
+            courseInstructors={courseInstructors}
+            enrolledStudents={enrolledStudents}
           />
         </div>
         <hr />

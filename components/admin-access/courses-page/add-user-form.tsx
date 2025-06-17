@@ -19,27 +19,42 @@ import {
 import { User } from "next-auth";
 import { MultiSelect } from "@/components/ui/multi-select";
 import { useCurrentUser } from "@/hooks/use-current-user";
+import { useEffect } from "react";
 
 type AddUserFormProps = {
   setIsOpen: (isOpen: boolean) => void;
   courseId: string;
-  availableStudents: User[];
-  availableInstructors: User[];
+  students: User[];
+  instructors: User[];
+  enrolledStudents: User[];
+  courseInstructors: User[];
 };
 
 const AddUserForm = ({
   setIsOpen,
   courseId,
-  availableStudents,
-  availableInstructors,
+  students,
+  instructors,
+  enrolledStudents,
+  courseInstructors,
 }: AddUserFormProps) => {
   const { user } = useCurrentUser();
+  const getInitialUserIds = () => {
+    if (user.role === "admin") {
+      return [];
+    }
+
+    const studentIds = enrolledStudents.map((student) => student.id);
+
+    return studentIds.length > 0 ? studentIds : [];
+  };
   const form = useForm<z.infer<typeof AddUserToCourseSchema>>({
     resolver: zodResolver(AddUserToCourseSchema),
+    mode: "onSubmit",
     defaultValues: {
       courseId,
       role: user.role === "admin" ? undefined : "student",
-      userIds: [],
+      userIds: getInitialUserIds() as any,
     },
   });
   const { execute, isExecuting } = useAction(addUserToCourse, {
@@ -62,12 +77,56 @@ const AddUserForm = ({
     },
     onExecute: () => {
       toast.dismiss();
-      toast.loading("Adding to course...");
+      toast.loading("Updating course users...");
     },
   });
+  useEffect(() => {
+    if (user.role !== "admin") {
+      const studentIds = enrolledStudents.map((student) => student.id);
+      if (studentIds.length > 0) {
+        form.setValue("userIds", studentIds as any);
+      }
+    }
+  }, [user.role, enrolledStudents, form]);
+  useEffect(() => {
+    const subscription = form.watch((value, { name }) => {
+      if (name === "role") {
+        const newUserIds =
+          value.role === "instructor"
+            ? courseInstructors.map((instructor) => instructor.id)
+            : enrolledStudents.map((student) => student.id);
 
+        form.setValue("userIds", newUserIds as any);
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [form, courseInstructors, enrolledStudents]);
   const handleSubmit = (data: z.infer<typeof AddUserToCourseSchema>) => {
-    execute(data);
+    if (!data.userIds || data.userIds.length === 0) {
+      form.setError("userIds", {
+        type: "manual",
+        message: "At least one user must be selected",
+      });
+
+      return;
+    }
+
+    const validUserIds = data.userIds.filter(
+      (id) => id !== "placeholder" && id !== ""
+    );
+
+    if (validUserIds.length === 0) {
+      form.setError("userIds", {
+        type: "manual",
+        message: "At least one user must be selected",
+      });
+
+      return;
+    }
+    execute({
+      ...data,
+      userIds: validUserIds as [string, ...string[]],
+    });
   };
 
   return (
@@ -99,7 +158,7 @@ const AddUserForm = ({
               </FormItem>
             )}
           />
-        )}
+        )}{" "}
         <FormField
           control={form.control}
           name="userIds"
@@ -108,21 +167,24 @@ const AddUserForm = ({
               <MultiSelect
                 options={
                   form.watch("role") === "instructor"
-                    ? availableInstructors.map((user) => ({
+                    ? instructors.map((user) => ({
                         label: `${user.firstName} ${user.lastName}`,
                         value: user.id,
                       }))
-                    : availableStudents.map((user) => ({
+                    : students.map((user) => ({
                         label: `${user.firstName} ${user.lastName}`,
                         value: user.id,
                       }))
                 }
                 onValueChange={field.onChange}
                 defaultValue={field.value}
+                value={field.value}
                 placeholder={
                   form.watch("role") === "instructor"
                     ? "Select instructors"
-                    : "Select students"
+                    : form.watch("role") === "student"
+                    ? "Select students"
+                    : "Select users"
                 }
                 variant="inverted"
                 disabled={!form.watch("role")}
@@ -135,8 +197,11 @@ const AddUserForm = ({
           <Button onClick={() => setIsOpen(false)} variant="secondary">
             Back
           </Button>
-          <Button type="submit" disabled={isExecuting}>
-            Add
+          <Button
+            onClick={() => console.log(form.getValues())}
+            disabled={isExecuting}
+          >
+            Save
           </Button>
         </div>
       </form>
