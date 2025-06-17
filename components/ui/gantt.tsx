@@ -776,7 +776,7 @@ export const GanttColumn: FC<GanttColumnProps> = ({
     <div
       className={cn(
         "group relative h-full overflow-hidden",
-        isColumnSecondary?.(index) ? "bg-secondary" : ""
+        isColumnSecondary?.(index) ? "bg-muted-secondary" : ""
       )}
       ref={mouseRef}
       onMouseEnter={handleMouseEnter}
@@ -1539,7 +1539,7 @@ export const GanttProvider: FC<GanttProviderProps> = ({
       <div
         key={providerKey}
         className={cn(
-          "gantt relative grid h-full w-full flex-none select-none overflow-auto rounded-sm bg-secondary",
+          "gantt relative grid h-full w-full flex-none select-none overflow-auto rounded-sm bg-muted-secondary",
           range,
           className
         )}
