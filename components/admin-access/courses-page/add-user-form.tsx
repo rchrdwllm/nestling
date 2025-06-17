@@ -80,6 +80,7 @@ const AddUserForm = ({
       toast.loading("Updating course users...");
     },
   });
+
   useEffect(() => {
     if (user.role !== "admin") {
       const studentIds = enrolledStudents.map((student) => student.id);
@@ -88,6 +89,7 @@ const AddUserForm = ({
       }
     }
   }, [user.role, enrolledStudents, form]);
+
   useEffect(() => {
     const subscription = form.watch((value, { name }) => {
       if (name === "role") {
@@ -101,6 +103,7 @@ const AddUserForm = ({
     });
     return () => subscription.unsubscribe();
   }, [form, courseInstructors, enrolledStudents]);
+
   const handleSubmit = (data: z.infer<typeof AddUserToCourseSchema>) => {
     if (!data.userIds || data.userIds.length === 0) {
       form.setError("userIds", {
@@ -158,7 +161,7 @@ const AddUserForm = ({
               </FormItem>
             )}
           />
-        )}{" "}
+        )}
         <FormField
           control={form.control}
           name="userIds"

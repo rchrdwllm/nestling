@@ -10,6 +10,7 @@ import { getDiscussionReplies } from "@/lib/discussion-reply";
 import { getUserById } from "@/lib/user";
 import Link from "next/link";
 import Searcher from "@/components/shared/search/general-search/searcher";
+import DiscussionDetailsBtn from "@/components/shared/courses-page/discussions/discussion-details-btn";
 
 const DiscussionPage = async ({
   params,
@@ -41,6 +42,9 @@ const DiscussionPage = async ({
   if (repliesError || !replies) {
     return <ErrorToast error={"Error fetching replies: " + repliesError} />;
   }
+
+  const isOwner = user.id === discussion.userId;
+
   return (
     <div className="flex flex-col gap-8 p-6">
       <Searcher query={query} page={page} tab={tab} />
@@ -71,8 +75,13 @@ const DiscussionPage = async ({
                 </p>
               </div>
             )}
-            <div>
-              <h1 className="font-semibold text-xl">{discussion.title}</h1>
+            <div className="w-full">
+              <div className="flex justify-between items-center">
+                <h1 className="font-semibold text-xl">{discussion.title}</h1>
+                {(isOwner || user.role === "admin") && (
+                  <DiscussionDetailsBtn discussionId={discussion.id} />
+                )}
+              </div>
               <p className="text-muted-foreground text-sm">
                 Posted on{" "}
                 <DateDisplay
