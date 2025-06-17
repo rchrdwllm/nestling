@@ -3,12 +3,12 @@ import { cert } from "firebase-admin/app";
 import { initializeApp } from "firebase/app";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyADMF6j2UaWNzDxaGPrAJF0NVnyp5J94pY",
-  authDomain: "nestling-3eea1.firebaseapp.com",
-  projectId: "nestling-3eea1",
-  storageBucket: "nestling-3eea1.firebasestorage.app",
-  messagingSenderId: "732687777835",
-  appId: "1:732687777835:web:abffd11476fd3c15822a6e",
+  apiKey: "AIzaSyBlbGFfhd-g4zpp1YpXlH10iHQAG1RDK0c",
+  authDomain: "nestling-backup.firebaseapp.com",
+  projectId: "nestling-backup",
+  storageBucket: "nestling-backup.firebasestorage.app",
+  messagingSenderId: "344308890060",
+  appId: "1:344308890060:web:085458698f2f2b35330569",
 };
 
 export const firebase = initializeApp(firebaseConfig);
