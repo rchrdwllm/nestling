@@ -74,7 +74,7 @@ const SearchBtn = () => {
         <DialogHeader>
           <DialogTitle>Search</DialogTitle>
           <DialogDescription>
-            Use the search bar to find courses, instructors, or topics.
+            Use the search bar to find content.
           </DialogDescription>
         </DialogHeader>
         <Search />

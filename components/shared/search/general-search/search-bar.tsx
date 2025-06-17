@@ -10,7 +10,7 @@ import * as z from "zod";
 import { GeneralSearchSchema } from "@/schemas/GeneralSearchSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { useCurrentUser } from "@/hooks/use-current-user";
 
 type SearchBarProps = {
@@ -67,7 +67,11 @@ const SearchBar = ({ isInbox }: SearchBarProps) => {
       if (term) {
         params.set("query", term);
         params.set("page", page.toString());
-        params.set("tab", form.getValues("tab") || "students");
+        params.set(
+          "tab",
+          form.getValues("tab") ||
+            (user.role === "student" ? "courses" : "students")
+        );
       } else {
         params.delete("query");
         params.delete("page");
@@ -82,6 +86,10 @@ const SearchBar = ({ isInbox }: SearchBarProps) => {
   const handleSubmit = (data: z.infer<typeof GeneralSearchSchema>) => {
     handleSearch(data.query);
   };
+
+  useEffect(() => {
+    form.setValue("tab", entities[0] as any);
+  }, []);
 
   return (
     <Form {...form}>
@@ -108,7 +116,7 @@ const SearchBar = ({ isInbox }: SearchBarProps) => {
                 value={field.value || "all"}
                 onValueChange={(value) => field.onChange(value)}
                 className="w-full"
-                defaultValue={entities[0]}
+                defaultValue={field.value}
               >
                 <TabsList className="w-full">
                   {entities.map((entity) => (
