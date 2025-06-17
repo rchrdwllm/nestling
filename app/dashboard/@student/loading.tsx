@@ -68,34 +68,34 @@ const StudentDashboardPage = () => {
           <article className="flex gap-4 shadow-sm hover:shadow-md p-4 border border-border rounded-xl transition-shadow">
             <Skeleton className="rounded-full size-10" />
             <div className="flex flex-col flex-1 gap-2 cursor-pointer">
-              <Skeleton className="w-12 size-[14px]" />
+              <Skeleton className="w-12 h-[14px]" />
               <div className="flex justify-between items-center">
-                <Skeleton className="w-48 size-[30px]" />
+                <Skeleton className="w-48 h-[30px]" />
               </div>
-              <Skeleton className="w-12 size-[14px]" />
-              <Skeleton className="w-full size-4" />
+              <Skeleton className="w-12 h-[14px]" />
+              <Skeleton className="w-full h-4" />
             </div>
           </article>
           <article className="flex gap-4 shadow-sm hover:shadow-md p-4 border border-border rounded-xl transition-shadow">
             <Skeleton className="rounded-full size-10" />
             <div className="flex flex-col flex-1 gap-2 cursor-pointer">
-              <Skeleton className="w-12 size-[14px]" />
+              <Skeleton className="w-12 h-[14px]" />
               <div className="flex justify-between items-center">
-                <Skeleton className="w-48 size-[30px]" />
+                <Skeleton className="w-48 h-[30px]" />
               </div>
-              <Skeleton className="w-12 size-[14px]" />
-              <Skeleton className="w-full size-4" />
+              <Skeleton className="w-12 h-[14px]" />
+              <Skeleton className="w-full h-4" />
             </div>
           </article>
           <article className="flex gap-4 shadow-sm hover:shadow-md p-4 border border-border rounded-xl transition-shadow">
             <Skeleton className="rounded-full size-10" />
             <div className="flex flex-col flex-1 gap-2 cursor-pointer">
-              <Skeleton className="w-12 size-[14px]" />
+              <Skeleton className="w-12 h-[14px]" />
               <div className="flex justify-between items-center">
-                <Skeleton className="w-48 size-[30px]" />
+                <Skeleton className="w-48 h-[30px]" />
               </div>
-              <Skeleton className="w-12 size-[14px]" />
-              <Skeleton className="w-full size-4" />
+              <Skeleton className="w-12 h-[14px]" />
+              <Skeleton className="w-full h-4" />
             </div>
           </article>
         </section>
