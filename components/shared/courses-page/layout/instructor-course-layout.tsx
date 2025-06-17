@@ -20,7 +20,7 @@ const InstructorCourseLayout = ({
   id,
   children,
 }: CourseLayoutProps) => {
-  const [isToggled, setIsToggled] = useState(false);
+  const [isToggled, setIsToggled] = useState(true);
 
   return (
     <main className="gap-x-2 grid grid-cols-8 bg-secondary">
