@@ -197,7 +197,7 @@ const AddUserForm = ({
           )}
         />
         <div className="flex justify-end gap-4">
-          <Button onClick={() => setIsOpen(false)} variant="secondary">
+          <Button onClick={() => setIsOpen(false)} variant="outline">
             Back
           </Button>
           <Button

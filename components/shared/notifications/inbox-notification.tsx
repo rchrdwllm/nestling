@@ -16,7 +16,7 @@ const InboxNotification = ({ title, message, url }: InboxNotificationProps) => {
         <p className="text-muted-foreground">{message}</p>
       </div>
       <Link href={url}>
-        <Button variant="secondary">View message</Button>
+        <Button variant="outline">View message</Button>
       </Link>
     </article>
   );

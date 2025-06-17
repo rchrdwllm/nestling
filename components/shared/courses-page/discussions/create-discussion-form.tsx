@@ -99,7 +99,7 @@ const CreateDiscussionForm = ({
           <Button
             type="button"
             onClick={() => setIsOpen(false)}
-            variant="secondary"
+            variant="outline"
             disabled={isExecuting}
           >
             Back

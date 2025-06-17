@@ -30,7 +30,7 @@ export const coursesCols: ColumnDef<Course>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Title
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          <ArrowUpDown className="ml-2 w-4 h-4" />
         </Button>
       );
     },
@@ -80,11 +80,7 @@ export const coursesCols: ColumnDef<Course>[] = [
             </DialogHeader>
             <DialogFooter>
               <DialogClose asChild>
-                <Button
-                  disabled={isExecuting}
-                  type="button"
-                  variant="secondary"
-                >
+                <Button disabled={isExecuting} type="button" variant="outline">
                   Close
                 </Button>
               </DialogClose>
@@ -110,7 +106,7 @@ export const coursesCols: ColumnDef<Course>[] = [
       const description = getValue() as string;
 
       return (
-        <span className="text-muted-foreground max-w-[500px] text-ellipsis">
+        <span className="max-w-[500px] text-muted-foreground text-ellipsis">
           {description}
         </span>
       );

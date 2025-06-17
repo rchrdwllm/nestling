@@ -85,7 +85,7 @@ const ReplyDiscussionForm = ({
           <Button
             type="button"
             onClick={() => setIsOpen(false)}
-            variant="secondary"
+            variant="outline"
             disabled={isExecuting}
           >
             Cancel

@@ -71,8 +71,8 @@ const ReplyTicketForm = ({ setIsOpen, ticketId }: ReplyTicketFormProps) => {
             </FormItem>
           )}
         />
-        <div className="flex gap-4 justify-end">
-          <Button onClick={() => setIsOpen(false)} variant="secondary">
+        <div className="flex justify-end gap-4">
+          <Button onClick={() => setIsOpen(false)} variant="outline">
             Back
           </Button>
           <Button type="submit" disabled={isExecuting}>
