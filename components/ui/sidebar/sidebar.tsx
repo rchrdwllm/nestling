@@ -35,19 +35,17 @@ const Sidebar = () => {
   return (
     <aside
       className={cn(
-        "top-2 z-10 sticky flex flex-col items-center bg-background shadow-sm p-3 border border-border rounded-xl h-[calc(100vh-1rem)]",
-        user.role === "admin" ? "py-4 justify-between" : "pt-8"
+        "top-2 z-10 sticky flex flex-col items-center bg-background shadow-sm p-3 border border-border rounded-xl h-[calc(100vh-1rem)] py-4 justify-between"
       )}
     >
       <Link href="/dashboard" className="block">
-        <Image src={logo} alt="Logo" className="size-10 object-contain rounded-lg" />
+        <Image
+          src={logo}
+          alt="Logo"
+          className="rounded-lg size-10 object-contain"
+        />
       </Link>
-      <div
-        className={cn(
-          "flex flex-col gap-4",
-          user.role === "admin" ? "items-center justify-between" : "mt-10"
-        )}
-      >
+      <div className={cn("flex flex-col gap-4 justify-center items-center")}>
         {sidebarItems.map((item) => {
           if (item.href === "/notifications") {
             return <NotifLink key={item.href} {...item} />;

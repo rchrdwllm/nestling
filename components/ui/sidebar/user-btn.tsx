@@ -40,7 +40,7 @@ const UserBtn = () => {
   if (!user) return null;
 
   return (
-    <div className={cn("size-10", user.role !== "admin" && "mt-auto")}>
+    <div className="size-10">
       <DropdownMenu>
         <DropdownMenuTrigger>
           {user.image ? (
