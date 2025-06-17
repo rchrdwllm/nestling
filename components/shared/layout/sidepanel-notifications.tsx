@@ -36,7 +36,7 @@ const SidePanelNotifications = ({ notifications }: SidePanelNotifications) => {
           onClick={() => {
             execute({ userId: user.id });
           }}
-          variant="outline"
+          variant="ghost"
           className="px-2"
         >
           <X className="size-5" />
