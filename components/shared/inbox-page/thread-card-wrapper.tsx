@@ -15,8 +15,8 @@ const ThreadCardWrapper = ({ children, channelId }: ThreadCardWrapperProps) => {
   return (
     <div
       className={cn(
-        "h-auto p-4 border-b border-border cursor-pointer transition-colors hover:bg-secondary",
-        params?.channelId === channelId && "bg-secondary"
+        "h-auto p-4 border-b border-border cursor-pointer transition-colors hover:bg-muted",
+        params?.channelId === channelId && "bg-muted"
       )}
     >
       {children}
