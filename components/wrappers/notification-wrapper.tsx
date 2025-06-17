@@ -64,7 +64,7 @@ const NotificationWrapper = ({
               description: notification.message,
               action: (
                 <Link href={notification.url}>
-                  <Button variant="outline">View message</Button>
+                  <Button variant="secondary">View message</Button>
                 </Link>
               ),
               duration: 100000,
@@ -75,7 +75,7 @@ const NotificationWrapper = ({
               description: notification.message,
               action: (
                 <Link href={notification.url}>
-                  <Button variant="outline">View</Button>
+                  <Button variant="secondary">View</Button>
                 </Link>
               ),
               duration: 100000,

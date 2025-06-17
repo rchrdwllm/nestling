@@ -105,8 +105,8 @@ const AddPeopleForm = ({ setIsOpen, isEdit }: AddPeopleForm) => {
             </FormItem>
           )}
         />
-        <div className="flex justify-end gap-4">
-          <Button onClick={() => setIsOpen(false)} variant="outline">
+        <div className="flex gap-4 justify-end">
+          <Button onClick={() => setIsOpen(false)} variant="secondary">
             Back
           </Button>
           <Button type="submit" disabled={isExecuting}>

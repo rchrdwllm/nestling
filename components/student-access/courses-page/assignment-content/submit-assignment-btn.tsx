@@ -192,10 +192,10 @@ const SubmitAssignmentBtn = ({
               <>
                 <button
                   type="button"
-                  className="group bg-background hover:bg-accent border border-input rounded-md w-full transition-colors hover:text-accent-foreground cursor-pointer"
+                  className="w-full border border-input bg-background hover:bg-accent hover:text-accent-foreground rounded-md cursor-pointer group transition-colors"
                 >
                   <label
-                    className="flex flex-col justify-center items-center gap-2 py-8 w-full text-muted-foreground group-hover:text-foreground transition-colors cursor-pointer"
+                    className="flex flex-col justify-center items-center gap-2 w-full py-8 cursor-pointer text-muted-foreground transition-colors group-hover:text-foreground"
                     htmlFor="submission"
                   >
                     {file ? (
@@ -243,14 +243,14 @@ const SubmitAssignmentBtn = ({
                 )}
               />
             )}
-            <div className="flex flex-col gap-4 mt-4">
+            <div className="mt-4 flex flex-col gap-4">
               <Button type="submit" disabled={isExecuting || isLoading}>
                 Submit
               </Button>
               <Button
                 type="button"
                 onClick={() => setIsOpen(false)}
-                variant="outline"
+                variant="secondary"
                 disabled={isExecuting || isLoading}
               >
                 Cancel

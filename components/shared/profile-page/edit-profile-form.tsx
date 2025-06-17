@@ -147,7 +147,7 @@ const EditProfileForm = ({
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <div className="flex flex-col justify-center items-center gap-4">
+                  <div className="flex flex-col items-center justify-center gap-4">
                     {form.getValues("image") ? (
                       <label
                         htmlFor="image"
@@ -159,24 +159,24 @@ const EditProfileForm = ({
                             className="object-cover"
                           />
                           <AvatarFallback>
-                            <div className="flex justify-center items-center bg-muted rounded-full size-32">
-                              <p className="font-bold text-xl">
+                            <div className="flex items-center justify-center size-32 bg-muted rounded-full">
+                              <p className="text-xl font-bold">
                                 {user.name![0]}
                               </p>
                             </div>
                           </AvatarFallback>
                         </Avatar>
-                        <Pencil className="right-0 bottom-2 absolute size-6 text-muted-foreground" />
+                        <Pencil className="absolute bottom-2 right-0 size-6 text-muted-foreground" />
                       </label>
                     ) : (
                       <label
                         htmlFor="image"
                         className="relative cursor-pointer"
                       >
-                        <div className="flex justify-center items-center bg-muted rounded-full size-32">
-                          <p className="font-bold text-xl">{user.name![0]}</p>
+                        <div className="flex items-center justify-center size-32 bg-muted rounded-full">
+                          <p className="text-xl font-bold">{user.name![0]}</p>
                         </div>
-                        <Pencil className="right-0 bottom-2 absolute size-6 text-muted-foreground" />
+                        <Pencil className="absolute bottom-2 right-0 size-6 text-muted-foreground" />
                       </label>
                     )}
                     <input
@@ -194,16 +194,16 @@ const EditProfileForm = ({
           {!setToggleEdit && (
             <>
               <div className="text-center">
-                <h1 className="mt-6 font-semibold text-3xl">
+                <h1 className="text-3xl font-semibold mt-6">
                   {user.name || `${user.firstName} ${user.lastName}`}
                 </h1>
-                <p className="mt-2 text-muted-foreground">
+                <p className="text-muted-foreground mt-2">
                   {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
                 </p>
               </div>
               {user.role !== "admin" && (
-                <div className="flex flex-col items-center gap-2 bg-secondary mx-auto p-4 border border-border rounded-lg w-max">
-                  <h1 className="font-mono font-semibold text-2xl">
+                <div className="w-max mx-auto p-4 bg-secondary rounded-lg border border-border flex flex-col gap-2 items-center">
+                  <h1 className="font-mono text-2xl font-semibold">
                     {contentsLength}
                   </h1>
                   <p className="text-muted-foreground text-sm">
@@ -307,11 +307,11 @@ const EditProfileForm = ({
               />
             </>
           )}
-          <div className="flex gap-4 w-full">
+          <div className="w-full flex gap-4">
             {setToggleEdit && (
               <Button
                 className="w-full"
-                variant="outline"
+                variant="secondary"
                 onClick={() => setToggleEdit(false)}
               >
                 Cancel
