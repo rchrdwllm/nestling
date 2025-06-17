@@ -16,6 +16,8 @@ export const uploadImage = actionClient
       secure_url,
       content_id,
       course_id,
+      discussion_id,
+      reply_id,
       hash,
     } = parsedInput;
     const user = await getOptimisticUser();
@@ -67,6 +69,40 @@ export const uploadImage = actionClient
         };
 
         await courseImgRef.set(reference);
+      }
+
+      if (discussion_id) {
+        const discussionImgRef = db
+          .collection("discussions")
+          .doc(discussion_id)
+          .collection("images")
+          .doc(public_id);
+        const reference = {
+          public_id,
+          created_at,
+          discussion_id,
+          secure_url,
+          hash,
+        };
+
+        await discussionImgRef.set(reference);
+      }
+
+      if (reply_id) {
+        const replyImgRef = db
+          .collection("discussionReplies")
+          .doc(reply_id)
+          .collection("images")
+          .doc(public_id);
+        const reference = {
+          public_id,
+          created_at,
+          reply_id,
+          secure_url,
+          hash,
+        };
+
+        await replyImgRef.set(reference);
       }
 
       return {

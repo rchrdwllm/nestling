@@ -120,6 +120,7 @@ export const deleteContent = actionClient
       await batch.commit();
 
       revalidateTag("contents");
+      revalidateTag("assignments");
       revalidateTag("files");
       revalidateTag("images");
       revalidateTag("modules");

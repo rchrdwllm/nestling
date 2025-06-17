@@ -31,6 +31,16 @@ export const UploadImageSchema = z.object({
       invalid_type_error: "Course ID must be a string",
     })
     .optional(),
+  discussion_id: z
+    .string({
+      invalid_type_error: "Discussion ID must be a string",
+    })
+    .optional(),
+  reply_id: z
+    .string({
+      invalid_type_error: "Reply ID must be a string",
+    })
+    .optional(),
   isEdit: z
     .boolean({
       invalid_type_error: "isEdit must be a boolean",

@@ -12,11 +12,10 @@ import { sendNotification } from "./send-notification";
 export const createDiscussion = actionClient
   .schema(CreateDiscussionSchema)
   .action(async ({ parsedInput }) => {
-    const { title, content, courseId } = parsedInput;
+    const { title, content, courseId, id } = parsedInput;
     const user = await getOptimisticUser();
 
     try {
-      const id = crypto.randomUUID();
       const discussionRef = db.collection("discussions").doc(id);
 
       await discussionRef.set({
