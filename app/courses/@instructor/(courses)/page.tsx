@@ -18,7 +18,7 @@ const InstructorCoursesPage = async ({
       <div className="flex flex-col gap-10 p-6">
         <div className="flex flex-col gap-3">
           <div className="flex flex-1 justify-between items-center gap-4">
-            <h1 className="font-semibold text-3xl">Manage courses</h1>
+            <h1 className="flex-1 font-semibold text-3xl">Manage courses</h1>
             <Link href="/courses/archive">
               <Button variant="outline">View archive</Button>
             </Link>
