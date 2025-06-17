@@ -30,6 +30,218 @@ span {
     --popover-foreground: 235 57% 5%;
     --primary: 356 94% 45%;
     --primary-foreground: 0 85.7% 97.3%;
+    --secondary: 220 27% 96.5%;
+    --secondary-foreground: 0 0% 9%;
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 222 9% 50%;
+    --accent: 0 0% 96.1%;
+    --accent-foreground: 0 0% 9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 150 11% 93%;
+    --input: 150 11% 93%;
+    --ring: 356 94% 45%;
+    --radius: 0.5rem;
+    --chart-1: 0 83% 48%;
+    --chart-2: 0 97% 60%;
+    --chart-3: 0 100% 70%;
+    --chart-4: 0 100% 81%;
+    --chart-5: 0 100% 89%;
+  }
+
+  .dark {
+    --background: 0 0% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 87% 58%;
+    --primary-foreground: 0 85.7% 97.3%;
+    --secondary: 0 0% 8.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 0 87% 58%;
+    --chart-1: 0 87% 58%;
+    --chart-2: 0 75% 51%;
+    --chart-3: 0 76% 42%;
+    --chart-4: 0 72% 35%;
+    --chart-5: 0 65% 31%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  .projects-scroll-area > div[data-radix-scroll-area-viewport] > div {
+    @apply block h-full !important;
+  }
+
+  .sidebar-scroll-area > div[data-radix-scroll-area-viewport] > div {
+    @apply block h-full !important;
+  }
+
+  .scroll-area > div[data-radix-scroll-area-viewport] > div {
+    @apply block h-full !important;
+  }
+}
+
+:root {
+  --nestling-color: #df1514;
+}
+
+:root {
+  --gray-bg: #d2d2d2;
+}
+
+@keyframes fadeinout {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.animate-fadeinout {
+  animation: fadeinout 600ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes fadeout {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.animate-fadeout {
+  animation: fadeout 600ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* FAQ slider animation */
+.slider-content {
+  transition-property: max-height, opacity, margin-top;
+  transition-duration: 400ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  max-height: 0;
+  opacity: 0;
+  margin-top: 0;
+}
+.slider-content.max-h-40 {
+  max-height: 10rem;
+  opacity: 1;
+  margin-top: 0.5rem;
+}
+
+@keyframes breath {
+  0% {
+    opacity: 0.82;
+    transform: scale(1);
+  }
+  20% {
+    opacity: 0.88;
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.018);
+  }
+  80% {
+    opacity: 0.88;
+  }
+  100% {
+    opacity: 0.82;
+    transform: scale(1);
+  }
+}
+.animate-breath {
+  animation: breath 2s ease-in-out infinite;
+}
+
+@keyframes slideDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-16px) scaleY(0.95) translateX(-50%);
+    max-height: 0;
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scaleY(1) translateX(-50%);
+    max-height: 500px;
+  }
+}
+.animate-slideDown {
+  animation: slideDown 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes breath-slow {
+  0%,
+  100% {
+    opacity: 0.82;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+.animate-breath-slow {
+  animation: breath-slow 2.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+span {
+  display: inline-block;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE dan Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 235 57% 5%;
+    --card: 0 0% 100%;
+    --card-foreground: 235 57% 5%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 235 57% 5%;
+    --primary: 356 94% 45%;
+    --primary-foreground: 0 85.7% 97.3%;
     --secondary: 230 13% 91%;
     --secondary-foreground: 0 0% 9%;
     --muted: 240 11% 93%;
