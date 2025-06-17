@@ -43,7 +43,7 @@ export const addUserToCourse = actionClient
           const instructorCourseRef = db
             .collection("users")
             .doc(userId)
-            .collection("instructedCourses")
+            .collection("courses")
             .doc(courseId);
           const courseInstructorRef = db
             .collection("courses")

@@ -1,5 +1,7 @@
-"use client";
-
+import { Button } from "@/components/ui/button";
+import { Module } from "@/types";
+import { useAction } from "next-safe-action/hooks";
+import { toast } from "sonner";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -11,28 +13,26 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { useAction } from "next-safe-action/hooks";
-import { toast } from "sonner";
-import { deleteContent } from "@/server/actions/delete-content";
-import { Button } from "@/components/ui/button";
+import { deleteModule } from "@/server/actions/delete-module";
 
-type DeleteContentBtnProps = {
-  contentId: string;
+type DeleteModuleBtnProps = {
+  module: string;
 };
 
-const DeleteContentBtn = ({ contentId }: DeleteContentBtnProps) => {
-  const { execute, isExecuting } = useAction(deleteContent, {
+const DeleteModuleBtn = ({ module }: DeleteModuleBtnProps) => {
+  const moduleData = JSON.parse(module) as Module;
+  const { execute, isExecuting } = useAction(deleteModule, {
     onSuccess: () => {
       toast.dismiss();
-      toast.success("Content deleted successfully");
+      toast.success("Module deleted successfully");
     },
     onError: (error) => {
       toast.dismiss();
-      toast.error(`Error deleting content: ${error}`);
+      toast.error(`Error deleting module: ${error}`);
     },
     onExecute: () => {
       toast.dismiss();
-      toast.loading("Deleting content...");
+      toast.loading("Deleting module...");
     },
   });
 
@@ -40,26 +40,25 @@ const DeleteContentBtn = ({ contentId }: DeleteContentBtnProps) => {
     <AlertDialog>
       <AlertDialogTrigger asChild>
         <Button
-          notAnimated
           variant="ghost"
           className="block px-2 py-1.5 w-full font-normal text-primary hover:text-primary text-sm text-left"
         >
-          Delete
+          Delete module
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will permanently the course
-            content along with associated data.
+            This action cannot be undone. This will permanently this course
+            module along with all its contents and associated data.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction
             disabled={isExecuting}
-            onClick={() => execute({ contentId })}
+            onClick={() => execute({ moduleId: moduleData.id })}
           >
             Continue
           </AlertDialogAction>
@@ -69,4 +68,4 @@ const DeleteContentBtn = ({ contentId }: DeleteContentBtnProps) => {
   );
 };
 
-export default DeleteContentBtn;
+export default DeleteModuleBtn;

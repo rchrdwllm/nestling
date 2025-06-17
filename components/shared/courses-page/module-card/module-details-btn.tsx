@@ -9,6 +9,7 @@ import {
 import { EllipsisVertical } from "lucide-react";
 import EditModuleBtn from "./edit-module-btn";
 import ArchiveModuleBtn from "./archive-module-btn";
+import DeleteModuleBtn from "./delete-module-btn";
 
 type ModuleDetailsBtnProps = {
   module: string;
@@ -18,7 +19,7 @@ const ModuleDetailsBtn = ({ module }: ModuleDetailsBtnProps) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
-        <EllipsisVertical className="size-4 text-muted-foreground transition-colors hover:text-foreground" />
+        <EllipsisVertical className="size-4 text-muted-foreground hover:text-foreground transition-colors" />
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuItem asChild>
@@ -26,6 +27,9 @@ const ModuleDetailsBtn = ({ module }: ModuleDetailsBtnProps) => {
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <ArchiveModuleBtn module={module} />
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <DeleteModuleBtn module={module} />
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

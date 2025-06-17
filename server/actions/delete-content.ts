@@ -10,7 +10,7 @@ import {
   deleteImgFromCloudinary,
 } from "./delete-from-cloudinary";
 import { deleteImage } from "./delete-image";
-import { Submission } from "@/types";
+import { Content, Submission } from "@/types";
 
 export const deleteContent = actionClient
   .schema(DeleteContentSchema)
@@ -24,6 +24,8 @@ export const deleteContent = actionClient
       if (!contentSnapshot.exists) {
         return { error: "Content not found" };
       }
+
+      const content = contentSnapshot.data() as Content;
 
       const batch = db.batch();
 
@@ -106,6 +108,13 @@ export const deleteContent = actionClient
         batch.delete(contentSubmissionRef);
       }
 
+      const moduleContentsRef = db
+        .collection("modules")
+        .doc(content.moduleId)
+        .collection("contents")
+        .doc(contentId);
+
+      batch.delete(moduleContentsRef);
       batch.delete(contentRef);
 
       await batch.commit();
@@ -113,6 +122,7 @@ export const deleteContent = actionClient
       revalidateTag("contents");
       revalidateTag("files");
       revalidateTag("images");
+      revalidateTag("modules");
 
       return { success: "Content deleted successfully" };
     } catch (error) {
