@@ -7,13 +7,13 @@ const EmployeeTaskCard = ({ title, projectId, startDate, endDate }: Task) => {
   return (
     <Link
       href={`/projects/${projectId}`}
-      className="bg-muted after:bg-primary relative rounded-md flex flex-col gap-1 p-2 pl-6 cursor-pointer text-sm after:absolute after:inset-y-2 after:left-2 after:w-1 after:rounded-full"
+      className="after:left-2 after:absolute relative after:inset-y-2 flex flex-col gap-1 bg-muted-secondary after:bg-primary p-2 pl-6 rounded-md after:rounded-full after:w-1 text-sm cursor-pointer"
     >
       <h1 className="font-medium">{title}</h1>
       <p className="text-muted-foreground text-xs">
-        <Calendar className="size-3 inline mb-1" />{" "}
+        <Calendar className="inline mb-1 size-3" />{" "}
         <DateDisplay date={startDate!} /> -{" "}
-        <Calendar className="size-3 inline mb-1" />{" "}
+        <Calendar className="inline mb-1 size-3" />{" "}
         <DateDisplay date={endDate!} />
       </p>
     </Link>
