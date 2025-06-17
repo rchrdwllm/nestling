@@ -78,7 +78,7 @@ const Layout = async ({
           </CourseSectionLink>
         </aside>
       </ScrollArea>
-      <ScrollArea className="col-span-6 bg-background shadow-sm border border-border rounded-xl h-[calc(100vh-1rem)] overflow-y-auto scroll-area">
+      <ScrollArea className="col-span-6 bg-background shadow-sm border border-border rounded-xl h-[calc(100vh-1rem)] scroll-area">
         {children}
       </ScrollArea>
     </main>
