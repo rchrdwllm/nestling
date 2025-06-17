@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/select";
 import { User } from "next-auth";
 import { MultiSelect } from "@/components/ui/multi-select";
+import { useCurrentUser } from "@/hooks/use-current-user";
 
 type AddUserFormProps = {
   setIsOpen: (isOpen: boolean) => void;
@@ -32,11 +33,12 @@ const AddUserForm = ({
   availableStudents,
   availableInstructors,
 }: AddUserFormProps) => {
+  const { user } = useCurrentUser();
   const form = useForm<z.infer<typeof AddUserToCourseSchema>>({
     resolver: zodResolver(AddUserToCourseSchema),
     defaultValues: {
       courseId,
-      role: undefined,
+      role: user.role === "admin" ? undefined : "student",
       userIds: [],
     },
   });
@@ -74,28 +76,30 @@ const AddUserForm = ({
         onSubmit={form.handleSubmit(handleSubmit)}
         className="flex flex-col gap-4"
       >
-        <FormField
-          control={form.control}
-          name="role"
-          render={({ field }) => (
-            <FormItem>
-              <Select
-                onValueChange={field.onChange}
-                value={field.value}
-                defaultValue={field.value}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select role" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="student">Student</SelectItem>
-                  <SelectItem value="instructor">Instructor</SelectItem>
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        {user.role === "admin" && (
+          <FormField
+            control={form.control}
+            name="role"
+            render={({ field }) => (
+              <FormItem>
+                <Select
+                  onValueChange={field.onChange}
+                  value={field.value}
+                  defaultValue={field.value}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select role" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="student">Student</SelectItem>
+                    <SelectItem value="instructor">Instructor</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
         <FormField
           control={form.control}
           name="userIds"
@@ -127,7 +131,7 @@ const AddUserForm = ({
             </FormItem>
           )}
         />
-        <div className="flex gap-4 justify-end">
+        <div className="flex justify-end gap-4">
           <Button onClick={() => setIsOpen(false)} variant="secondary">
             Back
           </Button>

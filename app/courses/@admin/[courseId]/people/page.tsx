@@ -62,6 +62,7 @@ const PeoplePage = async ({
   const availableInstructors = allInstructors.filter(
     (instructor) => !courseInstructors.some((i) => i.id === instructor.id)
   );
+
   return (
     <div className="flex flex-col gap-8 p-6">
       <Searcher query={query} page={page} tab={tab} />

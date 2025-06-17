@@ -11,6 +11,7 @@ import EditCourseBtn from "./edit-course-btn";
 import ArchiveCourseBtn from "./archive-course-btn";
 import EditAccessBtn from "./edit-access-btn";
 import { User } from "@/types";
+import AddUserBtn from "./add-user-btn";
 
 type CourseDetailsBtnProps = {
   course: string;
@@ -18,6 +19,8 @@ type CourseDetailsBtnProps = {
   isAdmin?: boolean;
   instructors?: User[];
   defaultInstructors?: User[];
+  availableStudents?: User[];
+  availableInstructors?: User[];
 };
 
 const CourseDetailsBtn = ({
@@ -26,11 +29,13 @@ const CourseDetailsBtn = ({
   isAdmin,
   instructors,
   defaultInstructors = [],
+  availableStudents = [],
+  availableInstructors = [],
 }: CourseDetailsBtnProps) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
-        <EllipsisVertical className="size-4 text-muted-foreground transition-colors hover:text-foreground" />
+        <EllipsisVertical className="size-4 text-muted-foreground hover:text-foreground transition-colors" />
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuItem asChild>
@@ -43,6 +48,13 @@ const CourseDetailsBtn = ({
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <ArchiveCourseBtn course={course} />
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <AddUserBtn
+            course={course}
+            availableStudents={availableStudents}
+            availableInstructors={availableInstructors}
+          />
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <EditAccessBtn course={course} enrolledStudents={enrolledStudents} />
