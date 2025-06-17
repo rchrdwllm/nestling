@@ -3,24 +3,25 @@ import Link from "next/link";
 import { ScrollText, FilePen, Paperclip } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import PublishContentSwitch from "./publish-content-switch";
+import ContentDetailsBtn from "./content-details-btn";
 
 const ContentCard = ({ id, courseId, title, type, isPublished }: Content) => {
   const Icon =
     type === "lesson"
       ? ScrollText
       : type === "assignment"
-        ? FilePen
-        : Paperclip;
+      ? FilePen
+      : Paperclip;
 
   return (
-    <article className="flex justify-between items-center">
+    <article className="flex justify-between items-center gap-4">
       <Link
-        className="flex-1 block"
+        className="block flex-1"
         href={`/courses/${courseId}/modules/content/${id}`}
       >
         <Button
           variant="link"
-          className="text-left inline-flex justify-start items-center gap-3 p-0 w-full flex-1"
+          className="inline-flex flex-1 justify-start items-center gap-3 p-0 w-full text-left"
         >
           <span>
             <Icon className="size-4" />
@@ -29,6 +30,7 @@ const ContentCard = ({ id, courseId, title, type, isPublished }: Content) => {
         </Button>
       </Link>
       <PublishContentSwitch defaultPublished={isPublished} contentId={id} />
+      <ContentDetailsBtn contentId={id} />
     </article>
   );
 };
