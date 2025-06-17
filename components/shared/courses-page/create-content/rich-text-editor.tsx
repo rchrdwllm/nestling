@@ -207,7 +207,7 @@ const RichTextEditor = ({ content }: RichTextEditorProps) => {
             </Toggle>
             <button
               type="button"
-              className="flex justify-center items-center hover:bg-accent hover:text-accent-foreground rounded-md transition-colors p-0 size-[36px] cursor-pointer"
+              className="flex justify-center items-center hover:bg-accent p-0 rounded-md size-[36px] transition-colors hover:text-accent-foreground cursor-pointer"
             >
               <label htmlFor="img-input" className="px-2 py-2 cursor-pointer">
                 <ImageIcon className="w-4 h-4 pointer-events-none" />
@@ -225,7 +225,7 @@ const RichTextEditor = ({ content }: RichTextEditorProps) => {
           <EditorContent
             placeholder="Start writing"
             editor={editor}
-            className="border-2 rounded-lg py-2 px-3 outline-none"
+            className="shadow-sm px-3 py-2 border rounded-lg outline-none"
           />
         </>
       )}
