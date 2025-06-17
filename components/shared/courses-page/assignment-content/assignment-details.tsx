@@ -12,7 +12,7 @@ const AssignmentDetails = async ({
   submissionType,
 }: AssignmentDetailsProps) => {
   return (
-    <section className={cn("border-b py-8 grid grid-cols-3")}>
+    <section className={cn("border-b py-8 grid grid-cols-3 gap-8")}>
       <div>
         <p className="text-muted-foreground">
           Start date:{" "}
