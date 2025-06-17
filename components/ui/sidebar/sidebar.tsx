@@ -40,7 +40,7 @@ const Sidebar = () => {
       )}
     >
       <Link href="/dashboard" className="block">
-        <Image src={logo} alt="Logo" className="size-10 object-contain" />
+        <Image src={logo} alt="Logo" className="size-10 object-contain rounded-lg" />
       </Link>
       <div
         className={cn(
