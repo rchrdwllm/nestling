@@ -9,11 +9,10 @@ import { revalidateTag } from "next/cache";
 export const replyToDiscussion = actionClient
   .schema(ReplyDiscussionSchema)
   .action(async ({ parsedInput }) => {
-    const { content, courseId, discussionId } = parsedInput;
+    const { content, courseId, discussionId, id } = parsedInput;
     const user = await getOptimisticUser();
 
     try {
-      const id = crypto.randomUUID();
       const replyRef = db.collection("discussionReplies").doc(id);
       const replyData = {
         id,

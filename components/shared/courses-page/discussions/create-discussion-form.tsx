@@ -18,6 +18,7 @@ import { useAction } from "next-safe-action/hooks";
 import { createDiscussion } from "@/server/actions/create-discussion";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import DiscussionTextEditor from "./discussion-text-editor";
 
 type CreateDiscussionFormProps = {
   courseId: string;
@@ -28,12 +29,14 @@ const CreateDiscussionForm = ({
   courseId,
   setIsOpen,
 }: CreateDiscussionFormProps) => {
+  const id = crypto.randomUUID();
   const router = useRouter();
   const form = useForm<z.infer<typeof CreateDiscussionSchema>>({
     defaultValues: {
       content: "",
       title: "",
       courseId: courseId,
+      id,
     },
     resolver: zodResolver(CreateDiscussionSchema),
   });
@@ -86,13 +89,13 @@ const CreateDiscussionForm = ({
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <RichTextEditor content={field.value || ""} />
+                <DiscussionTextEditor content={field.value || ""} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <div className="flex gap-4 justify-end">
+        <div className="flex justify-end gap-4">
           <Button
             type="button"
             onClick={() => setIsOpen(false)}

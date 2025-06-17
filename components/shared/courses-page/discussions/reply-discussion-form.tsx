@@ -17,6 +17,7 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { ReplyDiscussionSchema } from "@/schemas/ReplyDiscussionSchema";
 import { replyToDiscussion } from "@/server/actions/reply-to-discussion";
+import ReplyTextEditor from "./reply-text-editor";
 
 type ReplyDiscussionFormProps = {
   courseId: string;
@@ -29,12 +30,13 @@ const ReplyDiscussionForm = ({
   discussionId,
   setIsOpen,
 }: ReplyDiscussionFormProps) => {
-  const router = useRouter();
+  const id = crypto.randomUUID();
   const form = useForm<z.infer<typeof ReplyDiscussionSchema>>({
     defaultValues: {
       content: "",
       courseId,
       discussionId,
+      id,
     },
     resolver: zodResolver(ReplyDiscussionSchema),
   });
@@ -73,13 +75,13 @@ const ReplyDiscussionForm = ({
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <RichTextEditor content={field.value || ""} />
+                <ReplyTextEditor content={field.value || ""} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <div className="flex gap-4 justify-end">
+        <div className="flex justify-end gap-4">
           <Button
             type="button"
             onClick={() => setIsOpen(false)}
