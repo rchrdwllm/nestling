@@ -16,7 +16,7 @@ import {
 } from "firebase/firestore";
 import { ChevronsLeft, ChevronsRight, X } from "lucide-react";
 import { AnimatePresence } from "motion/react";
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useState } from "react";
 import SidePanelTasks from "./sidepanel-tasks";
 import { getUpcomingAssignmentsForStudent } from "@/lib/content";
 import { getIncompleteUserTasks } from "@/lib/task";
@@ -36,6 +36,7 @@ const SidePanel = ({
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [studentTasks, setStudentTasks] = useState<Content[]>([]);
   const [employeeTasks, setEmployeeTasks] = useState<Task[]>([]);
+
 
   const fetchStudentTasks = async () => {
     const { success: tasks, error } = await getUpcomingAssignmentsForStudent(
@@ -104,24 +105,26 @@ const SidePanel = ({
   return (
     <>
       {!rightPanelToggled && (
-        <div className="fixed top-1/2 right-3 z-50 p-2 -translate-y-1/2">
+        <div className="fixed top-8 right-10 z-50">
           <Button
             onClick={() => {
               setRightPanelToggled(true);
               setIsHovered(false);
             }}
             variant="outline"
-            className="rounded-lg shadow-lg bg-background text-foreground border border-border transition-opacity opacity-40 hover:opacity-100"
-            style={{
-              width: 64,
-              height: 120,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
-            }}
+            className={`
+              w-10 h-10 rounded-xl border border-border
+              flex items-center justify-center
+              shadow-sm
+              bg-transparent
+              transition-all duration-200
+              opacity-35
+              hover:opacity-100
+              hover:shadow-lg 
+            `}
+            aria-label="Show side panel"
           >
-            <ChevronsLeft className="size-6" />
+            <ChevronsLeft size={24} />
           </Button>
         </div>
       )}
