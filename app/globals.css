@@ -23,23 +23,23 @@ span {
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 235 57% 5%; 
+    --foreground: 235 57% 5%;
     --card: 0 0% 100%;
     --card-foreground: 235 57% 5%;
     --popover: 0 0% 100%;
     --popover-foreground: 235 57% 5%;
     --primary: 356 94% 45%;
     --primary-foreground: 0 85.7% 97.3%;
-    --secondary: 230 13% 77.6%;   
+    --secondary: 230 13% 77.6%;
     --secondary-foreground: 0 0% 9%;
-    --muted: 230 13% 91%; 
+    --muted: 230 13% 91%;
     --muted-foreground: 222 9% 50%;
-    --muted-secondary: 240 25% 96%; 
-    --accent: 240 11% 93%; 
+    --muted-secondary: 240 25% 96%;
+    --accent: 240 11% 93%;
     --accent-foreground: 0 0% 9%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 230 9% 88.7%; 
+    --border: 230 9% 88.7%;
     --input: 230 9% 88.7%;
     --ring: 356 94% 45%;
     --radius: 0.5rem;
@@ -210,16 +210,4 @@ span {
 }
 .animate-breath-slow {
   animation: breath-slow 2.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-}
-
-.side-panel-card {
-  background: hsl(var(--muted-secondary));
-  transition: background 0.2s, transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.2s;
-  cursor: pointer;
-}
-
-.side-panel-card:hover {
-  background: hsl(230 13% 77.6% / 0.65);
-  transform: translateY(-4px);
-  box-shadow: 0 4px 16px 0 rgba(0,0,0,0.08);
 }

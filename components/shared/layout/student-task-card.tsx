@@ -13,7 +13,7 @@ const StudentTaskCard = ({
   return (
     <Link
       href={`/courses/${courseId}/modules/content/${id}`}
-      className="side-panel-card after:left-2 after:absolute relative after:inset-y-2 flex flex-col gap-1 bg-muted-secondary after:bg-primary p-2 pl-6 rounded-md after:rounded-full after:w-1 text-sm cursor-pointer"
+      className="after:left-2 after:absolute relative after:inset-y-2 flex flex-col gap-1 bg-muted-secondary after:bg-primary hover:bg-muted/80 hover:shadow-md p-2 pl-6 rounded-md after:rounded-full after:w-1 text-sm transition-all hover:translate-y-[-4px] cursor-pointer"
     >
       <h1 className="font-medium">{title}</h1>
       <p className="text-muted-foreground text-xs">
