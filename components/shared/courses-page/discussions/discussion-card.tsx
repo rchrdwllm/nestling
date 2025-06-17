@@ -11,6 +11,10 @@ const DiscussionCard = async ({
   id,
   courseId,
   userId,
+  archivedAt,
+  content,
+  isArchived,
+  updatedAt,
 }: Discussion) => {
   const user = await getOptimisticUser();
   const isOwner = userId === user.id;
@@ -21,7 +25,19 @@ const DiscussionCard = async ({
         <div className="flex justify-between items-center">
           <h1 className="font-semibold text-xl">{title}</h1>
           {(isOwner || user.role === "admin") && (
-            <DiscussionDetailsBtn discussionId={id} />
+            <DiscussionDetailsBtn
+              discussion={{
+                title,
+                createdAt,
+                id,
+                courseId,
+                userId,
+                archivedAt,
+                content,
+                isArchived,
+                updatedAt,
+              }}
+            />
           )}
         </div>
         <p className="text-muted-foreground">

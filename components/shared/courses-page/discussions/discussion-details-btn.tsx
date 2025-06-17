@@ -8,12 +8,14 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { EllipsisVertical } from "lucide-react";
 import DeleteDiscussionBtn from "./delete-discussion-btn";
+import ArchiveDiscussionBtn from "./archive-discussion-btn";
+import { Discussion } from "@/types";
 
 type DiscussionDetailsBtnProps = {
-  discussionId: string;
+  discussion: Discussion;
 };
 
-const DiscussionDetailsBtn = ({ discussionId }: DiscussionDetailsBtnProps) => {
+const DiscussionDetailsBtn = ({ discussion }: DiscussionDetailsBtnProps) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
@@ -21,7 +23,13 @@ const DiscussionDetailsBtn = ({ discussionId }: DiscussionDetailsBtnProps) => {
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuItem asChild>
-          <DeleteDiscussionBtn discussionId={discussionId} />
+          <ArchiveDiscussionBtn
+            discussionId={discussion.id}
+            discussion={discussion}
+          />
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <DeleteDiscussionBtn discussionId={discussion.id} />
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

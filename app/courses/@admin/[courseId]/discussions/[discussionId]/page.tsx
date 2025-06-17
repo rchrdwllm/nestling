@@ -79,7 +79,7 @@ const DiscussionPage = async ({
               <div className="flex justify-between items-center">
                 <h1 className="font-semibold text-xl">{discussion.title}</h1>
                 {(isOwner || user.role === "admin") && (
-                  <DiscussionDetailsBtn discussionId={discussion.id} />
+                  <DiscussionDetailsBtn discussion={discussion} />
                 )}
               </div>
               <p className="text-muted-foreground text-sm">
