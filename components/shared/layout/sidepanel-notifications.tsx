@@ -21,6 +21,10 @@ const SidePanelNotifications = ({ notifications }: SidePanelNotifications) => {
       toast.dismiss();
       toast.error("Failed to clear notifications");
     },
+    onExecute: () => {
+      toast.dismiss();
+      toast.loading("Clearing notifications...");
+    },
   });
   const { user } = useCurrentUser();
 
@@ -32,7 +36,7 @@ const SidePanelNotifications = ({ notifications }: SidePanelNotifications) => {
           onClick={() => {
             execute({ userId: user.id });
           }}
-          variant="outline"
+          variant="ghost"
           className="px-2"
         >
           <X className="size-5" />
@@ -44,7 +48,7 @@ const SidePanelNotifications = ({ notifications }: SidePanelNotifications) => {
             <NotificationCard key={notification.id} {...notification} />
           ))
         ) : (
-          <p className="text-sm text-muted-foreground">No notifications</p>
+          <p className="text-muted-foreground text-sm">No notifications</p>
         )}
       </div>
     </div>

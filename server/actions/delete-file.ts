@@ -4,6 +4,7 @@ import { db } from "@/lib/firebase";
 import { actionClient } from "../action-client";
 import { DeleteFileSchema } from "@/schemas/DeleteFileSchema";
 import { getFile } from "@/lib/file";
+import { revalidateTag } from "next/cache";
 
 export const deleteFile = actionClient
   .schema(DeleteFileSchema)
@@ -30,6 +31,8 @@ export const deleteFile = actionClient
         .collection("files")
         .doc(public_id)
         .delete();
+
+      revalidateTag("files");
 
       return { success: "File deleted" };
     } catch (error) {

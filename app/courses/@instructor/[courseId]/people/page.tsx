@@ -4,13 +4,17 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import UserTable from "@/components/shared/people-page/user-table";
 import { userTableCols } from "@/components/shared/people-page/user-table-def";
 import { Users, GraduationCap } from "lucide-react";
+import Searcher from "@/components/shared/search/general-search/searcher";
 
 const PeoplePage = async ({
   params,
+  searchParams,
 }: {
   params: Promise<{ courseId: string }>;
+  searchParams?: Promise<{ query?: string; page?: string; tab?: string }>;
 }) => {
   const { courseId } = await params;
+  const { query, page, tab } = (await searchParams) || {};
   const { success: enrolledStudents, error: enrolledStudentsError } =
     await getEnrolledStudents(courseId);
   const { success: courseInstructors, error: courseInstructorsError } =
@@ -31,27 +35,27 @@ const PeoplePage = async ({
       />
     );
   }
-
   return (
-    <div className="p-6 flex flex-col gap-8">
+    <div className="flex flex-col gap-8 p-6">
+      <Searcher query={query} page={page} tab={tab} />
       <div className="flex flex-col gap-4">
-        <h1 className="text-3xl font-semibold">People</h1>
+        <h1 className="font-semibold text-3xl">People</h1>
         <hr />
       </div>
       <Tabs defaultValue="students" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-2">
+        <TabsList className="grid grid-cols-2 w-full">
           <TabsTrigger value="students" className="flex items-center gap-2">
-            <Users className="h-4 w-4" />
+            <Users className="w-4 h-4" />
             Students ({enrolledStudents.length})
           </TabsTrigger>
           <TabsTrigger value="instructors" className="flex items-center gap-2">
-            <GraduationCap className="h-4 w-4" />
+            <GraduationCap className="w-4 h-4" />
             Instructors ({courseInstructors.length})
           </TabsTrigger>
         </TabsList>
         <TabsContent value="students" className="space-y-4">
           <div className="flex flex-col gap-2">
-            <h2 className="text-xl font-semibold">Enrolled Students</h2>
+            <h2 className="font-semibold text-xl">Enrolled Students</h2>
             <p className="text-muted-foreground">
               Students enrolled in this course
             </p>
@@ -64,7 +68,7 @@ const PeoplePage = async ({
         </TabsContent>
         <TabsContent value="instructors" className="space-y-4">
           <div className="flex flex-col gap-2">
-            <h2 className="text-xl font-semibold">Course Instructors</h2>
+            <h2 className="font-semibold text-xl">Course Instructors</h2>
             <p className="text-muted-foreground">
               Instructors teaching this course
             </p>

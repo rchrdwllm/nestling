@@ -13,12 +13,11 @@ import EditAccessForm from "./edit-access-form";
 
 type EditAccessBtnProps = {
   course: string;
-  enrolledStudents: string;
+  enrolledStudents: User[];
 };
 
 const EditAccessBtn = ({ course, enrolledStudents }: EditAccessBtnProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const enrolledStudentsData = JSON.parse(enrolledStudents) as User[];
   const courseData = JSON.parse(course) as Course;
 
   return (
@@ -26,7 +25,7 @@ const EditAccessBtn = ({ course, enrolledStudents }: EditAccessBtnProps) => {
       <DialogTrigger asChild>
         <Button
           variant="ghost"
-          className="text-sm text-left block w-full px-2 py-1.5 font-normal"
+          className="block px-2 py-1.5 w-full font-normal text-sm text-left"
         >
           Edit access
         </Button>
@@ -40,7 +39,7 @@ const EditAccessBtn = ({ course, enrolledStudents }: EditAccessBtnProps) => {
         </DialogHeader>
         <EditAccessForm
           courseId={courseData.id}
-          enrolledStudents={enrolledStudentsData}
+          enrolledStudents={enrolledStudents}
         />
       </DialogContent>
     </Dialog>

@@ -16,7 +16,6 @@ export const deleteAttachment = actionClient
     const { taskId, attachmentId } = parsedInput;
 
     try {
-      console.log({ attachmentId });
       const { success: fileData, error } = await getFile(attachmentId);
 
       if (error) {
@@ -26,6 +25,8 @@ export const deleteAttachment = actionClient
       }
 
       if (!fileData) {
+        console.error("File not found");
+
         return { error: "File not found" };
       }
 

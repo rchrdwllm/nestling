@@ -27,15 +27,27 @@ const TopCourses = ({ data }: TopCourses) => {
     },
   } satisfies ChartConfig;
 
+  // Define colors for each course using chart colors from globals.css
+  const getBarColor = (index: number) => {
+    const colors = [
+      "hsl(var(--chart-1))",
+      "hsl(var(--chart-2))",
+      "hsl(var(--chart-3))",
+      "hsl(var(--chart-4))",
+      "hsl(var(--chart-5))",
+    ];
+    return colors[index % colors.length];
+  };
+
   return (
-    <Card className="p-4 flex flex-col h-full">
+    <Card className="flex flex-col p-4 h-full">
       <div className="flex flex-col gap-1">
         <h1 className="font-semibold text-xl">Top Courses</h1>
         <p className="text-muted-foreground text-sm">
           Courses with the highest student enrollments
         </p>
       </div>
-      <CardContent className="h-full flex justify-center items-center">
+      <CardContent className="flex justify-center items-center p-4 h-full">
         <ChartContainer className="w-full" config={chartConfig}>
           <BarChart
             accessibilityLayer
@@ -63,21 +75,34 @@ const TopCourses = ({ data }: TopCourses) => {
             <Bar
               dataKey="enrollmentCount"
               layout="vertical"
-              fill="hsl(var(--primary))"
               radius={4}
+              shape={(props: any) => {
+                const { payload, x, y, width, height, index } = props;
+                return (
+                  <rect
+                    x={x}
+                    y={y}
+                    width={width}
+                    height={height}
+                    fill={getBarColor(index)}
+                    rx={4}
+                    ry={4}
+                  />
+                );
+              }}
             >
               <LabelList
                 dataKey="title"
                 position="insideLeft"
                 offset={8}
-                fill="hsl(var(--primary-foreground))"
+                fill="white"
                 fontSize={12}
               />
               <LabelList
                 dataKey="enrollmentCount"
                 position="right"
                 offset={8}
-                className="text-primary-foreground"
+                className="text-foreground"
                 fontSize={12}
               />
             </Bar>

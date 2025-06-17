@@ -30,23 +30,24 @@ span {
     --popover-foreground: 235 57% 5%;
     --primary: 356 94% 45%;
     --primary-foreground: 0 85.7% 97.3%;
-    --secondary: 220 27% 96.5%;
+    --secondary: 230 13% 91%;
     --secondary-foreground: 0 0% 9%;
-    --muted: 0 0% 96.1%;
+    --muted: 240 11% 93%;
     --muted-foreground: 222 9% 50%;
-    --accent: 0 0% 96.1%;
+    --muted-secondary: 240 25% 96%;
+    --accent: 240 11% 93%;
     --accent-foreground: 0 0% 9%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 150 11% 93%;
-    --input: 150 11% 93%;
+    --border: 230 9% 88.7%;
+    --input: 230 9% 88.7%;
     --ring: 356 94% 45%;
     --radius: 0.5rem;
-    --chart-1: 0 93.5% 81.8%;
-    --chart-2: 0 90.6% 70.8%;
-    --chart-3: 0 72.2% 50.6%;
-    --chart-4: 0 84.2% 60.2%;
-    --chart-5: 0 73.7% 41.8%;
+    --chart-1: 0 83% 48%;
+    --chart-2: 0 97% 60%;
+    --chart-3: 0 100% 70%;
+    --chart-4: 0 100% 81%;
+    --chart-5: 0 100% 89%;
   }
 
   .dark {
@@ -62,6 +63,7 @@ span {
     --secondary-foreground: 0 0% 98%;
     --muted: 0 0% 14.9%;
     --muted-foreground: 0 0% 63.9%;
+    --muted-secondary: 0 0% 14.9%;
     --accent: 0 0% 14.9%;
     --accent-foreground: 0 0% 98%;
     --destructive: 0 62.8% 30.6%;
@@ -69,11 +71,11 @@ span {
     --border: 0 0% 14.9%;
     --input: 0 0% 14.9%;
     --ring: 0 87% 58%;
-    --chart-1: 0 84.2% 60.2%;
-    --chart-2: 0 72.2% 50.6%;
-    --chart-3: 0 73.7% 41.8%;
-    --chart-4: 0 70% 35.3%;
-    --chart-5: 0 62.8% 30.6%;
+    --chart-1: 0 87% 58%;
+    --chart-2: 0 75% 51%;
+    --chart-3: 0 76% 42%;
+    --chart-4: 0 72% 35%;
+    --chart-5: 0 65% 31%;
   }
 }
 
@@ -100,6 +102,10 @@ span {
   }
 
   .sidebar-scroll-area > div[data-radix-scroll-area-viewport] > div {
+    @apply block h-full !important;
+  }
+
+  .scroll-area > div[data-radix-scroll-area-viewport] > div {
     @apply block h-full !important;
   }
 }

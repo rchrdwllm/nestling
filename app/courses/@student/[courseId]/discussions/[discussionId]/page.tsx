@@ -9,13 +9,17 @@ import { getDiscussionById } from "@/lib/discussion";
 import { getDiscussionReplies } from "@/lib/discussion-reply";
 import { getUserById } from "@/lib/user";
 import Link from "next/link";
+import Searcher from "@/components/shared/search/general-search/searcher";
 
 const DiscussionPage = async ({
   params,
+  searchParams,
 }: {
   params: Promise<{ courseId: string; discussionId: string }>;
+  searchParams?: Promise<{ query?: string; page?: string; tab?: string }>;
 }) => {
   const { discussionId, courseId } = await params;
+  const { query, page, tab } = (await searchParams) || {};
   const { success: discussion, error } = await getDiscussionById(discussionId);
 
   if (error || !discussion) {
@@ -37,39 +41,39 @@ const DiscussionPage = async ({
   if (repliesError || !replies) {
     return <ErrorToast error={"Error fetching replies: " + repliesError} />;
   }
-
   return (
-    <div className="p-6 flex flex-col gap-8">
+    <div className="flex flex-col gap-8 p-6">
+      <Searcher query={query} page={page} tab={tab} />
       <div className="flex flex-col gap-4">
-        <div className="flex items-center justify-between">
-          <h1 className="text-3xl font-semibold">Discussion</h1>
+        <div className="flex justify-between items-center">
+          <h1 className="font-semibold text-3xl">Discussion</h1>
         </div>
         <hr />
       </div>
       <section className="flex flex-col gap-4">
-        <Card className="p-6 flex flex-col gap-4">
+        <Card className="flex flex-col gap-4 p-6">
           <div className="flex items-center gap-4">
             {user.image ? (
               <Avatar className="size-10">
                 <AvatarImage src={user.image} className="object-cover" />
                 <AvatarFallback>
-                  <div className="group flex items-center justify-center size-10 bg-muted rounded-full transition-colors hover:bg-primary">
-                    <p className="text-sm font-semibold transition-colors group-hover:text-primary-foreground">
+                  <div className="group flex justify-center items-center bg-muted hover:bg-primary rounded-full size-10 transition-colors">
+                    <p className="font-semibold group-hover:text-primary-foreground text-sm transition-colors">
                       {user.name![0]}
                     </p>
                   </div>
                 </AvatarFallback>
               </Avatar>
             ) : (
-              <div className="group flex items-center justify-center size-10 bg-muted rounded-full transition-colors hover:bg-primary">
-                <p className="text-sm font-semibold transition-colors group-hover:text-primary-foreground">
+              <div className="group flex justify-center items-center bg-muted hover:bg-primary rounded-full size-10 transition-colors">
+                <p className="font-semibold group-hover:text-primary-foreground text-sm transition-colors">
                   {user.name![0]}
                 </p>
               </div>
             )}
             <div>
-              <h1 className="text-xl font-semibold">{discussion.title}</h1>
-              <p className="text-sm text-muted-foreground">
+              <h1 className="font-semibold text-xl">{discussion.title}</h1>
+              <p className="text-muted-foreground text-sm">
                 Posted on{" "}
                 <DateDisplay
                   date={discussion.createdAt}
@@ -86,7 +90,7 @@ const DiscussionPage = async ({
               </p>
             </div>
           </div>
-          <div className="ml-14 flex flex-col gap-4">
+          <div className="flex flex-col gap-4 ml-14">
             <div
               className="flex flex-col gap-4"
               dangerouslySetInnerHTML={{ __html: discussion.content }}

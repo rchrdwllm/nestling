@@ -5,6 +5,7 @@ import { actionClient } from "../action-client";
 import { db } from "@/lib/firebase";
 import { revalidateTag } from "next/cache";
 import { enrollStudent } from "./enroll-student";
+import { removeFromCourse } from "./remove-from-course";
 
 export const addUserToCourse = actionClient
   .schema(AddUserToCourseSchema)
@@ -17,7 +18,44 @@ export const addUserToCourse = actionClient
       if (!courseSnapshot.exists) {
         return { error: "Course not found" };
       }
+
       const batch = db.batch();
+
+      if (role === "student") {
+        const courseStudentsSnapshot = await db
+          .collection("courses")
+          .doc(courseId)
+          .collection("enrolledStudents")
+          .get();
+        const enrolledStudentIds = courseStudentsSnapshot.docs.map(
+          (doc) => doc.id
+        );
+        const removedStudentIds = enrolledStudentIds.filter(
+          (id) => !userIds.includes(id)
+        );
+
+        for (const studentId of removedStudentIds) {
+          await removeFromCourse({ courseId, userId: studentId });
+        }
+      } else if (role === "instructor") {
+        const courseInstructorsSnapshot = await db
+          .collection("courses")
+          .doc(courseId)
+          .collection("instructors")
+          .get();
+        const currentInstructorIds = courseInstructorsSnapshot.docs.map(
+          (doc) => doc.id
+        );
+        const removedInstructorIds = currentInstructorIds.filter(
+          (id) => !userIds.includes(id)
+        );
+
+        for (const instructorId of removedInstructorIds) {
+          await removeFromCourse({ courseId, userId: instructorId });
+        }
+      } else {
+        return { error: "Invalid role specified" };
+      }
 
       for (const userId of userIds) {
         const userSnapshot = await db.collection("users").doc(userId).get();
@@ -43,7 +81,7 @@ export const addUserToCourse = actionClient
           const instructorCourseRef = db
             .collection("users")
             .doc(userId)
-            .collection("instructedCourses")
+            .collection("courses")
             .doc(courseId);
           const courseInstructorRef = db
             .collection("courses")
@@ -69,7 +107,7 @@ export const addUserToCourse = actionClient
       revalidateTag("courses");
       revalidateTag("user");
 
-      return { success: "Successfully added to course" };
+      return { success: "Users successfully updated" };
     } catch (error) {
       console.error("Error adding to course: ", error);
 

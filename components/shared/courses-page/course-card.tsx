@@ -1,6 +1,5 @@
 import {
   getCourse,
-  getCourseImage,
   getCourseInstructors,
   getEnrolledStudents,
 } from "@/lib/course";
@@ -13,6 +12,7 @@ import ErrorToast from "@/components/ui/error-toast";
 type CourseCardProps = {
   isAdmin?: boolean;
   instructors?: User[];
+  students?: User[];
 } & Course;
 
 const CourseCard = async ({
@@ -22,6 +22,7 @@ const CourseCard = async ({
   image,
   isAdmin,
   instructors,
+  students,
 }: CourseCardProps) => {
   const { success: course, error: courseError } = await getCourse(id);
   const { success: enrolledStudents, error: enrolledStudentsError } =
@@ -44,10 +45,10 @@ const CourseCard = async ({
     return <ErrorToast error="Error fetching course image" />;
 
   return (
-    <article className="p-4 shadow-sm transition-shadow hover:shadow-md rounded-xl border border-border flex flex-col gap-4">
+    <article className="flex flex-col gap-4 shadow-sm hover:shadow-md p-4 border border-border rounded-xl transition-shadow">
       <Link
         href={`/courses/${id}`}
-        className="block h-40 relative rounded-lg overflow-hidden"
+        className="block relative rounded-lg h-40 overflow-hidden"
       >
         <Image src={image} alt={image} className="w-full object-cover" fill />
       </Link>
@@ -58,10 +59,11 @@ const CourseCard = async ({
           </Link>
           <CourseDetailsBtn
             course={JSON.stringify(course)}
-            enrolledStudents={JSON.stringify(enrolledStudents)}
             isAdmin={isAdmin}
             instructors={instructors}
             defaultInstructors={courseInstructors}
+            students={students}
+            enrolledStudents={enrolledStudents}
           />
         </div>
         <p className="text-muted-foreground">{courseCode}</p>

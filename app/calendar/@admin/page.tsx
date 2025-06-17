@@ -4,8 +4,14 @@ import { getProjectsOfUser } from "@/lib/project";
 import { getIncompleteUserTasks } from "@/lib/task";
 import { getOptimisticUser } from "@/lib/user";
 import FadeInWrapper from "@/components/wrappers/fadein-wrapper";
+import Searcher from "@/components/shared/search/general-search/searcher";
 
-const AdminCalendarPage = async () => {
+const AdminCalendarPage = async ({
+  searchParams,
+}: {
+  searchParams?: Promise<{ query?: string; page?: string; tab?: string }>;
+}) => {
+  const { query, page, tab } = (await searchParams) || {};
   const user = await getOptimisticUser();
   const { success: adminProjects, error: adminProjectsError } =
     await getProjectsOfUser(user.id);
@@ -47,9 +53,9 @@ const AdminCalendarPage = async () => {
       description: task.description,
     })),
   ];
-
   return (
     <FadeInWrapper>
+      <Searcher query={query} page={page} tab={tab} />
       <FullCalendar events={projectsAndTasks} />
     </FadeInWrapper>
   );

@@ -157,20 +157,27 @@ export const getTaskAttachments = unstable_cache(
   { revalidate: 60 * 60, tags: ["tasks"] }
 );
 
-export const getTask = unstable_cache(async (taskId: string) => {
-  try {
-    const taskSnapshot = await db.collection("tasks").doc(taskId).get();
+export const getTask = unstable_cache(
+  async (taskId: string) => {
+    try {
+      const taskSnapshot = await db.collection("tasks").doc(taskId).get();
 
-    if (!taskSnapshot.exists) {
-      return { error: "Task not found" };
+      if (!taskSnapshot.exists) {
+        return { error: "Task not found" };
+      }
+
+      const taskData = taskSnapshot.data() as Task;
+
+      return { success: taskData };
+    } catch (error) {
+      console.error("Error fetching task:", error);
+
+      return { error };
     }
-
-    const taskData = taskSnapshot.data() as Task;
-
-    return { success: taskData };
-  } catch (error) {
-    console.error("Error fetching task:", error);
-
-    return { error };
+  },
+  ["taskId"],
+  {
+    revalidate: 60 * 60,
+    tags: ["tasks"],
   }
-});
+);

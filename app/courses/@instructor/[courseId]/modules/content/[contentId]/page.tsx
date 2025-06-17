@@ -6,27 +6,31 @@ import Link from "next/link";
 import { getOptimisticUser } from "@/lib/user";
 import ContentViewLogger from "@/components/shared/content-page/content-view-logger";
 import ErrorToast from "@/components/ui/error-toast";
+import Searcher from "@/components/shared/search/general-search/searcher";
 
 const ContentPage = async ({
   params,
+  searchParams,
 }: {
   params: Promise<{ contentId: string; courseId: string }>;
+  searchParams?: Promise<{ query?: string; page?: string; tab?: string }>;
 }) => {
   const { contentId, courseId } = await params;
+  const { query, page, tab } = (await searchParams) || {};
   const { success: content, error } = await getModuleContent(contentId);
   if (error || !content) {
     return <ErrorToast error={"Error fetching content: " + error} />;
   }
 
   const file = content.type === "file" ? await getContentFile(contentId) : null;
-
   return (
-    <main className="p-6 flex gap-16">
+    <main className="flex gap-16 p-6">
       <ContentViewLogger content={content} />
+      <Searcher query={query} page={page} tab={tab} />
       <div className="flex-1">
         <div className="flex flex-col gap-3">
           <div className="flex justify-between items-center">
-            <h1 className="text-3xl font-semibold">{content.title}</h1>
+            <h1 className="font-semibold text-3xl">{content.title}</h1>
             <Link
               href={`/courses/${courseId}/create?moduleId=${content.moduleId}&contentId=${contentId}`}
             >

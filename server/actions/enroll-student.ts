@@ -21,7 +21,7 @@ export const enrollStudent = actionClient
 
       if (existingEnrollmentData.exists) {
         return {
-          error: `Already enrolled in course ${courseId}`,
+          success: "Student is already enrolled in this course",
         };
       }
 

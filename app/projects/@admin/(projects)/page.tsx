@@ -9,8 +9,14 @@ import { getProjectsWithTasks, getUnarchivedProjects } from "@/lib/project";
 import { getIncompleteTasks } from "@/lib/task";
 import { getUnarchivedAdmins, getUnarchivedInstructors } from "@/lib/user";
 import FadeInWrapper from "@/components/wrappers/fadein-wrapper";
+import Searcher from "@/components/shared/search/general-search/searcher";
 
-const AdminProjectsPage = async () => {
+const AdminProjectsPage = async ({
+  searchParams,
+}: {
+  searchParams?: Promise<{ query?: string; page?: string; tab?: string }>;
+}) => {
+  const { query, page, tab } = (await searchParams) || {};
   const { success: projects, error: projectsError } =
     await getUnarchivedProjects();
   const { success: tasks, error: tasksError } = await getIncompleteTasks();
@@ -50,15 +56,15 @@ const AdminProjectsPage = async () => {
       />
     );
   }
-
   return (
     <FadeInWrapper>
-      <main className="h-full p-6 flex flex-col gap-8">
+      <Searcher query={query} page={page} tab={tab} />
+      <main className="flex flex-col gap-8 p-6 h-full">
         <div className="flex flex-col gap-4">
-          <h1 className="text-3xl font-semibold">Projects Dashboard</h1>
+          <h1 className="font-semibold text-3xl">Projects Dashboard</h1>
           <hr />
         </div>
-        <section className="grid grid-cols-2 gap-4 pb-6">
+        <section className="gap-4 grid grid-cols-2 pb-6">
           <article className="col-span-2">
             <ProjectsTimeline
               admins={JSON.stringify(admins)}
@@ -75,7 +81,7 @@ const AdminProjectsPage = async () => {
           <article className="min-h-[378px]">
             <TasksPriorityGraph tasks={tasks} />
           </article>
-          <article className="min-h-[378px] col-span-2">
+          <article className="col-span-2 min-h-[378px]">
             <ProjectsProgressGraph projects={projectsWithTasks} />
           </article>
         </section>

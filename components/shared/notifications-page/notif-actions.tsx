@@ -28,6 +28,10 @@ const NotifActions = ({ notifId }: NotifActionsProps) => {
       toast.error("Failed to delete notification");
       console.error("Error deleting notification");
     },
+    onExecute: () => {
+      toast.dismiss();
+      toast.loading("Deleting notification...");
+    },
   });
   const { execute: execRead } = useAction(readNotif, {
     onSuccess: ({ data }) => {
@@ -38,6 +42,10 @@ const NotifActions = ({ notifId }: NotifActionsProps) => {
       toast.dismiss();
       toast.error("Failed to mark notification as read");
       console.error("Error marking notification as read");
+    },
+    onExecute: () => {
+      toast.dismiss();
+      toast.loading("Marking as read...");
     },
   });
 
@@ -50,7 +58,7 @@ const NotifActions = ({ notifId }: NotifActionsProps) => {
               onClick={() => {
                 execDelete({ notificationId: notifId });
               }}
-              className="text-muted-foreground hover:text-primary px-2"
+              className="px-2 text-muted-foreground hover:text-primary"
               variant="ghost"
               notAnimated
             >
@@ -65,7 +73,7 @@ const NotifActions = ({ notifId }: NotifActionsProps) => {
               onClick={() => {
                 execRead({ notifId: notifId });
               }}
-              className="text-muted-foreground px-3"
+              className="px-3 text-muted-foreground"
               variant="ghost"
               notAnimated
             >

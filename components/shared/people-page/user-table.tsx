@@ -9,6 +9,7 @@ import {
   getSortedRowModel,
   ColumnFiltersState,
   getFilteredRowModel,
+  VisibilityState,
 } from "@tanstack/react-table";
 import {
   Table,
@@ -40,6 +41,7 @@ interface UserTableProps {
   data: User[];
   searchPlaceholder?: string;
   courseId?: string;
+  hide?: string[];
 }
 
 const UserTable = ({
@@ -47,9 +49,16 @@ const UserTable = ({
   data,
   searchPlaceholder = "Search users...",
   courseId,
+  hide = [],
 }: UserTableProps) => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(
+    hide.reduce((acc, columnId) => {
+      acc[columnId] = false;
+      return acc;
+    }, {} as Record<string, boolean>)
+  );
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 10,
@@ -68,7 +77,6 @@ const UserTable = ({
       toast.loading("Removing user from course...");
     },
   });
-
   const table = useReactTable({
     data,
     columns,
@@ -78,17 +86,19 @@ const UserTable = ({
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     onColumnFiltersChange: setColumnFilters,
+    onColumnVisibilityChange: setColumnVisibility,
     onPaginationChange: setPagination,
     state: {
       sorting,
       columnFilters,
+      columnVisibility,
       pagination,
     },
   });
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-between">
+      <div className="flex justify-between items-center">
         <Input
           placeholder={searchPlaceholder}
           value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
@@ -158,7 +168,7 @@ const UserTable = ({
                           <Button
                             notAnimated
                             variant="ghost"
-                            className="h-8 w-8 p-0"
+                            className="p-0 w-8 h-8"
                           >
                             <span className="sr-only">Open menu</span>
                             <MoreHorizontal />

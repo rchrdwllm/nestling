@@ -1,6 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import { FormField, FormItem, FormMessage } from "@/components/ui/form";
+import {
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import {
   Popover,
@@ -32,6 +37,7 @@ const AssignmentForm = () => {
         name="points"
         render={({ field }) => (
           <FormItem>
+            <FormLabel>Points</FormLabel>
             <Input
               placeholder="Points"
               type="number"
@@ -47,6 +53,7 @@ const AssignmentForm = () => {
         name="maxAttempts"
         render={({ field }) => (
           <FormItem>
+            <FormLabel>Allowed attempts</FormLabel>
             <Input
               placeholder="Allowed attempts"
               type="number"
@@ -62,13 +69,14 @@ const AssignmentForm = () => {
         name="date"
         render={({ field }) => (
           <FormItem className="flex flex-col">
+            <FormLabel>Deadline</FormLabel>
             <Popover>
               <PopoverTrigger asChild>
                 <Button
                   notAnimated
                   variant={"outline"}
                   className={cn(
-                    "border-2 rounded-lg justify-start text-left font-normal",
+                    "border rounded-lg justify-start text-left font-normal",
                     !field.value && "text-muted-foreground"
                   )}
                 >
@@ -83,11 +91,11 @@ const AssignmentForm = () => {
                       format(field.value.from, "LLL dd, y p")
                     )
                   ) : (
-                    <span>Deadline</span>
+                    <span>Select dates</span>
                   )}
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
+              <PopoverContent className="p-0 w-auto" align="start">
                 <Calendar
                   initialFocus
                   mode="range"
@@ -96,7 +104,7 @@ const AssignmentForm = () => {
                   onSelect={field.onChange}
                   numberOfMonths={2}
                 />
-                <div className="flex items-center justify-between p-4 pt-0">
+                <div className="flex justify-between items-center p-4 pt-0">
                   <TimePicker
                     setDate={(date) => {
                       field.onChange({ ...field.value, from: date });
@@ -121,6 +129,7 @@ const AssignmentForm = () => {
         name="submissionType"
         render={({ field }) => (
           <FormItem>
+            <FormLabel>Submission type</FormLabel>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <SelectTrigger>
                 <SelectValue placeholder="Select submission type" />

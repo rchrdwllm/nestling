@@ -19,7 +19,6 @@ import { toast } from "sonner";
 import { uploadImage } from "@/server/actions/upload-image";
 import { deleteImgFromCloudinary } from "@/server/actions/delete-from-cloudinary";
 import { deleteImage } from "@/server/actions/delete-image";
-import Heading from "@tiptap/extension-heading";
 import { getSHA256 } from "@/lib/sha-256";
 import { MAX_SIZE } from "@/constants/file";
 
@@ -105,6 +104,9 @@ const RichTextEditor = ({ content }: RichTextEditorProps) => {
 
   const addImage = useCallback(
     async (e: ChangeEvent) => {
+      toast.dismiss();
+      toast.loading("Uploading image...");
+
       const target = e.target as HTMLInputElement;
       const file = target.files?.[0];
 
@@ -135,8 +137,14 @@ const RichTextEditor = ({ content }: RichTextEditorProps) => {
                 alt: uploadedImg.public_id,
               })
               .run();
+
+            toast.dismiss();
+            toast.success("Image uploaded successfully");
           } catch (error) {
-            console.log(error);
+            console.error(error);
+
+            toast.dismiss();
+            toast.error("Failed to upload image: " + error);
           }
         } else {
           toast.error(JSON.stringify(error));
@@ -207,7 +215,7 @@ const RichTextEditor = ({ content }: RichTextEditorProps) => {
             </Toggle>
             <button
               type="button"
-              className="flex justify-center items-center hover:bg-accent hover:text-accent-foreground rounded-md transition-colors p-0 size-[36px] cursor-pointer"
+              className="flex justify-center items-center hover:bg-accent p-0 rounded-md size-[36px] transition-colors hover:text-accent-foreground cursor-pointer"
             >
               <label htmlFor="img-input" className="px-2 py-2 cursor-pointer">
                 <ImageIcon className="w-4 h-4 pointer-events-none" />
@@ -225,7 +233,7 @@ const RichTextEditor = ({ content }: RichTextEditorProps) => {
           <EditorContent
             placeholder="Start writing"
             editor={editor}
-            className="border-2 rounded-lg py-2 px-3 outline-none"
+            className="shadow-sm px-3 py-2 border rounded-lg outline-none"
           />
         </>
       )}

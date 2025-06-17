@@ -148,6 +148,7 @@ const CreateContentForm = ({
           name="type"
           render={({ field }) => (
             <FormItem>
+              <FormLabel>Content type</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select content type" />
@@ -170,6 +171,7 @@ const CreateContentForm = ({
           name="title"
           render={({ field }) => (
             <FormItem>
+              <FormLabel>Title</FormLabel>
               <FormItem>
                 <Input placeholder="Title" {...field} />
               </FormItem>
@@ -182,6 +184,7 @@ const CreateContentForm = ({
           name="moduleId"
           render={({ field }) => (
             <FormItem>
+              <FormLabel>Module</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select module" />

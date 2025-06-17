@@ -3,8 +3,14 @@ import { getUpcomingAssignmentsForStudent } from "@/lib/content";
 import { getOptimisticUser } from "@/lib/user";
 import FadeInWrapper from "@/components/wrappers/fadein-wrapper";
 import ErrorToast from "@/components/ui/error-toast";
+import Searcher from "@/components/shared/search/general-search/searcher";
 
-const StudentCalendarPage = async () => {
+const StudentCalendarPage = async ({
+  searchParams,
+}: {
+  searchParams?: Promise<{ query?: string; page?: string; tab?: string }>;
+}) => {
+  const { query, page, tab } = (await searchParams) || {};
   const user = await getOptimisticUser();
   const { success: upcomingAssignments, error } =
     await getUpcomingAssignmentsForStudent(user.id);
@@ -14,9 +20,9 @@ const StudentCalendarPage = async () => {
       <ErrorToast error={"Failed to fetch upcoming assignments: " + error} />
     );
   }
-
   return (
     <FadeInWrapper>
+      <Searcher query={query} page={page} tab={tab} />
       <FullCalendar
         events={
           upcomingAssignments.map((assignment) => ({

@@ -17,7 +17,7 @@ export const registerEmail = actionClient
         .get();
 
       if (existingEmailSnapshot.exists) {
-        return { error: "Email is already registered" };
+        return { error: "Email is already pre-registered" };
       }
 
       const existingUserSnapshot = await db

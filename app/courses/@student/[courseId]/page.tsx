@@ -3,13 +3,17 @@ import ModuleCard from "@/components/student-access/courses-page/module-card";
 import ErrorToast from "@/components/ui/error-toast";
 import { getCourse } from "@/lib/course";
 import { getPublishedCourseModules } from "@/lib/module";
+import Searcher from "@/components/shared/search/general-search/searcher";
 
 const CoursePage = async ({
   params,
+  searchParams,
 }: {
   params: Promise<{ courseId: string }>;
+  searchParams?: Promise<{ query?: string; page?: string; tab?: string }>;
 }) => {
   const { courseId } = await params;
+  const { query, page, tab } = (await searchParams) || {};
   const { success: course, error: courseError } = await getCourse(courseId);
   const { success: modules, error: moduleError } =
     await getPublishedCourseModules(courseId);
@@ -17,14 +21,14 @@ const CoursePage = async ({
   if (courseError || !course || !modules || moduleError) {
     return <ErrorToast error={"Error fetching course: " + courseError} />;
   }
-
   return (
-    <div className="p-6 flex flex-col gap-8">
+    <div className="flex flex-col gap-8 p-6">
+      <Searcher query={query} page={page} tab={tab} />
       <div className="flex flex-col gap-3">
-        <h1 className="text-3xl font-semibold">Modules</h1>
+        <h1 className="font-semibold text-3xl">Modules</h1>
         <hr />
       </div>
-      <div className="grid grid-cols-1 gap-4">
+      <div className="gap-4 grid grid-cols-1">
         {!modules.length ? (
           <p className="text-muted-foreground">No modules found</p>
         ) : (

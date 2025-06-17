@@ -21,12 +21,14 @@ const LayoutWrapper = ({ children }: { children: ReactNode }) => {
     return children;
 
   return (
-    <main className="relative h-screen flex items-stretch bg-secondary p-2 gap-2 overflow-x-hidden">
+    <main className="relative flex items-stretch gap-2 bg-secondary p-2 h-screen overflow-x-hidden">
       <Sidebar />
       <ScrollArea
         className={cn(
           "projects-scroll-area w-full shadow-sm h-[calc(100vh-1rem)] bg-background border border-border rounded-xl",
-          (pathname.startsWith("/projects") || pathname.startsWith("/inbox")) &&
+          (pathname.startsWith("/projects") ||
+            pathname.startsWith("/inbox") ||
+            pathname.startsWith("/courses")) &&
             "border-0 shadow-none"
         )}
       >

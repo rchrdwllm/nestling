@@ -39,6 +39,12 @@ const ArchiveProjectBtn = ({
       toast.error(JSON.stringify(data.error));
       setIsOpen(false);
     },
+    onExecute: () => {
+      toast.dismiss();
+      toast.loading(
+        isArchived ? "Unarchiving project..." : "Archiving project..."
+      );
+    },
   });
 
   const handleArchive = () => {
@@ -54,9 +60,12 @@ const ArchiveProjectBtn = ({
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Archive project</AlertDialogTitle>
+          <AlertDialogTitle>
+            {isArchived ? "Unarchive" : "Archive"} project
+          </AlertDialogTitle>
           <AlertDialogDescription>
-            Are you sure you want to archive this project?
+            Are you sure you want to {isArchived ? "unarchive" : "archive"} this
+            project?
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

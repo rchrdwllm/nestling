@@ -16,14 +16,18 @@ import AddUserForm from "./add-user-form";
 
 type AddUserBtnProps = {
   courseId: string;
-  availableStudents: User[];
-  availableInstructors: User[];
+  enrolledStudents: User[];
+  courseInstructors: User[];
+  students: User[];
+  instructors: User[];
 };
 
 const AddUserBtn = ({
   courseId,
-  availableStudents,
-  availableInstructors,
+  students,
+  instructors,
+  courseInstructors,
+  enrolledStudents,
 }: AddUserBtnProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -46,8 +50,10 @@ const AddUserBtn = ({
         <AddUserForm
           setIsOpen={setIsOpen}
           courseId={courseId}
-          availableInstructors={availableInstructors}
-          availableStudents={availableStudents}
+          students={students}
+          instructors={instructors}
+          courseInstructors={courseInstructors}
+          enrolledStudents={enrolledStudents}
         />
       </DialogContent>
     </Dialog>

@@ -11,6 +11,7 @@ import {
   Bell,
   Users,
   LayoutDashboard,
+  Search,
 } from "lucide-react";
 import { ForwardRefExoticComponent, RefAttributes } from "react";
 
@@ -24,6 +25,11 @@ export type SidebarItem = {
 
 export const studentSidebarItems: SidebarItem[] = [
   {
+    label: "Search",
+    href: "/search",
+    Icon: Search,
+  },
+  {
     label: "Dashboard",
     href: "/dashboard",
     Icon: LayoutDashboard,
@@ -32,11 +38,6 @@ export const studentSidebarItems: SidebarItem[] = [
     label: "Courses",
     href: "/courses",
     Icon: BookMarked,
-  },
-  {
-    label: "People",
-    href: "/people",
-    Icon: Users,
   },
   {
     label: "Calendar",
@@ -66,6 +67,11 @@ export const studentSidebarItems: SidebarItem[] = [
 ];
 
 export const instructorSidebarItems: SidebarItem[] = [
+  {
+    label: "Search",
+    href: "/search",
+    Icon: Search,
+  },
   {
     label: "Dashboard",
     href: "/dashboard",
@@ -114,6 +120,11 @@ export const instructorSidebarItems: SidebarItem[] = [
 ];
 
 export const adminSidebarItems: SidebarItem[] = [
+  {
+    label: "Search",
+    href: "/search",
+    Icon: Search,
+  },
   {
     label: "Dashboard",
     href: "/dashboard",

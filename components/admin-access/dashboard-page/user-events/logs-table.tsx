@@ -27,6 +27,7 @@ import { useAction } from "next-safe-action/hooks";
 import { deleteUserLogs } from "@/server/actions/delete-user-logs";
 import { toast } from "sonner";
 import GenerateLogsReport from "./generate-logs-report";
+import ClearLogsBtn from "./clear-logs-btn";
 
 const LogsTable = ({ columns, data, types }: any) => {
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -44,21 +45,6 @@ const LogsTable = ({ columns, data, types }: any) => {
       pageSize: showAll ? data.length : 5,
     }));
   }, [showAll, data.length]);
-  const { execute } = useAction(deleteUserLogs, {
-    onExecute: () => {
-      toast.dismiss();
-      toast.loading("Clearing logs...");
-    },
-    onSuccess: () => {
-      toast.dismiss();
-      toast.success("Logs deleted successfully");
-    },
-    onError: (error) => {
-      console.error("Error deleting logs:", error);
-      toast.dismiss();
-      toast.error("Error deleting logs");
-    },
-  });
   const table = useReactTable({
     data,
     columns,
@@ -78,7 +64,7 @@ const LogsTable = ({ columns, data, types }: any) => {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-between">
+      <div className="flex justify-between items-center">
         <Input
           placeholder="Filter user IDs..."
           value={(table.getColumn("userId")?.getFilterValue() as string) ?? ""}
@@ -105,14 +91,7 @@ const LogsTable = ({ columns, data, types }: any) => {
           <Button variant="outline" onClick={() => setShowAll(!showAll)}>
             {showAll ? "Show less" : "Show all"}
           </Button>
-          <Button
-            disabled={!table.getRowModel().rows.length}
-            variant="outline"
-            className="hover:text-primary"
-            onClick={() => execute({ types })}
-          >
-            <X className="size-4" /> Clear logs
-          </Button>
+          <ClearLogsBtn table={table} types={types} />
           <GenerateLogsReport data={data} />
         </div>
       </div>

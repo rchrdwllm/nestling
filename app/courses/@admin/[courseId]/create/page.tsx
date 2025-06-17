@@ -2,16 +2,23 @@ import CreateContentForm from "@/components/shared/courses-page/create-content/c
 import ErrorToast from "@/components/ui/error-toast";
 import { getModuleContent } from "@/lib/content";
 import { getModuleTitles } from "@/lib/module";
+import Searcher from "@/components/shared/search/general-search/searcher";
 
 const CreatePage = async ({
   params,
   searchParams,
 }: {
   params: Promise<{ courseId: string }>;
-  searchParams: Promise<{ moduleId?: string; contentId?: string }>;
+  searchParams: Promise<{
+    moduleId?: string;
+    contentId?: string;
+    query?: string;
+    page?: string;
+    tab?: string;
+  }>;
 }) => {
   const { courseId } = await params;
-  const { moduleId, contentId } = await searchParams;
+  const { moduleId, contentId, query, page, tab } = await searchParams;
   const { success: moduleTitles, error } = await getModuleTitles(courseId);
 
   if (error || !moduleTitles) {
@@ -31,13 +38,14 @@ const CreatePage = async ({
   }
 
   return (
-    <main className="p-6 flex flex-col gap-8">
+    <main className="flex flex-col gap-8 p-6">
+      <Searcher query={query} page={page} tab={tab} />
       <div className="flex flex-col gap-3">
-        <h1 className="text-3xl font-semibold">
-          {moduleId
-            ? "Add content"
-            : content
+        <h1 className="font-semibold text-3xl">
+          {content
             ? "Edit content"
+            : moduleId
+            ? "Add content"
             : "Create content"}
         </h1>
         <hr />

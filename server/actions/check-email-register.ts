@@ -27,7 +27,7 @@ export const checkEmailRegister = async (
       await getRegisteredEmail(email);
 
     if (emailError || !registeredEmail) {
-      return { error: emailError };
+      return { error: "This email has not yet been validated by Leave a Nest" };
     }
 
     if (registeredEmail.role !== role) {
