@@ -1,4 +1,3 @@
-import { deleteNotif } from "@/server/actions/delete-notif";
 import { readNotif } from "@/server/actions/read-notif";
 import { Notification } from "@/types";
 import { useAction } from "next-safe-action/hooks";
@@ -25,7 +24,7 @@ const NotificationCard = ({ title, message, url, id }: Notification) => {
     <Link
       onClick={handleNotifClick}
       href={url}
-      className="bg-muted after:bg-primary flex flex-col gap-1 relative rounded-md p-2 pl-6 cursor-pointer text-sm after:absolute after:inset-y-2 after:left-2 after:w-1 after:rounded-full"
+      className="after:left-2 after:absolute relative after:inset-y-2 flex flex-col gap-1 bg-muted-secondary after:bg-primary p-2 pl-6 rounded-md after:rounded-full after:w-1 text-sm cursor-pointer"
     >
       <h1 className="font-medium">{title}</h1>
       <p className="text-muted-foreground text-xs">{message}</p>
