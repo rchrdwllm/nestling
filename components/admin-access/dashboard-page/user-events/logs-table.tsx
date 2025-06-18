@@ -4,7 +4,6 @@ import {
   flexRender,
   getCoreRowModel,
   useReactTable,
-  getPaginationRowModel,
   SortingState,
   getSortedRowModel,
   ColumnFiltersState,
@@ -20,45 +19,26 @@ import {
 } from "@/components/ui/table";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Input } from "@/components/ui/input";
-import { X } from "lucide-react";
-import { useAction } from "next-safe-action/hooks";
-import { deleteUserLogs } from "@/server/actions/delete-user-logs";
-import { toast } from "sonner";
 import GenerateLogsReport from "./generate-logs-report";
 import ClearLogsBtn from "./clear-logs-btn";
 
-const LogsTable = ({ columns, data, types }: any) => {
+const LogsTable = ({ columns, data, types, loading = false }: any) => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [showAll, setShowAll] = useState(false);
-  const [pagination, setPagination] = useState({
-    pageIndex: 0,
-    pageSize: 5,
-  });
 
-  useEffect(() => {
-    setPagination((prev) => ({
-      ...prev,
-      pageIndex: 0,
-      pageSize: showAll ? data.length : 5,
-    }));
-  }, [showAll, data.length]);
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     onColumnFiltersChange: setColumnFilters,
-    onPaginationChange: setPagination,
     state: {
       sorting,
       columnFilters,
-      pagination,
     },
   });
 
@@ -72,25 +52,8 @@ const LogsTable = ({ columns, data, types }: any) => {
             table.getColumn("userId")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
-        />
+        />{" "}
         <div className="flex items-center gap-2">
-          <Button
-            variant="outline"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage() || showAll}
-          >
-            Previous
-          </Button>
-          <Button
-            variant="outline"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage() || showAll}
-          >
-            Next
-          </Button>
-          <Button variant="outline" onClick={() => setShowAll(!showAll)}>
-            {showAll ? "Show less" : "Show all"}
-          </Button>
           <ClearLogsBtn table={table} types={types} />
           <GenerateLogsReport data={data} />
         </div>
@@ -138,7 +101,7 @@ const LogsTable = ({ columns, data, types }: any) => {
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  {loading ? "Loading..." : "No results."}
                 </TableCell>
               </TableRow>
             )}
