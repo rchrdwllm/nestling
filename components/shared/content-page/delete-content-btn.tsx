@@ -46,7 +46,7 @@ const DeleteContentBtn = ({ contentId }: DeleteContentBtnProps) => {
       <AlertDialogTrigger asChild>
         <Button
           notAnimated
-          variant="ghost"
+          variant="outline"
           className="text-primary hover:text-primary"
         >
           <Trash className="size-4" /> Delete
