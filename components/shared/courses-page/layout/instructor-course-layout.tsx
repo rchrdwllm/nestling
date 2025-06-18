@@ -6,6 +6,7 @@ import { ReactNode, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { PanelLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 type CourseLayoutProps = {
   courseCode: string;
@@ -27,9 +28,11 @@ const InstructorCourseLayout = ({
       {isToggled && (
         <ScrollArea className="col-span-2 h-[calc(100vh-1rem)] sidebar-scroll-area">
           <aside className="flex flex-col gap-2 col-span-2 bg-background shadow-sm p-6 border border-border rounded-xl h-full">
-            <h1 className="font-medium text-sm">
-              {courseCode} - {name}
-            </h1>
+            <Link href="/courses">
+              <h1 className="font-medium text-sm cursor-pointer hover:underline hover:text-[--nestling-color]">
+                {courseCode} - {name}
+              </h1>
+            </Link>
             <CourseSectionLink href={`/courses/${id}`}>
               Modules
             </CourseSectionLink>
