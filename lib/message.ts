@@ -4,6 +4,20 @@ import { File, Message, MessageWithFiles } from "@/types";
 import { db } from "./firebase";
 import { unstable_cache } from "next/cache";
 
+const messageCache = new Map();
+const CACHE_TTL = 5 * 60 * 1000;
+
+const getCachedData = async (key: string, fetchFn: () => Promise<any>) => {
+  const cached = messageCache.get(key);
+  if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+    return cached.data;
+  }
+
+  const data = await fetchFn();
+  messageCache.set(key, { data, timestamp: Date.now() });
+  return data;
+};
+
 export const getChannelMessages = unstable_cache(
   async (
     channelId: string,
@@ -28,24 +42,47 @@ export const getChannelMessages = unstable_cache(
       }
 
       const messages = snapshot.docs.map((doc) => doc.data() as Message);
-      const withFiles: (Message | MessageWithFiles)[] = await Promise.all(
-        messages.map(async (message) => {
-          if (message.type === "file") {
-            const { success: files, error } = await getMessageFiles(message.id);
 
-            if (error) {
-              console.error("Error fetching message files:", error);
+      const fileMessageIds = messages
+        .filter((msg) => msg.type === "file")
+        .map((msg) => msg.id);
 
-              return { ...message, files: [] } as MessageWithFiles;
-            }
+      let fileMessagesMap = new Map();
 
-            if (files) {
-              return { ...message, files } as MessageWithFiles;
-            }
+      if (fileMessageIds.length > 0) {
+        const cacheKey = `files-${fileMessageIds.join(",")}`;
+
+        fileMessagesMap = await getCachedData(cacheKey, async () => {
+          const filesMap = new Map();
+
+          for (let i = 0; i < fileMessageIds.length; i += 5) {
+            const batch = fileMessageIds.slice(i, i + 5);
+            const batchResults = await Promise.all(
+              batch.map(async (messageId) => {
+                const { success: files } = await getMessageFilesInternal(
+                  messageId
+                );
+                return { messageId, files: files || [] };
+              })
+            );
+
+            batchResults.forEach(({ messageId, files }) => {
+              filesMap.set(messageId, files);
+            });
           }
 
+          return filesMap;
+        });
+      }
+
+      const withFiles: (Message | MessageWithFiles)[] = messages.map(
+        (message) => {
+          if (message.type === "file") {
+            const files = fileMessagesMap.get(message.id) || [];
+            return { ...message, files } as MessageWithFiles;
+          }
           return message;
-        })
+        }
       );
 
       const orderedMessages = withFiles.reverse();
@@ -54,11 +91,14 @@ export const getChannelMessages = unstable_cache(
       return { success: orderedMessages, hasMore };
     } catch (error) {
       console.error("Error fetching messages:", error);
-
       return { error: "Failed to fetch messages" };
     }
   },
-  ["channelId"]
+  ["channelId", "limit", "lastMessageTimestamp"],
+  {
+    revalidate: 300,
+    tags: ["messages"],
+  }
 );
 
 export const getLatestMessage = async (channelId: string) => {
@@ -84,23 +124,38 @@ export const getLatestMessage = async (channelId: string) => {
   }
 };
 
-export const getMessageFiles = async (messageId: string) => {
+const getMessageFilesInternal = async (messageId: string) => {
   try {
     const messageRef = await db
       .collection("messages")
       .doc(messageId)
       .collection("files")
       .orderBy("created_at", "desc")
+      .limit(10)
       .get();
-    const fileIds = messageRef.docs.map((doc) => doc.data()) as File[];
-    const files = await Promise.all(
-      fileIds.map(async (file) => {
-        const fileRef = await db.collection("files").doc(file.public_id).get();
-        const fileData = fileRef.data() as File;
 
-        return fileData;
-      })
-    );
+    if (messageRef.empty) {
+      return { success: [] };
+    }
+
+    const fileRefs = messageRef.docs.map((doc) => doc.data()) as File[];
+    const files: File[] = [];
+    const publicIds = fileRefs.map((file) => file.public_id).filter(Boolean);
+
+    if (publicIds.length === 0) {
+      return { success: [] };
+    }
+
+    for (let i = 0; i < publicIds.length; i += 10) {
+      const batch = publicIds.slice(i, i + 10);
+      const filesQuery = await db
+        .collection("files")
+        .where("public_id", "in", batch)
+        .get();
+
+      const batchFiles = filesQuery.docs.map((doc) => doc.data() as File);
+      files.push(...batchFiles);
+    }
 
     return { success: files };
   } catch (error) {
@@ -109,3 +164,12 @@ export const getMessageFiles = async (messageId: string) => {
     return { error: "Failed to fetch message files" };
   }
 };
+
+export const getMessageFiles = unstable_cache(
+  getMessageFilesInternal,
+  ["messageId"],
+  {
+    revalidate: 600,
+    tags: ["messageFiles"],
+  }
+);
