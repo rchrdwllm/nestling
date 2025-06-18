@@ -4,7 +4,7 @@ import { UserActivity } from "@/types";
 import { useEffect, useState } from "react";
 import LogsTable from "./logs-table";
 import { logsTableCols } from "./logs-table-def";
-import { fetchAuthLogs } from "@/lib/user-log";
+import { fetchAuthLogs, revalidateAuthLogsCache } from "@/lib/user-log";
 import { Button } from "@/components/ui/button";
 
 const AuthenticationEvents = () => {
@@ -16,8 +16,10 @@ const AuthenticationEvents = () => {
     lastDocId: undefined as string | undefined,
     totalFetched: 0,
   });
-
   const loadLogs = async (page: number = 1, append: boolean = false) => {
+    console.log(
+      `🔄 [CLIENT] Loading auth logs - Page: ${page}, Append: ${append}`
+    );
     setLoading(true);
 
     try {
@@ -30,16 +32,25 @@ const AuthenticationEvents = () => {
       if (result.success) {
         const { logs: newLogs, pagination: newPagination } = result.success;
 
+        console.log(
+          `✅ [CLIENT] Received ${newLogs.length} auth logs from server`
+        );
+        console.log(
+          `📊 [CLIENT] Total auth logs now: ${
+            append ? logs.length + newLogs.length : newLogs.length
+          }`
+        );
+
         setLogs((prev) => (append ? [...prev, ...newLogs] : newLogs));
         setPagination({
           ...newPagination,
           lastDocId: newPagination.lastDocId ?? undefined,
         });
       } else {
-        console.error("Failed to fetch logs:", result.error);
+        console.error("❌ [CLIENT] Failed to fetch auth logs:", result.error);
       }
     } catch (error) {
-      console.error("Error loading logs:", error);
+      console.error("❌ [CLIENT] Error loading auth logs:", error);
     } finally {
       setLoading(false);
     }
@@ -54,8 +65,9 @@ const AuthenticationEvents = () => {
       loadLogs(pagination.currentPage + 1, true);
     }
   };
-
-  const handleRefresh = () => {
+  const handleRefresh = async () => {
+    console.log("🔄 [CLIENT] Refresh button clicked - invalidating cache");
+    await revalidateAuthLogsCache();
     loadLogs(1, false);
   };
 
