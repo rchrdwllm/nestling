@@ -113,7 +113,7 @@ const SidePanel = ({
             }}
             variant="outline"
             className={`
-              w-10 h-10 rounded-xl border border-border
+              w-9 h-9 rounded-xl border border-border
               flex items-center justify-center
               shadow-sm
               bg-transparent

@@ -25,10 +25,13 @@ const CreateCourseBtn = ({ isAdmin, instructors }: CreateCourseBtnProps) => {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button>
-          <Plus className="size-4" />
-          New course
-        </Button>
+        <div style={{ display: "flex" }}>
+          <Button>
+            <Plus className="size-4" />
+            New course
+          </Button>
+          <span style={{ width: "50px" }} />
+        </div>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
