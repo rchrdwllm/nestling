@@ -5,6 +5,7 @@ import { getContentFile, getModuleContent } from "@/lib/content";
 import Link from "next/link";
 import ErrorToast from "@/components/ui/error-toast";
 import Searcher from "@/components/shared/search/general-search/searcher";
+import DeleteContentBtn from "@/components/shared/content-page/delete-content-btn";
 
 const ContentPage = async ({
   params,
@@ -27,8 +28,9 @@ const ContentPage = async ({
       <Searcher query={query} page={page} tab={tab} />
       <div className="flex-1">
         <div className="flex flex-col gap-3">
-          <div className="flex justify-between items-center">
-            <h1 className="font-semibold text-3xl">{content.title}</h1>
+          <div className="flex justify-between items-center gap-4">
+            <h1 className="flex-1 font-semibold text-3xl">{content.title}</h1>
+            <DeleteContentBtn contentId={contentId} />
             <Link
               href={`/courses/${courseId}/create?moduleId=${content.moduleId}&contentId=${contentId}`}
             >
