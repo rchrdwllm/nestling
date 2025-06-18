@@ -17,18 +17,21 @@ import { Trash } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
 import { deleteProject } from "@/server/actions/delete-project";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 type EditProjectBtnProps = {
   projectId: string;
 };
 
 const DeleteProjectBtn = ({ projectId }: EditProjectBtnProps) => {
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const { execute, isExecuting } = useAction(deleteProject, {
     onSuccess: () => {
       toast.dismiss();
       toast.success("Project deleted successfully");
       setIsOpen(false);
+      router.push("/projects");
     },
     onError: (error) => {
       toast.dismiss();
