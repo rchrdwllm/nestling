@@ -23,7 +23,7 @@ const ChatFileBubble = ({ secure_url, public_id, resource_type }: File) => {
       <Dialog>
         <DialogTrigger asChild>
           <article
-            className="relative aspect-square size-36 cursor-pointer overflow-hidden"
+            className="relative size-36 aspect-square overflow-hidden cursor-pointer"
             key={secure_url}
           >
             <div
@@ -32,7 +32,7 @@ const ChatFileBubble = ({ secure_url, public_id, resource_type }: File) => {
                 isLoaded ? "opacity-0" : "opacity-100"
               )}
             >
-              <Skeleton className="h-full w-full" />
+              <Skeleton className="w-full h-full" />
             </div>
             <Image
               onLoad={() => setIsLoaded(true)}
@@ -49,7 +49,7 @@ const ChatFileBubble = ({ secure_url, public_id, resource_type }: File) => {
         <DialogContent>
           <DialogTitle>{public_id}</DialogTitle>
           <DialogDescription></DialogDescription>
-          <div className="p-4 w-full h-96 flex flex-col gap-4">
+          <div className="flex flex-col gap-4 p-4 w-full h-96">
             <div className="relative size-full">
               <Image
                 src={secure_url}
@@ -71,11 +71,11 @@ const ChatFileBubble = ({ secure_url, public_id, resource_type }: File) => {
     return (
       <Link
         href={secure_url}
-        className="relative aspect-square bg-secondary rounded-md gap-2 px-4 cursor-pointer flex flex-col justify-center items-center h-36"
+        className="relative flex flex-col justify-center items-center gap-2 bg-muted-secondary px-4 rounded-md h-36 aspect-square cursor-pointer"
         download
       >
-        <FileIcon className="h-8 w-8 text-gray-500" />
-        <p className="text-sm text-muted-foreground">{public_id}</p>
+        <FileIcon className="w-8 h-8 text-gray-500" />
+        <p className="text-muted-foreground text-sm">{public_id}</p>
       </Link>
     );
   }
@@ -84,7 +84,7 @@ const ChatFileBubble = ({ secure_url, public_id, resource_type }: File) => {
     return (
       <Dialog>
         <DialogTrigger asChild>
-          <article className="relative aspect-square h-36" key={secure_url}>
+          <article className="relative h-36 aspect-square" key={secure_url}>
             <p>Video file: {public_id}</p>
           </article>
         </DialogTrigger>
@@ -104,7 +104,7 @@ const ChatFileBubble = ({ secure_url, public_id, resource_type }: File) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <article className="relative aspect-square h-36" key={secure_url}>
+        <article className="relative h-36 aspect-square" key={secure_url}>
           <Image
             className="rounded-md object-cover"
             fill
