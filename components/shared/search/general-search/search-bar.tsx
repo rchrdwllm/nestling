@@ -106,7 +106,7 @@ const SearchBar = ({ isInbox }: SearchBarProps) => {
               <FormMessage />
             </FormItem>
           )}
-        />
+        />{" "}
         <FormField
           control={form.control}
           name="tab"
@@ -114,7 +114,14 @@ const SearchBar = ({ isInbox }: SearchBarProps) => {
             <FormItem>
               <Tabs
                 value={field.value || "all"}
-                onValueChange={(value) => field.onChange(value)}
+                onValueChange={(value) => {
+                  field.onChange(value);
+                  // Reset pagination when tab changes
+                  const currentQuery = form.getValues("query");
+                  if (currentQuery) {
+                    handleSearch(currentQuery, 1); // Reset to page 1
+                  }
+                }}
                 className="w-full"
                 defaultValue={field.value}
               >
