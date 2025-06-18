@@ -105,11 +105,11 @@ const DiscussionPage = async ({
               dangerouslySetInnerHTML={{ __html: discussion.content }}
             />
           </div>
+          <DiscussionReplyBtn discussionId={discussionId} courseId={courseId} />
         </Card>
         {replies.map((reply) => (
           <DiscussionReplyCard key={reply.id} {...reply} />
         ))}
-        <DiscussionReplyBtn discussionId={discussionId} courseId={courseId} />
       </section>
     </div>
   );

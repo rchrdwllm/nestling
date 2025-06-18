@@ -21,7 +21,7 @@ const DiscussionReplyBtn = ({
       {!isOpen && (
         <Button
           onClick={() => setIsOpen(true)}
-          className="w-max text-muted-foreground"
+          className="-ml-4 w-max text-muted-foreground"
           variant="ghost"
         >
           <Plus className="size-4" /> Add reply

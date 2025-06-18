@@ -104,12 +104,15 @@ const DiscussionPage = async ({
               className="flex flex-col gap-4"
               dangerouslySetInnerHTML={{ __html: discussion.content }}
             />
+            <DiscussionReplyBtn
+              discussionId={discussionId}
+              courseId={courseId}
+            />
           </div>
         </Card>
         {replies.map((reply) => (
           <DiscussionReplyCard key={reply.id} {...reply} />
         ))}
-        <DiscussionReplyBtn discussionId={discussionId} courseId={courseId} />
       </section>
     </div>
   );
