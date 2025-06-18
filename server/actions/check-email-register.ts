@@ -69,6 +69,8 @@ export const checkEmailRegister = async (
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       notifsEnabled: false,
+      isArchived: false,
+      archivedAt: null,
     };
 
     await db.collection("users").doc(id).set(newUser);
