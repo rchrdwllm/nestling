@@ -5,24 +5,31 @@ import DateDisplay from "@/components/ui/date-display";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
-const NotifCard = ({ title, message, createdAt, id, url }: Notification) => {
+const NotifCard = ({
+  title,
+  message,
+  createdAt,
+  id,
+  url,
+  isRead,
+}: Notification) => {
   return (
-    <Card className="p-4 flex justify-between items-center">
+    <Card className="flex justify-between items-center p-4">
       <div className="flex flex-col gap-2">
         <Link href={url}>
           <Button
             variant="link"
-            className="px-0 text-foreground text-xl font-semibold"
+            className="px-0 font-semibold text-foreground text-xl"
           >
             {title}
           </Button>
         </Link>
         <p className="text-muted-foreground">{message}</p>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-muted-foreground text-sm">
           <DateDisplay date={createdAt} outputFormat="MMMM d, yyyy h:mm a" />
         </p>
       </div>
-      <NotifActions notifId={id} />
+      <NotifActions notifId={id} isRead={isRead} />
     </Card>
   );
 };

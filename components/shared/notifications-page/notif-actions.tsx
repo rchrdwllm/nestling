@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { deleteNotif } from "@/server/actions/delete-notif";
 import { readNotif } from "@/server/actions/read-notif";
-import { Check, X } from "lucide-react";
+import { Check, CheckCheck, X } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
 import { toast } from "sonner";
 import {
@@ -15,9 +15,10 @@ import {
 
 type NotifActionsProps = {
   notifId: string;
+  isRead: boolean;
 };
 
-const NotifActions = ({ notifId }: NotifActionsProps) => {
+const NotifActions = ({ notifId, isRead }: NotifActionsProps) => {
   const { execute: execDelete } = useAction(deleteNotif, {
     onSuccess: () => {
       toast.dismiss();
@@ -40,12 +41,18 @@ const NotifActions = ({ notifId }: NotifActionsProps) => {
     },
     onError: () => {
       toast.dismiss();
-      toast.error("Failed to mark notification as read");
-      console.error("Error marking notification as read");
+      toast.error(
+        isRead ? "Failed to mark as unread" : "Failed to mark as read"
+      );
+      console.error(
+        isRead
+          ? "Error marking notification as unread"
+          : "Error marking notification as read"
+      );
     },
     onExecute: () => {
       toast.dismiss();
-      toast.loading("Marking as read...");
+      toast.loading(isRead ? "Marking as unread..." : "Marking as read...");
     },
   });
 
@@ -77,11 +84,11 @@ const NotifActions = ({ notifId }: NotifActionsProps) => {
               variant="ghost"
               notAnimated
             >
-              <Check className="size-6" />
+              <CheckCheck className="size-6" />
             </Button>
           </TooltipTrigger>
           <TooltipContent>
-            <p>Mark as read</p>
+            <p>Mark as {isRead ? "unread" : "read"}</p>
           </TooltipContent>
         </Tooltip>
       </div>
