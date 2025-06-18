@@ -118,6 +118,7 @@ const GenerateLogsReport = ({ data }: GenerateGradesReportProps) => {
       setIsOpen(false);
     }
 
+    toast.dismiss();
     toast.success("Data exported successfully!");
     setIsLoading(false);
   };
