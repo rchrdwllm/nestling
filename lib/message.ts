@@ -5,16 +5,26 @@ import { db } from "./firebase";
 import { unstable_cache } from "next/cache";
 
 export const getChannelMessages = unstable_cache(
-  async (channelId: string) => {
+  async (
+    channelId: string,
+    limit: number = 20,
+    lastMessageTimestamp?: string
+  ) => {
     try {
-      const messagesRef = db
+      let messagesRef = db
         .collection("messages")
         .where("channelId", "==", channelId)
-        .orderBy("timestamp", "asc");
+        .orderBy("timestamp", "desc")
+        .limit(limit);
+
+      if (lastMessageTimestamp) {
+        messagesRef = messagesRef.startAfter(lastMessageTimestamp);
+      }
+
       const snapshot = await messagesRef.get();
 
       if (snapshot.empty) {
-        return { success: [] };
+        return { success: [], hasMore: false };
       }
 
       const messages = snapshot.docs.map((doc) => doc.data() as Message);
@@ -38,7 +48,10 @@ export const getChannelMessages = unstable_cache(
         })
       );
 
-      return { success: withFiles };
+      const orderedMessages = withFiles.reverse();
+      const hasMore = snapshot.docs.length === limit;
+
+      return { success: orderedMessages, hasMore };
     } catch (error) {
       console.error("Error fetching messages:", error);
 
