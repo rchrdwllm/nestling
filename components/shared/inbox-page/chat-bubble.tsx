@@ -31,7 +31,7 @@ const ChatBubble = ({
           "flex items-end gap-2 rounded-md p-2 w-max max-w-[55%] text-sm",
           isSender
             ? "ml-auto bg-primary text-primary-foreground"
-            : "bg-secondary"
+            : "bg-muted-secondary"
         )}
       >
         <p>{message}</p>

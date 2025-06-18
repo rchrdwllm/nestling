@@ -34,35 +34,35 @@ const ProfileDetails = ({ user, courses }: ProfileDetailsProps) => {
   );
 
   return (
-    <div className="flex flex-col gap-8 items-center">
+    <div className="flex flex-col items-center gap-8">
       <div className="flex flex-col items-center">
         {!toggleEdit &&
           (user.image ? (
             <Avatar className="size-32">
               <AvatarImage src={user.image} className="object-cover" />
               <AvatarFallback>
-                <div className="flex items-center justify-center size-32 bg-muted rounded-full">
-                  <p className="text-xl font-bold">{user.name![0]}</p>
+                <div className="flex justify-center items-center bg-muted rounded-full size-32">
+                  <p className="font-bold text-xl">{user.name![0]}</p>
                 </div>
               </AvatarFallback>
             </Avatar>
           ) : (
-            <div className="flex items-center justify-center size-32 bg-muted rounded-full">
-              <p className="text-xl font-bold">{user.name![0]}</p>
+            <div className="flex justify-center items-center bg-muted rounded-full size-32">
+              <p className="font-bold text-xl">{user.name![0]}</p>
             </div>
           ))}
-        <h1 className="text-3xl font-semibold mt-6 text-center">
+        <h1 className="mt-6 font-semibold text-3xl text-center">
           {user.name || `${user.firstName} ${user.lastName}`}
         </h1>
-        <p className="text-muted-foreground mt-2">
+        <p className="mt-2 text-muted-foreground">
           {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
         </p>
       </div>
       {user.role !== "admin" && !toggleEdit && (
         <Dialog>
           <DialogTrigger asChild>
-            <div className="p-4 cursor-pointer bg-secondary rounded-lg border border-border flex flex-col gap-2 items-center">
-              <h1 className="font-mono text-2xl font-semibold">
+            <div className="flex flex-col items-center gap-2 bg-muted-secondary p-4 border border-border rounded-lg cursor-pointer">
+              <h1 className="font-mono font-semibold text-2xl">
                 {courses.length}
               </h1>
               <p className="text-muted-foreground text-sm">
@@ -77,7 +77,7 @@ const ProfileDetails = ({ user, courses }: ProfileDetailsProps) => {
             </DialogHeader>
             <ScrollArea className="max-h-[400px]">
               {courses.length > 0 ? (
-                <ul className="list-disc pl-5">
+                <ul className="pl-5 list-disc">
                   {courses.map((course) => (
                     <li key={course.id}>
                       {course.courseCode} - {course.name}
@@ -91,11 +91,11 @@ const ProfileDetails = ({ user, courses }: ProfileDetailsProps) => {
           </DialogContent>
         </Dialog>
       )}
-      <div className="flex flex-col gap-4 items-start">
+      <div className="flex flex-col items-start gap-4">
         <Link href={`mailto:${user.email}`}>
           <Button
             variant="link"
-            className="p-0 h-[unset] text-base font-normal text-foreground flex items-center gap-3"
+            className="flex items-center gap-3 p-0 h-[unset] font-normal text-foreground text-base"
           >
             <Mail className="size-4 text-muted-foreground" /> {user.email}
           </Button>
@@ -109,7 +109,7 @@ const ProfileDetails = ({ user, courses }: ProfileDetailsProps) => {
           {user.address || "N/A"}
         </p>
       </div>
-      <div className="flex flex-col gap-4 items-center w-full">
+      <div className="flex flex-col items-center gap-4 w-full">
         {!toggleEdit ? (
           (isCurrentUser || currentUser.role === "admin") && (
             <Button
