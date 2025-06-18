@@ -5,7 +5,14 @@ import { Button } from "@/components/ui/button";
 import PublishContentSwitch from "./publish-content-switch";
 import ContentDetailsBtn from "./content-details-btn";
 
-const ContentCard = ({ id, courseId, title, type, isPublished }: Content) => {
+const ContentCard = ({
+  id,
+  courseId,
+  title,
+  type,
+  isPublished,
+  moduleId,
+}: Content) => {
   const Icon =
     type === "lesson"
       ? ScrollText
@@ -30,7 +37,11 @@ const ContentCard = ({ id, courseId, title, type, isPublished }: Content) => {
         </Button>
       </Link>
       <PublishContentSwitch defaultPublished={isPublished} contentId={id} />
-      <ContentDetailsBtn contentId={id} />
+      <ContentDetailsBtn
+        contentId={id}
+        moduleId={moduleId}
+        courseId={courseId}
+      />
     </article>
   );
 };
