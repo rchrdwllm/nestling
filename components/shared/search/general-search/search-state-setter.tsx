@@ -1,6 +1,7 @@
 "use client";
 
 import { useSearchStore } from "@/context/search-context";
+import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
 type SearchStateSetterProps = {
@@ -19,13 +20,19 @@ type SearchStateSetterProps = {
 };
 
 const SearchStateSetter = ({ searchResults }: SearchStateSetterProps) => {
-  const { setSearchResults } = useSearchStore();
+  const { setSearchResults, setCurrentPage } = useSearchStore();
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     if (searchResults) {
       setSearchResults(searchResults);
+
+      // Set current page from URL params
+      const pageParam = searchParams.get("page");
+      const currentPage = pageParam ? parseInt(pageParam, 10) : 1;
+      setCurrentPage(currentPage);
     }
-  }, [searchResults, setSearchResults]);
+  }, [searchResults, setSearchResults, setCurrentPage, searchParams]);
 
   return null;
 };

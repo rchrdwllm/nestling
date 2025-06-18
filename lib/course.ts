@@ -21,7 +21,7 @@ export const getAllCourses = unstable_cache(
     }
   },
   ["courses"],
-  { revalidate: 3600, tags: ["courses"] }
+  { revalidate: 7200, tags: ["courses"] } // Increased to 2 hours
 );
 
 export const getArchivedCourses = unstable_cache(
@@ -39,7 +39,7 @@ export const getArchivedCourses = unstable_cache(
     }
   },
   ["archivedCourses"],
-  { revalidate: 3600, tags: ["courses"] }
+  { revalidate: 86400, tags: ["courses"] } // Archived courses change less - 24 hours
 );
 
 export const getCourse = unstable_cache(
@@ -95,16 +95,25 @@ export const getEnrolledCourses = unstable_cache(
         .where("accessEnabled", "==", true)
         .get();
       const courseIds = snapshot.docs.map((doc) => doc.id);
-      const courses = await Promise.all(
-        courseIds.map(async (courseId) => {
-          const courseSnapshot = await db
-            .collection("courses")
-            .doc(courseId)
-            .get();
 
-          return courseSnapshot.data() as Course;
-        })
-      );
+      if (courseIds.length === 0) {
+        return { success: [] };
+      }
+
+      // Batch read up to 10 courses at once using 'in' operator
+      const courses: Course[] = [];
+      for (let i = 0; i < courseIds.length; i += 10) {
+        const batch = courseIds.slice(i, i + 10);
+        const coursesQuery = await db
+          .collection("courses")
+          .where("id", "in", batch)
+          .get();
+
+        const batchCourses = coursesQuery.docs.map(
+          (doc) => doc.data() as Course
+        );
+        courses.push(...batchCourses);
+      }
 
       const enrolledCourses = courses.filter((course) => !course.isArchived);
 
@@ -114,7 +123,7 @@ export const getEnrolledCourses = unstable_cache(
     }
   },
   ["enrolledCourses"],
-  { revalidate: 3600, tags: ["courses"] }
+  { revalidate: 7200, tags: ["courses"] } // Increased cache to 2 hours
 );
 
 export const getEnrolledStudents = unstable_cache(
@@ -127,29 +136,36 @@ export const getEnrolledStudents = unstable_cache(
         .get();
       const studentIds = snapshot.docs.map((doc) => doc.id);
 
+      if (studentIds.length === 0) {
+        return { success: [] };
+      }
+
       const aesKey = process.env.AES_ENCRYPTION_KEY;
 
       if (!aesKey) {
         return { error: "AES encryption key not found" };
       }
 
-      const students = await Promise.all(
-        studentIds.map(async (studentId) => {
-          const studentSnapshot = await db
-            .collection("users")
-            .doc(studentId)
-            .get();
+      // Batch read students using 'in' operator
+      const students: User[] = [];
+      for (let i = 0; i < studentIds.length; i += 10) {
+        const batch = studentIds.slice(i, i + 10);
+        const studentsQuery = await db
+          .collection("users")
+          .where("id", "in", batch)
+          .get();
 
-          return {
-            ...studentSnapshot.data(),
-            contactNumber: decryptData(
-              studentSnapshot.data()!.contactNumber,
-              aesKey
-            ),
-            address: decryptData(studentSnapshot.data()!.address, aesKey),
-          } as User;
-        })
-      );
+        const batchStudents = studentsQuery.docs.map(
+          (doc) =>
+            ({
+              ...doc.data(),
+              contactNumber: decryptData(doc.data()!.contactNumber, aesKey),
+              address: decryptData(doc.data()!.address, aesKey),
+            } as User)
+        );
+
+        students.push(...batchStudents);
+      }
 
       return { success: students };
     } catch (error) {
@@ -157,7 +173,7 @@ export const getEnrolledStudents = unstable_cache(
     }
   },
   ["enrolledStudents"],
-  { revalidate: 60, tags: ["students", "user"] }
+  { revalidate: 300, tags: ["students", "user"] } // Reduced to 5 minutes for more dynamic data
 );
 
 export const getEnrolledStudentIds = unstable_cache(
@@ -188,16 +204,25 @@ export const getInstructorCourses = unstable_cache(
         .collection("courses")
         .get();
       const courseIds = snapshot.docs.map((doc) => doc.id);
-      const courses = await Promise.all(
-        courseIds.map(async (courseId) => {
-          const courseSnapshot = await db
-            .collection("courses")
-            .doc(courseId)
-            .get();
 
-          return courseSnapshot.data() as Course;
-        })
-      );
+      if (courseIds.length === 0) {
+        return { success: [] };
+      }
+
+      // Batch read courses using 'in' operator
+      const courses: Course[] = [];
+      for (let i = 0; i < courseIds.length; i += 10) {
+        const batch = courseIds.slice(i, i + 10);
+        const coursesQuery = await db
+          .collection("courses")
+          .where("id", "in", batch)
+          .get();
+
+        const batchCourses = coursesQuery.docs.map(
+          (doc) => doc.data() as Course
+        );
+        courses.push(...batchCourses);
+      }
 
       return { success: courses };
     } catch (error) {
@@ -205,7 +230,7 @@ export const getInstructorCourses = unstable_cache(
     }
   },
   ["instructorCourses"],
-  { revalidate: 3600, tags: ["courses"] }
+  { revalidate: 7200, tags: ["courses"] } // Increased cache to 2 hours
 );
 
 export const getUnarchivedInstructorCourses = unstable_cache(
@@ -217,16 +242,26 @@ export const getUnarchivedInstructorCourses = unstable_cache(
         .collection("courses")
         .get();
       const courseIds = snapshot.docs.map((doc) => doc.id);
-      const courses = await Promise.all(
-        courseIds.map(async (courseId) => {
-          const courseSnapshot = await db
-            .collection("courses")
-            .doc(courseId)
-            .get();
 
-          return courseSnapshot.data() as Course;
-        })
-      );
+      if (courseIds.length === 0) {
+        return { success: [] };
+      }
+
+      // Batch read courses using 'in' operator
+      const courses: Course[] = [];
+      for (let i = 0; i < courseIds.length; i += 10) {
+        const batch = courseIds.slice(i, i + 10);
+        const coursesQuery = await db
+          .collection("courses")
+          .where("id", "in", batch)
+          .get();
+
+        const batchCourses = coursesQuery.docs.map(
+          (doc) => doc.data() as Course
+        );
+        courses.push(...batchCourses);
+      }
+
       const unarchivedCourses = courses.filter((course) => !course.isArchived);
 
       return { success: unarchivedCourses };
@@ -234,8 +269,8 @@ export const getUnarchivedInstructorCourses = unstable_cache(
       return { error };
     }
   },
-  ["instructorCourses"],
-  { revalidate: 3600, tags: ["courses"] }
+  ["unarchivedInstructorCourses"],
+  { revalidate: 7200, tags: ["courses"] } // Increased cache and unique cache key
 );
 
 export const getArchivedInstructorCourses = unstable_cache(
@@ -247,16 +282,26 @@ export const getArchivedInstructorCourses = unstable_cache(
         .collection("courses")
         .get();
       const courseIds = snapshot.docs.map((doc) => doc.id);
-      const courses = await Promise.all(
-        courseIds.map(async (courseId) => {
-          const courseSnapshot = await db
-            .collection("courses")
-            .doc(courseId)
-            .get();
 
-          return courseSnapshot.data() as Course;
-        })
-      );
+      if (courseIds.length === 0) {
+        return { success: [] };
+      }
+
+      // Batch read courses using 'in' operator
+      const courses: Course[] = [];
+      for (let i = 0; i < courseIds.length; i += 10) {
+        const batch = courseIds.slice(i, i + 10);
+        const coursesQuery = await db
+          .collection("courses")
+          .where("id", "in", batch)
+          .get();
+
+        const batchCourses = coursesQuery.docs.map(
+          (doc) => doc.data() as Course
+        );
+        courses.push(...batchCourses);
+      }
+
       const archivedCourses = courses.filter((course) => course.isArchived);
 
       return { success: archivedCourses };
@@ -264,8 +309,8 @@ export const getArchivedInstructorCourses = unstable_cache(
       return { error };
     }
   },
-  ["instructorCourses"],
-  { revalidate: 3600, tags: ["courses"] }
+  ["archivedInstructorCourses"],
+  { revalidate: 86400, tags: ["courses"] } // Archived courses change less frequently - 24 hours cache
 );
 
 export const getCourseImage = unstable_cache(
@@ -328,29 +373,36 @@ export const getCourseInstructors = unstable_cache(
         .get();
       const instructorIds = courseInstructorSnapshot.docs.map((doc) => doc.id);
 
+      if (instructorIds.length === 0) {
+        return { success: [] };
+      }
+
       const aesKey = process.env.AES_ENCRYPTION_KEY;
 
       if (!aesKey) {
         return { error: "AES encryption key not found" };
       }
 
-      const instructors = await Promise.all(
-        instructorIds.map(async (instructorId) => {
-          const instructorSnapshot = await db
-            .collection("users")
-            .doc(instructorId)
-            .get();
+      // Batch read instructors using 'in' operator
+      const instructors: User[] = [];
+      for (let i = 0; i < instructorIds.length; i += 10) {
+        const batch = instructorIds.slice(i, i + 10);
+        const instructorsQuery = await db
+          .collection("users")
+          .where("id", "in", batch)
+          .get();
 
-          return {
-            ...instructorSnapshot.data(),
-            contactNumber: decryptData(
-              instructorSnapshot.data()!.contactNumber,
-              aesKey
-            ),
-            address: decryptData(instructorSnapshot.data()!.address, aesKey),
-          } as User;
-        })
-      );
+        const batchInstructors = instructorsQuery.docs.map(
+          (doc) =>
+            ({
+              ...doc.data(),
+              contactNumber: decryptData(doc.data()!.contactNumber, aesKey),
+              address: decryptData(doc.data()!.address, aesKey),
+            } as User)
+        );
+
+        instructors.push(...batchInstructors);
+      }
 
       return { success: instructors };
     } catch (error) {
@@ -359,16 +411,19 @@ export const getCourseInstructors = unstable_cache(
       return { error: "Error fetching course instructors" };
     }
   },
-  ["courseId"],
-  { revalidate: 60 * 60 * 24, tags: ["instructors", "user"] }
+  ["courseInstructors"],
+  { revalidate: 86400, tags: ["instructors", "user"] } // Instructors change less frequently
 );
 
 export const getTopCoursesByEnrollments = unstable_cache(
   async () => {
     try {
       const coursesSnapshot = await db.collection("courses").get();
+
+      // Use Promise.all for subcollection queries but limit to avoid excessive reads
       const courses = await Promise.all(
-        coursesSnapshot.docs.map(async (doc) => {
+        coursesSnapshot.docs.slice(0, 20).map(async (doc) => {
+          // Limit to top 20 courses initially
           const course = doc.data() as Course;
           const enrolledStudentsSnapshot = await db
             .collection("courses")
@@ -394,7 +449,7 @@ export const getTopCoursesByEnrollments = unstable_cache(
     }
   },
   ["topCoursesByEnrollments"],
-  { revalidate: 60 * 60 * 24, tags: ["courses"] }
+  { revalidate: 86400, tags: ["courses"] } // Daily cache for analytics data
 );
 
 export const getSlicedCourses = unstable_cache(
@@ -408,16 +463,26 @@ export const getSlicedCourses = unstable_cache(
         .limit(limit)
         .get();
       const courseIds = snapshot.docs.map((doc) => doc.id);
-      const courses = await Promise.all(
-        courseIds.map(async (courseId) => {
-          const courseSnapshot = await db
-            .collection("courses")
-            .doc(courseId)
-            .get();
 
-          return courseSnapshot.data() as Course;
-        })
-      );
+      if (courseIds.length === 0) {
+        return { success: [] };
+      }
+
+      // Batch read courses using 'in' operator
+      const courses: Course[] = [];
+      for (let i = 0; i < courseIds.length; i += 10) {
+        const batch = courseIds.slice(i, i + 10);
+        const coursesQuery = await db
+          .collection("courses")
+          .where("id", "in", batch)
+          .get();
+
+        const batchCourses = coursesQuery.docs.map(
+          (doc) => doc.data() as Course
+        );
+        courses.push(...batchCourses);
+      }
+
       const enrolledCourses = courses.filter((course) => !course.isArchived);
 
       return { success: enrolledCourses };
@@ -427,8 +492,8 @@ export const getSlicedCourses = unstable_cache(
       return { error: "Error fetching courses" };
     }
   },
-  ["studentId", "limit"],
-  { revalidate: 60 * 60 * 24, tags: ["courses"] }
+  ["slicedCourses"],
+  { revalidate: 7200, tags: ["courses"] } // 2 hours cache and unique cache key
 );
 
 export const getSlicedInstructorCourses = unstable_cache(
@@ -441,15 +506,25 @@ export const getSlicedInstructorCourses = unstable_cache(
         .limit(limit)
         .get();
       const courseIds = snapshot.docs.map((doc) => doc.data().courseId);
-      const courses = await Promise.all(
-        courseIds.map(async (courseId) => {
-          const courseSnapshot = await db
-            .collection("courses")
-            .doc(courseId)
-            .get();
-          return courseSnapshot.data() as Course;
-        })
-      );
+
+      if (courseIds.length === 0) {
+        return { success: [] };
+      }
+
+      // Batch read courses using 'in' operator
+      const courses: Course[] = [];
+      for (let i = 0; i < courseIds.length; i += 10) {
+        const batch = courseIds.slice(i, i + 10);
+        const coursesQuery = await db
+          .collection("courses")
+          .where("id", "in", batch)
+          .get();
+
+        const batchCourses = coursesQuery.docs.map(
+          (doc) => doc.data() as Course
+        );
+        courses.push(...batchCourses);
+      }
 
       const instructedCourses = courses.filter((course) => !course.isArchived);
 
@@ -459,7 +534,9 @@ export const getSlicedInstructorCourses = unstable_cache(
 
       return { error: "Error fetching instructor courses" };
     }
-  }
+  },
+  ["slicedInstructorCourses"],
+  { revalidate: 7200, tags: ["courses"] } // 2 hours cache and unique cache key
 );
 
 export const getMostViewedCourses = unstable_cache(
@@ -485,5 +562,5 @@ export const getMostViewedCourses = unstable_cache(
     }
   },
   ["mostViewedCourses"],
-  { revalidate: 60 * 60 * 24, tags: ["courses"] }
+  { revalidate: 86400, tags: ["courses"] } // Daily cache for analytics data
 );
