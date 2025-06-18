@@ -11,7 +11,7 @@ const Layout = async ({ children }: { children: ReactNode }) => {
   if (!user) return redirect("/api/auth/signin");
 
   return (
-    <main className="gap-x-2 grid grid-cols-8 bg-secondary h-[calc(100vh-1.1rem)]">
+    <main className="gap-x-2 grid grid-cols-8 bg-secondary h-[calc(100vh-1rem)]">
       <aside className="flex flex-col col-span-2 bg-background border border-border rounded-xl">
         <div className="p-4 border-b border-border">
           <SearchBtn isInbox />
