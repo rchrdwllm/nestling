@@ -17,9 +17,7 @@ const Channel = async ({
   receiverId: searchReceiverId,
 }: ChannelProps) => {
   const { success: thread } = await getThreadByChannelId(channelId);
-  const { success: messages, error: messagesError } = await getChannelMessages(
-    channelId
-  );
+  const messagesResult = await getChannelMessages(channelId);
   const currentUser = await getOptimisticUser();
 
   const receiverId = thread
@@ -33,28 +31,31 @@ const Channel = async ({
     return <ErrorToast error={"Error fetching receiver: " + receiverError} />;
   }
 
+  const messages = messagesResult.success || [];
+  const hasMore = messagesResult.hasMore || false;
+
   if (!messages?.length && receiver) {
     return (
       <div className="flex flex-col">
-        <header className="p-4 h-[72.8px] flex items-center border-b border-border">
+        <header className="flex items-center p-4 border-b border-border h-[72.8px]">
           <Link href={`/profile?userId=${receiver.id}`}>
-            <Button className="text-foreground px-0 py-0" variant="link">
+            <Button className="px-0 py-0 text-foreground" variant="link">
               <h1 className="font-semibold">{receiver.name}</h1>
             </Button>
           </Link>
         </header>
-        <div className="h-[calc(100vh-1rem-72.8px-64.8px)] w-full px-4 flex justify-center items-center">
+        <div className="flex justify-center items-center px-4 w-full h-[calc(100vh-1rem-72.8px-64.8px)]">
           <h1 className="text-muted-foreground">No messages yet</h1>
         </div>
         <ChatForm receiverId={receiver.id} />
       </div>
     );
   }
-
   return (
     <ChatWindow
       messages={JSON.stringify(messages)}
       receiver={JSON.stringify(receiver)}
+      hasMore={hasMore}
     />
   );
 };
