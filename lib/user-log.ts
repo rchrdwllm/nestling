@@ -19,8 +19,6 @@ const fetchAuthLogsInternal = async (
   limit = 20,
   lastDocId?: string
 ) => {
-  const startTime = Date.now();
-
   try {
     let query = db
       .collection("userActivities")
@@ -54,12 +52,6 @@ const fetchAuthLogsInternal = async (
       id: doc.id,
       ...doc.data(),
     })) as (UserActivity & { id: string })[];
-
-    const typesFound = authLogs.map((log) => log.type);
-    const uniqueTypes = [...new Set(typesFound)];
-
-    const endTime = Date.now();
-    const duration = endTime - startTime;
 
     const result: PaginatedAuthLogs = {
       logs: authLogs,
@@ -98,8 +90,6 @@ const fetchContentLogsInternal = async (
   limit = 20,
   lastDocId?: string
 ) => {
-  const startTime = Date.now();
-
   try {
     let query = db
       .collection("userActivities")
@@ -191,8 +181,6 @@ const fetchSystemLogsInternal = async (
   limit = 20,
   lastDocId?: string
 ) => {
-  const startTime = Date.now();
-
   try {
     let query = db
       .collection("userActivities")
