@@ -70,7 +70,7 @@ const CreateTaskForm = ({
   const initialPreviewUrls = useMemo(
     () =>
       attachments.map((attachment) => ({
-        name: attachment.public_id,
+        name: attachment.original_filename,
         type: attachment.resource_type,
         url: attachment.secure_url,
       })),

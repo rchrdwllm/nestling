@@ -9,19 +9,20 @@ const FilePreview = ({
   resource_type,
   secure_url,
   public_id,
+  original_filename,
 }: CloudinaryFile) => {
   const [isLoaded, setIsLoaded] = useState(false);
 
   if (resource_type === "image") {
     return (
-      <article className="relative aspect-square size-36" key={secure_url}>
+      <article className="relative size-36 aspect-square" key={secure_url}>
         <div
           className={cn(
             "absolute top-0 left-0 h-full w-full z-10 transition-opacity",
             isLoaded ? "opacity-0" : "opacity-100"
           )}
         >
-          <Skeleton className="h-full w-full" />
+          <Skeleton className="w-full h-full" />
         </div>
         <Image
           onLoad={() => setIsLoaded(true)}
@@ -36,17 +37,17 @@ const FilePreview = ({
 
   if (resource_type === "raw") {
     return (
-      <div className="relative aspect-square bg-secondary rounded-md gap-2 px-4 cursor-pointer flex flex-col justify-center items-center h-36">
-        <FileIcon className="h-8 w-8 text-gray-500" />
-        <p className="text-sm text-muted-foreground">{public_id}</p>
+      <div className="relative flex flex-col justify-center items-center gap-2 bg-secondary px-4 rounded-md h-36 aspect-square cursor-pointer">
+        <FileIcon className="w-8 h-8 text-gray-500" />
+        <p className="text-muted-foreground text-sm">{original_filename}</p>
       </div>
     );
   }
 
   if (resource_type === "video") {
     return (
-      <article className="relative aspect-square h-36" key={secure_url}>
-        <p>Video file: {public_id}</p>
+      <article className="relative h-36 aspect-square" key={secure_url}>
+        <p>Video file: {original_filename}</p>
       </article>
     );
   }

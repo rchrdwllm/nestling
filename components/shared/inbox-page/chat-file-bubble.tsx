@@ -13,9 +13,14 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { cn } from "@/lib/utils";
+import { addAttachmentFlag, cn } from "@/lib/utils";
 
-const ChatFileBubble = ({ secure_url, public_id, resource_type }: File) => {
+const ChatFileBubble = ({
+  secure_url,
+  public_id,
+  resource_type,
+  original_filename,
+}: File) => {
   const [isLoaded, setIsLoaded] = useState(false);
 
   if (resource_type === "image") {
@@ -42,23 +47,27 @@ const ChatFileBubble = ({ secure_url, public_id, resource_type }: File) => {
               )}
               fill
               src={secure_url}
-              alt={public_id}
+              alt={original_filename || public_id}
             />
           </article>
         </DialogTrigger>
         <DialogContent>
-          <DialogTitle>{public_id}</DialogTitle>
+          <DialogTitle>{original_filename}</DialogTitle>
           <DialogDescription></DialogDescription>
           <div className="flex flex-col gap-4 p-4 w-full h-96">
             <div className="relative size-full">
               <Image
                 src={secure_url}
-                alt={public_id}
+                alt={original_filename || public_id}
                 className="object-contain"
                 fill
               />
             </div>
-            <Link href={secure_url} download className="w-full">
+            <Link
+              href={addAttachmentFlag(secure_url)}
+              download
+              className="w-full"
+            >
               <Button className="w-full">Save image</Button>
             </Link>
           </div>
@@ -70,12 +79,12 @@ const ChatFileBubble = ({ secure_url, public_id, resource_type }: File) => {
   if (resource_type === "raw") {
     return (
       <Link
-        href={secure_url}
+        href={addAttachmentFlag(secure_url)}
         className="relative flex flex-col justify-center items-center gap-2 bg-muted-secondary px-4 rounded-md h-36 aspect-square cursor-pointer"
         download
       >
         <FileIcon className="w-8 h-8 text-gray-500" />
-        <p className="text-muted-foreground text-sm">{public_id}</p>
+        <p className="text-muted-foreground text-sm">{original_filename}</p>
       </Link>
     );
   }
@@ -85,7 +94,7 @@ const ChatFileBubble = ({ secure_url, public_id, resource_type }: File) => {
       <Dialog>
         <DialogTrigger asChild>
           <article className="relative h-36 aspect-square" key={secure_url}>
-            <p>Video file: {public_id}</p>
+            <p>Video file: {original_filename}</p>
           </article>
         </DialogTrigger>
         <DialogContent>
@@ -109,7 +118,7 @@ const ChatFileBubble = ({ secure_url, public_id, resource_type }: File) => {
             className="rounded-md object-cover"
             fill
             src={secure_url}
-            alt={public_id}
+            alt={original_filename || public_id}
           />
         </article>
       </DialogTrigger>

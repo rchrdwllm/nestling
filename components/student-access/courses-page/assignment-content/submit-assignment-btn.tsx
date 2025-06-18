@@ -151,6 +151,7 @@ const SubmitAssignmentBtn = ({
               type: file.type,
               url: uploadedFile.url,
               resource_type: uploadedFile.resource_type,
+              original_filename: uploadedFile.original_filename,
               hash,
             },
             content: "",
@@ -192,10 +193,10 @@ const SubmitAssignmentBtn = ({
               <>
                 <button
                   type="button"
-                  className="w-full border border-input bg-background hover:bg-accent hover:text-accent-foreground rounded-md cursor-pointer group transition-colors"
+                  className="group bg-background hover:bg-accent border border-input rounded-md w-full transition-colors hover:text-accent-foreground cursor-pointer"
                 >
                   <label
-                    className="flex flex-col justify-center items-center gap-2 w-full py-8 cursor-pointer text-muted-foreground transition-colors group-hover:text-foreground"
+                    className="flex flex-col justify-center items-center gap-2 py-8 w-full text-muted-foreground group-hover:text-foreground transition-colors cursor-pointer"
                     htmlFor="submission"
                   >
                     {file ? (
@@ -243,7 +244,7 @@ const SubmitAssignmentBtn = ({
                 )}
               />
             )}
-            <div className="mt-4 flex flex-col gap-4">
+            <div className="flex flex-col gap-4 mt-4">
               <Button type="submit" disabled={isExecuting || isLoading}>
                 Submit
               </Button>

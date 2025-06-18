@@ -21,6 +21,10 @@ export const UploadFileSchema = z.object({
     required_error: "Secure URL is required",
     invalid_type_error: "Secure URL must be a string",
   }),
+  original_filename: z.string({
+    required_error: "Original filename is required",
+    invalid_type_error: "Original filename must be a string",
+  }),
   type: z.string({
     required_error: "Type is required",
     invalid_type_error: "Type must be a string",

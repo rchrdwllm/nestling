@@ -20,6 +20,7 @@ export const uploadFile = actionClient
       type,
       submission_id,
       resource_type,
+      original_filename,
       hash,
     } = parsedInput;
     const user = await getOptimisticUser();
@@ -36,6 +37,7 @@ export const uploadFile = actionClient
         user_id: user.id,
         resource_type,
         hash,
+        original_filename,
       };
 
       await fileRef.set(newFile);

@@ -167,6 +167,7 @@ export type File = {
   public_id: string;
   created_at: string;
   secure_url: string;
+  original_filename: string;
   url: string;
   type: string;
   submission_id?: string;
@@ -205,7 +206,7 @@ export type Announcement = {
 export type UniversalAnnouncement = {
   title: string;
   description: string;
-  image:string;
+  image: string;
   createdAt: string;
   updatedAt: string;
   isArchived: boolean;

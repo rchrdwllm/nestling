@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { addAttachmentFlag } from "@/lib/utils";
 import Link from "next/link";
 import React from "react";
 
@@ -13,7 +14,7 @@ const PdfViewer = ({ pdfUrl, showDownload }: PdfViewerProps) => {
       {showDownload && (
         <Link
           className="w-min"
-          href={pdfUrl}
+          href={addAttachmentFlag(pdfUrl)}
           download
           target="_blank"
           rel="noopener noreferrer"

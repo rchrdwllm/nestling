@@ -14,6 +14,7 @@ import { useState } from "react";
 import { useAction } from "next-safe-action/hooks";
 import { deleteAttachment } from "@/server/actions/delete-attachment";
 import { toast } from "sonner";
+import { addAttachmentFlag } from "@/lib/utils";
 
 type AttachmentPreviewProps = {
   name: string;
@@ -52,10 +53,10 @@ const AttachmentPreview = ({
       <DialogTrigger asChild>
         <Button
           variant="ghost"
-          className="rounded-none w-full h-auto overflow-hidden text-muted-foreground flex justify-start items-center gap-4"
+          className="flex justify-start items-center gap-4 rounded-none w-full h-auto overflow-hidden text-muted-foreground"
         >
           {type === "raw" ? (
-            <div className="flex gap-4 items-center">
+            <div className="flex items-center gap-4">
               <FileIcon size={24} /> <p className="text-sm">{name}</p>
             </div>
           ) : (
@@ -63,7 +64,7 @@ const AttachmentPreview = ({
               <img
                 src={url}
                 alt={name}
-                className="size-12 rounded-sm object-cover"
+                className="rounded-sm size-12 object-cover"
               />{" "}
               <p className="text-sm">{name}</p>
             </>
@@ -95,7 +96,7 @@ const AttachmentPreview = ({
             </Button>
             <Link
               className="w-full"
-              href={url}
+              href={addAttachmentFlag(url)}
               download
               target="_blank"
               rel="noopener noreferrer"

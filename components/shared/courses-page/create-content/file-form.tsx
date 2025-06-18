@@ -49,6 +49,8 @@ const FileForm = () => {
       );
 
       if (uploadedFile) {
+        console.log({ uploadedFile });
+
         execute({
           ...uploadedFile,
           type: file.type,
@@ -80,13 +82,13 @@ const FileForm = () => {
       <div className="flex gap-2">
         <button
           type="button"
-          className="flex-1 border-input bg-background hover:bg-accent hover:text-accent-foreground transition-colors rounded-md border-2"
+          className="flex-1 bg-background hover:bg-accent border-2 border-input rounded-md transition-colors hover:text-accent-foreground"
         >
           <label
             htmlFor="file-input"
-            className="px-3 py-2 w-full text-sm cursor-pointer flex items-center gap-2 transition-colors text-muted-foreground hover:text-foreground"
+            className="flex items-center gap-2 px-3 py-2 w-full text-muted-foreground hover:text-foreground text-sm transition-colors cursor-pointer"
           >
-            <Paperclip className="w-4 h-4 pointer-events-none " />
+            <Paperclip className="w-4 h-4 pointer-events-none" />
             {file ? (
               <span className="truncate">{file.name}</span>
             ) : (

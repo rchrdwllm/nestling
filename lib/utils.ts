@@ -23,3 +23,17 @@ export async function streamToString(stream: any) {
 
   return Buffer.concat(chunks).toString("utf8");
 }
+
+export const addAttachmentFlag = (cloudinaryUrl: string): string => {
+  if (!cloudinaryUrl.includes("cloudinary.com")) {
+    return cloudinaryUrl;
+  }
+
+  const urlParts = cloudinaryUrl.split("/upload/");
+
+  if (urlParts.length === 2) {
+    return `${urlParts[0]}/upload/fl_attachment/${urlParts[1]}`;
+  }
+
+  return cloudinaryUrl;
+};
