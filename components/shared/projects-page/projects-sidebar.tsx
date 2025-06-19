@@ -4,6 +4,7 @@ import SidebarCreateBtn from "@/components/shared/projects-page/sidebar-create-b
 import { getProjectsOfUser } from "@/lib/project";
 import { getOptimisticUser } from "@/lib/user";
 import React from "react";
+import SidebarBackBtn from "./sidebar-back-btn";
 
 const ProjectsSidebar = async () => {
   const user = await getOptimisticUser();
@@ -20,7 +21,8 @@ const ProjectsSidebar = async () => {
   }
 
   return (
-    <aside className="flex flex-col gap-4 py-6 border rounded-xl border-border bg-background h-full shadow-sm">
+    <aside className="flex flex-col gap-4 bg-background shadow-sm py-6 border border-border rounded-xl h-full">
+      <SidebarBackBtn />
       <div className="flex flex-col gap-2 px-4">
         <CourseSectionLink segments={["projects"]} href="/projects">
           Home

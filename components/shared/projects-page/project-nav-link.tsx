@@ -26,9 +26,9 @@ const ProjectNavLink = ({ href, children }: ProjectNavLinkProps) => {
       <Button
         variant="ghost"
         className={cn(
-          "w-full text-left justify-start rounded-none flex items-center gap-2 py-3 px-4 text-muted-foreground/65 group-hover:text-foreground",
+          "w-full text-left justify-start rounded-none flex items-center gap-2 py-3 px-4 text-muted-foreground group-hover:text-foreground",
           isActive &&
-            "bg-secondary text-foreground font-medium hover:bg-secondary hover:text-foreground"
+            "bg-muted-secondary text-foreground font-medium hover:bg-muted-secondary hover:text-foreground"
         )}
       >
         <Briefcase className="size-4" /> <span>{children}</span>
