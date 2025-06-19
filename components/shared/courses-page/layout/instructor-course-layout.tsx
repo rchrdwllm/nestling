@@ -4,9 +4,10 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import CourseSectionLink from "../course-section-link";
 import { ReactNode, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { PanelLeft } from "lucide-react";
+import { ArrowLeft, PanelLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 type CourseLayoutProps = {
   courseCode: string;
@@ -22,17 +23,26 @@ const InstructorCourseLayout = ({
   children,
 }: CourseLayoutProps) => {
   const [isToggled, setIsToggled] = useState(true);
+  const router = useRouter();
 
   return (
     <main className="gap-x-2 grid grid-cols-8 bg-secondary">
       {isToggled && (
         <ScrollArea className="col-span-2 h-[calc(100vh-1rem)] sidebar-scroll-area">
           <aside className="flex flex-col gap-2 col-span-2 bg-background shadow-sm p-6 border border-border rounded-xl h-full">
-            <Link href="/courses">
-              <h1 className="font-medium text-sm cursor-pointer hover:underline hover:text-[--nestling-color]">
-                {courseCode} - {name}
+            <div className="flex items-center gap-2 mb-4">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="-ml-2 px-2 text-muted-foreground"
+                onClick={() => router.back()}
+              >
+                <ArrowLeft className="size-4" />
+              </Button>
+              <h1 className="max-w-xs font-medium text-sm truncate">
+                {courseCode} - {name} dfghkasdjg sdkgjhsdkfg hasdfksdfgjh
               </h1>
-            </Link>
+            </div>
             <CourseSectionLink href={`/courses/${id}`}>
               Modules
             </CourseSectionLink>
