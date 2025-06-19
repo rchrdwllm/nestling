@@ -23,18 +23,18 @@ export const checkEmailRegister = async (
   } = data;
 
   try {
-    // const { success: registeredEmail, error: emailError } =
-    //   await getRegisteredEmail(email);
+    const { success: registeredEmail, error: emailError } =
+      await getRegisteredEmail(email);
 
-    // if (emailError || !registeredEmail) {
-    //   return { error: "This email has not yet been validated by Leave a Nest" };
-    // }
+    if (emailError || !registeredEmail) {
+      return { error: "This email has not yet been validated by Leave a Nest" };
+    }
 
-    // if (registeredEmail.role !== role) {
-    //   return {
-    //     error: `Role mismatch. Registered email in system is for ${registeredEmail.role}, but provided role is ${role}.`,
-    //   };
-    // }
+    if (registeredEmail.role !== role) {
+      return {
+        error: `Role mismatch. Registered email in system is for ${registeredEmail.role}, but provided role is ${role}.`,
+      };
+    }
 
     const usersRef = db.collection("users").where("email", "==", email);
     const users = await usersRef.get();
