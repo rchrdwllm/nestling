@@ -5,7 +5,7 @@ import { deleteFile } from "@/server/actions/delete-file";
 import { deleteFileFromCloudinary } from "@/server/actions/delete-from-cloudinary";
 import { uploadFile } from "@/server/actions/upload-file";
 import { uploadFileToCloudinary } from "@/server/actions/upload-to-cloudinary";
-import { CloudinaryFile } from "@/types";
+import { CloudinaryFile, File as DatabaseFile } from "@/types";
 import { Paperclip, X } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
 import { ChangeEvent, useCallback, useState } from "react";
@@ -13,7 +13,7 @@ import { useFormContext } from "react-hook-form";
 import { toast } from "sonner";
 
 type FileFormProps = {
-  contentFile?: CloudinaryFile | null;
+  contentFile?: DatabaseFile | null;
 };
 
 const FileForm = ({ contentFile }: FileFormProps) => {
