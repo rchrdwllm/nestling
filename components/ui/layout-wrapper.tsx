@@ -1,17 +1,15 @@
 "use client";
 
-import { ReactNode, useState } from "react";
+import { ReactNode } from "react";
 import Sidebar from "./sidebar/sidebar";
 import { ScrollArea } from "./scroll-area";
 import { useUser } from "@/hooks/use-user";
 import { usePathname } from "next/navigation";
-import SidePanel from "../shared/layout/side-panel";
 import { cn } from "@/lib/utils";
 
 const LayoutWrapper = ({ children }: { children: ReactNode }) => {
   const pathname = usePathname();
   const { user } = useUser();
-  const [rightPanelToggled, setRightPanelToggled] = useState(true);
 
   if (
     !user ||
@@ -34,10 +32,6 @@ const LayoutWrapper = ({ children }: { children: ReactNode }) => {
       >
         {children}
       </ScrollArea>
-      <SidePanel
-        rightPanelToggled={rightPanelToggled}
-        setRightPanelToggled={setRightPanelToggled}
-      />
     </main>
   );
 };
