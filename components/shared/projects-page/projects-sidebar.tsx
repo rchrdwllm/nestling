@@ -5,6 +5,7 @@ import { getProjectsOfUser } from "@/lib/project";
 import { getOptimisticUser } from "@/lib/user";
 import React from "react";
 import SidebarBackBtn from "./sidebar-back-btn";
+import ErrorToast from "@/components/ui/error-toast";
 
 const ProjectsSidebar = async () => {
   const user = await getOptimisticUser();
@@ -12,12 +13,8 @@ const ProjectsSidebar = async () => {
     user.id
   );
 
-  if (projectsError) {
-    return <h1>{projectsError}</h1>;
-  }
-
-  if (!projects) {
-    return <h1>No projects found</h1>;
+  if (projectsError || !projects) {
+    return <ErrorToast error={"Error fetching projects: " + projectsError} />;
   }
 
   return (
