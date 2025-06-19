@@ -12,8 +12,9 @@ export const createModule = actionClient
     const { title, courseId, isEdit, moduleId } = parsedInput;
 
     try {
-      const { success: existingModules, error } =
-        await getCourseModules(courseId);
+      const { success: existingModules, error } = await getCourseModules(
+        courseId
+      );
 
       if (error) {
         return { error };
@@ -31,6 +32,7 @@ export const createModule = actionClient
 
         revalidatePath("/courses/[courseId]", "page");
         revalidatePath(`/courses/${courseId}`);
+        revalidateTag("modules");
 
         return { success: `Module updated successfully` };
       }
