@@ -21,7 +21,7 @@ const FAQDropdown = ({
       <button
         className={`w-full text-left flex justify-between items-center text-lg font-medium select-none transition-colors duration-200 group ${
           open ? "text-primary" : ""
-        } hover:bg-secondary rounded-lg p-2`}
+        } hover:bg-muted-secondary rounded-lg p-2`}
         onClick={() => setOpen((o) => !o)}
       >
         {question}
@@ -54,7 +54,7 @@ const FAQDropdown = ({
         transition={{ duration: 0.3 }}
         className="overflow-hidden"
       >
-        <p className="text-muted-foreground p-2">{answer}</p>
+        <p className="p-2 text-muted-foreground">{answer}</p>
       </MotionWrapper>
     </div>
   );
@@ -77,7 +77,7 @@ const Help = () => {
       } pb-20`}
     >
       <section className="flex flex-col gap-4">
-        <h2 className="text-xl font-semibold">Frequently Asked Questions:</h2>
+        <h2 className="font-semibold text-xl">Frequently Asked Questions:</h2>
         <div className="divide-y">
           {/* General Questions */}
           <FAQDropdown
