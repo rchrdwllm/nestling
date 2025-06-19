@@ -9,10 +9,13 @@ import { revalidateTag } from "next/cache";
 export const deleteFile = actionClient
   .schema(DeleteFileSchema)
   .action(async ({ parsedInput }) => {
-    const { public_id } = parsedInput;
+    const { public_id, content_id } = parsedInput;
 
     try {
       const { success: fileData, error } = await getFile(public_id);
+
+      console.log("Deleting file with public_id:", public_id);
+      console.log("File data:", fileData);
 
       if (error) {
         console.error(error);
@@ -24,13 +27,15 @@ export const deleteFile = actionClient
         return { error: "File not found" };
       }
 
-      await db.collection("files").doc(public_id).delete();
-      await db
-        .collection("contents")
-        .doc(fileData.content_id)
-        .collection("files")
-        .doc(public_id)
-        .delete();
+      if (content_id) {
+        await db.collection("files").doc(public_id).delete();
+        await db
+          .collection("contents")
+          .doc(content_id)
+          .collection("files")
+          .doc(public_id)
+          .delete();
+      }
 
       revalidateTag("files");
 

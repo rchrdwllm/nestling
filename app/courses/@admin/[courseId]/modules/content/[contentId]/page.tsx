@@ -6,6 +6,7 @@ import Link from "next/link";
 import ErrorToast from "@/components/ui/error-toast";
 import Searcher from "@/components/shared/search/general-search/searcher";
 import DeleteContentBtn from "@/components/shared/content-page/delete-content-btn";
+import { addAttachmentFlag } from "@/lib/utils";
 
 const ContentPage = async ({
   params,
@@ -44,7 +45,9 @@ const ContentPage = async ({
           className="flex flex-col gap-4 mt-6"
           dangerouslySetInnerHTML={{ __html: content.content }}
         />
-        {file && <PdfViewer pdfUrl={file.success?.secure_url!} />}
+        {file && (
+          <PdfViewer pdfUrl={addAttachmentFlag(file.success?.secure_url!)} />
+        )}
       </div>
       {content.type === "assignment" && (
         <Link

@@ -1,6 +1,6 @@
 import CreateContentForm from "@/components/shared/courses-page/create-content/create-content-form";
 import ErrorToast from "@/components/ui/error-toast";
-import { getModuleContent } from "@/lib/content";
+import { getContentFile, getModuleContent } from "@/lib/content";
 import { getModuleTitles } from "@/lib/module";
 import Searcher from "@/components/shared/search/general-search/searcher";
 
@@ -37,16 +37,41 @@ const CreatePage = async ({
     );
   }
 
+  if (contentId) {
+    const { success: file, error: fileError } = await getContentFile(contentId);
+
+    if (fileError) {
+      return (
+        <ErrorToast
+          error={"Error fetching content file: " + (fileError || "")}
+        />
+      );
+    }
+
+    return (
+      <main className="flex flex-col gap-8 p-6">
+        <Searcher query={query} page={page} tab={tab} />
+        <div className="flex flex-col gap-3">
+          <h1 className="font-semibold text-3xl">Edit content</h1>
+          <hr />
+        </div>
+        <CreateContentForm
+          defaultModule={moduleId}
+          courseId={courseId}
+          modules={moduleTitles}
+          content={JSON.stringify(content)}
+          contentFile={file}
+        />
+      </main>
+    );
+  }
+
   return (
     <main className="flex flex-col gap-8 p-6">
       <Searcher query={query} page={page} tab={tab} />
       <div className="flex flex-col gap-3">
         <h1 className="font-semibold text-3xl">
-          {content
-            ? "Edit content"
-            : moduleId
-            ? "Add content"
-            : "Create content"}
+          {moduleId ? "Add content" : "Create content"}
         </h1>
         <hr />
       </div>
@@ -54,7 +79,6 @@ const CreatePage = async ({
         defaultModule={moduleId}
         courseId={courseId}
         modules={moduleTitles}
-        content={JSON.stringify(content)}
       />
     </main>
   );

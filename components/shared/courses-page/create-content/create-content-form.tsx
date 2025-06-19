@@ -32,6 +32,7 @@ import AssignmentForm from "./assignment-form";
 import FileForm from "./file-form";
 import { Switch } from "@/components/ui/switch";
 import { useEffect, useMemo } from "react";
+import { File } from "@/types";
 
 type CreateContentFormProps = {
   defaultModule?: string;
@@ -42,6 +43,7 @@ type CreateContentFormProps = {
   }[];
   courseId: string;
   content?: string;
+  contentFile?: File | null;
 };
 
 const CreateContentForm = ({
@@ -49,6 +51,7 @@ const CreateContentForm = ({
   modules,
   courseId,
   content,
+  contentFile,
 }: CreateContentFormProps) => {
   const id = crypto.randomUUID();
   const router = useRouter();
@@ -223,7 +226,7 @@ const CreateContentForm = ({
         />
         {form.watch("type") === "assignment" && <AssignmentForm />}
         {form.watch("type") === "file" ? (
-          <FileForm />
+          <FileForm contentFile={contentFile} />
         ) : (
           <FormField
             control={form.control}
