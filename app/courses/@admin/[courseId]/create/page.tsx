@@ -38,15 +38,7 @@ const CreatePage = async ({
   }
 
   if (contentId) {
-    const { success: file, error: fileError } = await getContentFile(contentId);
-
-    if (fileError) {
-      return (
-        <ErrorToast
-          error={"Error fetching content file: " + (fileError || "")}
-        />
-      );
-    }
+    const { success: file } = await getContentFile(contentId);
 
     return (
       <main className="flex flex-col gap-8 p-6">
