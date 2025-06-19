@@ -1,10 +1,7 @@
 import SubmissionPreview from "@/components/shared/content-page/submission-preview";
 import { getEnrolledStudents } from "@/lib/course";
 import { getModuleContent } from "@/lib/content";
-import {
-  getAssignmentSubmissions,
-  getStudentAssignmentSubmission,
-} from "@/lib/submission";
+import { getAssignmentSubmissions } from "@/lib/submission";
 import { getOptimisticUser } from "@/lib/user";
 import ErrorToast from "@/components/ui/error-toast";
 
