@@ -4,11 +4,7 @@ import { DuplicateCourseSchema } from "@/schemas/DuplicateCourseSchema";
 import { actionClient } from "../action-client";
 import { db } from "@/lib/firebase";
 import { Course, File, Image } from "@/types";
-import {
-  getCourseImage,
-  getCourseInstructors,
-  getEnrolledStudentIds,
-} from "@/lib/course";
+import { getCourseImage } from "@/lib/course";
 import { getCourseModules } from "@/lib/module";
 import { getModuleContents } from "@/lib/content";
 import { duplicateCloudinaryFile, duplicateCloudinaryImage } from "@/lib/utils";
@@ -20,10 +16,14 @@ export const duplicateCourse = actionClient
     const { courseId } = parsedInput;
 
     try {
+      console.log("Duplicating course with ID:", courseId);
+
       const courseCollection = db.collection("courses");
       const courseSnapshot = await db.collection("courses").doc(courseId).get();
 
       if (!courseSnapshot.exists) {
+        console.log("Course not found:", courseId);
+
         return { error: "Course not found" };
       }
 
@@ -31,26 +31,36 @@ export const duplicateCourse = actionClient
       const newId = crypto.randomUUID();
       const batch = db.batch();
 
+      console.log("First, duplicating course image...");
+      console.log("Getting course image...");
+
       const { success: image, error: imageError } = await getCourseImage(
         courseId
       );
 
       if (imageError || !image) {
-        console.error("Failed to get course image:", imageError);
+        console.log("Failed to get course image:", imageError);
 
         return { error: imageError };
       }
 
-      const { success: newCloudinaryImage, error: uploadError } =
-        await duplicateCloudinaryImage(image.secure_url, image.public_id);
+      console.log("Duplicating course image with new hash...");
+
+      const {
+        success: newCloudinaryImage,
+        hash,
+        error: uploadError,
+      } = await duplicateCloudinaryImage(image.secure_url, image.public_id);
 
       if (uploadError || !newCloudinaryImage) {
-        console.error("Failed to duplicate image:", uploadError);
+        console.log("Failed to duplicate image:", uploadError);
 
         return { error: uploadError };
       }
 
       const newImageId = crypto.randomUUID();
+
+      console.log("Creating new image reference...");
 
       const newImageRef = db.collection("images").doc(newImageId);
       const courseImgRef = db
@@ -64,28 +74,42 @@ export const duplicateCourse = actionClient
         created_at: new Date().toISOString(),
         course_id: newId,
         secure_url: newCloudinaryImage.secure_url,
-        // hash: newCloudinaryImage.hash,
+        hash: hash || "",
       };
 
+      console.log("Setting new image data in batch...");
+
       batch.set(newImageRef, {
-        ...imageData,
+        ...image,
         id: newImageId,
         url: newCloudinaryImage.secure_url,
         public_id: newCloudinaryImage.public_id,
+        hash: hash || "",
       });
-      batch.set(contentImageRef, reference);
+
+      console.log("Setting course image reference in batch...");
+
+      batch.set(courseImgRef, reference);
+
+      console.log("Setting main course data in batch...");
 
       batch.set(courseCollection.doc(newId), {
         ...courseData,
         id: newId,
       });
 
+      console.log("Getting course modules...");
+
       const { success: courseModules, error: courseModulesError } =
         await getCourseModules(courseId);
 
       if (courseModulesError || !courseModules) {
+        console.log("Failed to get course modules:", courseModulesError);
+
         return { error: courseModulesError };
       }
+
+      console.log("Duplicating course modules...");
 
       for (const module of courseModules) {
         const newModuleId = crypto.randomUUID();
@@ -106,6 +130,10 @@ export const duplicateCourse = actionClient
           createdAt: new Date().toISOString(),
         };
 
+        console.log("Creating new module reference...");
+
+        console.log("Setting new module data in batch...");
+
         batch.set(moduleRef, {
           ...module,
           id: newModuleId,
@@ -116,10 +144,14 @@ export const duplicateCourse = actionClient
         batch.set(courseModuleRef, reference);
         batch.set(moduleCourseRef, reference);
 
+        console.log("Getting module contents...");
+
         const { success: moduleContents, error: moduleContentsError } =
           await getModuleContents(module.id);
 
         if (moduleContentsError || !moduleContents) {
+          console.log("Failed to get module contents:", moduleContentsError);
+
           return { error: moduleContentsError };
         }
 
@@ -142,6 +174,10 @@ export const duplicateCourse = actionClient
             createdAt: new Date().toISOString(),
           };
 
+          console.log("Creating new content reference...");
+
+          console.log("Setting new content data in batch...");
+
           batch.set(contentRef, {
             ...content,
             id: newContentId,
@@ -152,15 +188,20 @@ export const duplicateCourse = actionClient
           batch.set(contentModuleRef, reference);
           batch.set(moduleContentRef, reference);
 
+          console.log("Duplicating content files...");
+
           const contentFilesRef = await db
             .collection("contents")
             .doc(content.id)
             .collection("files")
             .get();
+
           if (!contentFilesRef.empty) {
             for (const fileDoc of contentFilesRef.docs) {
               const fileData = fileDoc.data() as File;
               const newFileId = crypto.randomUUID();
+
+              console.log("Duplicating file:", fileData.original_filename);
 
               const { success: newCloudinaryFile, error: uploadError } =
                 await duplicateCloudinaryFile(
@@ -174,6 +215,8 @@ export const duplicateCourse = actionClient
                 continue;
               }
 
+              console.log("Creating new file reference...");
+
               const newFileRef = db.collection("files").doc(newFileId);
               const contentFileRef = db
                 .collection("contents")
@@ -186,6 +229,8 @@ export const duplicateCourse = actionClient
                 createdAt: new Date().toISOString(),
               };
 
+              console.log("Setting new file data in batch...");
+
               batch.set(newFileRef, {
                 ...fileData,
                 id: newFileId,
@@ -195,6 +240,8 @@ export const duplicateCourse = actionClient
               batch.set(contentFileRef, reference);
             }
           }
+
+          console.log("Duplicating content images...");
 
           const contentImagesRef = await db
             .collection("contents")
@@ -206,6 +253,8 @@ export const duplicateCourse = actionClient
               const imageData = imageDoc.data() as Image;
               const newImageId = crypto.randomUUID();
 
+              console.log("Duplicating image");
+
               const { success: newCloudinaryImage, error: uploadError } =
                 await duplicateCloudinaryImage(
                   imageData.secure_url,
@@ -213,10 +262,14 @@ export const duplicateCourse = actionClient
                 );
 
               if (uploadError || !newCloudinaryImage) {
-                console.error("Failed to duplicate image:", uploadError);
+                console.log("Failed to duplicate image:", uploadError);
 
                 continue;
               }
+
+              console.log("Creating new image reference...");
+
+              console.log("Setting new image data in batch...");
 
               const newImageRef = db.collection("images").doc(newImageId);
               const contentImageRef = db
@@ -240,17 +293,21 @@ export const duplicateCourse = actionClient
             }
           }
         }
-
-        await batch.commit();
-
-        revalidateTag("courses");
-        revalidateTag("modules");
-        revalidateTag("contents");
-        revalidateTag("files");
-        revalidateTag("images");
-
-        return { success: `Course ${courseData.name} duplicated successfully` };
       }
+
+      console.log("Committing module batch...");
+
+      await batch.commit();
+
+      console.log("Revalidating tags...");
+
+      revalidateTag("courses");
+      revalidateTag("modules");
+      revalidateTag("contents");
+      revalidateTag("files");
+      revalidateTag("images");
+
+      return { success: `Course ${courseData.name} duplicated successfully` };
     } catch (error) {
       console.error("Error duplicating course:", error);
 

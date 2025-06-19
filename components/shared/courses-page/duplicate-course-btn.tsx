@@ -22,9 +22,9 @@ type DuplicateCourseBtnProps = {
 
 const DuplicateCourseBtn = ({ courseId }: DuplicateCourseBtnProps) => {
   const { execute, isExecuting } = useAction(duplicateCourse, {
-    onSuccess: () => {
+    onSuccess: ({ data }) => {
       toast.dismiss();
-      toast.success("Course duplicated successfully");
+      toast.success(data?.error ? `Error: ${data.error}` : `${data?.success}`);
     },
     onError: (error) => {
       toast.dismiss();

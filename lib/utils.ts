@@ -57,8 +57,15 @@ export const duplicateCloudinaryImage = async (
     const blob = await response.blob();
 
     const file = new File([blob], fileName, { type: blob.type });
+    const hash = await getSHA256(file);
+    const { success, error } = await uploadImgToCloudinary(file);
 
-    return await uploadImgToCloudinary(file);
+    if (error || !success) {
+      console.error("Image upload to Cloudinary failed:", error);
+      return { error };
+    }
+
+    return { success, hash };
   } catch (error) {
     console.error("Image duplication failed:", error);
     return { error };
@@ -79,8 +86,16 @@ export const duplicateCloudinaryFile = async (
     const blob = await response.blob();
 
     const file = new File([blob], fileName, { type: blob.type });
+    const hash = await getSHA256(file);
+    const { success, error } = await uploadFileToCloudinary(file);
 
-    return await uploadFileToCloudinary(file);
+    if (error || !success) {
+      console.error("File upload to Cloudinary failed:", error);
+
+      return { error };
+    }
+
+    return { success, hash };
   } catch (error) {
     console.error("File duplication failed:", error);
     return { error };
