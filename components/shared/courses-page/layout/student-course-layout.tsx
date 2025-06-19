@@ -40,7 +40,7 @@ const StudentCourseLayout = ({
                 <ArrowLeft className="size-4" />
               </Button>
               <h1 className="max-w-xs font-medium text-sm truncate">
-                {courseCode} - {name} dfghkasdjg sdkgjhsdkfg hasdfksdfgjh
+                {courseCode} - {name}
               </h1>
             </div>
             <CourseSectionLink href={`/courses/${id}`}>
