@@ -1,6 +1,11 @@
+import {
+  uploadFileToCloudinary,
+  uploadImgToCloudinary,
+} from "@/server/actions/upload-to-cloudinary";
 import { clsx, type ClassValue } from "clsx";
 import { differenceInCalendarDays, isPast, isToday } from "date-fns";
 import { twMerge } from "tailwind-merge";
+import { getSHA256 } from "./sha-256";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -53,5 +58,65 @@ export const getDueText = (endDate: string) => {
   }
 
   const days = differenceInCalendarDays(end, new Date());
+  
   return `Due in ${days} day${days === 1 ? "" : "s"}`;
+}
+
+export const duplicateCloudinaryImage = async (
+  originalUrl: string,
+  fileName: string
+) => {
+  try {
+    const response = await fetch(originalUrl);
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch image: ${response.statusText}`);
+    }
+
+    const blob = await response.blob();
+
+    const file = new File([blob], fileName, { type: blob.type });
+    const hash = await getSHA256(file);
+    const { success, error } = await uploadImgToCloudinary(file);
+
+    if (error || !success) {
+      console.error("Image upload to Cloudinary failed:", error);
+      return { error };
+    }
+
+    return { success, hash };
+  } catch (error) {
+    console.error("Image duplication failed:", error);
+    return { error };
+  }
+};
+
+export const duplicateCloudinaryFile = async (
+  originalUrl: string,
+  fileName: string
+) => {
+  try {
+    const response = await fetch(originalUrl);
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch file: ${response.statusText}`);
+    }
+
+    const blob = await response.blob();
+
+    const file = new File([blob], fileName, { type: blob.type });
+    const hash = await getSHA256(file);
+    const { success, error } = await uploadFileToCloudinary(file);
+
+    if (error || !success) {
+      console.error("File upload to Cloudinary failed:", error);
+
+      return { error };
+    }
+
+    return { success, hash };
+  } catch (error) {
+    console.error("File duplication failed:", error);
+    return { error };
+  }
 };

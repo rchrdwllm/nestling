@@ -10,8 +10,9 @@ import { EllipsisVertical } from "lucide-react";
 import EditCourseBtn from "./edit-course-btn";
 import ArchiveCourseBtn from "./archive-course-btn";
 import EditAccessBtn from "./edit-access-btn";
-import { User } from "@/types";
+import { Course, User } from "@/types";
 import AddUserBtn from "./add-user-btn";
+import DuplicateCourseBtn from "./duplicate-course-btn";
 
 type CourseDetailsBtnProps = {
   course: string;
@@ -45,9 +46,6 @@ const CourseDetailsBtn = ({
           />
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <ArchiveCourseBtn course={course} />
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild>
           <AddUserBtn
             course={course}
             instructors={instructors || []}
@@ -58,6 +56,12 @@ const CourseDetailsBtn = ({
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <EditAccessBtn course={course} enrolledStudents={enrolledStudents} />
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <DuplicateCourseBtn courseId={(JSON.parse(course) as Course).id} />
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <ArchiveCourseBtn course={course} />
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
