@@ -49,7 +49,7 @@ export const createTicket = actionClient
         title: `New ticket: ${title}`,
         message: `A new ticket has been created by ${user.name}.`,
         type: "ticket",
-        url: `/help/tickets/${id}`,
+        url: `/support-tickets/${id}`,
         receiverIds: adminIds,
         senderId: user.id,
       });

@@ -65,7 +65,7 @@ export const replyToTicket = actionClient
         title: `New reply on ticket: ${ticket.title}`,
         message: `You have a new reply on your ticket: ${ticket.title}.`,
         type: "ticket_reply",
-        url: `/help/tickets/${ticketId}`,
+        url: `/support-tickets/${ticketId}`,
         receiverIds: [ticket.userId],
         senderId: user.id,
       });

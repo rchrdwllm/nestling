@@ -45,7 +45,12 @@ const Sidebar = () => {
           className="rounded-lg size-10 object-contain"
         />
       </Link>
-      <div className={cn("flex flex-col gap-4 justify-center items-center")}>
+      <div
+        className={cn(
+          "flex flex-col justify-center items-center gap-2 min-[1600px]:gap-4",
+          user.role === "student" && "gap-4"
+        )}
+      >
         {sidebarItems.map((item) => {
           if (item.href === "/notifications") {
             return <NotifLink key={item.href} {...item} />;

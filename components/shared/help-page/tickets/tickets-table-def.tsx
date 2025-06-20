@@ -31,7 +31,7 @@ export const ticketsTableCols: ColumnDef<Ticket>[] = [
       const ticketId = row.original.id;
 
       return (
-        <Link href={`/help/tickets/${ticketId}`}>
+        <Link href={`/support-tickets/${ticketId}`}>
           <Button className="px-0" variant="link">
             {title}
           </Button>
@@ -107,7 +107,7 @@ export const adminTicketsTableCols: ColumnDef<Ticket>[] = [
       const ticketId = row.original.id;
 
       return (
-        <Link href={`/help/tickets/${ticketId}`}>
+        <Link href={`/support-tickets/${ticketId}`}>
           <Button className="px-0" variant="link">
             {title}
           </Button>

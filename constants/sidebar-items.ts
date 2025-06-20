@@ -12,6 +12,7 @@ import {
   Users,
   LayoutDashboard,
   Search,
+  Tag,
 } from "lucide-react";
 import { ForwardRefExoticComponent, RefAttributes } from "react";
 
@@ -58,6 +59,11 @@ export const studentSidebarItems: SidebarItem[] = [
     label: "About",
     href: "/about",
     Icon: Info,
+  },
+  {
+    label: "Support Tickets",
+    href: "/support-tickets",
+    Icon: Tag,
   },
   {
     label: "Help",
@@ -113,6 +119,11 @@ export const instructorSidebarItems: SidebarItem[] = [
     Icon: Info,
   },
   {
+    label: "Support Tickets",
+    href: "/support-tickets",
+    Icon: Tag,
+  },
+  {
     label: "Help",
     href: "/help",
     Icon: CircleHelp,
@@ -164,6 +175,11 @@ export const adminSidebarItems: SidebarItem[] = [
     label: "About",
     href: "/about",
     Icon: Info,
+  },
+  {
+    label: "Support Tickets",
+    href: "/support-tickets",
+    Icon: Tag,
   },
   {
     label: "Help",

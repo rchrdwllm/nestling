@@ -139,11 +139,11 @@ const Help = () => {
         <div className="flex flex-col items-center gap-4">
           {user.role !== "admin" && <CreateTicketBtn />}
           {user.role === "admin" ? (
-            <Link href="/help/tickets">
+            <Link href="/support-tickets">
               <Button variant="link">View all support tickets</Button>
             </Link>
           ) : (
-            <Link href="/help/tickets">
+            <Link href="/support-tickets">
               <Button variant="link">View your tickets</Button>
             </Link>
           )}
