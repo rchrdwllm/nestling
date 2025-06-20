@@ -27,37 +27,8 @@ const UpcomingTasks = async () => {
           </p>
         </div>
         <CardContent className="flex flex-col gap-2 p-0">
-          {tasks.map((task, index) => (
-            <>
-              <UpcomingTaskCard key={task.id + index} {...task} />
-              <UpcomingTaskCard key={task.id + index} {...task} />
-              <UpcomingTaskCard key={task.id + index} {...task} />
-              <UpcomingTaskCard key={task.id + index} {...task} />
-              <UpcomingTaskCard key={task.id + index} {...task} />
-              <UpcomingTaskCard key={task.id + index} {...task} />
-              <UpcomingTaskCard key={task.id + index} {...task} />
-              <UpcomingTaskCard key={task.id + index} {...task} />
-              <UpcomingTaskCard key={task.id + index} {...task} />
-              <UpcomingTaskCard key={task.id + index} {...task} />
-              <UpcomingTaskCard key={task.id + index} {...task} />
-              <UpcomingTaskCard key={task.id + index} {...task} />
-              <UpcomingTaskCard key={task.id + index} {...task} />
-              <UpcomingTaskCard key={task.id + index} {...task} />
-              <UpcomingTaskCard key={task.id + index} {...task} />
-              <UpcomingTaskCard key={task.id + index} {...task} />
-              <UpcomingTaskCard key={task.id + index} {...task} />
-              <UpcomingTaskCard key={task.id + index} {...task} />
-              <UpcomingTaskCard key={task.id + index} {...task} />
-              <UpcomingTaskCard key={task.id + index} {...task} />
-              <UpcomingTaskCard key={task.id + index} {...task} />
-              <UpcomingTaskCard key={task.id + index} {...task} />
-              <UpcomingTaskCard key={task.id + index} {...task} />
-              <UpcomingTaskCard key={task.id + index} {...task} />
-              <UpcomingTaskCard key={task.id + index} {...task} />
-              <UpcomingTaskCard key={task.id + index} {...task} />
-              <UpcomingTaskCard key={task.id + index} {...task} />
-              <UpcomingTaskCard key={task.id + index} {...task} />
-            </>
+          {tasks.map((task) => (
+            <UpcomingTaskCard key={task.id} {...task} />
           ))}
         </CardContent>
       </div>
