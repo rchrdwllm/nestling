@@ -1,4 +1,5 @@
 import { clsx, type ClassValue } from "clsx";
+import { differenceInCalendarDays, isPast, isToday } from "date-fns";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
@@ -36,4 +37,21 @@ export const addAttachmentFlag = (cloudinaryUrl: string): string => {
   }
 
   return cloudinaryUrl;
+};
+
+export const getDueText = (endDate: string) => {
+  if (!endDate) return "";
+
+  const end = new Date(endDate);
+
+  if (isToday(end)) {
+    return "Due today";
+  }
+
+  if (isPast(end) && !isToday(end)) {
+    return "Overdue";
+  }
+
+  const days = differenceInCalendarDays(end, new Date());
+  return `Due in ${days} day${days === 1 ? "" : "s"}`;
 };

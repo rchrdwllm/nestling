@@ -2,6 +2,7 @@ import FadeInWrapper from "@/components/wrappers/fadein-wrapper";
 import MyCourses from "@/components/student-access/dashboard-page/my-courses";
 import RecentAnnouncements from "@/components/student-access/dashboard-page/recent-announcements";
 import Searcher from "@/components/shared/search/general-search/searcher";
+import UpcomingTasks from "@/components/student-access/dashboard-page/upcoming-tasks";
 
 const StudentDashboardPage = async ({
   searchParams,
@@ -22,6 +23,7 @@ const StudentDashboardPage = async ({
         </div>
         <MyCourses />
         <RecentAnnouncements />
+        <UpcomingTasks />
       </div>
     </FadeInWrapper>
   );
