@@ -2,7 +2,7 @@
 
 import { useCurrentUser } from "@/hooks/use-current-user";
 import StudentTaskCard from "./student-task-card";
-import EmployeeTaskCard from "./employee-task-card";
+import UpcomingTaskCard from "../../admin-access/dashboard-page/upcoming-task-card";
 
 type SidePanelTasksProps = {
   tasks: any[];
@@ -21,10 +21,10 @@ const SidePanelTasks = ({ tasks }: SidePanelTasksProps) => {
           user.role === "student" ? (
             tasks.map((task) => <StudentTaskCard key={task.id} {...task} />)
           ) : (
-            tasks.map((task) => <EmployeeTaskCard key={task.id} {...task} />)
+            tasks.map((task) => <UpcomingTaskCard key={task.id} {...task} />)
           )
         ) : (
-          <p className="text-sm text-muted-foreground">No pending tasks</p>
+          <p className="text-muted-foreground text-sm">No pending tasks</p>
         )}
       </div>
     </div>

@@ -1,4 +1,4 @@
-import EmployeeTaskCard from "@/components/shared/layout/employee-task-card";
+import UpcomingTaskCard from "@/components/admin-access/dashboard-page/upcoming-task-card";
 import { CardContent } from "@/components/ui/card";
 import ErrorToast from "@/components/ui/error-toast";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -29,34 +29,34 @@ const UpcomingTasks = async () => {
         <CardContent className="flex flex-col gap-2 p-0">
           {tasks.map((task, index) => (
             <>
-              <EmployeeTaskCard key={task.id + index} {...task} />
-              <EmployeeTaskCard key={task.id + index} {...task} />
-              <EmployeeTaskCard key={task.id + index} {...task} />
-              <EmployeeTaskCard key={task.id + index} {...task} />
-              <EmployeeTaskCard key={task.id + index} {...task} />
-              <EmployeeTaskCard key={task.id + index} {...task} />
-              <EmployeeTaskCard key={task.id + index} {...task} />
-              <EmployeeTaskCard key={task.id + index} {...task} />
-              <EmployeeTaskCard key={task.id + index} {...task} />
-              <EmployeeTaskCard key={task.id + index} {...task} />
-              <EmployeeTaskCard key={task.id + index} {...task} />
-              <EmployeeTaskCard key={task.id + index} {...task} />
-              <EmployeeTaskCard key={task.id + index} {...task} />
-              <EmployeeTaskCard key={task.id + index} {...task} />
-              <EmployeeTaskCard key={task.id + index} {...task} />
-              <EmployeeTaskCard key={task.id + index} {...task} />
-              <EmployeeTaskCard key={task.id + index} {...task} />
-              <EmployeeTaskCard key={task.id + index} {...task} />
-              <EmployeeTaskCard key={task.id + index} {...task} />
-              <EmployeeTaskCard key={task.id + index} {...task} />
-              <EmployeeTaskCard key={task.id + index} {...task} />
-              <EmployeeTaskCard key={task.id + index} {...task} />
-              <EmployeeTaskCard key={task.id + index} {...task} />
-              <EmployeeTaskCard key={task.id + index} {...task} />
-              <EmployeeTaskCard key={task.id + index} {...task} />
-              <EmployeeTaskCard key={task.id + index} {...task} />
-              <EmployeeTaskCard key={task.id + index} {...task} />
-              <EmployeeTaskCard key={task.id + index} {...task} />
+              <UpcomingTaskCard key={task.id + index} {...task} />
+              <UpcomingTaskCard key={task.id + index} {...task} />
+              <UpcomingTaskCard key={task.id + index} {...task} />
+              <UpcomingTaskCard key={task.id + index} {...task} />
+              <UpcomingTaskCard key={task.id + index} {...task} />
+              <UpcomingTaskCard key={task.id + index} {...task} />
+              <UpcomingTaskCard key={task.id + index} {...task} />
+              <UpcomingTaskCard key={task.id + index} {...task} />
+              <UpcomingTaskCard key={task.id + index} {...task} />
+              <UpcomingTaskCard key={task.id + index} {...task} />
+              <UpcomingTaskCard key={task.id + index} {...task} />
+              <UpcomingTaskCard key={task.id + index} {...task} />
+              <UpcomingTaskCard key={task.id + index} {...task} />
+              <UpcomingTaskCard key={task.id + index} {...task} />
+              <UpcomingTaskCard key={task.id + index} {...task} />
+              <UpcomingTaskCard key={task.id + index} {...task} />
+              <UpcomingTaskCard key={task.id + index} {...task} />
+              <UpcomingTaskCard key={task.id + index} {...task} />
+              <UpcomingTaskCard key={task.id + index} {...task} />
+              <UpcomingTaskCard key={task.id + index} {...task} />
+              <UpcomingTaskCard key={task.id + index} {...task} />
+              <UpcomingTaskCard key={task.id + index} {...task} />
+              <UpcomingTaskCard key={task.id + index} {...task} />
+              <UpcomingTaskCard key={task.id + index} {...task} />
+              <UpcomingTaskCard key={task.id + index} {...task} />
+              <UpcomingTaskCard key={task.id + index} {...task} />
+              <UpcomingTaskCard key={task.id + index} {...task} />
+              <UpcomingTaskCard key={task.id + index} {...task} />
             </>
           ))}
         </CardContent>

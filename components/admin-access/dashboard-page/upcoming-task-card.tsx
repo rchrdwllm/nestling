@@ -3,7 +3,7 @@ import { Task } from "@/types";
 import { Calendar } from "lucide-react";
 import Link from "next/link";
 
-const EmployeeTaskCard = ({ title, projectId, startDate, endDate }: Task) => {
+const UpcomingTaskCard = ({ title, projectId, startDate, endDate }: Task) => {
   return (
     <Link
       href={`/projects/${projectId}`}
@@ -20,4 +20,4 @@ const EmployeeTaskCard = ({ title, projectId, startDate, endDate }: Task) => {
   );
 };
 
-export default EmployeeTaskCard;
+export default UpcomingTaskCard;
