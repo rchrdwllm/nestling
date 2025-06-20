@@ -64,6 +64,12 @@ const StudentCourseLayout = ({
             >
               People
             </CourseSectionLink>
+            <CourseSectionLink
+              segments={["grades"]}
+              href={`/courses/${id}/grades`}
+            >
+              Grades
+            </CourseSectionLink>
           </aside>
         </ScrollArea>
       )}

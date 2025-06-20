@@ -8,6 +8,7 @@ import {
 import { Content } from "@/types";
 import Link from "next/link";
 import GradeStudentForm from "./grade-student-form";
+import ErrorToast from "@/components/ui/error-toast";
 
 type AssignmentCardProps = Content & {
   studentId: string;
@@ -24,13 +25,15 @@ const AssignmentCard = async ({
     await getLatestAssignmentSubmission(id, studentId);
 
   if (submissionError) {
-    console.error("Error fetching student submissions: ", submissionError);
-
-    return <h1>Error fetching student submissions</h1>;
+    return (
+      <ErrorToast
+        error={"Error fetching student submission" + submissionError}
+      />
+    );
   }
 
   return (
-    <article className="h-10 flex justify-between items-center">
+    <article className="flex justify-between items-center h-10">
       <Link href={`/courses/${courseId}/modules/content/${id}`}>
         <Button variant="link" className="p-0">
           {title}

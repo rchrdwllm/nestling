@@ -1,11 +1,5 @@
-import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import {
-  getAssignmentSubmissions,
-  getStudentCourseSubmissions,
-} from "@/lib/submission";
 import { Content, User } from "@/types";
-import Link from "next/link";
 import AssignmentCard from "./assignment-card";
 
 type GradeStudentCardProps = User & {
@@ -19,8 +13,8 @@ const GradeStudentCard = async ({
   id,
 }: GradeStudentCardProps) => {
   return (
-    <Card className="p-4 flex flex-col gap-4">
-      <h1 className="text-xl font-semibold">{name}</h1>
+    <Card className="flex flex-col gap-4 p-4">
+      <h1 className="font-semibold text-xl">{name}</h1>
       {!assignments.length ? (
         <p className="text-muted-foreground">No assignments found</p>
       ) : (

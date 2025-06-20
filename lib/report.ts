@@ -4,6 +4,93 @@ import { Announcement, Content, Submission, User } from "@/types";
 import { db } from "./firebase";
 import { unstable_cache } from "next/cache";
 
+export const generateStudentGradesReport = unstable_cache(
+  async (courseId: string, studentId: string) => {
+    try {
+      const studentSnapshot = await db.collection("users").doc(studentId).get();
+
+      if (!studentSnapshot.exists) {
+        return { error: `Student ${studentId} not found` };
+      }
+
+      const studentData = studentSnapshot.data() as User;
+
+      const assignmentsSnapshot = await db
+        .collection("contents")
+        .where("courseId", "==", courseId)
+        .where("type", "==", "assignment")
+        .get();
+
+      if (assignmentsSnapshot.empty) {
+        return { success: [] };
+      }
+
+      const assignments = assignmentsSnapshot.docs.map((doc) =>
+        doc.data()
+      ) as Content[];
+
+      const allSubmissions = await db
+        .collection("submissions")
+        .where(
+          "contentId",
+          "in",
+          assignments.map((a) => a.id)
+        )
+        .where("studentId", "==", studentId)
+        .orderBy("createdAt", "desc")
+        .get();
+
+      const submissionsData = allSubmissions.docs.map(
+        (doc) => doc.data() as Submission
+      );
+
+      const row: Record<string, any> = {
+        student: `${studentData.firstName} ${studentData.lastName}`,
+        studentId: studentData.id,
+      };
+
+      let totalGrade = 0;
+      let totalMaxPoints = 0;
+
+      assignments.forEach((assignment) => {
+        const studentSubmissions = submissionsData.filter(
+          (submission) =>
+            submission.studentId === studentId &&
+            submission.contentId === assignment.id
+        );
+
+        const latestSubmission =
+          studentSubmissions.length > 0 ? studentSubmissions[0] : null;
+
+        const grade =
+          latestSubmission?.grade == null
+            ? "Not yet graded"
+            : latestSubmission.grade;
+        const maxPoints = assignment.points!;
+
+        row[`${assignment.title}`] = grade;
+
+        totalGrade += typeof grade === "number" ? grade : 0;
+        totalMaxPoints += maxPoints;
+      });
+
+      const overallPercentage =
+        totalMaxPoints > 0
+          ? Math.round((totalGrade / totalMaxPoints) * 100)
+          : 0;
+      row.overallPercentage = `${overallPercentage}%`;
+
+      return { success: [row] };
+    } catch (error) {
+      console.error("Error generating student grades report: ", error);
+
+      return { error };
+    }
+  },
+  [],
+  { revalidate: 60 * 60, tags: ["submissions"] }
+);
+
 export const generateGradesReport = unstable_cache(
   async (studentIds: string[], courseId: string) => {
     try {
@@ -24,6 +111,7 @@ export const generateGradesReport = unstable_cache(
       if (assignmentsSnapshot.empty) {
         return { success: [] };
       }
+
       const assignments = assignmentsSnapshot.docs.map((doc) =>
         doc.data()
       ) as Content[];
@@ -61,12 +149,15 @@ export const generateGradesReport = unstable_cache(
           const latestSubmission =
             studentSubmissions.length > 0 ? studentSubmissions[0] : null;
 
-          const grade = latestSubmission?.grade || 0;
-          const maxPoints = assignment.points || 100;
+          const grade =
+            latestSubmission?.grade == null
+              ? "Not yet graded"
+              : latestSubmission.grade;
+          const maxPoints = assignment.points!;
 
           row[`${assignment.title}`] = grade;
 
-          totalGrade += grade;
+          totalGrade += typeof grade === "number" ? grade : 0;
           totalMaxPoints += maxPoints;
         });
 
