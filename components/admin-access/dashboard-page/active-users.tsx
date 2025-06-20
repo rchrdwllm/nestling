@@ -38,17 +38,20 @@ const ActiveUsers = ({ monthlyActiveUsers }: ActiveUserProps) => {
   }, [monthlyActiveUsers]);
 
   return (
-    <Card>
+    <Card className="flex flex-col h-full max-h-[550px]">
       <CardHeader>
         <CardTitle className="font-mono text-6xl">{totalUsers}</CardTitle>
         <CardDescription>
           Total active users for the last 6 months
         </CardDescription>
       </CardHeader>
-      <CardContent>
-        <ChartContainer className="max-h-[450px] w-full" config={chartConfig}>
+      <CardContent className="flex-1">
+        <ChartContainer
+          className="w-full h-full max-h-[550px]"
+          config={chartConfig}
+        >
           <AreaChart
-            className="max-h-[450px] w-full"
+            className="w-full max-h-[550px]"
             accessibilityLayer
             data={monthlyActiveUsers}
             margin={{

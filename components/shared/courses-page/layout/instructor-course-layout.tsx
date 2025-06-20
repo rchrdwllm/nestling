@@ -103,7 +103,7 @@ const InstructorCourseLayout = ({
           isToggled ? "col-span-6" : "col-span-8"
         )}
       >
-        <div className="px-3 pt-2">
+        <div className="px-3 pt-6">
           <Button
             size="sm"
             className="text-muted-foreground"

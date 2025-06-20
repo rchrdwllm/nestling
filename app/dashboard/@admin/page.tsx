@@ -10,6 +10,7 @@ import { getMostViewedCourses, getTopCoursesByEnrollments } from "@/lib/course";
 import { getActiveUsersFromMonths } from "@/lib/monthly-activity";
 import FadeInWrapper from "@/components/wrappers/fadein-wrapper";
 import Searcher from "@/components/shared/search/general-search/searcher";
+import UpcomingTasks from "@/components/admin-access/dashboard-page/upcoming-tasks";
 
 const AdminDashboardPage = async ({
   searchParams,
@@ -65,8 +66,11 @@ const AdminDashboardPage = async ({
           <article className="col-span-3">
             <TopCourses data={topCourses} />
           </article>
-          <article className="col-span-6">
+          <article className="col-span-3">
             <ActiveUsers monthlyActiveUsers={activeUsers.monthlyActiveUsers} />
+          </article>
+          <article className="col-span-3">
+            <UpcomingTasks />
           </article>
         </div>
         <div className="flex flex-col gap-4">

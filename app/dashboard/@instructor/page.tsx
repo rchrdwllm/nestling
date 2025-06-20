@@ -1,6 +1,7 @@
 import MyCourses from "@/components/instructor-access/dashboard-page/my-courses";
 import FadeInWrapper from "@/components/wrappers/fadein-wrapper";
 import Searcher from "@/components/shared/search/general-search/searcher";
+import UpcomingTasks from "@/components/admin-access/dashboard-page/upcoming-tasks";
 
 const InstructorDashboardPage = async ({
   searchParams,
@@ -20,6 +21,7 @@ const InstructorDashboardPage = async ({
           <hr />
         </div>
         <MyCourses />
+        <UpcomingTasks />
       </div>
     </FadeInWrapper>
   );

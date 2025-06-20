@@ -39,7 +39,7 @@ const MostViewedCourses = ({ data }: MostViewedCourses) => {
   };
 
   return (
-    <Card className="flex flex-col p-4 h-full">
+    <Card className="flex flex-col p-4 h-full max-h-[550px]">
       <div className="flex flex-col gap-1">
         <h1 className="font-semibold text-xl">Most Viewed Courses</h1>
         <p className="text-muted-foreground text-sm">
