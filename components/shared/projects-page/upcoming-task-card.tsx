@@ -4,37 +4,28 @@ import { projectPriorities } from "@/constants/project";
 import { Task } from "@/types";
 import { Calendar } from "lucide-react";
 import Link from "next/link";
-import { useMemo } from "react";
-import { differenceInCalendarDays, isToday, isPast } from "date-fns";
-import { cn } from "@/lib/utils";
+import { isPast } from "date-fns";
+import { cn, getDueText } from "@/lib/utils";
+import { getProjectById } from "@/lib/project";
+import ErrorToast from "@/components/ui/error-toast";
+import ClickableProjectBadge from "./clickable-project-badge";
 
-const UpcomingTaskCard = ({
+const UpcomingTaskCard = async ({
   title,
   projectId,
   endDate,
   description,
   priority,
 }: Task) => {
-  const taskPriority = useMemo(
-    () => projectPriorities.find((p) => p.value === priority)!,
-    [priority]
+  const projectPriority = projectPriorities.find((p) => p.value === priority)!;
+  const dueDate = getDueText(endDate!);
+  const { success: project, error: projectError } = await getProjectById(
+    projectId
   );
-  const dueDate = useMemo(() => {
-    if (!endDate) return "";
 
-    const end = new Date(endDate);
-
-    if (isToday(end)) {
-      return "Due today";
-    }
-
-    if (isPast(end) && !isToday(end)) {
-      return "Overdue";
-    }
-
-    const days = differenceInCalendarDays(end, new Date());
-    return `Due in ${days} day${days === 1 ? "" : "s"}`;
-  }, [endDate]);
+  if (projectError || !project) {
+    return <ErrorToast error={"Error fetching project: " + projectError} />;
+  }
 
   return (
     <Link href={`/projects/${projectId}`}>
@@ -46,8 +37,12 @@ const UpcomingTaskCard = ({
           )}
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          <Badge style={{ backgroundColor: taskPriority.color }}>
-            {taskPriority.name}
+          <ClickableProjectBadge
+            projectId={projectId}
+            projectTitle={project.title}
+          />
+          <Badge style={{ backgroundColor: projectPriority.color }}>
+            {projectPriority.name}
           </Badge>
           <p
             className={cn(

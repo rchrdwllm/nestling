@@ -5,6 +5,26 @@ import { db } from "./firebase";
 import { Task } from "@/types";
 import { getFile } from "./file";
 
+export const getAllTasks = unstable_cache(
+  async () => {
+    try {
+      const tasksSnapshot = await db
+        .collection("tasks")
+        .orderBy("endDate", "asc")
+        .get();
+      const tasks = tasksSnapshot.docs.map((doc) => doc.data()) as Task[];
+
+      return { success: tasks };
+    } catch (error) {
+      console.error("Error fetching all tasks:", error);
+
+      return { error: JSON.stringify(error) };
+    }
+  },
+  ["allTasks"],
+  { revalidate: 60 * 60, tags: ["tasks"] }
+);
+
 export const getIncompleteTasks = unstable_cache(
   async () => {
     try {
@@ -97,7 +117,7 @@ export const getUserTasks = unstable_cache(
     } catch (error) {
       console.error("Error fetching project tasks:", error);
 
-      return { error };
+      return { error: JSON.stringify(error) };
     }
   },
   ["userId"],

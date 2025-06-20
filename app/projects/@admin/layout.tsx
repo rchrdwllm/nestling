@@ -1,4 +1,5 @@
 import CreateProjectDialog from "@/components/admin-access/projects-page/create-project-dialog";
+import ErrorToast from "@/components/ui/error-toast";
 import { getUnarchivedAdmins, getUnarchivedInstructors } from "@/lib/user";
 import { ReactNode } from "react";
 
@@ -7,14 +8,12 @@ const Layout = async ({ children }: { children: ReactNode }) => {
   const { success: instructors, error: instructorsError } =
     await getUnarchivedInstructors();
 
-  if (adminsError || instructorsError) {
-    console.error("Error fetching data:", adminsError || instructorsError);
-
-    return <div>Error loading data. Please try again later.</div>;
-  }
-
-  if (!admins || !instructors) {
-    return <div>No data available.</div>;
+  if (adminsError || instructorsError || !admins || !instructors) {
+    return (
+      <ErrorToast
+        error={"Error fetching data: " + (adminsError || instructorsError)}
+      />
+    );
   }
 
   return (

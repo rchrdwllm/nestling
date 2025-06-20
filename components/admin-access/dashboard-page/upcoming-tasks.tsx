@@ -1,4 +1,4 @@
-import UpcomingTaskCard from "@/components/admin-access/dashboard-page/upcoming-task-card";
+import UpcomingTaskCard from "@/components/shared/projects-page/upcoming-task-card";
 import { CardContent } from "@/components/ui/card";
 import ErrorToast from "@/components/ui/error-toast";
 import { ScrollArea } from "@/components/ui/scroll-area";

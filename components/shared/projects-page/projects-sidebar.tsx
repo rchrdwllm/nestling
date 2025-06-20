@@ -24,6 +24,9 @@ const ProjectsSidebar = async () => {
         <CourseSectionLink segments={["projects"]} href="/projects">
           Home
         </CourseSectionLink>
+        <CourseSectionLink segments={["tasks"]} href="/projects/tasks">
+          Tasks
+        </CourseSectionLink>
         <CourseSectionLink segments={["archive"]} href="/projects/archive">
           Archive
         </CourseSectionLink>

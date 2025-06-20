@@ -8,6 +8,6 @@ interface ProjectsSidebarState {
 }
 
 export const useProjectsSidebarStore = create<ProjectsSidebarState>((set) => ({
-  isToggled: false,
+  isToggled: true,
   setIsToggled: (value: boolean) => set({ isToggled: value }),
 }));
