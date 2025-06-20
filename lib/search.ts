@@ -33,25 +33,97 @@ export const searchStudents = unstable_cache(
     const cacheKey = `students-${query.toLowerCase()}`;
 
     const allStudents = await getCachedData(cacheKey, async () => {
-      // Use server-side pagination with Firestore compound queries
       const queryLower = query.toLowerCase();
+      const students: User[] = [];
 
-      // More efficient approach: use Firestore's text search capabilities with ordering
-      const studentsSnapshot = await db
-        .collection("users")
-        .where("role", "==", "student")
-        .orderBy("name")
-        .limit(100) // Limit initial fetch to reduce reads
-        .get();
+      // Strategy: Use multiple targeted queries instead of client-side filtering
+      // This ensures we don't miss results due to arbitrary limits
 
-      return studentsSnapshot.docs
-        .map((doc) => doc.data() as User)
-        .filter(
-          (student) =>
-            student.name?.toLowerCase().includes(queryLower) ||
-            student.email?.toLowerCase().includes(queryLower) ||
-            student.id?.toLowerCase().includes(queryLower)
+      // Query 1: Search by name using range queries (more efficient than client-side filter)
+      const nameQueries = [];
+
+      // For name search, use startAt/endAt for prefix matching
+      if (queryLower.length >= 2) {
+        nameQueries.push(
+          db
+            .collection("users")
+            .where("role", "==", "student")
+            .orderBy("name")
+            .startAt(queryLower)
+            .endAt(queryLower + "\uf8ff")
+            .limit(50)
+            .get()
         );
+      }
+
+      // Query 2: Search by email (if query looks like email or contains @)
+      const emailQueries = [];
+      if (queryLower.includes("@") || queryLower.includes(".")) {
+        emailQueries.push(
+          db
+            .collection("users")
+            .where("role", "==", "student")
+            .orderBy("email")
+            .startAt(queryLower)
+            .endAt(queryLower + "\uf8ff")
+            .limit(50)
+            .get()
+        );
+      }
+
+      // Execute queries in parallel
+      const queryPromises = [...nameQueries, ...emailQueries];
+
+      if (queryPromises.length > 0) {
+        const snapshots = await Promise.all(queryPromises);
+        const foundUsers = new Set<string>(); // Use Set to avoid duplicates
+
+        snapshots.forEach((snapshot) => {
+          snapshot.docs.forEach((doc) => {
+            const user = doc.data() as User;
+            if (!foundUsers.has(user.id)) {
+              // Additional client-side filtering for partial matches
+              if (
+                user.name?.toLowerCase().includes(queryLower) ||
+                user.email?.toLowerCase().includes(queryLower) ||
+                user.id?.toLowerCase().includes(queryLower)
+              ) {
+                foundUsers.add(user.id);
+                students.push(user);
+              }
+            }
+          });
+        });
+      }
+
+      // If we still have very few results, do a broader search
+      if (students.length < 10) {
+        const fallbackSnapshot = await db
+          .collection("users")
+          .where("role", "==", "student")
+          .orderBy("name")
+          .limit(200) // Increased limit for broader search
+          .get();
+
+        const fallbackStudents = fallbackSnapshot.docs
+          .map((doc) => doc.data() as User)
+          .filter((student) => {
+            const matchesQuery =
+              student.name?.toLowerCase().includes(queryLower) ||
+              student.email?.toLowerCase().includes(queryLower) ||
+              student.id?.toLowerCase().includes(queryLower);
+
+            // Avoid duplicates from previous queries
+            return (
+              matchesQuery &&
+              !students.some((existing) => existing.id === student.id)
+            );
+          });
+
+        students.push(...fallbackStudents);
+      }
+
+      return students;
     });
 
     const totalStudents = allStudents.length;
@@ -81,22 +153,88 @@ export const searchInstructors = unstable_cache(
 
     const allInstructors = await getCachedData(cacheKey, async () => {
       const queryLower = query.toLowerCase();
+      const instructors: User[] = [];
 
-      const instructorsSnapshot = await db
-        .collection("users")
-        .where("role", "==", "instructor")
-        .orderBy("name")
-        .limit(100) // Limit initial fetch
-        .get();
+      // Use targeted queries instead of arbitrary limits
+      const nameQueries = [];
 
-      return instructorsSnapshot.docs
-        .map((doc) => doc.data() as User)
-        .filter(
-          (instructor) =>
-            instructor.name?.toLowerCase().includes(queryLower) ||
-            instructor.email?.toLowerCase().includes(queryLower) ||
-            instructor.id?.toLowerCase().includes(queryLower)
+      if (queryLower.length >= 2) {
+        nameQueries.push(
+          db
+            .collection("users")
+            .where("role", "==", "instructor")
+            .orderBy("name")
+            .startAt(queryLower)
+            .endAt(queryLower + "\uf8ff")
+            .limit(50)
+            .get()
         );
+      }
+
+      const emailQueries = [];
+      if (queryLower.includes("@") || queryLower.includes(".")) {
+        emailQueries.push(
+          db
+            .collection("users")
+            .where("role", "==", "instructor")
+            .orderBy("email")
+            .startAt(queryLower)
+            .endAt(queryLower + "\uf8ff")
+            .limit(50)
+            .get()
+        );
+      }
+
+      const queryPromises = [...nameQueries, ...emailQueries];
+
+      if (queryPromises.length > 0) {
+        const snapshots = await Promise.all(queryPromises);
+        const foundUsers = new Set<string>();
+
+        snapshots.forEach((snapshot) => {
+          snapshot.docs.forEach((doc) => {
+            const user = doc.data() as User;
+            if (!foundUsers.has(user.id)) {
+              if (
+                user.name?.toLowerCase().includes(queryLower) ||
+                user.email?.toLowerCase().includes(queryLower) ||
+                user.id?.toLowerCase().includes(queryLower)
+              ) {
+                foundUsers.add(user.id);
+                instructors.push(user);
+              }
+            }
+          });
+        });
+      }
+
+      // Fallback search if few results (instructors are typically fewer)
+      if (instructors.length < 5) {
+        const fallbackSnapshot = await db
+          .collection("users")
+          .where("role", "==", "instructor")
+          .orderBy("name")
+          .limit(100)
+          .get();
+
+        const fallbackInstructors = fallbackSnapshot.docs
+          .map((doc) => doc.data() as User)
+          .filter((instructor) => {
+            const matchesQuery =
+              instructor.name?.toLowerCase().includes(queryLower) ||
+              instructor.email?.toLowerCase().includes(queryLower) ||
+              instructor.id?.toLowerCase().includes(queryLower);
+
+            return (
+              matchesQuery &&
+              !instructors.some((existing) => existing.id === instructor.id)
+            );
+          });
+
+        instructors.push(...fallbackInstructors);
+      }
+
+      return instructors;
     });
 
     const totalInstructors = allInstructors.length;
@@ -171,22 +309,84 @@ export const searchCourses = unstable_cache(
 
     const allCourses = await getCachedData(cacheKey, async () => {
       const queryLower = query.toLowerCase();
+      const courses: Course[] = [];
 
-      const courseRefsSnapshot = await db
-        .collection("courses")
-        .orderBy("name")
-        .limit(200) // Reasonable limit for courses
-        .get();
+      // Targeted queries for courses
+      const nameQueries = [];
 
-      const courses = courseRefsSnapshot.docs.map(
-        (doc) => doc.data() as Course
-      );
+      if (queryLower.length >= 2) {
+        nameQueries.push(
+          db
+            .collection("courses")
+            .orderBy("name")
+            .startAt(queryLower)
+            .endAt(queryLower + "\uf8ff")
+            .limit(100)
+            .get()
+        );
+      }
 
-      return courses.filter(
-        (course) =>
-          course.name?.toLowerCase().includes(queryLower) ||
-          course.courseCode?.toLowerCase().includes(queryLower)
-      );
+      // Search by course code if query looks like a code (short alphanumeric)
+      const codeQueries = [];
+      if (queryLower.length <= 10 && /^[a-z0-9\s-]+$/i.test(queryLower)) {
+        codeQueries.push(
+          db
+            .collection("courses")
+            .orderBy("courseCode")
+            .startAt(queryLower)
+            .endAt(queryLower + "\uf8ff")
+            .limit(100)
+            .get()
+        );
+      }
+
+      const queryPromises = [...nameQueries, ...codeQueries];
+
+      if (queryPromises.length > 0) {
+        const snapshots = await Promise.all(queryPromises);
+        const foundCourses = new Set<string>();
+
+        snapshots.forEach((snapshot) => {
+          snapshot.docs.forEach((doc) => {
+            const course = doc.data() as Course;
+            if (!foundCourses.has(course.id)) {
+              if (
+                course.name?.toLowerCase().includes(queryLower) ||
+                course.courseCode?.toLowerCase().includes(queryLower)
+              ) {
+                foundCourses.add(course.id);
+                courses.push(course);
+              }
+            }
+          });
+        });
+      }
+
+      // Fallback for broader search if needed
+      if (courses.length < 10) {
+        const fallbackSnapshot = await db
+          .collection("courses")
+          .orderBy("name")
+          .limit(300)
+          .get();
+
+        const fallbackCourses = fallbackSnapshot.docs
+          .map((doc) => doc.data() as Course)
+          .filter((course) => {
+            const matchesQuery =
+              course.name?.toLowerCase().includes(queryLower) ||
+              course.courseCode?.toLowerCase().includes(queryLower);
+
+            return (
+              matchesQuery &&
+              !courses.some((existing) => existing.id === course.id)
+            );
+          });
+
+        courses.push(...fallbackCourses);
+      }
+
+      return courses;
     });
 
     const totalCourses = allCourses.length;
