@@ -51,7 +51,8 @@ const DuplicateCourseBtn = ({ courseId }: DuplicateCourseBtnProps) => {
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
           <AlertDialogDescription>
-            Do you really want to duplicate this course?
+            Do you really want to duplicate this course? Duplicating the course
+            will create a copy of this course but without any students enrolled.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
