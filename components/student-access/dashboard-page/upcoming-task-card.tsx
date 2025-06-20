@@ -1,4 +1,3 @@
-import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Content } from "@/types";
 import { Calendar } from "lucide-react";
