@@ -342,6 +342,8 @@ export type Ticket = {
   userId: string;
   createdAt: string;
   updatedAt: string;
+  isArchived: boolean;
+  archivedAt: string | null;
 };
 
 export type TicketReply = {

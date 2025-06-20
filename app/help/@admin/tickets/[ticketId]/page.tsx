@@ -6,6 +6,7 @@ import CreateReplyBtn from "@/components/shared/help-page/tickets/create-reply-b
 import { getTicketReplies } from "@/lib/ticket-reply";
 import TicketReplyCard from "@/components/shared/help-page/tickets/ticket-reply-card";
 import Searcher from "@/components/shared/search/general-search/searcher";
+import ArchiveTicketBtn from "@/components/admin-access/help-page/archive-ticket-btn";
 
 const TicketPage = async ({
   params,
@@ -39,6 +40,10 @@ const TicketPage = async ({
           <h1 className="flex-1 font-semibold text-3xl">
             Ticket: {ticket.title}
           </h1>
+          <ArchiveTicketBtn
+            ticketId={ticket.id}
+            isArchived={ticket.isArchived}
+          />
           <UpdateTicketBtn ticketStatus={ticket.status} ticketId={ticket.id} />
         </div>
         <hr />
@@ -50,17 +55,25 @@ const TicketPage = async ({
           : ticketReplies.map((reply) => (
               <TicketReplyCard key={reply.id} {...reply} />
             ))}
-        {ticket.status !== "closed" && <CreateReplyBtn ticketId={ticket.id} />}
+        {(ticket.status !== "closed" || ticket.isArchived) && (
+          <CreateReplyBtn ticketId={ticket.id} />
+        )}
         {ticket.status === "closed" && (
           <p className="py-20 text-muted-foreground text-sm text-center">
             This ticket has been closed
           </p>
         )}
-        {!ticketReplies.length && ticket.status !== "closed" && (
+        {ticket.isArchived && (
           <p className="py-20 text-muted-foreground text-sm text-center">
-            No replies yet
+            This ticket has been archived
           </p>
         )}
+        {!ticketReplies.length &&
+          (ticket.status !== "closed" || ticket.isArchived) && (
+            <p className="py-20 text-muted-foreground text-sm text-center">
+              No replies yet
+            </p>
+          )}
       </section>
     </div>
   );

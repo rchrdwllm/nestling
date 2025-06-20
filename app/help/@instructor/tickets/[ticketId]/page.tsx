@@ -49,17 +49,22 @@ const TicketPage = async ({
           : ticketReplies.map((reply) => (
               <TicketReplyCard key={reply.id} {...reply} />
             ))}
-        {ticket.status !== "closed" && <CreateReplyBtn ticketId={ticket.id} />}
         {ticket.status === "closed" && (
           <p className="py-20 text-muted-foreground text-sm text-center">
             This ticket has been closed
           </p>
         )}
-        {!ticketReplies.length && ticket.status !== "closed" && (
+        {ticket.isArchived && (
           <p className="py-20 text-muted-foreground text-sm text-center">
-            No replies yet
+            This ticket has been archived
           </p>
         )}
+        {!ticketReplies.length &&
+          (ticket.status !== "closed" || ticket.isArchived) && (
+            <p className="py-20 text-muted-foreground text-sm text-center">
+              No replies yet
+            </p>
+          )}
       </section>
     </div>
   );

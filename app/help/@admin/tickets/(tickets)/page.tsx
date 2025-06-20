@@ -1,3 +1,4 @@
+import ArchivedTickets from "@/components/admin-access/help-page/archived-tickets";
 import ClosedTickets from "@/components/admin-access/help-page/closed-tickets";
 import InProgressTickets from "@/components/admin-access/help-page/in-progress-tickets";
 import OpenTickets from "@/components/admin-access/help-page/open-tickets";
@@ -31,6 +32,9 @@ const Tickets = async ({
           <TabsTrigger className="w-full" value="closed">
             Closed tickets
           </TabsTrigger>
+          <TabsTrigger className="w-full" value="archived">
+            Archived tickets
+          </TabsTrigger>
         </TabsList>
         <TabsContent value="open">
           <OpenTickets />
@@ -40,6 +44,9 @@ const Tickets = async ({
         </TabsContent>
         <TabsContent value="closed">
           <ClosedTickets />
+        </TabsContent>
+        <TabsContent value="archived">
+          <ArchivedTickets />
         </TabsContent>
       </Tabs>
     </div>

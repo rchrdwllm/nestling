@@ -30,6 +30,7 @@ export const getOpenTickets = unstable_cache(
       const ticketsRef = await db
         .collection("tickets")
         .where("status", "==", "open")
+        .where("isArchived", "==", false)
         .orderBy("createdAt", "desc")
         .get();
       const tickets = ticketsRef.docs.map((doc) => doc.data()) as Ticket[];
@@ -51,6 +52,7 @@ export const getInProgressTickets = unstable_cache(
       const ticketsRef = await db
         .collection("tickets")
         .where("status", "==", "in-progress")
+        .where("isArchived", "==", false)
         .orderBy("createdAt", "desc")
         .get();
       const tickets = ticketsRef.docs.map((doc) => doc.data()) as Ticket[];
@@ -72,6 +74,7 @@ export const getClosedTickets = unstable_cache(
       const ticketsRef = await db
         .collection("tickets")
         .where("status", "==", "closed")
+        .where("isArchived", "==", false)
         .orderBy("createdAt", "desc")
         .get();
       const tickets = ticketsRef.docs.map((doc) => doc.data()) as Ticket[];
@@ -84,6 +87,27 @@ export const getClosedTickets = unstable_cache(
     }
   },
   ["closedTickets"],
+  { revalidate: 60 * 60, tags: ["tickets"] }
+);
+
+export const getArchivedTickets = unstable_cache(
+  async () => {
+    try {
+      const ticketsRef = await db
+        .collection("tickets")
+        .where("isArchived", "==", true)
+        .orderBy("createdAt", "desc")
+        .get();
+      const tickets = ticketsRef.docs.map((doc) => doc.data()) as Ticket[];
+
+      return { success: tickets };
+    } catch (error) {
+      console.error("Error fetching archived tickets:", error);
+
+      return { error };
+    }
+  },
+  ["archivedTickets"],
   { revalidate: 60 * 60, tags: ["tickets"] }
 );
 

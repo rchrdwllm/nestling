@@ -4,19 +4,16 @@ import {
   ticketsTableCols,
 } from "@/components/shared/help-page/tickets/tickets-table-def";
 import ErrorToast from "@/components/ui/error-toast";
-import { getInProgressTickets } from "@/lib/ticket";
+import { getArchivedTickets } from "@/lib/ticket";
 import { getOptimisticUser } from "@/lib/user";
 
-const InProgressTickets = async () => {
-  const { success: tickets, error: ticketsError } =
-    await getInProgressTickets();
+const ArchivedTickets = async () => {
+  const { success: tickets, error: ticketsError } = await getArchivedTickets();
   const user = await getOptimisticUser();
 
   if (ticketsError || !tickets) {
     return (
-      <ErrorToast
-        error={"Error fetching in-progress tickets: " + ticketsError}
-      />
+      <ErrorToast error={"Error fetching archived tickets: " + ticketsError} />
     );
   }
 
@@ -28,4 +25,4 @@ const InProgressTickets = async () => {
   );
 };
 
-export default InProgressTickets;
+export default ArchivedTickets;

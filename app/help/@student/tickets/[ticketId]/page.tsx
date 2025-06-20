@@ -28,10 +28,10 @@ const TicketPage = async ({
   }
 
   return (
-    <div className="p-6 flex flex-col gap-8">
+    <div className="flex flex-col gap-8 p-6">
       <div className="flex flex-col gap-4">
         <div className="flex justify-between items-center gap-4">
-          <h1 className="text-3xl flex-1 font-semibold">
+          <h1 className="flex-1 font-semibold text-3xl">
             Ticket: {ticket.title}
           </h1>
         </div>
@@ -44,17 +44,22 @@ const TicketPage = async ({
           : ticketReplies.map((reply) => (
               <TicketReplyCard key={reply.id} {...reply} />
             ))}
-        {ticket.status !== "closed" && <CreateReplyBtn ticketId={ticket.id} />}
         {ticket.status === "closed" && (
-          <p className="text-muted-foreground text-sm text-center py-20">
+          <p className="py-20 text-muted-foreground text-sm text-center">
             This ticket has been closed
           </p>
         )}
-        {!ticketReplies.length && ticket.status !== "closed" && (
-          <p className="text-muted-foreground text-sm text-center py-20">
-            No replies yet
+        {ticket.isArchived && (
+          <p className="py-20 text-muted-foreground text-sm text-center">
+            This ticket has been archived
           </p>
         )}
+        {!ticketReplies.length &&
+          (ticket.status !== "closed" || ticket.isArchived) && (
+            <p className="py-20 text-muted-foreground text-sm text-center">
+              No replies yet
+            </p>
+          )}
       </section>
     </div>
   );
