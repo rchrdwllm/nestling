@@ -96,6 +96,12 @@ export const duplicateCourse = actionClient
       batch.set(courseCollection.doc(newId), {
         ...courseData,
         id: newId,
+        name: `${courseData.name} (Copy)`,
+        courseCode: `${courseData.courseCode}-COPY`,
+        imageId: newImageId,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        viewCount: 0,
       });
 
       console.log("Getting course modules...");
