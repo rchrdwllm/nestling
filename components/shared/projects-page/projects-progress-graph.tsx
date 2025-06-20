@@ -42,7 +42,7 @@ const ProjectsProgressGraph = ({ projects }: ProjectsProgressGraphProps) => {
   const chartConfig = {
     completed: {
       label: "Completed",
-      color: "hsl(var(--chart-2))",
+      color: "hsl(var(--chart-3))",
     },
     incomplete: {
       label: "Incomplete",
@@ -51,14 +51,14 @@ const ProjectsProgressGraph = ({ projects }: ProjectsProgressGraphProps) => {
   } satisfies ChartConfig;
 
   return (
-    <Card className="p-4 flex flex-col gap-8 h-full">
+    <Card className="flex flex-col gap-8 p-4 h-full">
       <div className="flex flex-col gap-1">
         <h1 className="font-semibold text-xl">Projects progress</h1>
         <p className="text-muted-foreground text-sm">
           Completion percentage by tasks for each project
         </p>
       </div>
-      <CardContent className="flex-1 p-0 flex items-center justify-center">
+      <CardContent className="flex flex-1 justify-center items-center p-0">
         <ChartContainer className="w-full max-w-[700px]" config={chartConfig}>
           <BarChart accessibilityLayer data={chartData}>
             <CartesianGrid vertical={false} />

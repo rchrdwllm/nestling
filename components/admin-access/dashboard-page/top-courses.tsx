@@ -15,6 +15,8 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 type TopCourses = {
   data: { title: string; enrollmentCount: number }[];
@@ -42,7 +44,17 @@ const TopCourses = ({ data }: TopCourses) => {
   return (
     <Card className="flex flex-col p-4 h-full max-h-[550px]">
       <div className="flex flex-col gap-1">
-        <h1 className="font-semibold text-xl">Top Courses</h1>
+        <div className="flex justify-between items-center">
+          <h1 className="font-semibold text-xl">Top courses</h1>
+          <Link href="/courses">
+            <Button
+              variant="link"
+              className="px-0 text-muted-foreground hover:text-primary"
+            >
+              View all
+            </Button>
+          </Link>
+        </div>
         <p className="text-muted-foreground text-sm">
           Courses with the highest student enrollments
         </p>

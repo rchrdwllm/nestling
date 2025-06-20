@@ -36,9 +36,9 @@ const ProjectsStatusGraph = ({ projects }: ProjectsStatusGraphProps) => {
       fill: (() => {
         switch (status) {
           case "completed":
-            return "hsl(var(--chart-3))";
+            return "hsl(var(--chart-5))";
           case "in-progress":
-            return "hsl(var(--chart-2))";
+            return "hsl(var(--chart-3))";
           case "planned":
             return "hsl(var(--chart-1))";
           default:
@@ -73,7 +73,7 @@ const ProjectsStatusGraph = ({ projects }: ProjectsStatusGraphProps) => {
       <CardContent className="flex-1 p-0">
         <ChartContainer
           config={chartConfig}
-          className="mx-auto aspect-square max-h-[300px]"
+          className="mx-auto max-h-[300px] aspect-square"
         >
           <PieChart>
             <ChartTooltip
@@ -83,7 +83,7 @@ const ProjectsStatusGraph = ({ projects }: ProjectsStatusGraphProps) => {
             <Pie data={chartData} dataKey="count" nameKey="status" />
             <ChartLegend
               content={<ChartLegendContent nameKey="status" />}
-              className="-translate-y-2 flex-wrap gap-2 *:basis-1/4 *:justify-center"
+              className="flex-wrap *:justify-center gap-2 -translate-y-2 *:basis-1/4"
             />
           </PieChart>
         </ChartContainer>
