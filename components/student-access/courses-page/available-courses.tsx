@@ -1,9 +1,7 @@
 import { getAvailableCourses } from "@/lib/course";
-import CourseCard from "./course-card/course-card";
 import { getCurrentUser } from "@/lib/user";
-import CoursesTable from "./courses-table";
-import { coursesCols } from "./courses-table-def";
 import ErrorToast from "@/components/ui/error-toast";
+import CourseCard from "./course-card";
 
 const AvailableCourses = async () => {
   const user = await getCurrentUser();
@@ -14,8 +12,12 @@ const AvailableCourses = async () => {
   }
 
   return (
-    <section>
-      <CoursesTable columns={coursesCols} data={courses} />
+    <section className="gap-8 grid grid-cols-4">
+      {!courses.length ? (
+        <p className="text-muted-foreground">No courses found</p>
+      ) : (
+        courses.map((course) => <CourseCard key={course.id} {...course} />)
+      )}
     </section>
   );
 };
