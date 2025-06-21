@@ -19,13 +19,10 @@ const AddPeopleBtn = () => {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <div style={{ display: "flex" }}>
-          <Button>
-            <Plus className="size-4" />
-            Register person
-          </Button>
-          <span style={{ width: "50px" }} />
-        </div>
+        <Button>
+          <Plus className="size-4" />
+          Register person
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
