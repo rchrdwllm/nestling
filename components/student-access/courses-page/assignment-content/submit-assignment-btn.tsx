@@ -1,5 +1,8 @@
 "use client";
 
+import React, { useState } from "react";
+import Confetti from "react-confetti";
+import { useWindowSize } from "@react-hook/window-size";
 import RichTextEditor from "@/components/shared/courses-page/create-content/rich-text-editor";
 import { Button } from "@/components/ui/button";
 import {
@@ -26,7 +29,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Paperclip } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
 import { useRouter } from "next/navigation";
-import { ChangeEvent, useCallback, useState } from "react";
+import { ChangeEvent, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
@@ -56,6 +59,9 @@ const SubmitAssignmentBtn = ({
   const [isOpen, setIsOpen] = useState(false);
   const [file, setFile] = useState<File | undefined>(undefined);
   const [isLoading, setIsLoading] = useState(false);
+  const [showConfetti, setShowConfetti] = useState(false);
+  const [fadeConfetti, setFadeConfetti] = useState(false);
+  const [width, height] = useWindowSize();
   const { execute, isExecuting } = useAction(submitAssignment, {
     onSuccess: () => {
       setIsOpen(false);
@@ -65,6 +71,11 @@ const SubmitAssignmentBtn = ({
       toast.dismiss();
       toast.success("Assignment submitted successfully");
       router.refresh();
+      setShowConfetti(true);
+      setFadeConfetti(false);
+
+      setTimeout(() => setFadeConfetti(true), 7000); 
+      setTimeout(() => setShowConfetti(false), 7500); 
     },
     onError: (error) => {
       toast.dismiss();
@@ -136,9 +147,8 @@ const SubmitAssignmentBtn = ({
         }
 
         const hash = await getSHA256(file);
-        const { success: uploadedFile, error } = await uploadFileToCloudinary(
-          file
-        );
+        const { success: uploadedFile, error } =
+          await uploadFileToCloudinary(file);
 
         if (uploadedFile) {
           execute({
@@ -219,14 +229,14 @@ const SubmitAssignmentBtn = ({
                     submissionType === "pdf"
                       ? "application/pdf"
                       : submissionType === "docx"
-                      ? ".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                      : submissionType === "xlsx"
-                      ? ".xls,.xlsx,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-                      : submissionType === "pptx"
-                      ? ".ppt,.pptx,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation"
-                      : submissionType === "mp4"
-                      ? "video/mp4"
-                      : undefined
+                        ? ".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                        : submissionType === "xlsx"
+                          ? ".xls,.xlsx,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                          : submissionType === "pptx"
+                            ? ".ppt,.pptx,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation"
+                            : submissionType === "mp4"
+                              ? "video/mp4"
+                              : undefined
                   }
                 />
               </>
@@ -260,6 +270,23 @@ const SubmitAssignmentBtn = ({
           </form>
         </Form>
       </DialogContent>
+      <style>
+        {`
+      .confetti-fade {
+        opacity: 1;
+        transition: opacity 1s ease;
+        pointer-events: none;
+      }
+      .confetti-fade.out {
+        opacity: 0;
+      }
+    `}
+      </style>
+      {showConfetti && (
+        <div className={`confetti-fade${fadeConfetti ? " out" : ""}`}>
+          <Confetti width={width} height={height} />
+        </div>
+      )}
     </Dialog>
   );
 };
