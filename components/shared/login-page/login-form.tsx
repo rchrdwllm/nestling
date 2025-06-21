@@ -16,6 +16,7 @@ import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useAction } from "next-safe-action/hooks";
 import { logUserActivity } from "@/server/actions/log-user-activity";
+import { Eye, EyeOff } from "lucide-react";
 
 type LoginFormProps = {
   setStep: (step: number) => void;
@@ -124,21 +125,38 @@ const LoginForm = ({ role, setStep }: LoginFormProps) => {
           <FormField
             control={form.control}
             name="password"
-            render={({ field }) => (
-              <FormItem>
-                <Input placeholder="Password" type="password" {...field} />
-                <FormMessage />
-                <Link href="/api/auth/forgot-password">
-                  <Button
+            render={({ field }) => {
+              const [showPassword, setShowPassword] = useState(false);
+
+              return (
+                <FormItem className="relative">
+                  <Input
+                    placeholder="Password"
+                    type={showPassword ? "text" : "password"}
+                    {...field}
+                    className="pr-10"
+                  />
+                  <button
                     type="button"
-                    variant="link"
-                    className="text-muted-foreground hover:text-primary text-xs px-3"
+                    onClick={() => setShowPassword((v) => !v)}
+                    className="absolute right-3 top-1 -translate-y-1/8 text-muted-foreground"
+                    tabIndex={-1}
                   >
-                    Forgot password?
-                  </Button>
-                </Link>
-              </FormItem>
-            )}
+                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
+                  <FormMessage />
+                  <Link href="/api/auth/forgot-password">
+                    <Button
+                      type="button"
+                      variant="link"
+                      className="text-muted-foreground hover:text-primary text-xs px-3"
+                    >
+                      Forgot password?
+                    </Button>
+                  </Link>
+                </FormItem>
+              );
+            }}
           />
           <div className="max-w-[300px] w-full flex gap-4">
             <Button
