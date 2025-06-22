@@ -20,9 +20,11 @@ const UpcomingTasks = async () => {
         <h1 className="font-semibold text-xl">Upcoming tasks</h1>
       </div>
       <section className="flex flex-col gap-4">
-        {tasks.map((task) => (
-          <UpcomingTaskCard key={task.id} {...task} />
-        ))}
+        {!tasks.length ? (
+          <p className="text-muted-foreground">No upcoming tasks</p>
+        ) : (
+          tasks.map((task) => <UpcomingTaskCard key={task.id} {...task} />)
+        )}
       </section>
     </div>
   );

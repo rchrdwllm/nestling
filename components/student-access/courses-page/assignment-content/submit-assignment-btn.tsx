@@ -74,8 +74,8 @@ const SubmitAssignmentBtn = ({
       setShowConfetti(true);
       setFadeConfetti(false);
 
-      setTimeout(() => setFadeConfetti(true), 7000); 
-      setTimeout(() => setShowConfetti(false), 7500); 
+      setTimeout(() => setFadeConfetti(true), 7000);
+      setTimeout(() => setShowConfetti(false), 7500);
     },
     onError: (error) => {
       toast.dismiss();
@@ -147,8 +147,9 @@ const SubmitAssignmentBtn = ({
         }
 
         const hash = await getSHA256(file);
-        const { success: uploadedFile, error } =
-          await uploadFileToCloudinary(file);
+        const { success: uploadedFile, error } = await uploadFileToCloudinary(
+          file
+        );
 
         if (uploadedFile) {
           execute({
@@ -229,14 +230,14 @@ const SubmitAssignmentBtn = ({
                     submissionType === "pdf"
                       ? "application/pdf"
                       : submissionType === "docx"
-                        ? ".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                        : submissionType === "xlsx"
-                          ? ".xls,.xlsx,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-                          : submissionType === "pptx"
-                            ? ".ppt,.pptx,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation"
-                            : submissionType === "mp4"
-                              ? "video/mp4"
-                              : undefined
+                      ? ".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                      : submissionType === "xlsx"
+                      ? ".xls,.xlsx,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                      : submissionType === "pptx"
+                      ? ".ppt,.pptx,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation"
+                      : submissionType === "mp4"
+                      ? "video/mp4"
+                      : undefined
                   }
                 />
               </>
@@ -255,7 +256,14 @@ const SubmitAssignmentBtn = ({
               />
             )}
             <div className="flex flex-col gap-4 mt-4">
-              <Button type="submit" disabled={isExecuting || isLoading}>
+              <Button
+                type="submit"
+                disabled={
+                  isExecuting ||
+                  isLoading ||
+                  (submissionType !== "text" && !file)
+                }
+              >
                 Submit
               </Button>
               <Button

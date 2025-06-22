@@ -144,7 +144,6 @@ export const getUpcomingAssignmentsForStudent = unstable_cache(
       const { success: courses, error } = await getEnrolledCourses(userId);
 
       if (error) return { error };
-
       if (!courses) return { success: [] };
 
       const assignmentsArr = await Promise.all(
@@ -152,17 +151,41 @@ export const getUpcomingAssignmentsForStudent = unstable_cache(
           const { success: assignments } = await getUpcomingAssignments(
             course.id
           );
-
           return assignments || [];
         })
       );
-
       const allAssignments = assignmentsArr.flat();
 
-      return { success: allAssignments };
+      if (allAssignments.length === 0) return { success: [] };
+
+      // Get all submissions by the student for these assignments (batch in groups of 10)
+      const assignmentIds = allAssignments.map((a) => a.id);
+      const batchSize = 10;
+      let submissions: any[] = [];
+
+      for (let i = 0; i < assignmentIds.length; i += batchSize) {
+        const batchIds = assignmentIds.slice(i, i + batchSize);
+        if (batchIds.length === 0) continue;
+        const submissionsSnapshot = await db
+          .collection("submissions")
+          .where("studentId", "==", userId)
+          .where("contentId", "in", batchIds)
+          .get();
+        submissions = submissions.concat(
+          submissionsSnapshot.docs.map((doc) => doc.data())
+        );
+      }
+
+      const submittedAssignmentIds = new Set(
+        submissions.map((s) => s.contentId)
+      );
+      const pendingAssignments = allAssignments.filter(
+        (a) => !submittedAssignmentIds.has(a.id)
+      );
+
+      return { success: pendingAssignments };
     } catch (error) {
       console.error("Error fetching upcoming assignments: ", error);
-
       return { error: "Error fetching upcoming assignments for student" };
     }
   },
