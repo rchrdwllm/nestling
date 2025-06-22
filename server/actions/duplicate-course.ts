@@ -188,6 +188,7 @@ export const duplicateCourse = actionClient
             ...content,
             id: newContentId,
             moduleId: newModuleId,
+            courseId: newId,
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
           });
