@@ -110,6 +110,32 @@ export const getCourseAssignments = unstable_cache(
   { tags: ["contents", "assignments"] }
 );
 
+export const getPublishedCourseAssignments = unstable_cache(
+  async (courseId: string) => {
+    try {
+      const assignmentsRef = await db
+        .collection("contents")
+        .where("courseId", "==", courseId)
+        .where("type", "==", "assignment")
+        .get();
+
+      if (assignmentsRef.empty) {
+        return { success: [] };
+      }
+
+      const assignments = assignmentsRef.docs.map(
+        (doc) => doc.data() as Content
+      );
+
+      return { success: assignments };
+    } catch (error) {
+      return { error };
+    }
+  },
+  ["courseId"],
+  { tags: ["contents", "assignments"] }
+);
+
 export const getUpcomingAssignments = unstable_cache(
   async (courseId: string) => {
     try {
@@ -117,6 +143,8 @@ export const getUpcomingAssignments = unstable_cache(
         .collection("contents")
         .where("courseId", "==", courseId)
         .where("type", "==", "assignment")
+        .where("isPublished", "==", true)
+        .orderBy("endDate", "asc")
         .get();
       const assignments = assignmentsRef.docs.map(
         (doc) => doc.data() as Content

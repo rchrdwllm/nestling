@@ -47,6 +47,12 @@ const StudentCourseLayout = ({
               Modules
             </CourseSectionLink>
             <CourseSectionLink
+              segments={["assignments"]}
+              href={`/courses/${id}/assignments`}
+            >
+              Assignments
+            </CourseSectionLink>
+            <CourseSectionLink
               segments={["discussions"]}
               href={`/courses/${id}/discussions`}
             >
