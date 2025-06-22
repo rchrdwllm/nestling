@@ -3,12 +3,17 @@ import MyCourses from "@/components/student-access/dashboard-page/my-courses";
 import RecentAnnouncements from "@/components/student-access/dashboard-page/recent-announcements";
 import Searcher from "@/components/shared/search/general-search/searcher";
 import UpcomingTasks from "@/components/student-access/dashboard-page/upcoming-tasks";
+import { getOptimisticUser } from "@/lib/user";
 
 const StudentDashboardPage = async ({
   searchParams,
 }: {
   searchParams?: Promise<{ query?: string; page?: string; tab?: string }>;
 }) => {
+  const user = await getOptimisticUser();
+
+  if (user.role !== "student") return null;
+
   const { query, page, tab } = (await searchParams) || {};
 
   return (
