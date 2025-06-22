@@ -52,6 +52,6 @@ export const deleteAttachment = actionClient
     } catch (error) {
       console.error("Error deleting attachment: ", error);
 
-      return { error };
+      return { error: JSON.stringify(error) };
     }
   });

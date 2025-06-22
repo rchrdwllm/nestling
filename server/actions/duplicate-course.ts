@@ -317,7 +317,6 @@ export const duplicateCourse = actionClient
       return { success: `Course ${courseData.name} duplicated successfully` };
     } catch (error) {
       console.error("Error duplicating course:", error);
-
-      return { error };
+      return { error: JSON.stringify(error) };
     }
   });

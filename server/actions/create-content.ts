@@ -194,6 +194,6 @@ export const createContent = actionClient
 
       return { success: newContent };
     } catch (error) {
-      return { error };
+      return { error: JSON.stringify(error) };
     }
   });

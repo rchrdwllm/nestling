@@ -37,6 +37,6 @@ export const archiveTicket = actionClient
     } catch (error) {
       console.error("Error archiving ticket:", error);
 
-      return { error };
+      return { error: JSON.stringify(error) };
     }
   });

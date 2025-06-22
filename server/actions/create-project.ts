@@ -94,6 +94,6 @@ export const createProject = actionClient
     } catch (error) {
       console.error("Error creating project:", error);
 
-      return { error };
+      return { error: JSON.stringify(error) };
     }
   });

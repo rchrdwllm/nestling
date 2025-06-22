@@ -41,6 +41,6 @@ export const archiveUser = actionClient
     } catch (error) {
       console.error("Error fetching user:", error);
 
-      return { error };
+      return { error: JSON.stringify(error) };
     }
   });

@@ -30,6 +30,6 @@ export const deleteNotif = actionClient
     } catch (error) {
       console.error("Error deleting notification: " + error);
 
-      return { error };
+      return { error: JSON.stringify(error) };
     }
   });

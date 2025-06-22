@@ -280,6 +280,8 @@ export const createCourse = actionClient
 
       return { success: "Course created successfully" };
     } catch (error) {
+      console.error("Error creating course: ", error);
+
       return { error: JSON.stringify(error) };
     }
   });

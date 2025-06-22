@@ -102,7 +102,7 @@ export const submitAssignment = actionClient
         } catch (error) {
           console.error("File upload failed:", error);
 
-          return { error };
+          return { error: JSON.stringify(error) };
         }
       }
 
@@ -146,6 +146,6 @@ export const submitAssignment = actionClient
     } catch (error) {
       console.error("Assignment submission failed:", error);
 
-      return { error };
+      return { error: JSON.stringify(error) };
     }
   });

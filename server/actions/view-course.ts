@@ -21,6 +21,6 @@ export const viewCourse = actionClient
     } catch (error) {
       console.error("Error incrementing course views:", error);
 
-      return { error: "Failed to increment course views" };
+      return { error: JSON.stringify("Failed to increment course views") };
     }
   });

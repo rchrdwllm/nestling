@@ -27,7 +27,7 @@ export const generatePasswordResetToken = async (email: string) => {
         },
       };
     } catch (error) {
-      return { error };
+      return { error: JSON.stringify(error) };
     }
   }
 

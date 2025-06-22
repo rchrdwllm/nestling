@@ -33,6 +33,8 @@ export const archiveCourse = actionClient
         success: `Course ${course.isArchived ? "unarchived" : "archived"}`,
       };
     } catch (error) {
+      console.error("Error archiving course: ", error);
+
       return { error: JSON.stringify(error) };
     }
   });

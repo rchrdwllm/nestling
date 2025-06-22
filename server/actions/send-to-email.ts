@@ -14,6 +14,6 @@ export const sendPasswordResetToken = async (email: string, token: string) => {
 
   return {
     success: data,
-    error,
+    error: error?.message || null,
   };
 };

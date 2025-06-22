@@ -18,6 +18,6 @@ export const updateThread = async (threadId: string) => {
   } catch (error) {
     console.error("Error updating thread:", error);
 
-    return { error };
+    return { error: JSON.stringify(error) };
   }
 };

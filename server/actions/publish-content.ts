@@ -26,7 +26,6 @@ export const publishContent = actionClient
       return { success: successMessage };
     } catch (error) {
       console.error(error);
-
-      return { error };
+      return { error: JSON.stringify(error) };
     }
   });

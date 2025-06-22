@@ -43,6 +43,6 @@ export const deleteFile = actionClient
     } catch (error) {
       console.error("File deletion failed:", error);
 
-      return { error };
+      return { error: JSON.stringify(error) };
     }
   });

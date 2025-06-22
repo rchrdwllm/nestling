@@ -61,6 +61,6 @@ export const removeFromCourse = actionClient
     } catch (error) {
       console.error("Error removing user from course:", error);
 
-      return { error };
+      return { error: JSON.stringify(error) };
     }
   });

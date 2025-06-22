@@ -111,6 +111,6 @@ export const uploadImage = actionClient
     } catch (error) {
       console.error("Image upload failed:", error);
 
-      return { error };
+      return { error: JSON.stringify(error) };
     }
   });

@@ -31,7 +31,7 @@ export const sendMessage = actionClient
       await pusherServer.trigger(
         channelId,
         "new-message",
-        files ? { ...messageData, files } : messageData,
+        files ? { ...messageData, files } : messageData
       );
 
       try {
@@ -77,11 +77,11 @@ export const sendMessage = actionClient
       } catch (error) {
         console.error("Error sending message to Pusher:", error);
 
-        return { error };
+        return { error: JSON.stringify(error) };
       }
     } catch (error) {
       console.error("Error sending message:", error);
 
-      return { error };
+      return { error: JSON.stringify(error) };
     }
   });

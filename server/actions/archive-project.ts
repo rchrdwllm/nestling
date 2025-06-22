@@ -46,6 +46,6 @@ export const archiveProject = actionClient
     } catch (error) {
       console.error("Error archiving project: ", error);
 
-      return { error };
+      return { error: JSON.stringify(error) };
     }
   });

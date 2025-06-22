@@ -35,6 +35,6 @@ export const emailResetToken = actionClient
         return { success: "Reset link sent! Please check your email" };
       }
     } catch (error) {
-      return { error };
+      return { error: JSON.stringify(error) };
     }
   });

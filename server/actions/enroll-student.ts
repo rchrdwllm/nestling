@@ -65,6 +65,6 @@ export const enrollStudent = actionClient
 
       return { success: `Enrolled student in course ${courseId}` };
     } catch (error) {
-      return { error };
+      return { error: JSON.stringify(error) };
     }
   });

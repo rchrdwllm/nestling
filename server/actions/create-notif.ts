@@ -38,6 +38,6 @@ export const createNotif = actionClient
     } catch (error) {
       console.error("Error creating notification:", error);
 
-      return { error };
+      return { error: JSON.stringify(error) };
     }
   });

@@ -35,6 +35,6 @@ export const deleteImage = actionClient
     } catch (error) {
       console.error("Image deletion failed:", error);
 
-      return { error };
+      return { error: JSON.stringify(error) };
     }
   });

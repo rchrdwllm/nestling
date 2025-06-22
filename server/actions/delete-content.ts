@@ -128,7 +128,6 @@ export const deleteContent = actionClient
       return { success: "Content deleted successfully" };
     } catch (error) {
       console.error("Error deleting content:", error);
-
-      return { error };
+      return { error: JSON.stringify(error) };
     }
   });

@@ -69,6 +69,6 @@ export const deleteTask = actionClient
     } catch (error) {
       console.error("Error deleting task: ", error);
 
-      return { error };
+      return { error: JSON.stringify(error) };
     }
   });

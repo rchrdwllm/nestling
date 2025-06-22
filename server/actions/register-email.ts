@@ -42,6 +42,6 @@ export const registerEmail = actionClient
     } catch (error) {
       console.error("Error registering people:", error);
 
-      return { error };
+      return { error: JSON.stringify(error) };
     }
   });

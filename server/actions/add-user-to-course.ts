@@ -111,6 +111,6 @@ export const addUserToCourse = actionClient
     } catch (error) {
       console.error("Error adding to course: ", error);
 
-      return { error };
+      return { error: JSON.stringify(error) };
     }
   });

@@ -53,6 +53,6 @@ export const deleteProject = actionClient
     } catch (error) {
       console.error("Error deleting project: ", error);
 
-      return { error };
+      return { error: JSON.stringify(error) };
     }
   });

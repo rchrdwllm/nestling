@@ -29,6 +29,6 @@ export const deleteAllNotif = actionClient
     } catch (error) {
       console.error("Error deleting all notifications: " + error);
 
-      return { error: "Failed to delete notifications" };
+      return { error: JSON.stringify(error) };
     }
   });

@@ -34,6 +34,6 @@ export const checkEmailLogin = async (data: z.infer<typeof LoginSchema>) => {
 
     return { success: user };
   } catch (error) {
-    return { error };
+    return { error: JSON.stringify(error) };
   }
 };

@@ -30,6 +30,6 @@ export const updateTicket = actionClient
     } catch (error) {
       console.error("Error updating ticket:", error);
 
-      return { error };
+      return { error: JSON.stringify(error) };
     }
   });

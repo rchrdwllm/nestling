@@ -57,6 +57,6 @@ export const replyToDiscussion = actionClient
     } catch (error) {
       console.error("Error replying to discussion:", error);
 
-      return { error };
+      return { error: JSON.stringify(error) };
     }
   });

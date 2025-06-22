@@ -40,8 +40,6 @@ export const createAnnouncement = actionClient
         return { success: "Announcement updated successfully" };
       } catch (error) {
         console.error("Error updating announcement:", error);
-
-        return { error: "Failed to update announcement" };
       }
     }
 
@@ -92,6 +90,6 @@ export const createAnnouncement = actionClient
     } catch (error) {
       console.error("Error creating announcement:", error);
 
-      return { error };
+      return { error: JSON.stringify(error) };
     }
   });

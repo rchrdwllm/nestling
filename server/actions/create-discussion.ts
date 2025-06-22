@@ -59,6 +59,6 @@ export const createDiscussion = actionClient
     } catch (error) {
       console.error("Error creating discussion:", error);
 
-      return { error };
+      return { error: JSON.stringify(error) };
     }
   });

@@ -34,6 +34,6 @@ export const resetPassword = actionClient
 
       return { success: "Password reset successfully! You can login again" };
     } catch (error) {
-      return { error };
+      return { error: JSON.stringify(error) };
     }
   });

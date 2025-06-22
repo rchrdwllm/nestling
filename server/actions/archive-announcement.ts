@@ -40,6 +40,6 @@ export const archiveAnnouncement = actionClient
     } catch (error) {
       console.error("Error archiving announcement:", error);
 
-      return { error: "Failed to archive announcement" };
+      return { error: JSON.stringify(error) };
     }
   });

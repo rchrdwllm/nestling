@@ -131,8 +131,6 @@ export const createTask = actionClient
 
       return { success: "Successfully created task" };
     } catch (error) {
-      console.error("Error creating task: ", error);
-
-      return { error };
+      return { error: JSON.stringify(error) };
     }
   });

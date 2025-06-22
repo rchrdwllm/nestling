@@ -24,7 +24,6 @@ export const logUserActivity = actionClient
       return { success: "Activity logged successfully" };
     } catch (error) {
       console.error("Error logging user activity:", error);
-
-      return { error };
+      return { error: JSON.stringify(error) };
     }
   });

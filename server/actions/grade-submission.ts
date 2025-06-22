@@ -91,7 +91,6 @@ export const gradeSubmission = actionClient
       return { success: "Assessment graded" };
     } catch (error) {
       console.error(error);
-
-      return { error };
+      return { error: JSON.stringify(error) };
     }
   });

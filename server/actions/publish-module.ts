@@ -27,6 +27,6 @@ export const publishModule = actionClient
     } catch (error) {
       console.error(error);
 
-      return { error };
+      return { error: JSON.stringify(error) };
     }
   });

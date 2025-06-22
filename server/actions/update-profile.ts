@@ -90,6 +90,6 @@ export const updateProfile = actionClient
     } catch (error) {
       console.error(error);
 
-      return { error };
+      return { error: JSON.stringify(error) };
     }
   });

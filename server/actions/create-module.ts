@@ -83,6 +83,6 @@ export const createModule = actionClient
 
       return { success: `Module ${title} created` };
     } catch (error) {
-      return { error };
+      return { error: JSON.stringify(error) };
     }
   });

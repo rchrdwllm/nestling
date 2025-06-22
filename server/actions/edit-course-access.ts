@@ -53,6 +53,6 @@ export const editCourseAccess = actionClient
     } catch (error) {
       console.error("Error updating access: ", error);
 
-      return { error };
+      return { error: JSON.stringify(error) };
     }
   });

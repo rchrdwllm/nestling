@@ -22,7 +22,7 @@ export const uploadImgToCloudinary = async (file: File) => {
   } catch (error) {
     console.error("Image upload failed:", error);
 
-    return { error };
+    return { error: JSON.stringify(error) };
   }
 };
 
@@ -50,7 +50,7 @@ export const uploadFileToCloudinary = async (file: File) => {
     } catch (error) {
       console.error("File upload failed:", error);
 
-      return { error };
+      return { error: JSON.stringify(error) };
     }
   }
 
@@ -70,6 +70,6 @@ export const uploadFileToCloudinary = async (file: File) => {
   } catch (error) {
     console.error("File upload failed:", error);
 
-    return { error };
+    return { error: JSON.stringify(error) };
   }
 };

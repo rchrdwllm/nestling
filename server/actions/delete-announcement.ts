@@ -28,6 +28,6 @@ export const deleteAnnouncement = actionClient
     } catch (error) {
       console.error("Error deleting announcement:", error);
 
-      return { error };
+      return { error: JSON.stringify(error) };
     }
   });

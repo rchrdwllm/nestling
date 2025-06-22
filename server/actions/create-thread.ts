@@ -41,6 +41,6 @@ export const createThread = actionClient
     } catch (error) {
       console.error("Error creating thread:", error);
 
-      return { error };
+      return { error: JSON.stringify(error) };
     }
   });

@@ -61,6 +61,6 @@ export const deleteDiscussion = actionClient
     } catch (error) {
       console.error("Error deleting discussion:", error);
 
-      return { error };
+      return { error: JSON.stringify(error) };
     }
   });

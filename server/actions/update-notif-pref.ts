@@ -32,7 +32,6 @@ export const updateNotifPref = actionClient
       };
     } catch (error) {
       console.error("Error updating notification preference:", error);
-
-      return { error: "Failed to update notification preference" };
+      return { error: JSON.stringify(error) };
     }
   });

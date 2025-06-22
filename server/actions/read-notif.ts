@@ -36,6 +36,6 @@ export const readNotif = actionClient
     } catch (error) {
       console.error("Error reading notification:", error);
 
-      return { error: error };
+      return { error: JSON.stringify(error) };
     }
   });

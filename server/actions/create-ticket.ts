@@ -75,6 +75,6 @@ export const createTicket = actionClient
     } catch (error) {
       console.error("Error creating ticket:", error);
 
-      return { error };
+      return { error: JSON.stringify(error) };
     }
   });

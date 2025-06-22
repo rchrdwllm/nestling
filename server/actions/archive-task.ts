@@ -42,6 +42,6 @@ export const archiveTask = actionClient
     } catch (error) {
       console.error("Error archiving task:", error);
 
-      return { error: "Failed to archive task" };
+      return { error: JSON.stringify(error) };
     }
   });

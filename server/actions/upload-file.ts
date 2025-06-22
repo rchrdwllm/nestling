@@ -118,6 +118,6 @@ export const uploadFile = actionClient
     } catch (error) {
       console.error("File upload failed:", error);
 
-      return { error };
+      return { error: JSON.stringify(error) };
     }
   });

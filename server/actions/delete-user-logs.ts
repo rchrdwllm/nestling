@@ -28,6 +28,6 @@ export const deleteUserLogs = actionClient
     } catch (error) {
       console.error("Error deleting user logs:", error);
 
-      return { error };
+      return { error: JSON.stringify(error) };
     }
   });

@@ -42,6 +42,6 @@ export const archiveDiscussion = actionClient
     } catch (error) {
       console.error("Error archiving discussion:", error);
 
-      return { error };
+      return { error: JSON.stringify(error) };
     }
   });

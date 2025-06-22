@@ -81,6 +81,6 @@ export const checkEmailRegister = async (
 
     return { success: newUser };
   } catch (error) {
-    return { error: error };
+    return { error: JSON.stringify(error) };
   }
 };

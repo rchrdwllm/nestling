@@ -92,6 +92,6 @@ export const replyToTicket = actionClient
     } catch (error) {
       console.error("Error replying to ticket:", error);
 
-      return { error };
+      return { error: JSON.stringify(error) };
     }
   });

@@ -29,6 +29,6 @@ export const addAttachment = actionClient
     } catch (error) {
       console.error("Error adding attachment: ", error);
 
-      return { error };
+      return { error: JSON.stringify(error) };
     }
   });

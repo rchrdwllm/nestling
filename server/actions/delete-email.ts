@@ -28,6 +28,6 @@ export const deleteEmail = actionClient
     } catch (error) {
       console.error("Error deleting email: ", error);
 
-      return { error };
+      return { error: JSON.stringify(error) };
     }
   });
