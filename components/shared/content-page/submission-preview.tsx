@@ -44,7 +44,7 @@ const SubmissionPreview = async ({
     ? studentSubmissions[parseInt(attempt) - 1]
     : studentSubmissions[0];
 
-  if (submissionType === "file") {
+  if (submissionType !== "text") {
     const { success: file, error: fileError } = await getFile(
       selectedAttempt.fileId
     );

@@ -26,6 +26,7 @@ const SubmissionsPage = async ({
   if (contentError || !content) {
     return <ErrorToast error={"Error fetching content: " + contentError} />;
   }
+
   return (
     <main className="flex flex-col gap-4 p-6">
       <Searcher query={query} page={page} tab={tab} />
