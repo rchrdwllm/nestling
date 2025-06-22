@@ -1,0 +1,103 @@
+[
+  {
+    "name": "Software Engineering 1",
+    "description": "This course introduces the fundamental concepts and methodologies of software engineering. Topics include software development life cycle models, requirements engineering, system modeling, and software design principles. Emphasis is placed on collaborative development, documentation, and the use of tools to support software project planning and version control.",
+    "courseCode": "CS 301",
+    "id": "39860f2f-e5ee-43ef-8a70-7824820832b6",
+    "createdAt": "2025-06-18T00:13:49.116Z",
+    "updatedAt": "2025-06-18T00:13:49.116Z",
+    "image": "https://res.cloudinary.com/nestling-lan/image/upload/v1750205627/djjuq9flyg3rb0xrsbgm.png",
+    "isArchived": false,
+    "viewCount": 16
+  },
+  {
+    "name": "Software Engineering 2",
+    "description": "This course builds upon the foundational principles of software engineering, focusing on advanced topics such as software architecture, design patterns, testing strategies, project management, and maintenance. Students will work in teams to develop and manage software projects using agile methodologies, apply software quality assurance practices, and explore real-world case studies to reinforce best practices in the software development lifecycle.",
+    "courseCode": "CS 304",
+    "id": "436752cf-10c9-4e43-b08e-fd08ed9530a2",
+    "createdAt": "2025-06-18T00:10:45.553Z",
+    "updatedAt": "2025-06-18T00:10:45.554Z",
+    "image": "https://res.cloudinary.com/nestling-lan/image/upload/v1750205442/lbid8o69lrdyorbb7itu.png",
+    "isArchived": false,
+    "viewCount": 2
+  },
+  {
+    "name": "Intelligent Agents",
+    "description": "This course introduces the concepts and architectures of intelligent agents—autonomous entities that perceive their environment and make decisions to achieve goals. Topics include agent types, environments, decision-making models, agent communication, and multi-agent systems. Students will design and implement basic agents with applications in AI, robotics, and simulations.",
+    "courseCode": "CS 403",
+    "id": "4d9becb6-6612-4e65-a8bd-eb8abceec229",
+    "createdAt": "2025-06-18T00:21:19.184Z",
+    "updatedAt": "2025-06-18T00:21:19.184Z",
+    "image": "https://res.cloudinary.com/nestling-lan/image/upload/v1750206077/lconf5i9qbcmv6gtipbq.jpg",
+    "isArchived": false,
+    "viewCount": 5
+  },
+  {
+    "name": "Expert Systems ",
+    "description": "This course covers the design and development of intelligent systems that simulate the decision-making ability of human experts. Topics include knowledge representation, inference engines, rule-based systems, and reasoning under uncertainty. Students will build simple expert systems and explore applications in fields such as healthcare, finance, and diagnostics.",
+    "courseCode": "CS 404",
+    "id": "70d9cf69-b3ad-4855-84cb-dc0c486c6f5b",
+    "createdAt": "2025-06-18T00:15:50.236Z",
+    "updatedAt": "2025-06-18T00:15:50.236Z",
+    "image": "https://res.cloudinary.com/nestling-lan/image/upload/v1750205748/vvthqa6evqgkgj2ylbhb.png",
+    "isArchived": false,
+    "viewCount": 0
+  },
+  {
+    "description": "This course introduces the fundamental concepts and methodologies of software engineering. Topics include software development life cycle models, requirements engineering, system modeling, and software design principles. Emphasis is placed on collaborative development, documentation, and the use of tools to support software project planning and version control.",
+    "courseCode": "CS 301",
+    "id": "797d3857-d4a3-4bad-8abf-0bbe2999e353",
+    "createdAt": "2025-06-18T00:13:49.116Z",
+    "image": "https://res.cloudinary.com/nestling-lan/image/upload/v1750205627/djjuq9flyg3rb0xrsbgm.png",
+    "isArchived": false,
+    "name": "Software Engineering 1 (Duplicate)",
+    "updatedAt": "2025-06-19T12:32:24.893Z",
+    "viewCount": 4
+  },
+  {
+    "name": "Human Computer Interaction",
+    "description": "Course for human course interaction",
+    "courseCode": "ITE 010A",
+    "id": "8e8b29e4-dec9-4be8-a9b2-d276b94a8262",
+    "createdAt": "2025-06-19T07:29:41.335Z",
+    "updatedAt": "2025-06-19T07:29:41.335Z",
+    "image": "https://res.cloudinary.com/nestling-lan/image/upload/v1750318177/wamc9dvj8r5vt1nj3yns.png",
+    "isArchived": false,
+    "viewCount": 33
+  },
+  {
+    "name": "Algorithms and Complexity",
+    "description": "This course examines the design, analysis, and efficiency of algorithms. Topics include algorithmic strategies (divide and conquer, greedy, dynamic programming), data structures, and computational complexity classes such as P, NP, and NP-complete. Students will learn to evaluate algorithm performance and solve problems with optimized and scalable solutions.",
+    "courseCode": "CS 006",
+    "id": "90fa0664-4332-48a6-b9a4-ba7179d87842",
+    "createdAt": "2025-06-18T00:19:06.151Z",
+    "updatedAt": "2025-06-18T00:19:06.151Z",
+    "image": "https://res.cloudinary.com/nestling-lan/image/upload/v1750205944/g3cmgivberfud8mlvyab.jpg",
+    "isArchived": false,
+    "viewCount": 0
+  },
+  {
+    "name": "Human Computer Interaction (Copy)",
+    "description": "Course for human course interaction",
+    "courseCode": "ITE 010A-COPY",
+    "id": "9fbb490e-06a1-4936-9d6b-bb40e4b6ceb9",
+    "createdAt": "2025-06-21T11:07:51.181Z",
+    "updatedAt": "2025-06-21T11:07:51.181Z",
+    "image": "https://res.cloudinary.com/nestling-lan/image/upload/v1750318177/wamc9dvj8r5vt1nj3yns.png",
+    "viewCount": 0,
+    "imageId": "a275cd44-6191-4b30-ba08-aa5c854717a6",
+    "archivedAt": "2025-06-21T11:08:01.140Z",
+    "isArchived": true
+  },
+  {
+    "name": "Parallel and Distributed Computing",
+    "description": "This course explores the principles and techniques behind the design and implementation of parallel and distributed systems. Topics include concurrency, synchronization, distributed algorithms, parallel architectures, and performance optimization. Students will learn how to develop scalable and efficient software that runs across multiple processors or machines, with hands-on experience in parallel programming frameworks.",
+    "courseCode": "CS 007",
+    "id": "bbbf93d3-c978-49be-b929-00212103ef78",
+    "createdAt": "2025-06-18T00:12:11.078Z",
+    "updatedAt": "2025-06-18T00:12:11.078Z",
+    "image": "https://res.cloudinary.com/nestling-lan/image/upload/v1750205529/gfyujkm1ahujprikckzj.png",
+    "isArchived": false,
+    "viewCount": 0
+  }
+]
