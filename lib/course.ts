@@ -59,7 +59,7 @@ export const getCourse = unstable_cache(
     }
   },
   ["courses"],
-  { revalidate: 3600 }
+  { revalidate: 7200 }
 );
 
 export const getAvailableCourses = unstable_cache(
@@ -109,7 +109,7 @@ export const getAvailableCourses = unstable_cache(
     }
   },
   ["availableCourses"],
-  { revalidate: 3600, tags: ["courses"] }
+  { revalidate: 7200, tags: ["courses"] }
 );
 
 export const getEnrolledCourses = unstable_cache(
@@ -381,7 +381,7 @@ export const getCourseImage = unstable_cache(
     }
   },
   ["courseImage"],
-  { revalidate: 3600 }
+  { revalidate: 7200 }
 );
 
 export const getEnrollmentDetails = unstable_cache(
