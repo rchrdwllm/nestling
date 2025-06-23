@@ -600,36 +600,24 @@ export const getSlicedInstructorCourses = unstable_cache(
 
 export const getMostViewedCourses = unstable_cache(
   async () => {
-    console.log(`[${new Date().toISOString()}] getMostViewedCourses called`);
     try {
       const coursesSnapshot = await db.collection("courses").get();
-
-      // Use Promise.all for subcollection queries but limit to avoid excessive reads
-      const courses = await Promise.all(
-        coursesSnapshot.docs.slice(0, 20).map(async (doc) => {
-          // Limit to top 20 courses initially
-          const course = doc.data() as Course;
-          const viewsSnapshot = await db
-            .collection("courses")
-            .doc(course.id)
-            .collection("views")
-            .get();
-          const viewCount = viewsSnapshot.size;
-
-          return { title: course.name, viewCount };
-        })
-      );
+      const courses = coursesSnapshot.docs.map((doc) => ({
+        title: doc.data().name,
+        viewCount: doc.data().viewCount,
+      })) as { title: string; viewCount: number }[];
 
       courses.sort((a, b) => b.viewCount - a.viewCount);
 
-      const filteredCourses = courses.filter((course) => {
-        return course.viewCount > 0 && course.title;
-      });
+      const mostViewedCourses = courses
+        .slice(0, 5)
+        .filter((course) => course.viewCount > 0 && course.title);
 
-      return { success: filteredCourses.slice(0, 5) };
+      return { success: mostViewedCourses };
     } catch (error) {
       console.error("Error fetching most viewed courses:", error);
-      return { error };
+
+      return { error: "Error fetching most viewed courses" };
     }
   },
   ["mostViewedCourses"],

@@ -30,6 +30,8 @@ const AdminDashboardPage = async ({
   const { success: mostViewedCourses, error: mostViewedCoursesError } =
     await getMostViewedCourses();
 
+  console.log(mostViewedCourses);
+
   if (
     !activeUsers ||
     !topCourses ||
