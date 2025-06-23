@@ -12,6 +12,7 @@ import NotificationWrapper from "@/components/wrappers/notification-wrapper";
 import NativeNotificationWrapper from "@/components/wrappers/native-notification-wrapper";
 import { getCurrentUser } from "@/lib/user";
 import LayoutWrapper from "@/components/ui/layout-wrapper";
+import IdleLogoutWrapper from "@/components/wrappers/idle-logout-wrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -55,15 +56,17 @@ export default async function RootLayout({
       >
         <SessionWrapper session={session}>
           <ThemeWrapper attribute="class" defaultTheme="light">
-            <NextTopLoader showSpinner={false} color="#df1514" />
-            <CacheRefresherWrapper>
-              <NotificationWrapper authUser={JSON.stringify(user)}>
-                <NativeNotificationWrapper authUser={JSON.stringify(user)}>
-                  <LayoutWrapper>{children}</LayoutWrapper>
-                </NativeNotificationWrapper>
-              </NotificationWrapper>
-            </CacheRefresherWrapper>
-            <Toaster />
+            <IdleLogoutWrapper>
+              <NextTopLoader showSpinner={false} color="#df1514" />
+              <CacheRefresherWrapper>
+                <NotificationWrapper authUser={JSON.stringify(user)}>
+                  <NativeNotificationWrapper authUser={JSON.stringify(user)}>
+                    <LayoutWrapper>{children}</LayoutWrapper>
+                  </NativeNotificationWrapper>
+                </NotificationWrapper>
+              </CacheRefresherWrapper>
+              <Toaster />
+            </IdleLogoutWrapper>
           </ThemeWrapper>
         </SessionWrapper>
       </body>
