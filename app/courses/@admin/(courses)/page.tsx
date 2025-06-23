@@ -20,6 +20,7 @@ const AdminCoursesPage = async ({
       <ErrorToast error={"Error fetching instructors: " + (error || "")} />
     );
   }
+
   return (
     <FadeInWrapper>
       <Searcher query={query} page={page} tab={tab} />

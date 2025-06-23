@@ -11,12 +11,18 @@ import { getActiveUsersFromMonths } from "@/lib/monthly-activity";
 import FadeInWrapper from "@/components/wrappers/fadein-wrapper";
 import Searcher from "@/components/shared/search/general-search/searcher";
 import UpcomingTasks from "@/components/admin-access/dashboard-page/upcoming-tasks";
+import { getOptimisticUser } from "@/lib/user";
+import Unauthorized from "@/components/ui/unauthorized";
 
 const AdminDashboardPage = async ({
   searchParams,
 }: {
   searchParams?: Promise<{ query?: string; page?: string; tab?: string }>;
 }) => {
+  const user = await getOptimisticUser();
+
+  if (user.role !== "admin") return <Unauthorized />;
+
   const { success: activeUsers, error: activeUsersError } =
     await getActiveUsersFromMonths(6);
   const { success: topCourses, error: topCoursesError } =

@@ -5,6 +5,7 @@ import { getOptimisticUser } from "@/lib/user";
 import FadeInWrapper from "@/components/wrappers/fadein-wrapper";
 import ErrorToast from "@/components/ui/error-toast";
 import Searcher from "@/components/shared/search/general-search/searcher";
+import Unauthorized from "@/components/ui/unauthorized";
 
 const InstructorCalendarPage = async ({
   searchParams,
@@ -13,6 +14,9 @@ const InstructorCalendarPage = async ({
 }) => {
   const { query, page, tab } = (await searchParams) || {};
   const user = await getOptimisticUser();
+
+  if (user.role !== "instructor") return <Unauthorized />;
+
   const { success: instructorProjects, error: instructorProjectsError } =
     await getProjectsOfUser(user.id);
   const { success: instructorTasks, error: instructorTasksError } =

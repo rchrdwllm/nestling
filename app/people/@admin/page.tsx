@@ -18,6 +18,7 @@ import RegisteredTable from "@/components/admin-access/people-page/registered-ta
 import { registeredTableCols } from "@/components/admin-access/people-page/registered-table-def";
 import AddPeopleBtn from "@/components/admin-access/people-page/add-people-btn";
 import Searcher from "@/components/shared/search/general-search/searcher";
+import Unauthorized from "@/components/ui/unauthorized";
 
 const AdminPeoplePage = async ({
   searchParams,
@@ -25,13 +26,16 @@ const AdminPeoplePage = async ({
   searchParams?: Promise<{ query?: string; page?: string; tab?: string }>;
 }) => {
   const { query, page, tab } = (await searchParams) || {};
+  const user = await getOptimisticUser();
+
+  if (user.role !== "admin") return <Unauthorized />;
+
   const { success: students, error: studentsError } = await getAllStudents();
   const { success: instructors, error: instructorsError } =
     await getAllInstructors();
   const { success: admins, error: adminsError } = await getAllAdmins();
   const { success: registeredEmails, error: registeredEmailsError } =
     await getRegisteredEmails();
-  const user = await getOptimisticUser();
 
   if (studentsError || instructorsError || adminsError) {
     return (

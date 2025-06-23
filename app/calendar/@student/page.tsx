@@ -4,6 +4,7 @@ import { getOptimisticUser } from "@/lib/user";
 import FadeInWrapper from "@/components/wrappers/fadein-wrapper";
 import ErrorToast from "@/components/ui/error-toast";
 import Searcher from "@/components/shared/search/general-search/searcher";
+import Unauthorized from "@/components/ui/unauthorized";
 
 const StudentCalendarPage = async ({
   searchParams,
@@ -12,6 +13,9 @@ const StudentCalendarPage = async ({
 }) => {
   const { query, page, tab } = (await searchParams) || {};
   const user = await getOptimisticUser();
+
+  if (user.role !== "student") return <Unauthorized />;
+
   const { success: upcomingAssignments, error } =
     await getUpcomingAssignmentsForStudent(user.id);
 
@@ -20,6 +24,7 @@ const StudentCalendarPage = async ({
       <ErrorToast error={"Failed to fetch upcoming assignments: " + error} />
     );
   }
+
   return (
     <FadeInWrapper>
       <Searcher query={query} page={page} tab={tab} />

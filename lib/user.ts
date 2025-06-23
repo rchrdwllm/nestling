@@ -9,18 +9,19 @@ import { decryptData } from "./aes";
 
 export const getCurrentUser = async () => {
   const user = await getServerSession(authOptions);
-
   return user?.user;
 };
 
 export const getOptimisticUser = async () => {
   const user = await getServerSession(authOptions);
-
   return user!.user!;
 };
 
 export const getUserById = unstable_cache(
   async (userId: string) => {
+    console.log(
+      `[${new Date().toISOString()}] getUserById called for userId=${userId}`
+    );
     try {
       const userSnapshot = await db.collection("users").doc(userId).get();
 
@@ -57,6 +58,7 @@ export const getUserById = unstable_cache(
 
 export const getUnarchivedStudents = unstable_cache(
   async () => {
+    console.log(`[${new Date().toISOString()}] getUnarchivedStudents called`);
     try {
       const usersSnapshot = await db
         .collection("users")
@@ -91,6 +93,9 @@ export const getUnarchivedStudents = unstable_cache(
 
 export const getUnarchivedInstructors = unstable_cache(
   async () => {
+    console.log(
+      `[${new Date().toISOString()}] getUnarchivedInstructors called`
+    );
     try {
       const usersSnapshot = await db
         .collection("users")
@@ -125,6 +130,7 @@ export const getUnarchivedInstructors = unstable_cache(
 
 export const getUnarchivedAdmins = unstable_cache(
   async () => {
+    console.log(`[${new Date().toISOString()}] getUnarchivedAdmins called`);
     try {
       const usersSnapshot = await db
         .collection("users")
@@ -159,6 +165,7 @@ export const getUnarchivedAdmins = unstable_cache(
 
 export const getAllStudents = unstable_cache(
   async () => {
+    console.log(`[${new Date().toISOString()}] getAllStudents called`);
     try {
       const usersSnapshot = await db
         .collection("users")
@@ -192,6 +199,7 @@ export const getAllStudents = unstable_cache(
 
 export const getAllInstructors = unstable_cache(
   async () => {
+    console.log(`[${new Date().toISOString()}] getAllInstructors called`);
     try {
       const usersSnapshot = await db
         .collection("users")
@@ -225,6 +233,7 @@ export const getAllInstructors = unstable_cache(
 
 export const getAllAdmins = unstable_cache(
   async () => {
+    console.log(`[${new Date().toISOString()}] getAllAdmins called`);
     try {
       const usersSnapshot = await db
         .collection("users")
