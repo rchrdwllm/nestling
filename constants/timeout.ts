@@ -1,1 +1,1 @@
-export const IDLE_TIMEOUT = 10 * 1000;
+export const IDLE_TIMEOUT = 60 * 60 * 1000;
