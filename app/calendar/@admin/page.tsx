@@ -5,6 +5,7 @@ import { getIncompleteUserTasks } from "@/lib/task";
 import { getOptimisticUser } from "@/lib/user";
 import FadeInWrapper from "@/components/wrappers/fadein-wrapper";
 import Searcher from "@/components/shared/search/general-search/searcher";
+import Unauthorized from "@/components/ui/unauthorized";
 
 const AdminCalendarPage = async ({
   searchParams,
@@ -13,6 +14,9 @@ const AdminCalendarPage = async ({
 }) => {
   const { query, page, tab } = (await searchParams) || {};
   const user = await getOptimisticUser();
+
+  if (user.role !== "admin") return <Unauthorized />;
+
   const { success: adminProjects, error: adminProjectsError } =
     await getProjectsOfUser(user.id);
   const { success: adminTasks, error: adminTasksError } =

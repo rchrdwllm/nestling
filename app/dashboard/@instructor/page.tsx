@@ -3,6 +3,7 @@ import FadeInWrapper from "@/components/wrappers/fadein-wrapper";
 import Searcher from "@/components/shared/search/general-search/searcher";
 import UpcomingTasks from "@/components/shared/projects-page/upcoming-tasks";
 import { getOptimisticUser } from "@/lib/user";
+import Unauthorized from "@/components/ui/unauthorized";
 
 const InstructorDashboardPage = async ({
   searchParams,
@@ -11,7 +12,7 @@ const InstructorDashboardPage = async ({
 }) => {
   const user = await getOptimisticUser();
 
-  if (user.role !== "instructor") return null;
+  if (user.role !== "instructor") return <Unauthorized />;
 
   const { query, page, tab } = (await searchParams) || {};
 

@@ -4,6 +4,7 @@ import RecentAnnouncements from "@/components/student-access/dashboard-page/rece
 import Searcher from "@/components/shared/search/general-search/searcher";
 import UpcomingTasks from "@/components/student-access/dashboard-page/upcoming-tasks";
 import { getOptimisticUser } from "@/lib/user";
+import Unauthorized from "@/components/ui/unauthorized";
 
 const StudentDashboardPage = async ({
   searchParams,
@@ -12,7 +13,7 @@ const StudentDashboardPage = async ({
 }) => {
   const user = await getOptimisticUser();
 
-  if (user.role !== "student") return null;
+  if (user.role !== "student") return <Unauthorized />;
 
   const { query, page, tab } = (await searchParams) || {};
 
