@@ -46,7 +46,9 @@ export const getArchivedCourses = unstable_cache(
 
 export const getCourse = unstable_cache(
   async (courseId: string) => {
-    console.log(`[${new Date().toISOString()}] getCourse called for courseId=${courseId}`);
+    console.log(
+      `[${new Date().toISOString()}] getCourse called for courseId=${courseId}`
+    );
     try {
       const snapshot = await db.collection("courses").doc(courseId).get();
       const course = snapshot.data() as Course;
@@ -62,7 +64,9 @@ export const getCourse = unstable_cache(
 
 export const getAvailableCourses = unstable_cache(
   async (studentId) => {
-    console.log(`[${new Date().toISOString()}] getAvailableCourses called for studentId=${studentId}`);
+    console.log(
+      `[${new Date().toISOString()}] getAvailableCourses called for studentId=${studentId}`
+    );
     try {
       // Get enrolled course IDs
       const enrolledCoursesSnapshot = await db
@@ -71,7 +75,9 @@ export const getAvailableCourses = unstable_cache(
         .collection("enrolledCourses")
         .where("accessEnabled", "==", true)
         .get();
-      const enrolledCourseIds = enrolledCoursesSnapshot.docs.map((doc) => doc.id);
+      const enrolledCourseIds = enrolledCoursesSnapshot.docs.map(
+        (doc) => doc.id
+      );
 
       // If no enrolled courses, just return all unarchived courses
       if (enrolledCourseIds.length === 0) {
@@ -92,7 +98,9 @@ export const getAvailableCourses = unstable_cache(
           .where("isArchived", "==", false)
           .where("id", "not-in", batch)
           .get();
-        availableCourses.push(...snapshot.docs.map((doc) => doc.data() as Course));
+        availableCourses.push(
+          ...snapshot.docs.map((doc) => doc.data() as Course)
+        );
       }
       return { success: availableCourses };
     } catch (error) {
@@ -106,7 +114,9 @@ export const getAvailableCourses = unstable_cache(
 
 export const getEnrolledCourses = unstable_cache(
   async (studentId: string) => {
-    console.log(`[${new Date().toISOString()}] getEnrolledCourses called for studentId=${studentId}`);
+    console.log(
+      `[${new Date().toISOString()}] getEnrolledCourses called for studentId=${studentId}`
+    );
     try {
       const snapshot = await db
         .collection("users")
@@ -148,7 +158,9 @@ export const getEnrolledCourses = unstable_cache(
 
 export const getEnrolledStudents = unstable_cache(
   async (courseId: string) => {
-    console.log(`[${new Date().toISOString()}] getEnrolledStudents called for courseId=${courseId}`);
+    console.log(
+      `[${new Date().toISOString()}] getEnrolledStudents called for courseId=${courseId}`
+    );
     try {
       const snapshot = await db
         .collection("courses")
@@ -199,7 +211,9 @@ export const getEnrolledStudents = unstable_cache(
 
 export const getEnrolledStudentIds = unstable_cache(
   async (courseId: string) => {
-    console.log(`[${new Date().toISOString()}] getEnrolledStudentIds called for courseId=${courseId}`);
+    console.log(
+      `[${new Date().toISOString()}] getEnrolledStudentIds called for courseId=${courseId}`
+    );
     try {
       const snapshot = await db
         .collection("courses")
@@ -219,7 +233,9 @@ export const getEnrolledStudentIds = unstable_cache(
 
 export const getInstructorCourses = unstable_cache(
   async (instructorId: string) => {
-    console.log(`[${new Date().toISOString()}] getInstructorCourses called for instructorId=${instructorId}`);
+    console.log(
+      `[${new Date().toISOString()}] getInstructorCourses called for instructorId=${instructorId}`
+    );
     try {
       const snapshot = await db
         .collection("users")
@@ -258,7 +274,9 @@ export const getInstructorCourses = unstable_cache(
 
 export const getUnarchivedInstructorCourses = unstable_cache(
   async (instructorId: string) => {
-    console.log(`[${new Date().toISOString()}] getUnarchivedInstructorCourses called for instructorId=${instructorId}`);
+    console.log(
+      `[${new Date().toISOString()}] getUnarchivedInstructorCourses called for instructorId=${instructorId}`
+    );
     try {
       const snapshot = await db
         .collection("users")
@@ -299,7 +317,9 @@ export const getUnarchivedInstructorCourses = unstable_cache(
 
 export const getArchivedInstructorCourses = unstable_cache(
   async (instructorId: string) => {
-    console.log(`[${new Date().toISOString()}] getArchivedInstructorCourses called for instructorId=${instructorId}`);
+    console.log(
+      `[${new Date().toISOString()}] getArchivedInstructorCourses called for instructorId=${instructorId}`
+    );
     try {
       const snapshot = await db
         .collection("users")
@@ -340,7 +360,9 @@ export const getArchivedInstructorCourses = unstable_cache(
 
 export const getCourseImage = unstable_cache(
   async (courseId: string) => {
-    console.log(`[${new Date().toISOString()}] getCourseImage called for courseId=${courseId}`);
+    console.log(
+      `[${new Date().toISOString()}] getCourseImage called for courseId=${courseId}`
+    );
     try {
       const snapshot = await db
         .collection("courses")
@@ -364,7 +386,9 @@ export const getCourseImage = unstable_cache(
 
 export const getEnrollmentDetails = unstable_cache(
   async (courseId: string, studentId: string) => {
-    console.log(`[${new Date().toISOString()}] getEnrollmentDetails called for courseId=${courseId}, studentId=${studentId}`);
+    console.log(
+      `[${new Date().toISOString()}] getEnrollmentDetails called for courseId=${courseId}, studentId=${studentId}`
+    );
     try {
       const snapshot = await db
         .collection("courses")
@@ -392,7 +416,9 @@ export const getEnrollmentDetails = unstable_cache(
 
 export const getCourseInstructors = unstable_cache(
   async (courseId: string) => {
-    console.log(`[${new Date().toISOString()}] getCourseInstructors called for courseId=${courseId}`);
+    console.log(
+      `[${new Date().toISOString()}] getCourseInstructors called for courseId=${courseId}`
+    );
     try {
       const courseInstructorSnapshot = await db
         .collection("courses")
@@ -445,7 +471,9 @@ export const getCourseInstructors = unstable_cache(
 
 export const getTopCoursesByEnrollments = unstable_cache(
   async () => {
-    console.log(`[${new Date().toISOString()}] getTopCoursesByEnrollments called`);
+    console.log(
+      `[${new Date().toISOString()}] getTopCoursesByEnrollments called`
+    );
     try {
       const coursesSnapshot = await db.collection("courses").get();
 
@@ -483,7 +511,9 @@ export const getTopCoursesByEnrollments = unstable_cache(
 
 export const getSlicedCourses = unstable_cache(
   async (studentId: string, limit: number = 4) => {
-    console.log(`[${new Date().toISOString()}] getSlicedCourses called for studentId=${studentId}, limit=${limit}`);
+    console.log(
+      `[${new Date().toISOString()}] getSlicedCourses called for studentId=${studentId}, limit=${limit}`
+    );
     try {
       const snapshot = await db
         .collection("users")
@@ -528,7 +558,9 @@ export const getSlicedCourses = unstable_cache(
 
 export const getSlicedInstructorCourses = unstable_cache(
   async (instructorId: string, limit: number = 4) => {
-    console.log(`[${new Date().toISOString()}] getSlicedInstructorCourses called for instructorId=${instructorId}, limit=${limit}`);
+    console.log(
+      `[${new Date().toISOString()}] getSlicedInstructorCourses called for instructorId=${instructorId}, limit=${limit}`
+    );
     try {
       const snapshot = await db
         .collection("users")
