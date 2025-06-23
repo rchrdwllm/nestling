@@ -1,8 +1,17 @@
 import CreateProjectDialog from "@/components/admin-access/projects-page/create-project-dialog";
-import { getUnarchivedAdmins, getUnarchivedInstructors } from "@/lib/user";
+import Unauthorized from "@/components/ui/unauthorized";
+import {
+  getOptimisticUser,
+  getUnarchivedAdmins,
+  getUnarchivedInstructors,
+} from "@/lib/user";
 import { ReactNode } from "react";
 
 const Layout = async ({ children }: { children: ReactNode }) => {
+  const user = await getOptimisticUser();
+
+  if (user.role !== "instructor") return <Unauthorized />;
+
   const { success: admins, error: adminsError } = await getUnarchivedAdmins();
   const { success: instructors, error: instructorsError } =
     await getUnarchivedInstructors();
