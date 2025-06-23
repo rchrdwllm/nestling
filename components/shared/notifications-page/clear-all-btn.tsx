@@ -18,6 +18,9 @@ const ClearAllBtn = () => {
       toast.error("Failed to delete notifications");
       console.error("Error deleting notifications");
     },
+    onExecute: () => {
+      toast.loading("Deleting notifications...");
+    },
   });
 
   return (
