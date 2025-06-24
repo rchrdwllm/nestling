@@ -3,29 +3,21 @@ import { Thread } from "@/types";
 import Link from "next/link";
 import ThreadCardWrapper from "./thread-card-wrapper";
 import { getLatestMessage } from "@/lib/message";
+import ErrorToast from "@/components/ui/error-toast";
 
 const ThreadCard = async ({ userIds, channelId }: Thread) => {
   const user = await getOptimisticUser();
   const receiverId = userIds.find((id) => id !== user.id)!;
-  const { success: receiver, error: receiverError } =
-    await getUserById(receiverId);
+  const { success: receiver, error: receiverError } = await getUserById(
+    receiverId
+  );
   const { success: latestMessage } = await getLatestMessage(channelId);
 
-  if (receiverError) {
+  if (receiverError || !receiver) {
     return (
-      <div className="flex-1 flex justify-center items-center">
-        <h1 className="text-muted-foreground">
-          {JSON.stringify(receiverError)}
-        </h1>
-      </div>
-    );
-  }
-
-  if (!receiver) {
-    return (
-      <div className="flex-1 flex justify-center items-center">
-        <h1 className="text-muted-foreground">No receiver available</h1>
-      </div>
+      <ErrorToast
+        error={"Failed to load thread: " + (receiverError || "Unknown error")}
+      />
     );
   }
 
@@ -34,7 +26,7 @@ const ThreadCard = async ({ userIds, channelId }: Thread) => {
       <ThreadCardWrapper channelId={channelId}>
         <h1 className="font-medium text-inherit">{receiver.name}</h1>
         {latestMessage && (
-          <p className="text-sm text-muted-foreground truncate max-w-[90%]">
+          <p className="max-w-[90%] text-muted-foreground text-sm truncate">
             {latestMessage.senderId === user.id
               ? `You: ${latestMessage.message}`
               : latestMessage.message}

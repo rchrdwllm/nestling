@@ -2,7 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import { useParams } from "next/navigation";
-import { ReactNode, useEffect } from "react";
+import { ReactNode } from "react";
 
 type ThreadCardWrapperProps = {
   children: ReactNode;
@@ -15,8 +15,8 @@ const ThreadCardWrapper = ({ children, channelId }: ThreadCardWrapperProps) => {
   return (
     <div
       className={cn(
-        "h-auto p-4 border-b border-border cursor-pointer transition-colors hover:bg-muted",
-        params?.channelId === channelId && "bg-muted"
+        "h-auto p-4 border-b border-border cursor-pointer transition-colors hover:bg-muted-secondary",
+        params?.channelId === channelId && "bg-muted-secondary"
       )}
     >
       {children}
