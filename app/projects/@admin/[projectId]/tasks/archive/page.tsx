@@ -36,7 +36,9 @@ const ArchivedTasks = async ({
     );
   }
 
-  const availableAssignees = [...heads, ...associates];
+  const availableAssignees = [
+    ...new Map([...heads, ...associates].map((user) => [user.id, user])).values(),
+  ];
 
   return (
     <div className="p-6 flex flex-col gap-4">

@@ -73,7 +73,9 @@ const ProjectPage = async ({
     );
   }
 
-  const availableAssignees = [...heads, ...associates];
+  const availableAssignees = [
+    ...new Map([...heads, ...associates].map((user) => [user.id, user])).values(),
+  ];
 
   const { success: tasks, error: tasksError } = await getProjectTasks(
     project.id
