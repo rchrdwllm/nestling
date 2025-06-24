@@ -36,12 +36,15 @@ import { useAction } from "next-safe-action/hooks";
 import { removeFromCourse } from "@/server/actions/remove-from-course";
 import { toast } from "sonner";
 import GenerateUsersReport from "./generate-users-report";
+import GenerateCourseUsersReport from "../courses-page/people-page/generate-course-users-report";
 
 interface UserTableProps {
   columns: ColumnDef<User>[];
   data: User[];
   searchPlaceholder?: string;
   courseId?: string;
+  courseCode: string;
+  courseTitle: string;
   hide?: string[];
   showUsersExport?: boolean;
   showCourseUsersExport?: boolean;
@@ -52,6 +55,8 @@ const UserTable = ({
   data,
   searchPlaceholder = "Search users...",
   courseId,
+  courseCode,
+  courseTitle,
   hide = [],
   showUsersExport = false,
   showCourseUsersExport = false,
@@ -127,6 +132,13 @@ const UserTable = ({
           >
             Next
           </Button>
+          {showCourseUsersExport && (
+            <GenerateCourseUsersReport
+              courseId={courseId!}
+              courseTitle={courseTitle!}
+              courseCode={courseCode!}
+            />
+          )}
           {showUsersExport && <GenerateUsersReport />}
         </div>
       </div>

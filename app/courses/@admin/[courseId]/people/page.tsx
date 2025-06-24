@@ -1,5 +1,9 @@
 import ErrorToast from "@/components/ui/error-toast";
-import { getEnrolledStudents, getCourseInstructors } from "@/lib/course";
+import {
+  getEnrolledStudents,
+  getCourseInstructors,
+  getCourse,
+} from "@/lib/course";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import UserTable from "@/components/shared/people-page/user-table";
 import { userTableCols } from "@/components/shared/people-page/user-table-def";
@@ -17,6 +21,7 @@ const PeoplePage = async ({
 }) => {
   const { courseId } = await params;
   const { query, page, tab } = (await searchParams) || {};
+  const { success: course, error: courseError } = await getCourse(courseId);
   const { success: enrolledStudents, error: enrolledStudentsError } =
     await getEnrolledStudents(courseId);
   const { success: courseInstructors, error: courseInstructorsError } =
@@ -25,6 +30,10 @@ const PeoplePage = async ({
     await getAllStudents();
   const { success: allInstructors, error: allInstructorsError } =
     await getAllInstructors();
+
+  if (courseError || !course) {
+    return <ErrorToast error={"Error fetching course: " + courseError} />;
+  }
 
   if (enrolledStudentsError || !enrolledStudents) {
     return (
@@ -102,6 +111,9 @@ const PeoplePage = async ({
             data={enrolledStudents}
             searchPlaceholder="Search students by name..."
             courseId={courseId}
+            courseCode={course.courseCode}
+            courseTitle={course.name}
+            showCourseUsersExport
           />
         </TabsContent>
         <TabsContent value="instructors" className="space-y-4">
@@ -116,6 +128,9 @@ const PeoplePage = async ({
             data={courseInstructors}
             searchPlaceholder="Search instructors by name..."
             courseId={courseId}
+            courseCode={course.courseCode}
+            courseTitle={course.name}
+            showCourseUsersExport
           />
         </TabsContent>
       </Tabs>

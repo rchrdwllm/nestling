@@ -1,6 +1,6 @@
 "use server";
 
-import { Announcement, Content, Submission, User } from "@/types";
+import { Announcement, Content, Course, Submission, User } from "@/types";
 import { db } from "./firebase";
 import { unstable_cache } from "next/cache";
 import { formatInTimeZone } from "date-fns-tz";
@@ -379,4 +379,91 @@ export const generateAnnouncementsReport = unstable_cache(
   },
   ["courseId"],
   { revalidate: 60 * 60, tags: ["announcements"] }
+);
+
+export const generateCourseStudentsReport = unstable_cache(
+  async (courseId: string) => {
+    try {
+      const studentsSnapshot = await db
+        .collection("courses")
+        .doc(courseId)
+        .collection("enrolledStudents")
+        .get();
+
+      if (studentsSnapshot.empty) {
+        return { success: [] };
+      }
+
+      const studentIds = studentsSnapshot.docs.map((doc) => doc.id);
+      const enrolledStudents = [];
+
+      for (const studentId of studentIds) {
+        const studentDoc = await db.collection("users").doc(studentId).get();
+
+        if (studentDoc.exists) {
+          enrolledStudents.push(studentDoc.data() as User);
+        }
+      }
+
+      const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+      const csvData = enrolledStudents.map((student) => ({
+        ID: student.id,
+        "First name": student.firstName,
+        "Last name": student.lastName,
+        Email: student.email,
+      }));
+
+      return { success: csvData };
+    } catch (error) {
+      return { error: "Error generating course students report" };
+    }
+  },
+  ["courseId"],
+  { revalidate: 60 * 60 * 24, tags: ["user"] }
+);
+
+export const generateCourseInstructorsReport = unstable_cache(
+  async (courseId: string) => {
+    try {
+      const instructorsSnapshot = await db
+        .collection("courses")
+        .doc(courseId)
+        .collection("instructors")
+        .get();
+
+      if (instructorsSnapshot.empty) {
+        return { success: [] };
+      }
+
+      const instructorIds = instructorsSnapshot.docs.map((doc) => doc.id);
+      const instructors = [];
+
+      for (const instructorId of instructorIds) {
+        const instructorDoc = await db
+          .collection("users")
+          .doc(instructorId)
+          .get();
+
+        if (instructorDoc.exists) {
+          instructors.push(instructorDoc.data() as User);
+        }
+      }
+
+      const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+      const csvData = instructors.map((instructor) => ({
+        ID: instructor.id,
+        "First name": instructor.firstName,
+        "Last name": instructor.lastName,
+        Email: instructor.email,
+      }));
+
+      return { success: csvData };
+    } catch (error) {
+      return { error: "Error generating course instructors report" };
+    }
+  },
+  ["courseId"],
+  { revalidate: 60 * 60 * 24, tags: ["user"] }
 );

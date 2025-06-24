@@ -90,7 +90,6 @@ export const getAvailableCourses = unstable_cache(
         return { success: courses };
       }
 
-      // Batch fetch available courses not in enrolledCourseIds
       const availableCourses: Course[] = [];
       for (let i = 0; i < enrolledCourseIds.length; i += 10) {
         const batch = enrolledCourseIds.slice(i, i + 10);
