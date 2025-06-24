@@ -104,23 +104,19 @@ const GenerateLogsReport = ({ data }: GenerateGradesReportProps) => {
       return;
     }
 
-    toast.loading("Exporting data...");
-
     if (format === "pdf") {
       await handleDownloadPdf();
 
-      toast.dismiss();
       setIsOpen(false);
     } else if (format === "csv") {
       await handleDownloadCsv();
-
-      toast.dismiss();
-      setIsOpen(false);
     }
 
     toast.dismiss();
     toast.success("Data exported successfully!");
+
     setIsLoading(false);
+    setIsOpen(false);
   };
 
   return (
@@ -154,7 +150,7 @@ const GenerateLogsReport = ({ data }: GenerateGradesReportProps) => {
           >
             Cancel
           </Button>
-          <Button disabled={isLoading} onClick={handleExport}>
+          <Button disabled={isLoading || !format} onClick={handleExport}>
             Export
           </Button>
         </DialogFooter>
