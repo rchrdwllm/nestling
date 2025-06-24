@@ -11,6 +11,7 @@ const NotificationsPage = async ({
   searchParams?: Promise<{ query?: string; page?: string; tab?: string }>;
 }) => {
   const { query, page, tab } = (await searchParams) || {};
+
   return (
     <FadeInWrapper>
       <Searcher query={query} page={page} tab={tab} />

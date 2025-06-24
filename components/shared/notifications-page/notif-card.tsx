@@ -14,7 +14,7 @@ const NotifCard = ({
   isRead,
 }: Notification) => {
   return (
-    <Card className="flex justify-between items-center p-4">
+    <Card className="flex justify-between items-center p-4 w-full">
       <div className="flex flex-col gap-2">
         <Link href={url}>
           <Button
