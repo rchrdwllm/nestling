@@ -37,7 +37,7 @@ const FilePreview = ({
 
   if (resource_type === "raw") {
     return (
-      <div className="relative flex flex-col justify-center items-center gap-2 bg-secondary px-4 rounded-md h-36 aspect-square cursor-pointer">
+      <div className="relative flex flex-col justify-center items-center gap-2 bg-muted-secondary px-4 rounded-md h-36 aspect-square cursor-pointer">
         <FileIcon className="w-8 h-8 text-gray-500" />
         <p className="text-muted-foreground text-sm">{original_filename}</p>
       </div>
