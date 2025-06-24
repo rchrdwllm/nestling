@@ -35,6 +35,7 @@ import { MoreHorizontal } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
 import { removeFromCourse } from "@/server/actions/remove-from-course";
 import { toast } from "sonner";
+import GenerateUsersReport from "./generate-users-report";
 
 interface UserTableProps {
   columns: ColumnDef<User>[];
@@ -42,6 +43,8 @@ interface UserTableProps {
   searchPlaceholder?: string;
   courseId?: string;
   hide?: string[];
+  showUsersExport?: boolean;
+  showCourseUsersExport?: boolean;
 }
 
 const UserTable = ({
@@ -50,6 +53,8 @@ const UserTable = ({
   searchPlaceholder = "Search users...",
   courseId,
   hide = [],
+  showUsersExport = false,
+  showCourseUsersExport = false,
 }: UserTableProps) => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -110,7 +115,6 @@ const UserTable = ({
         <div className="flex items-center gap-2">
           <Button
             variant="outline"
-            size="sm"
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >
@@ -118,12 +122,12 @@ const UserTable = ({
           </Button>
           <Button
             variant="outline"
-            size="sm"
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           >
             Next
           </Button>
+          {showUsersExport && <GenerateUsersReport />}
         </div>
       </div>
       <Card>

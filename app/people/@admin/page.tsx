@@ -59,6 +59,7 @@ const AdminPeoplePage = async ({
       />
     );
   }
+
   return (
     <FadeInWrapper>
       <Searcher query={query} page={page} tab={tab} />
@@ -105,6 +106,7 @@ const AdminPeoplePage = async ({
               }
               data={students}
               searchPlaceholder="Search students by name..."
+              showUsersExport
             />
           </TabsContent>
           <TabsContent value="instructors" className="space-y-4">
@@ -120,6 +122,7 @@ const AdminPeoplePage = async ({
               }
               data={instructors}
               searchPlaceholder="Search instructors by name..."
+              showUsersExport
             />
           </TabsContent>
           <TabsContent value="admins" className="space-y-4">
@@ -135,6 +138,7 @@ const AdminPeoplePage = async ({
               }
               data={admins}
               searchPlaceholder="Search administrators by name..."
+              showUsersExport
             />
           </TabsContent>
           <TabsContent value="registered" className="space-y-4">

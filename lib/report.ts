@@ -3,6 +3,119 @@
 import { Announcement, Content, Submission, User } from "@/types";
 import { db } from "./firebase";
 import { unstable_cache } from "next/cache";
+import { formatInTimeZone } from "date-fns-tz";
+
+export const generateStudentsReport = unstable_cache(
+  async () => {
+    try {
+      const studentsSnapshot = await db
+        .collection("users")
+        .where("role", "==", "student")
+        .get();
+
+      if (studentsSnapshot.empty) {
+        return { success: [] };
+      }
+
+      const students = studentsSnapshot.docs.map((doc) => doc.data() as User);
+      const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+      const csvData = students.map((student) => ({
+        ID: student.id,
+        "First name": student.firstName,
+        "Last name": student.lastName,
+        Email: student.email,
+        Joined: formatInTimeZone(
+          student.createdAt,
+          timeZone,
+          "MMMM d, yyyy HH:mm:ss zzz"
+        ),
+      }));
+
+      return { success: csvData };
+    } catch (error) {
+      return { error: "Error generating students report" };
+    }
+  },
+  [],
+  { revalidate: 60 * 60 * 24, tags: ["user"] }
+);
+
+export const generateInstructorsReport = unstable_cache(
+  async () => {
+    try {
+      const instructorsSnapshot = await db
+        .collection("users")
+        .where("role", "==", "instructor")
+        .get();
+
+      if (instructorsSnapshot.empty) {
+        return { success: [] };
+      }
+
+      const instructors = instructorsSnapshot.docs.map(
+        (doc) => doc.data() as User
+      );
+      const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+      const csvData = instructors.map((instructor) => ({
+        ID: instructor.id,
+        "First name": instructor.firstName,
+        "Last name": instructor.lastName,
+        Email: instructor.email,
+        Joined: formatInTimeZone(
+          instructor.createdAt,
+          timeZone,
+          "MMMM d, yyyy HH:mm:ss zzz"
+        ),
+      }));
+
+      return { success: csvData };
+    } catch (error) {
+      console.error("Error generating instructors report: ", error);
+      return { error: "Error generating instructors report" };
+    }
+  },
+  [],
+  { revalidate: 60 * 60 * 24, tags: ["user"] }
+);
+
+export const generateAdminsReport = unstable_cache(
+  async () => {
+    try {
+      const adminsSnapshot = await db
+        .collection("users")
+        .where("role", "==", "admin")
+        .get();
+
+      if (adminsSnapshot.empty) {
+        return { success: [] };
+      }
+
+      const admins = adminsSnapshot.docs.map((doc) => doc.data() as User);
+      const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+      const csvData = admins.map((admin) => ({
+        ID: admin.id,
+        "First name": admin.firstName,
+        "Last name": admin.lastName,
+        Email: admin.email,
+        Joined: formatInTimeZone(
+          admin.createdAt,
+          timeZone,
+          "MMMM d, yyyy HH:mm:ss zzz"
+        ),
+      }));
+
+      return { success: csvData };
+    } catch (error) {
+      console.error("Error generating admins report: ", error);
+      return { error: "Error generating admins report" };
+    }
+  },
+  [],
+  { revalidate: 60 * 60 * 24, tags: ["user"] }
+);
 
 export const generateStudentGradesReport = unstable_cache(
   async (courseId: string, studentId: string) => {
@@ -45,8 +158,8 @@ export const generateStudentGradesReport = unstable_cache(
       );
 
       const row: Record<string, any> = {
-        student: `${studentData.firstName} ${studentData.lastName}`,
-        studentId: studentData.id,
+        Name: `${studentData.firstName} ${studentData.lastName}`,
+        ID: studentData.id,
       };
 
       let totalGrade = 0;
@@ -132,8 +245,8 @@ export const generateGradesReport = unstable_cache(
 
       const csvData = students.map((student) => {
         const row: Record<string, any> = {
-          student: `${student.firstName} ${student.lastName}`,
-          studentId: student.id,
+          Name: `${student.firstName} ${student.lastName}`,
+          ID: student.id,
         };
 
         let totalGrade = 0;
@@ -200,6 +313,25 @@ export const generateSubmissionsReport = unstable_cache(
         grade: submission.isGraded ? submission.grade : "Not graded",
       }));
 
+      const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+      submissions.map((submission) => ({
+        Name: submission.studentName,
+        Feedback: submission.feedback || "No feedback",
+        Grade: submission.isGraded ? submission.grade : "Not graded",
+        "Graded At":
+          formatInTimeZone(
+            submission.gradedAt!,
+            timeZone,
+            "MMMM d, yyyy HH:mm:ss zzz"
+          ) || "Not graded",
+        "Submission Date": formatInTimeZone(
+          submission.createdAt,
+          timeZone,
+          "MMMM d, yyyy HH:mm:ss zzz"
+        ),
+      }));
+
       return { success: transformed };
     } catch (error) {
       console.error(error);
@@ -224,13 +356,18 @@ export const generateAnnouncementsReport = unstable_cache(
         return doc.data();
       }) as Announcement[];
 
+      const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
       const csvData = announcements.map((announcement) => {
         return {
-          id: announcement.id,
-          title: announcement.title,
-          content: announcement.content,
-          createdAt: announcement.createdAt,
-          userId: announcement.senderId,
+          Title: announcement.title,
+          Content: announcement.content,
+          "Posted at": formatInTimeZone(
+            announcement.createdAt,
+            timeZone,
+            "MMMM d, yyyy HH:mm:ss zzz"
+          ),
+          "Sender ID": announcement.senderId,
         };
       });
 
