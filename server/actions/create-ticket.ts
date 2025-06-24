@@ -29,6 +29,8 @@ export const createTicket = actionClient
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
         userId: user.id,
+        isArchived: false,
+        archivedAt: null,
       });
 
       const { success: admins, error: adminsError } =
