@@ -43,8 +43,8 @@ interface UserTableProps {
   data: User[];
   searchPlaceholder?: string;
   courseId?: string;
-  courseCode: string;
-  courseTitle: string;
+  courseCode?: string;
+  courseTitle?: string;
   hide?: string[];
   showUsersExport?: boolean;
   showCourseUsersExport?: boolean;
