@@ -37,13 +37,15 @@ const ArchivedTasks = async ({
   }
 
   const availableAssignees = [
-    ...new Map([...heads, ...associates].map((user) => [user.id, user])).values(),
+    ...new Map(
+      [...heads, ...associates].map((user) => [user.id, user])
+    ).values(),
   ];
 
   return (
-    <div className="p-6 flex flex-col gap-4">
+    <div className="flex flex-col gap-4 p-6">
       <div className="flex flex-col gap-4">
-        <h1 className="text-3xl font-semibold">Archived Tasks</h1>
+        <h1 className="font-semibold text-3xl">Archived Tasks</h1>
         <hr />
       </div>
       <div>
