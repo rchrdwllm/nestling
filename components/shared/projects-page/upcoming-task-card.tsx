@@ -29,7 +29,7 @@ const UpcomingTaskCard = async ({
 
   return (
     <Link href={`/projects/${projectId}`}>
-      <Card className="flex flex-col gap-1 hover:shadow-md p-4 transition-shadow">
+      <Card className="flex flex-col gap-2 hover:shadow-md p-4 transition-shadow">
         <div>
           <h3 className="font-medium">{title}</h3>
           {description && (
