@@ -1,12 +1,14 @@
 import ChatBubble from "./chat-bubble";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { pusherClient } from "@/lib/pusher";
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState, useCallback, Fragment } from "react";
 import { MessageWithFiles } from "@/types";
 import { generateChannelId } from "@/lib/utils";
 import { getChannelMessages } from "@/lib/message";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
+import { format, isSameDay } from "date-fns";
+import DateDivider from "./date-divider";
 
 type ChatProps = {
   receiverId: string;
@@ -174,9 +176,23 @@ const Chat = ({
       )}
 
       <div ref={chatContainerRef} className="flex flex-col gap-4 py-4">
-        {chatData.map((chat, index) => (
-          <ChatBubble key={`${chat.id}-${index}`} {...chat} />
-        ))}
+        {chatData.map((chat, index) => {
+          const prevChat = chatData[index - 1];
+          const showDivider =
+            index === 0 ||
+            !isSameDay(new Date(chat.timestamp), new Date(prevChat?.timestamp));
+
+          return (
+            <Fragment key={`${chat.id}-${index}`}>
+              {showDivider && (
+                <DateDivider
+                  date={format(new Date(chat.timestamp), "eeee, MMMM d, yyyy")}
+                />
+              )}
+              <ChatBubble {...chat} />
+            </Fragment>
+          );
+        })}
       </div>
     </div>
   );
