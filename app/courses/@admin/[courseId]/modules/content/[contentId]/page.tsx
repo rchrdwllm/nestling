@@ -23,7 +23,10 @@ const ContentPage = async ({
     return <ErrorToast error={"Error fetching content: " + (error || "")} />;
   }
 
+  console.log("Content fetched:", content);
+
   const file = content.type === "file" ? await getContentFile(contentId) : null;
+
   return (
     <main className="flex gap-16 p-6">
       <Searcher query={query} page={page} tab={tab} />

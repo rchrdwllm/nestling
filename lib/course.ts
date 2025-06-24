@@ -13,6 +13,7 @@ export const getAllCourses = unstable_cache(
       const snapshot = await db
         .collection("courses")
         .where("isArchived", "==", false)
+        .orderBy("createdAt", "desc")
         .get();
       const courses = snapshot.docs.map((doc) => doc.data()) as Course[];
 
@@ -22,7 +23,7 @@ export const getAllCourses = unstable_cache(
     }
   },
   ["courses"],
-  { revalidate: 7200, tags: ["courses"] } // Increased to 2 hours
+  { revalidate: 7200, tags: ["courses"] }
 );
 
 export const getArchivedCourses = unstable_cache(
@@ -41,7 +42,7 @@ export const getArchivedCourses = unstable_cache(
     }
   },
   ["archivedCourses"],
-  { revalidate: 86400, tags: ["courses"] } // Archived courses change less - 24 hours
+  { revalidate: 86400, tags: ["courses"] }
 );
 
 export const getCourse = unstable_cache(

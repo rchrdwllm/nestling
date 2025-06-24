@@ -3,12 +3,13 @@
 import { DuplicateCourseSchema } from "@/schemas/DuplicateCourseSchema";
 import { actionClient } from "../action-client";
 import { db } from "@/lib/firebase";
-import { Course, File, Image } from "@/types";
+import { CloudinaryImage, Course, File, Image } from "@/types";
 import { getCourseImage } from "@/lib/course";
 import { getCourseModules } from "@/lib/module";
 import { getModuleContents } from "@/lib/content";
 import { duplicateCloudinaryFile, duplicateCloudinaryImage } from "@/lib/utils";
 import { revalidateTag } from "next/cache";
+import * as Cheerio from "cheerio";
 
 export const duplicateCourse = actionClient
   .schema(DuplicateCourseSchema)
@@ -58,19 +59,19 @@ export const duplicateCourse = actionClient
         return { error: uploadError };
       }
 
-      const newImageId = crypto.randomUUID();
-
       console.log("Creating new image reference...");
 
-      const newImageRef = db.collection("images").doc(newImageId);
+      const newImageRef = db
+        .collection("images")
+        .doc(newCloudinaryImage.public_id);
       const courseImgRef = db
         .collection("courses")
         .doc(newId)
         .collection("images")
-        .doc(newImageId);
+        .doc(newCloudinaryImage.public_id);
 
       const reference = {
-        public_id: newImageId,
+        public_id: newCloudinaryImage.public_id,
         created_at: new Date().toISOString(),
         course_id: newId,
         secure_url: newCloudinaryImage.secure_url,
@@ -81,7 +82,7 @@ export const duplicateCourse = actionClient
 
       batch.set(newImageRef, {
         ...image,
-        id: newImageId,
+        id: newCloudinaryImage.public_id,
         url: newCloudinaryImage.secure_url,
         public_id: newCloudinaryImage.public_id,
         hash: hash || "",
@@ -98,7 +99,7 @@ export const duplicateCourse = actionClient
         id: newId,
         name: `${courseData.name} (Copy)`,
         courseCode: `${courseData.courseCode}-COPY`,
-        imageId: newImageId,
+        imageId: newCloudinaryImage.public_id,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
         viewCount: 0,
@@ -137,7 +138,6 @@ export const duplicateCourse = actionClient
         };
 
         console.log("Creating new module reference...");
-
         console.log("Setting new module data in batch...");
 
         batch.set(moduleRef, {
@@ -180,20 +180,7 @@ export const duplicateCourse = actionClient
             createdAt: new Date().toISOString(),
           };
 
-          console.log("Creating new content reference...");
-
-          console.log("Setting new content data in batch...");
-
-          batch.set(contentRef, {
-            ...content,
-            id: newContentId,
-            moduleId: newModuleId,
-            courseId: newId,
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-          });
-          batch.set(contentModuleRef, reference);
-          batch.set(moduleContentRef, reference);
+          const contentHTML = Cheerio.load(content.content);
 
           console.log("Duplicating content files...");
 
@@ -255,7 +242,11 @@ export const duplicateCourse = actionClient
             .doc(content.id)
             .collection("images")
             .get();
+
           if (!contentImagesRef.empty) {
+            // Map old image URLs to new CloudinaryImage objects
+            const imgUrlMap = new Map<string, CloudinaryImage>();
+
             for (const imageDoc of contentImagesRef.docs) {
               const imageData = imageDoc.data() as Image;
               const newImageId = crypto.randomUUID();
@@ -270,12 +261,13 @@ export const duplicateCourse = actionClient
 
               if (uploadError || !newCloudinaryImage) {
                 console.log("Failed to duplicate image:", uploadError);
-
                 continue;
               }
 
-              console.log("Creating new image reference...");
+              // Map old URL to new image
+              imgUrlMap.set(imageData.secure_url, newCloudinaryImage);
 
+              console.log("Creating new image reference...");
               console.log("Setting new image data in batch...");
 
               const newImageRef = db.collection("images").doc(newImageId);
@@ -298,7 +290,38 @@ export const duplicateCourse = actionClient
               });
               batch.set(contentImageRef, reference);
             }
+
+            console.log("Updating content HTML with new image URLs...");
+
+            contentHTML("img").each((_, el) => {
+              const imgSrc = contentHTML(el).attr("src");
+              const foundImage = imgUrlMap.get(imgSrc || "");
+
+              console.log("For image:", imgSrc, "found:", foundImage);
+
+              if (foundImage) {
+                contentHTML(el).attr("src", foundImage.secure_url);
+                contentHTML(el).attr("alt", foundImage.public_id);
+              }
+            });
           }
+
+          const newContent = contentHTML.html();
+
+          console.log("Creating new content reference...");
+          console.log("Setting new content data in batch...");
+
+          batch.set(contentRef, {
+            ...content,
+            id: newContentId,
+            moduleId: newModuleId,
+            courseId: newId,
+            content: newContent,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          });
+          batch.set(contentModuleRef, reference);
+          batch.set(moduleContentRef, reference);
         }
       }
 
