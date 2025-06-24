@@ -39,8 +39,6 @@ const ProjectPage = async ({
   const { success: instructors, error: instructorsError } =
     await getUnarchivedInstructors();
 
-  console.log("Fetching project details for projectId:", projectId);
-
   if (
     projectError ||
     adminsError ||
