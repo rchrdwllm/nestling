@@ -22,7 +22,12 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
-import { getOpenTickets } from "@/lib/ticket";
+import {
+  getArchivedTickets,
+  getClosedTickets,
+  getInProgressTickets,
+  getOpenTickets,
+} from "@/lib/ticket";
 import { Ticket } from "@/types";
 import { toast } from "sonner";
 
@@ -31,6 +36,7 @@ type TicketsTableProps = {
   data: any[];
   lastDocId?: string | undefined;
   hasMore?: boolean;
+  tab?: "open" | "in-progress" | "closed" | "archived";
 };
 
 const TicketsTable = ({
@@ -38,35 +44,30 @@ const TicketsTable = ({
   data,
   lastDocId,
   hasMore,
+  tab = "open",
 }: TicketsTableProps) => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [showAll, setShowAll] = useState(false);
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 5,
   });
-  const [openTickets, setOpenTickets] = useState<Ticket[]>(data);
+  const [tickets, setTickets] = useState<Ticket[]>(data);
   const [lastDocIdState, setLastDocIdState] = useState<string | undefined>(
     lastDocId
   );
   const [hasMoreTickets, setHasMoreTickets] = useState(hasMore);
   const [isLoading, setIsLoading] = useState(false);
+  const [cursorStack, setCursorStack] = useState<string[]>([]);
 
   useEffect(() => {
     setLastDocIdState(lastDocId);
     setHasMoreTickets(hasMore);
-    setOpenTickets(data);
-
-    console.log({
-      lastDocId,
-      hasMore,
-      data,
-    });
+    setTickets(data);
   }, [hasMore, lastDocId, data]);
 
   const table = useReactTable({
-    data: openTickets,
+    data: tickets,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -82,16 +83,129 @@ const TicketsTable = ({
     },
   });
 
+  const handleGoPrevPage = async () => {
+    setIsLoading(true);
+
+    const prevCursor = cursorStack.pop();
+
+    setCursorStack(cursorStack);
+
+    let ticketsData: Ticket[] | undefined;
+    let newLastDocId: string | undefined;
+    let hasMore: boolean | undefined;
+    let error: string | undefined | unknown;
+
+    switch (tab) {
+      case "open":
+        ({
+          success: ticketsData,
+          lastDocId: newLastDocId,
+          hasMore,
+          error,
+        } = await getOpenTickets(5, prevCursor));
+        break;
+      case "in-progress":
+        ({
+          success: ticketsData,
+          lastDocId: newLastDocId,
+          hasMore,
+          error,
+        } = await getInProgressTickets(5, prevCursor));
+        break;
+      case "closed":
+        ({
+          success: ticketsData,
+          lastDocId: newLastDocId,
+          hasMore,
+        } = await getClosedTickets(5, prevCursor));
+        break;
+      case "archived":
+        ({
+          success: ticketsData,
+          lastDocId: newLastDocId,
+          hasMore,
+          error,
+        } = await getArchivedTickets(5, prevCursor));
+        break;
+      default:
+        console.error("Unknown tab:", tab);
+        setIsLoading(false);
+        return;
+    }
+
+    if (error || !ticketsData) {
+      console.error("Error fetching next page of tickets:", error);
+      toast.error("Error fetching next page of tickets: " + error);
+
+      setIsLoading(false);
+
+      return;
+    }
+
+    if (newLastDocId) {
+      setLastDocIdState(newLastDocId);
+    }
+
+    setTickets(ticketsData);
+    setHasMoreTickets(hasMore);
+
+    setIsLoading(false);
+  };
+
   const handleGoNextPage = async () => {
     setIsLoading(true);
 
     if (lastDocId) {
-      const { lastDocId, hasMore, success, error } = await getOpenTickets(
-        5,
-        lastDocIdState
-      );
+      let ticketsData: Ticket[] | undefined;
+      let newLastDocId: string | undefined;
+      let hasMore: boolean | undefined;
+      let error: string | undefined | unknown;
 
-      if (error || !success) {
+      if (!cursorStack.length) {
+        setCursorStack((prev) => [...prev, ""]);
+      } else {
+        setCursorStack((prev) => [...prev, lastDocIdState || ""]);
+      }
+
+      switch (tab) {
+        case "open":
+          ({
+            success: ticketsData,
+            lastDocId: newLastDocId,
+            hasMore,
+            error,
+          } = await getOpenTickets(5, lastDocIdState));
+          break;
+        case "in-progress":
+          ({
+            success: ticketsData,
+            lastDocId: newLastDocId,
+            hasMore,
+            error,
+          } = await getInProgressTickets(5, lastDocIdState));
+          break;
+        case "closed":
+          ({
+            success: ticketsData,
+            lastDocId: newLastDocId,
+            hasMore,
+          } = await getClosedTickets(5, lastDocIdState));
+          break;
+        case "archived":
+          ({
+            success: ticketsData,
+            lastDocId: newLastDocId,
+            hasMore,
+            error,
+          } = await getArchivedTickets(5, lastDocIdState));
+          break;
+        default:
+          console.error("Unknown tab:", tab);
+          setIsLoading(false);
+          return;
+      }
+
+      if (error || !ticketsData) {
         console.error("Error fetching next page of tickets:", error);
         toast.error("Error fetching next page of tickets: " + error);
 
@@ -100,11 +214,11 @@ const TicketsTable = ({
         return;
       }
 
-      if (lastDocId) {
-        setLastDocIdState(lastDocId);
+      if (newLastDocId) {
+        setLastDocIdState(newLastDocId);
       }
 
-      setOpenTickets(success);
+      setTickets(ticketsData);
       setHasMoreTickets(hasMore);
     }
 
@@ -125,8 +239,8 @@ const TicketsTable = ({
         <div className="flex items-center gap-2">
           <Button
             variant="outline"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage() || showAll}
+            disabled={!cursorStack.length}
+            onClick={handleGoPrevPage}
           >
             Previous
           </Button>
@@ -136,9 +250,6 @@ const TicketsTable = ({
             onClick={handleGoNextPage}
           >
             Next
-          </Button>
-          <Button variant="outline" onClick={() => setShowAll(!showAll)}>
-            {showAll ? "Show less" : "Show all"}
           </Button>
         </div>
       </div>
