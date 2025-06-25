@@ -3,6 +3,8 @@ import RegisterRoleBtn from "./register-role-btn";
 import { Role } from "@/types";
 import MotionWrapper from "@/components/wrappers/motion-wrapper";
 import { easings } from "@/constants/animations";
+import Image from "next/image";
+import nestling from "@/assets/nestling.png";
 
 type RoleSelectorProps = {
   setRole: (role: Role) => void;
@@ -16,13 +18,23 @@ const RoleSelector = ({ setRole, setStep }: RoleSelectorProps) => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5, ease: easings.easeOutExpo }}
-      className="flex flex-col gap-8 items-center"
+      className="flex flex-col items-center gap-8"
     >
-      <div key="role-selector-header" className="text-center">
-        <h1 className="font-semibold text-2xl text-center">Select a role</h1>
-        <p className="text-muted-foreground w-2/3 text-center mx-auto text-sm">
-          Please choose whether you are a student, an instructor, or an admin
-        </p>
+      <div
+        key="role-selector-header"
+        className="flex flex-col items-center gap-4"
+      >
+        <Image
+          src={nestling}
+          alt="Nestling logo"
+          className="h-[50px] object-contain"
+        />
+        <div className="text-center">
+          <h1 className="font-semibold text-2xl text-center">Select a role</h1>
+          <p className="mx-auto w-2/3 text-muted-foreground text-sm text-center">
+            Please choose whether you are a student, an instructor, or an admin
+          </p>
+        </div>
       </div>
       <div className="flex flex-col gap-4">
         <RegisterRoleBtn onClick={setStep} role="student" setRole={setRole}>

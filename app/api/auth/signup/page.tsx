@@ -11,17 +11,17 @@ const RegisterPage = async () => {
   if (user) return redirect(`/dashboard`);
 
   return (
-    <main className="bg-primary items-center lg:items-start lg:bg-none h-screen grid grid-cols-2 overflow-x-hidden">
+    <main className="items-center lg:items-start grid grid-cols-2 bg-primary lg:bg-none h-screen overflow-x-hidden">
       <Image
         priority
         src={registerBg}
         alt="Register Background"
-        className="hidden lg:block w-full h-screen absolute object-cover"
+        className="hidden lg:block absolute w-full h-screen object-cover"
       />
       <div className="hidden lg:block"></div>
-      <div className="z-[1] col-span-2 lg:col-span-1 min-h-screen flex flex-col items-center pb-12 pt-4 px-4 lg:px-20 gap-4">
+      <div className="z-[1] flex flex-col items-center gap-4 col-span-2 lg:col-span-1 px-4 lg:px-20 pt-4 pb-12 min-h-screen">
         <Image src={logoTextReversed} className="w-44" alt="Logo Text" />
-        <div className="flex-1 flex items-center justify-center w-full h-full bg-background rounded-xl shadow-xl py-6">
+        <div className="flex flex-1 justify-center items-center bg-background shadow-xl py-6 rounded-xl w-full h-full">
           <RegisterSteps />
         </div>
       </div>
