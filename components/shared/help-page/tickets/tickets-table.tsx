@@ -22,8 +22,23 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
+import { getOpenTickets } from "@/lib/ticket";
+import { Ticket } from "@/types";
+import { toast } from "sonner";
 
-const TicketsTable = ({ columns, data }: any) => {
+type TicketsTableProps = {
+  columns: any[];
+  data: any[];
+  lastDocId?: string | undefined;
+  hasMore?: boolean;
+};
+
+const TicketsTable = ({
+  columns,
+  data,
+  lastDocId,
+  hasMore,
+}: TicketsTableProps) => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [showAll, setShowAll] = useState(false);
@@ -31,16 +46,27 @@ const TicketsTable = ({ columns, data }: any) => {
     pageIndex: 0,
     pageSize: 5,
   });
+  const [openTickets, setOpenTickets] = useState<Ticket[]>(data);
+  const [lastDocIdState, setLastDocIdState] = useState<string | undefined>(
+    lastDocId
+  );
+  const [hasMoreTickets, setHasMoreTickets] = useState(hasMore);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    setPagination((prev) => ({
-      ...prev,
-      pageIndex: 0,
-      pageSize: showAll ? data.length : 10,
-    }));
-  }, [showAll, data.length]);
+    setLastDocIdState(lastDocId);
+    setHasMoreTickets(hasMore);
+    setOpenTickets(data);
+
+    console.log({
+      lastDocId,
+      hasMore,
+      data,
+    });
+  }, [hasMore, lastDocId, data]);
+
   const table = useReactTable({
-    data,
+    data: openTickets,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -56,9 +82,38 @@ const TicketsTable = ({ columns, data }: any) => {
     },
   });
 
+  const handleGoNextPage = async () => {
+    setIsLoading(true);
+
+    if (lastDocId) {
+      const { lastDocId, hasMore, success, error } = await getOpenTickets(
+        5,
+        lastDocIdState
+      );
+
+      if (error || !success) {
+        console.error("Error fetching next page of tickets:", error);
+        toast.error("Error fetching next page of tickets: " + error);
+
+        setIsLoading(false);
+
+        return;
+      }
+
+      if (lastDocId) {
+        setLastDocIdState(lastDocId);
+      }
+
+      setOpenTickets(success);
+      setHasMoreTickets(hasMore);
+    }
+
+    setIsLoading(false);
+  };
+
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-between">
+      <div className="flex justify-between items-center">
         <Input
           placeholder="Filter tickets"
           value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
@@ -77,8 +132,8 @@ const TicketsTable = ({ columns, data }: any) => {
           </Button>
           <Button
             variant="outline"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage() || showAll}
+            disabled={!hasMoreTickets || isLoading}
+            onClick={handleGoNextPage}
           >
             Next
           </Button>
