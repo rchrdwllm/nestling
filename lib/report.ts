@@ -126,8 +126,6 @@ export const generateStudentGradesReport = unstable_cache(
         return { error: `Student ${studentId} not found` };
       }
 
-      const studentData = studentSnapshot.data() as User;
-
       const assignmentsSnapshot = await db
         .collection("contents")
         .where("courseId", "==", courseId)
@@ -157,10 +155,7 @@ export const generateStudentGradesReport = unstable_cache(
         (doc) => doc.data() as Submission
       );
 
-      const row: Record<string, any> = {
-        Name: `${studentData.firstName} ${studentData.lastName}`,
-        ID: studentData.id,
-      };
+      const row: Record<string, any> = {};
 
       let totalGrade = 0;
       let totalMaxPoints = 0;
@@ -191,7 +186,7 @@ export const generateStudentGradesReport = unstable_cache(
         totalMaxPoints > 0
           ? Math.round((totalGrade / totalMaxPoints) * 100)
           : 0;
-      row.overallPercentage = `${overallPercentage}%`;
+      row.Grade = `${overallPercentage}%`;
 
       return { success: [row] };
     } catch (error) {

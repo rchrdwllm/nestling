@@ -25,6 +25,7 @@ import { useState } from "react";
 import { formatInTimeZone } from "date-fns-tz";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import { useCurrentUser } from "@/hooks/use-current-user";
 
 type GenerateGradesReportProps = {
   studentId: string;
@@ -42,6 +43,7 @@ const GenerateGradesReport = ({
   const [isOpen, setIsOpen] = useState(false);
   const [format, setFormat] = useState<string | undefined>(undefined);
   const [isLoading, setIsLoading] = useState(false);
+  const { user } = useCurrentUser();
 
   const handleDownloadCsv = async () => {
     const { success, error } = await generateStudentGradesReport(
@@ -109,6 +111,7 @@ const GenerateGradesReport = ({
     doc.setFontSize(16);
     doc.text(`Grades Report: ${courseCode} - ${courseTitle}`, 14, 18);
     doc.setFontSize(10);
+    doc.text(`Student: ${user.name}`, 14, 22);
     doc.text(`Generated: ${formattedDate}`, 14, 26);
 
     const headers = [Object.keys(success[0] || {})];
