@@ -623,3 +623,130 @@ export const getMostViewedCourses = unstable_cache(
   ["mostViewedCourses"],
   { revalidate: 86400, tags: ["courses"] }
 );
+
+export const getAllCoursesWithSubcollections = unstable_cache(
+  async () => {
+    try {
+      const coursesSnapshot = await db
+        .collection("courses")
+        .where("isArchived", "==", false)
+        .orderBy("createdAt", "desc")
+        .get();
+      const courses = coursesSnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      })) as Course[];
+
+      const subcollections = await Promise.all(
+        courses.map(async (course) => {
+          const [enrolledSnap, instructorsSnap] = await Promise.all([
+            db
+              .collection("courses")
+              .doc(course.id)
+              .collection("enrolledStudents")
+              .get(),
+            db
+              .collection("courses")
+              .doc(course.id)
+              .collection("instructors")
+              .get(),
+          ]);
+          return {
+            courseId: course.id,
+            enrolledStudents: enrolledSnap.docs.map((doc) =>
+              doc.data()
+            ) as User[],
+            courseInstructors: instructorsSnap.docs.map((doc) =>
+              doc.data()
+            ) as User[],
+          };
+        })
+      );
+
+      const enrolledStudentsByCourse = Object.fromEntries(
+        subcollections.map((s) => [s.courseId, s.enrolledStudents])
+      );
+      const courseInstructorsByCourse = Object.fromEntries(
+        subcollections.map((s) => [s.courseId, s.courseInstructors])
+      );
+
+      return {
+        success: courses,
+        enrolledStudentsByCourse,
+        courseInstructorsByCourse,
+      };
+    } catch (error) {
+      console.error("Error fetching all courses with subcollections:", error);
+
+      return { error };
+    }
+  },
+  ["coursesWithSubcollections"],
+  { revalidate: 7200, tags: ["courses"] }
+);
+
+export const getUnarchivedInstructorCoursesWithSubcollections = unstable_cache(
+  async (instructorId: string) => {
+    try {
+      const coursesSnapshot = await db
+        .collection("courses")
+        .where("isArchived", "==", false)
+        .where("instructorIds", "array-contains", instructorId)
+        .orderBy("createdAt", "desc")
+        .get();
+
+      const courses = coursesSnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      })) as Course[];
+
+      const subcollections = await Promise.all(
+        courses.map(async (course) => {
+          const [enrolledSnap, instructorsSnap] = await Promise.all([
+            db
+              .collection("courses")
+              .doc(course.id)
+              .collection("enrolledStudents")
+              .get(),
+            db
+              .collection("courses")
+              .doc(course.id)
+              .collection("instructors")
+              .get(),
+          ]);
+          return {
+            courseId: course.id,
+            enrolledStudents: enrolledSnap.docs.map((doc) =>
+              doc.data()
+            ) as User[],
+            courseInstructors: instructorsSnap.docs.map((doc) =>
+              doc.data()
+            ) as User[],
+          };
+        })
+      );
+
+      const enrolledStudentsByCourse = Object.fromEntries(
+        subcollections.map((s) => [s.courseId, s.enrolledStudents])
+      );
+      const courseInstructorsByCourse = Object.fromEntries(
+        subcollections.map((s) => [s.courseId, s.courseInstructors])
+      );
+
+      return {
+        success: courses,
+        enrolledStudentsByCourse,
+        courseInstructorsByCourse,
+      };
+    } catch (error) {
+      console.error(
+        "Error fetching unarchived instructor courses with subcollections:",
+        error
+      );
+
+      return { error };
+    }
+  },
+  ["unarchivedInstructorCoursesWithSubcollections"],
+  { revalidate: 7200, tags: ["courses"] }
+);

@@ -1,17 +1,22 @@
 import CourseCard from "@/components/shared/courses-page/course-card";
 import ErrorToast from "@/components/ui/error-toast";
-import { getAllCourses } from "@/lib/course";
+import { getAllCoursesWithSubcollections } from "@/lib/course";
 import { getUnarchivedInstructors, getUnarchivedStudents } from "@/lib/user";
 
 const Courses = async () => {
-  const { success: courses, error } = await getAllCourses();
+  const {
+    success: courses,
+    enrolledStudentsByCourse,
+    courseInstructorsByCourse,
+    error: coursesError,
+  } = await getAllCoursesWithSubcollections();
   const { success: instructors, error: instructorsError } =
     await getUnarchivedInstructors();
   const { success: students, error: studentsError } =
     await getUnarchivedStudents();
 
   if (
-    error ||
+    coursesError ||
     !courses ||
     !instructors ||
     instructorsError ||
@@ -19,13 +24,7 @@ const Courses = async () => {
     studentsError
   ) {
     return (
-      <ErrorToast
-        error={
-          "Error fetching courses: " + error ||
-          "Error fetching instructors: " + instructorsError ||
-          "Error fetching students: " + studentsError
-        }
-      />
+      <ErrorToast error={"Error fetching courses, instructors, or students."} />
     );
   }
 
@@ -41,6 +40,8 @@ const Courses = async () => {
             isAdmin
             instructors={instructors}
             students={students}
+            enrolledStudents={enrolledStudentsByCourse[course.id] || []}
+            courseInstructors={courseInstructorsByCourse[course.id] || []}
           />
         ))
       )}

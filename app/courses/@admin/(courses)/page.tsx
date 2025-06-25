@@ -26,8 +26,6 @@ const AdminCoursesPage = async ({
     );
   }
 
-  console.log("Fetching on the admin side...");
-
   return (
     <FadeInWrapper>
       <Searcher query={query} page={page} tab={tab} />

@@ -1,4 +1,4 @@
-import { getUnarchivedInstructorCourses } from "@/lib/course";
+import { getUnarchivedInstructorCoursesWithSubcollections } from "@/lib/course";
 import {
   getCurrentUser,
   getUnarchivedInstructors,
@@ -9,16 +9,19 @@ import ErrorToast from "@/components/ui/error-toast";
 
 const Courses = async () => {
   const user = await getCurrentUser();
-  const { success: courses, error } = await getUnarchivedInstructorCourses(
-    user!.id
-  );
+  const {
+    success: courses,
+    enrolledStudentsByCourse,
+    courseInstructorsByCourse,
+  } = await getUnarchivedInstructorCoursesWithSubcollections(user!.id);
+
   const { success: instructors, error: instructorsError } =
     await getUnarchivedInstructors();
   const { success: students, error: studentsError } =
     await getUnarchivedStudents();
 
-  if (error || !courses) {
-    return <ErrorToast error={"Error fetching courses: " + error} />;
+  if (!courses) {
+    return <ErrorToast error={"Error fetching courses."} />;
   }
 
   if (!courses.length) {
@@ -46,6 +49,8 @@ const Courses = async () => {
           key={course.id}
           students={students}
           instructors={instructors}
+          enrolledStudents={enrolledStudentsByCourse[course.id] || []}
+          courseInstructors={courseInstructorsByCourse[course.id] || []}
           {...course}
         />
       ))}
