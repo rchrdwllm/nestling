@@ -8,7 +8,12 @@ import { getArchivedTickets } from "@/lib/ticket";
 import { getOptimisticUser } from "@/lib/user";
 
 const ArchivedTickets = async () => {
-  const { success: tickets, error: ticketsError } = await getArchivedTickets();
+  const {
+    success: tickets,
+    error: ticketsError,
+    lastDocId,
+    hasMore,
+  } = await getArchivedTickets(5);
   const user = await getOptimisticUser();
 
   if (ticketsError || !tickets) {
@@ -21,6 +26,9 @@ const ArchivedTickets = async () => {
     <TicketsTable
       columns={user.role === "admin" ? adminTicketsTableCols : ticketsTableCols}
       data={tickets}
+      tab="archived"
+      lastDocId={lastDocId}
+      hasMore={hasMore}
     />
   );
 };

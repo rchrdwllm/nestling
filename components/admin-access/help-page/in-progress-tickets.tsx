@@ -8,8 +8,12 @@ import { getInProgressTickets } from "@/lib/ticket";
 import { getOptimisticUser } from "@/lib/user";
 
 const InProgressTickets = async () => {
-  const { success: tickets, error: ticketsError } =
-    await getInProgressTickets();
+  const {
+    success: tickets,
+    error: ticketsError,
+    lastDocId,
+    hasMore,
+  } = await getInProgressTickets(5);
   const user = await getOptimisticUser();
 
   if (ticketsError || !tickets) {
@@ -24,6 +28,9 @@ const InProgressTickets = async () => {
     <TicketsTable
       columns={user.role === "admin" ? adminTicketsTableCols : ticketsTableCols}
       data={tickets}
+      tab="in-progress"
+      lastDocId={lastDocId}
+      hasMore={hasMore}
     />
   );
 };

@@ -28,6 +28,7 @@ const OpenTickets = async () => {
       data={tickets}
       lastDocId={lastDocId}
       hasMore={hasMore}
+      tab="open"
     />
   );
 };
