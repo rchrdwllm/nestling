@@ -153,11 +153,12 @@ export const getTaskAttachments = unstable_cache(
         .collection("tasks")
         .doc(taskId)
         .collection("files")
-        .orderBy("createdAt", "desc")
+        .orderBy("created_at", "desc")
         .get();
       const taskAttachmentIds = taskAttachmentsSnapshot.docs.map(
         (doc) => doc.id
       );
+
       const taskAttachments = await Promise.all(
         taskAttachmentIds.map(async (id) => {
           const { success, error } = await getFile(id);

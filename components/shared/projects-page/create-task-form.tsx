@@ -17,7 +17,7 @@ import {
 import { Calendar } from "@/components/ui/calendar";
 import { Calendar as CalendarIcon, FileIcon, Plus } from "lucide-react";
 import { format } from "date-fns";
-import { cn } from "@/lib/utils";
+import { addAttachmentFlag, cn } from "@/lib/utils";
 import { File as CustomFile, Task, User } from "@/types";
 import { useAction } from "next-safe-action/hooks";
 import { toast } from "sonner";
@@ -224,7 +224,7 @@ const CreateTaskForm = ({
         ...uploadedFiles.map((file) => ({
           name: file!.public_id,
           type: file!.resource_type,
-          url: file!.secure_url,
+          url: addAttachmentFlag(file!.secure_url),
         })),
       ]);
     }
