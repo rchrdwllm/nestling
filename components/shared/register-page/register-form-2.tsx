@@ -15,6 +15,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useAction } from "next-safe-action/hooks";
 import { logUserActivity } from "@/server/actions/log-user-activity";
+import { Eye, EyeOff } from "lucide-react";
 
 type RegisterForm2Props = {
   setStep: (step: number) => void;
@@ -30,6 +31,8 @@ type RegisterForm2Props = {
 
 const RegisterForm2 = ({ setStep, role, details }: RegisterForm2Props) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false); // <-- Add this state
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false); // <-- Add this state
   const router = useRouter();
   const form = useForm<z.infer<typeof RegisterSchema>>({
     defaultValues: {
@@ -122,8 +125,21 @@ const RegisterForm2 = ({ setStep, role, details }: RegisterForm2Props) => {
             control={form.control}
             name="password"
             render={({ field }) => (
-              <FormItem>
-                <Input type="password" placeholder="Password" {...field} />
+              <FormItem className="relative">
+                <Input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Password"
+                  {...field}
+                  className="pr-10"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((v) => !v)}
+                  className="absolute right-3 top-1 -translate-y-0 text-muted-foreground"
+                  tabIndex={-1}
+                >
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
                 <FormMessage />
               </FormItem>
             )}
@@ -132,12 +148,21 @@ const RegisterForm2 = ({ setStep, role, details }: RegisterForm2Props) => {
             control={form.control}
             name="confirmPassword"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="relative">
                 <Input
-                  type="password"
+                  type={showConfirmPassword ? "text" : "password"}
                   placeholder="Confirm password"
                   {...field}
+                  className="pr-10"
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword((v) => !v)}
+                  className="absolute right-3 top-1 -translate-y-0 text-muted-foreground"
+                  tabIndex={-1}
+                >
+                  {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
                 <FormMessage />
               </FormItem>
             )}
