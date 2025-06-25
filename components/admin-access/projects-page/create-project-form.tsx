@@ -73,7 +73,7 @@ const CreateProjectForm = ({
       startDate:
         (projectData?.startDate && new Date(projectData.startDate)) ||
         selectedStartDate ||
-        undefined,
+        new Date(),
       endDate:
         (projectData?.endDate && new Date(projectData.endDate)) ||
         selectedEndDate ||
@@ -173,7 +173,7 @@ const CreateProjectForm = ({
                         <SelectItem key={status.id} value={status.value}>
                           <div className="flex items-center gap-2">
                             <span
-                              className="inline-block size-2 rounded-md"
+                              className="inline-block rounded-md size-2"
                               style={{ backgroundColor: status.color }}
                             ></span>{" "}
                             <span>{status.name}</span>
@@ -208,7 +208,7 @@ const CreateProjectForm = ({
                         <SelectItem key={priority.id} value={priority.value}>
                           <div className="flex items-center gap-2">
                             <span
-                              className="inline-block size-2 rounded-md"
+                              className="inline-block rounded-md size-2"
                               style={{ backgroundColor: priority.color }}
                             ></span>{" "}
                             <span>{priority.name}</span>
@@ -244,11 +244,11 @@ const CreateProjectForm = ({
                       ) : (
                         <span>Start date</span>
                       )}
-                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                      <CalendarIcon className="opacity-50 ml-auto w-4 h-4" />
                     </Button>
                   </FormControl>
                 </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
+                <PopoverContent className="p-0 w-auto" align="start">
                   <Calendar
                     mode="single"
                     selected={field.value}
@@ -282,11 +282,11 @@ const CreateProjectForm = ({
                       ) : (
                         <span>End date</span>
                       )}
-                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                      <CalendarIcon className="opacity-50 ml-auto w-4 h-4" />
                     </Button>
                   </FormControl>
                 </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
+                <PopoverContent className="p-0 w-auto" align="start">
                   <Calendar
                     mode="single"
                     selected={field.value}
