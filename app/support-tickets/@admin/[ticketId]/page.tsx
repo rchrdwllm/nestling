@@ -7,6 +7,8 @@ import { getTicketReplies } from "@/lib/ticket-reply";
 import TicketReplyCard from "@/components/shared/help-page/tickets/ticket-reply-card";
 import Searcher from "@/components/shared/search/general-search/searcher";
 import ArchiveTicketBtn from "@/components/admin-access/help-page/archive-ticket-btn";
+import Unauthorized from "@/components/ui/unauthorized";
+import { getOptimisticUser } from "@/lib/user";
 
 const TicketPage = async ({
   params,
@@ -17,6 +19,10 @@ const TicketPage = async ({
 }) => {
   const { ticketId } = await params;
   const { query, page, tab } = (await searchParams) || {};
+  const user = await getOptimisticUser();
+
+  if (user.role !== "admin") return <Unauthorized />;
+
   const { success: ticket, error: ticketError } = await getTicketById(ticketId);
 
   if (ticketError || !ticket) {

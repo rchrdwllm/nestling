@@ -3,6 +3,7 @@ import TicketsTable from "@/components/shared/help-page/tickets/tickets-table";
 import { ticketsTableCols } from "@/components/shared/help-page/tickets/tickets-table-def";
 import Searcher from "@/components/shared/search/general-search/searcher";
 import ErrorToast from "@/components/ui/error-toast";
+import Unauthorized from "@/components/ui/unauthorized";
 import { getUserTickets } from "@/lib/ticket";
 import { getOptimisticUser } from "@/lib/user";
 
@@ -13,6 +14,9 @@ const Tickets = async ({
 }) => {
   const { query, page, tab } = (await searchParams) || {};
   const user = await getOptimisticUser();
+
+  if (user.role !== "student") return <Unauthorized />;
+
   const { success: tickets, error } = await getUserTickets(user.id);
 
   if (error || !tickets) {

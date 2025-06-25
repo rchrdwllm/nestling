@@ -4,6 +4,8 @@ import InProgressTickets from "@/components/admin-access/help-page/in-progress-t
 import OpenTickets from "@/components/admin-access/help-page/open-tickets";
 import Searcher from "@/components/shared/search/general-search/searcher";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import Unauthorized from "@/components/ui/unauthorized";
+import { getOptimisticUser } from "@/lib/user";
 
 const Tickets = async ({
   searchParams,
@@ -11,6 +13,9 @@ const Tickets = async ({
   searchParams?: Promise<{ query?: string; page?: string; tab?: string }>;
 }) => {
   const { query, page, tab } = (await searchParams) || {};
+  const user = await getOptimisticUser();
+
+  if (user.role !== "admin") return <Unauthorized />;
 
   return (
     <div className="flex flex-col gap-8 p-6">

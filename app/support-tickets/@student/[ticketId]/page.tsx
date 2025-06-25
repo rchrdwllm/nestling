@@ -1,10 +1,10 @@
 import TicketDetails from "@/components/shared/help-page/tickets/ticket-details";
 import ErrorToast from "@/components/ui/error-toast";
 import { getTicketById } from "@/lib/ticket";
-import UpdateTicketBtn from "@/components/shared/help-page/tickets/update-ticket-btn";
-import CreateReplyBtn from "@/components/shared/help-page/tickets/create-reply-btn";
 import { getTicketReplies } from "@/lib/ticket-reply";
 import TicketReplyCard from "@/components/shared/help-page/tickets/ticket-reply-card";
+import { getOptimisticUser } from "@/lib/user";
+import Unauthorized from "@/components/ui/unauthorized";
 
 const TicketPage = async ({
   params,
@@ -12,6 +12,10 @@ const TicketPage = async ({
   params: Promise<{ ticketId: string }>;
 }) => {
   const { ticketId } = await params;
+  const user = await getOptimisticUser();
+
+  if (user.role !== "student") return <Unauthorized />;
+
   const { success: ticket, error: ticketError } = await getTicketById(ticketId);
 
   if (ticketError || !ticket) {
