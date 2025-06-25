@@ -73,11 +73,14 @@ const CreateTaskForm = ({
         name: attachment.original_filename,
         type: attachment.resource_type,
         url: attachment.secure_url,
+        hash: attachment.hash || "",
       })),
     [attachments]
   );
   const [previewUrls, setPreviewUrls] =
-    useState<{ url: string; type: string; name: string }[]>(initialPreviewUrls);
+    useState<{ url: string; type: string; name: string; hash: string }[]>(
+      initialPreviewUrls
+    );
   const form = useForm<z.infer<typeof CreateTaskSchema>>({
     defaultValues: {
       title: task?.title || "",
@@ -225,6 +228,7 @@ const CreateTaskForm = ({
           name: file!.public_id,
           type: file!.resource_type,
           url: addAttachmentFlag(file!.secure_url),
+          hash: file!.hash || "",
         })),
       ]);
     }
@@ -464,6 +468,7 @@ const CreateTaskForm = ({
                       type={previewUrl.type}
                       url={previewUrl.url}
                       name={previewUrl.name}
+                      hash={previewUrl.hash}
                       taskId={task.id}
                     />
                   </article>

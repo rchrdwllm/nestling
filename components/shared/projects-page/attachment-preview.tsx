@@ -10,11 +10,12 @@ import PdfViewer from "../content-page/pdf-viewer";
 import { FileIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAction } from "next-safe-action/hooks";
 import { deleteAttachment } from "@/server/actions/delete-attachment";
 import { toast } from "sonner";
 import { addAttachmentFlag } from "@/lib/utils";
+import { verifyFileIntegrity } from "@/lib/file";
 
 type AttachmentPreviewProps = {
   name: string;
@@ -22,6 +23,7 @@ type AttachmentPreviewProps = {
   url: string;
   id: string;
   taskId: string;
+  hash?: string;
 };
 
 const AttachmentPreview = ({
@@ -30,8 +32,11 @@ const AttachmentPreview = ({
   url,
   id,
   taskId,
+  hash,
 }: AttachmentPreviewProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isVerified, setIsVerified] = useState(false);
   const { execute, isExecuting } = useAction(deleteAttachment, {
     onExecute: () => {
       toast.dismiss();
@@ -47,6 +52,31 @@ const AttachmentPreview = ({
       toast.error("Error deleting attachment");
     },
   });
+
+  const handleVerify = async () => {
+    setIsLoading(true);
+
+    const isVerified = await verifyFileIntegrity(url, hash || "");
+
+    setIsVerified(isVerified);
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    if (url && hash) {
+      handleVerify();
+    }
+  }, [url, hash]);
+
+  if (isLoading) return null;
+
+  if (!isVerified) {
+    return (
+      <div className="bg-red-50 dark:bg-red-950 p-4 text-red-800 dark:text-red-400">
+        <p>This file may have been tampered with</p>
+      </div>
+    );
+  }
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
