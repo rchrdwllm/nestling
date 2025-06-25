@@ -20,7 +20,7 @@ const RegisterPage = async () => {
       />
       <div className="hidden lg:block"></div>
       <div className="z-[1] flex flex-col items-center gap-4 col-span-2 lg:col-span-1 px-4 lg:px-20 pt-4 pb-12 min-h-screen">
-        <Image src={logoTextReversed} className="w-44" alt="Logo Text" />
+        <Image src={logoTextReversed} className="w-52" alt="Logo Text" />
         <div className="flex flex-1 justify-center items-center bg-background shadow-xl py-6 rounded-xl w-full h-full">
           <RegisterSteps />
         </div>
