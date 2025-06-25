@@ -2,6 +2,8 @@ import { ReactNode } from "react";
 import { getCourse } from "@/lib/course";
 import ErrorToast from "@/components/ui/error-toast";
 import AdminCourseLayout from "@/components/shared/courses-page/layout/admin-course-layout";
+import { getOptimisticUser } from "@/lib/user";
+import Unauthorized from "@/components/ui/unauthorized";
 
 const Layout = async ({
   children,
@@ -11,6 +13,10 @@ const Layout = async ({
   params: { courseId: string };
 }) => {
   const { courseId } = await params;
+  const user = await getOptimisticUser();
+
+  if (user.role !== "admin") return <Unauthorized />;
+
   const { success: course, error: courseError } = await getCourse(courseId);
 
   if (courseError || !course) {

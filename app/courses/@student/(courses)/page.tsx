@@ -2,6 +2,8 @@ import FadeInWrapper from "@/components/wrappers/fadein-wrapper";
 import AvailableCourses from "@/components/student-access/courses-page/available-courses";
 import EnrolledCourses from "@/components/student-access/courses-page/enrolled-courses";
 import Searcher from "@/components/shared/search/general-search/searcher";
+import { getOptimisticUser } from "@/lib/user";
+import Unauthorized from "@/components/ui/unauthorized";
 
 const CoursesPage = async ({
   searchParams,
@@ -9,6 +11,9 @@ const CoursesPage = async ({
   searchParams?: Promise<{ query?: string; page?: string; tab?: string }>;
 }) => {
   const { query, page, tab } = (await searchParams) || {};
+  const user = await getOptimisticUser();
+
+  if (user.role !== "student") return <Unauthorized />;
 
   return (
     <FadeInWrapper>

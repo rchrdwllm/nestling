@@ -1,11 +1,12 @@
 import Courses from "@/components/admin-access/courses-page/courses";
 import CreateCourseBtn from "@/components/shared/courses-page/create-course-btn";
 import ErrorToast from "@/components/ui/error-toast";
-import { getUnarchivedInstructors } from "@/lib/user";
+import { getOptimisticUser, getUnarchivedInstructors } from "@/lib/user";
 import FadeInWrapper from "@/components/wrappers/fadein-wrapper";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import Searcher from "@/components/shared/search/general-search/searcher";
+import Unauthorized from "@/components/ui/unauthorized";
 
 const AdminCoursesPage = async ({
   searchParams,
@@ -13,6 +14,10 @@ const AdminCoursesPage = async ({
   searchParams?: Promise<{ query?: string; page?: string; tab?: string }>;
 }) => {
   const { query, page, tab } = (await searchParams) || {};
+  const user = await getOptimisticUser();
+
+  if (user.role !== "admin") return <Unauthorized />;
+
   const { success: instructors, error } = await getUnarchivedInstructors();
 
   if (error || !instructors) {
@@ -20,6 +25,8 @@ const AdminCoursesPage = async ({
       <ErrorToast error={"Error fetching instructors: " + (error || "")} />
     );
   }
+
+  console.log("Fetching on the admin side...");
 
   return (
     <FadeInWrapper>
