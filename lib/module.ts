@@ -80,6 +80,7 @@ export const getPublishedCourseModules = unstable_cache(
         .collection("modules")
         .where("courseId", "==", courseId)
         .where("isPublished", "==", true)
+        .where("isArchived", "==", false)
         .orderBy("createdAt", "asc")
         .get();
       const modules = modulesSnapshot.docs.map((doc) => {
