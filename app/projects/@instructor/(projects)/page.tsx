@@ -5,7 +5,7 @@ import { projectCols } from "@/components/shared/projects-page/projects-table-de
 import ProjectsTimeline from "@/components/shared/projects-page/projects-timeline";
 import TasksPriorityGraph from "@/components/shared/projects-page/tasks-priority-graph";
 import { getProjectsOfUser, getUserProjectsWithTasks } from "@/lib/project";
-import { getIncompleteTasks } from "@/lib/task";
+import { getIncompleteTasks, getIncompleteUserTasks } from "@/lib/task";
 import {
   getUnarchivedAdmins,
   getUnarchivedInstructors,
@@ -25,7 +25,9 @@ const InstructorProjectsDashboard = async ({
   const { success: projects, error: projectsError } = await getProjectsOfUser(
     user.id
   );
-  const { success: tasks, error: tasksError } = await getIncompleteTasks();
+  const { success: tasks, error: tasksError } = await getIncompleteUserTasks(
+    user.id
+  );
   const { success: projectsWithTasks, error: projectsWithTasksError } =
     await getUserProjectsWithTasks(user.id);
   const { success: admins, error: adminsError } = await getUnarchivedAdmins();
