@@ -1,10 +1,13 @@
 import CreateTicketBtn from "@/components/shared/help-page/tickets/create-ticket-btn";
-import TicketsTable from "@/components/shared/help-page/tickets/tickets-table";
-import { ticketsTableCols } from "@/components/shared/help-page/tickets/tickets-table-def";
 import Searcher from "@/components/shared/search/general-search/searcher";
+import ArchivedTickets from "@/components/student-access/support-tickets-page/archived-tickets";
+import ClosedTickets from "@/components/student-access/support-tickets-page/closed-tickets";
+import InProgressTickets from "@/components/student-access/support-tickets-page/in-progress-tickets";
+import OpenTickets from "@/components/student-access/support-tickets-page/open-tickets";
 import ErrorToast from "@/components/ui/error-toast";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Unauthorized from "@/components/ui/unauthorized";
-import { getUserTickets } from "@/lib/ticket";
+import { getOpenUserTickets } from "@/lib/ticket";
 import { getOptimisticUser } from "@/lib/user";
 
 const Tickets = async ({
@@ -17,7 +20,7 @@ const Tickets = async ({
 
   if (user.role !== "student") return <Unauthorized />;
 
-  const { success: tickets, error } = await getUserTickets(user.id);
+  const { success: tickets, error } = await getOpenUserTickets(user.id);
 
   if (error || !tickets) {
     return <ErrorToast error={"Failed to fetch tickets: " + error} />;
@@ -33,7 +36,34 @@ const Tickets = async ({
         </div>
         <hr />
       </div>
-      <TicketsTable columns={ticketsTableCols} data={tickets} />
+      <Tabs defaultValue="open" className="w-full">
+        <TabsList className="mb-2 w-full">
+          <TabsTrigger className="w-full" value="open">
+            Open tickets
+          </TabsTrigger>
+          <TabsTrigger className="w-full" value="in-progress">
+            In progress tickets
+          </TabsTrigger>
+          <TabsTrigger className="w-full" value="closed">
+            Closed tickets
+          </TabsTrigger>
+          <TabsTrigger className="w-full" value="archived">
+            Archived tickets
+          </TabsTrigger>
+        </TabsList>
+        <TabsContent value="open">
+          <OpenTickets />
+        </TabsContent>
+        <TabsContent value="in-progress">
+          <InProgressTickets />
+        </TabsContent>
+        <TabsContent value="closed">
+          <ClosedTickets />
+        </TabsContent>
+        <TabsContent value="archived">
+          <ArchivedTickets />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };

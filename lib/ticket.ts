@@ -151,20 +151,138 @@ export const getArchivedTickets = unstable_cache(
   }
 );
 
-export const getUserTickets = unstable_cache(
-  async (userId: string) => {
+export const getOpenUserTickets = unstable_cache(
+  async (userId: string, limit: number = 5, lastDocId?: string) => {
     try {
-      const ticketsRef = await db
+      let query = db
         .collection("tickets")
         .where("userId", "==", userId)
+        .where("status", "==", "open")
+        .where("isArchived", "==", false)
         .orderBy("createdAt", "desc")
-        .get();
-      const tickets = ticketsRef.docs.map((doc) => doc.data()) as Ticket[];
+        .limit(limit + 1);
 
-      return { success: tickets };
+      if (lastDocId) {
+        const lastDoc = await db.collection("tickets").doc(lastDocId).get();
+        if (lastDoc.exists) {
+          query = query.startAfter(lastDoc);
+        }
+      }
+
+      const ticketsRef = await query.get();
+      const docs = ticketsRef.docs;
+      const hasMore = docs.length > limit;
+      const tickets = docs.slice(0, limit).map((doc) => doc.data()) as Ticket[];
+      const newLastDocId =
+        docs.length > 0 ? docs[Math.min(docs.length, limit) - 1].id : undefined;
+
+      return { success: tickets, hasMore, lastDocId: newLastDocId };
     } catch (error) {
-      console.error("Error fetching user tickets:", error);
+      console.error("Error fetching open user tickets:", error);
+      return { error };
+    }
+  },
+  ["userId"],
+  { revalidate: 60 * 60, tags: ["tickets"] }
+);
 
+export const getInProgressUserTickets = unstable_cache(
+  async (userId: string, limit: number = 5, lastDocId?: string) => {
+    try {
+      let query = db
+        .collection("tickets")
+        .where("userId", "==", userId)
+        .where("status", "==", "in-progress")
+        .where("isArchived", "==", false)
+        .orderBy("createdAt", "desc")
+        .limit(limit + 1);
+
+      if (lastDocId) {
+        const lastDoc = await db.collection("tickets").doc(lastDocId).get();
+        if (lastDoc.exists) {
+          query = query.startAfter(lastDoc);
+        }
+      }
+
+      const ticketsRef = await query.get();
+      const docs = ticketsRef.docs;
+      const hasMore = docs.length > limit;
+      const tickets = docs.slice(0, limit).map((doc) => doc.data()) as Ticket[];
+      const newLastDocId =
+        docs.length > 0 ? docs[Math.min(docs.length, limit) - 1].id : undefined;
+
+      return { success: tickets, hasMore, lastDocId: newLastDocId };
+    } catch (error) {
+      console.error("Error fetching in-progress user tickets:", error);
+      return { error };
+    }
+  },
+  ["userId"],
+  { revalidate: 60 * 60, tags: ["tickets"] }
+);
+
+export const getClosedUserTickets = unstable_cache(
+  async (userId: string, limit: number = 5, lastDocId?: string) => {
+    try {
+      let query = db
+        .collection("tickets")
+        .where("userId", "==", userId)
+        .where("status", "==", "closed")
+        .where("isArchived", "==", false)
+        .orderBy("createdAt", "desc")
+        .limit(limit + 1);
+
+      if (lastDocId) {
+        const lastDoc = await db.collection("tickets").doc(lastDocId).get();
+        if (lastDoc.exists) {
+          query = query.startAfter(lastDoc);
+        }
+      }
+
+      const ticketsRef = await query.get();
+      const docs = ticketsRef.docs;
+      const hasMore = docs.length > limit;
+      const tickets = docs.slice(0, limit).map((doc) => doc.data()) as Ticket[];
+      const newLastDocId =
+        docs.length > 0 ? docs[Math.min(docs.length, limit) - 1].id : undefined;
+
+      return { success: tickets, hasMore, lastDocId: newLastDocId };
+    } catch (error) {
+      console.error("Error fetching closed user tickets:", error);
+      return { error };
+    }
+  },
+  ["userId"],
+  { revalidate: 60 * 60, tags: ["tickets"] }
+);
+
+export const getArchivedUserTickets = unstable_cache(
+  async (userId: string, limit: number = 5, lastDocId?: string) => {
+    try {
+      let query = db
+        .collection("tickets")
+        .where("userId", "==", userId)
+        .where("isArchived", "==", true)
+        .orderBy("createdAt", "desc")
+        .limit(limit + 1);
+
+      if (lastDocId) {
+        const lastDoc = await db.collection("tickets").doc(lastDocId).get();
+        if (lastDoc.exists) {
+          query = query.startAfter(lastDoc);
+        }
+      }
+
+      const ticketsRef = await query.get();
+      const docs = ticketsRef.docs;
+      const hasMore = docs.length > limit;
+      const tickets = docs.slice(0, limit).map((doc) => doc.data()) as Ticket[];
+      const newLastDocId =
+        docs.length > 0 ? docs[Math.min(docs.length, limit) - 1].id : undefined;
+
+      return { success: tickets, hasMore, lastDocId: newLastDocId };
+    } catch (error) {
+      console.error("Error fetching archived user tickets:", error);
       return { error };
     }
   },
