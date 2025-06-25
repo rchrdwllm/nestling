@@ -7,7 +7,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import PdfViewer from "../content-page/pdf-viewer";
-import { FileIcon } from "lucide-react";
+import { FileIcon, LoaderCircle } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -68,7 +68,12 @@ const AttachmentPreview = ({
     }
   }, [url, hash]);
 
-  if (isLoading) return null;
+  if (isLoading)
+    return (
+      <div className="flex items-center px-4 py-3">
+        <p className="text-muted-foreground text-sm">Verifying...</p>
+      </div>
+    );
 
   if (!isVerified) {
     return (
