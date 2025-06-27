@@ -5,6 +5,7 @@ import Searcher from "@/components/shared/search/general-search/searcher";
 import UpcomingTasks from "@/components/student-access/dashboard-page/upcoming-tasks";
 import { getOptimisticUser } from "@/lib/user";
 import Unauthorized from "@/components/ui/unauthorized";
+import CurrentDate from "@/components/shared/current-date";
 
 const StudentDashboardPage = async ({
   searchParams,
@@ -24,6 +25,7 @@ const StudentDashboardPage = async ({
         <div className="flex flex-col gap-4">
           <div className="flex items-center gap-4">
             <h1 className="font-semibold text-3xl">Dashboard</h1>
+            <CurrentDate />
           </div>
           <hr />
         </div>

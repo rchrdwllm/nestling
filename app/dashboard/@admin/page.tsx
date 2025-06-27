@@ -13,6 +13,7 @@ import Searcher from "@/components/shared/search/general-search/searcher";
 import UpcomingTasks from "@/components/admin-access/dashboard-page/upcoming-tasks";
 import { getOptimisticUser } from "@/lib/user";
 import Unauthorized from "@/components/ui/unauthorized";
+import CurrentDate from "@/components/shared/current-date";
 
 const AdminDashboardPage = async ({
   searchParams,
@@ -53,6 +54,7 @@ const AdminDashboardPage = async ({
         <div className="flex flex-col gap-4">
           <div className="flex items-center gap-6">
             <h1 className="font-semibold text-3xl">Admin Dashboard</h1>
+            <CurrentDate />
           </div>
           <hr />
         </div>
