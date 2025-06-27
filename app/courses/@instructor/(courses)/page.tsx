@@ -4,8 +4,10 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import FadeInWrapper from "@/components/wrappers/fadein-wrapper";
 import Searcher from "@/components/shared/search/general-search/searcher";
-import { getOptimisticUser } from "@/lib/user";
+import { getOptimisticUser, getUnarchivedInstructors, getUnarchivedStudents } from "@/lib/user";
+import { getPaginatedInstructorCourses } from "@/lib/course";
 import Unauthorized from "@/components/ui/unauthorized";
+import ErrorToast from "@/components/ui/error-toast";
 
 const InstructorCoursesPage = async ({
   searchParams,
@@ -17,6 +19,30 @@ const InstructorCoursesPage = async ({
 
   if (user.role !== "instructor") return <Unauthorized />;
 
+  const { success: instructors, error: instructorsError } = await getUnarchivedInstructors();
+  const { success: students, error: studentsError } = await getUnarchivedStudents();
+  const { success: initialCourses, lastVisible: initialLastVisibleDocId, error: coursesError } = await getPaginatedInstructorCourses(user.id, 8);
+
+  if (instructorsError || !instructors) {
+    return (
+      <ErrorToast error={"Error fetching instructors: " + (instructorsError || "")} />
+    );
+  }
+
+  if (studentsError || !students) {
+    return (
+      <ErrorToast error={"Error fetching students: " + (studentsError || "")} />
+    );
+  }
+
+  if (coursesError || !initialCourses) {
+    return (
+      <ErrorToast error={"Error fetching courses: " + (coursesError || "")} />
+    );
+  }
+
+  const hasMore = initialCourses.length === 8;
+
   return (
     <FadeInWrapper>
       <Searcher query={query} page={page} tab={tab} />
@@ -27,11 +53,18 @@ const InstructorCoursesPage = async ({
             <Link href="/courses/archive">
               <Button variant="outline">View archive</Button>
             </Link>
-            <CreateCourseBtn />
+            <CreateCourseBtn instructors={instructors} />
           </div>
           <hr />
         </div>
-        <Courses />
+        <Courses
+          initialCourses={initialCourses}
+          initialLastVisibleDocId={initialLastVisibleDocId}
+          initialInstructors={instructors}
+          initialStudents={students}
+          hasMore={hasMore}
+          userId={user.id}
+        />
       </div>
     </FadeInWrapper>
   );

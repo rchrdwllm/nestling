@@ -1,7 +1,11 @@
 import Courses from "@/components/admin-access/courses-page/courses";
 import CreateCourseBtn from "@/components/shared/courses-page/create-course-btn";
 import ErrorToast from "@/components/ui/error-toast";
-import { getOptimisticUser, getUnarchivedInstructors, getUnarchivedStudents } from "@/lib/user";
+import {
+  getOptimisticUser,
+  getUnarchivedInstructors,
+  getUnarchivedStudents,
+} from "@/lib/user";
 import { getPaginatedCourses } from "@/lib/course";
 import FadeInWrapper from "@/components/wrappers/fadein-wrapper";
 import Link from "next/link";
@@ -19,13 +23,21 @@ const AdminCoursesPage = async ({
 
   if (user.role !== "admin") return <Unauthorized />;
 
-  const { success: instructors, error: instructorsError } = await getUnarchivedInstructors();
-  const { success: students, error: studentsError } = await getUnarchivedStudents();
-  const { success: initialCourses, lastVisible: initialLastVisibleDocId, error: coursesError } = await getPaginatedCourses(8);
+  const { success: instructors, error: instructorsError } =
+    await getUnarchivedInstructors();
+  const { success: students, error: studentsError } =
+    await getUnarchivedStudents();
+  const {
+    success: initialCourses,
+    lastVisible: initialLastVisibleDocId,
+    error: coursesError,
+  } = await getPaginatedCourses(8);
 
   if (instructorsError || !instructors) {
     return (
-      <ErrorToast error={"Error fetching instructors: " + (instructorsError || "")} />
+      <ErrorToast
+        error={"Error fetching instructors: " + (instructorsError || "")}
+      />
     );
   }
 
@@ -41,7 +53,7 @@ const AdminCoursesPage = async ({
     );
   }
 
-  const hasMore = initialCourses.length === 3;
+  const hasMore = initialCourses.length === 8;
 
   return (
     <FadeInWrapper>
