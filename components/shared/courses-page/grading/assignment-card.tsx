@@ -20,6 +20,7 @@ const AssignmentCard = async ({
   courseId,
   studentId,
   points,
+  isGraded,
 }: AssignmentCardProps) => {
   const { success: submission, error: submissionError } =
     await getLatestAssignmentSubmission(id, studentId);
@@ -40,13 +41,17 @@ const AssignmentCard = async ({
         </Button>
       </Link>
       {submission ? (
-        <GradeStudentForm
-          grade={submission.grade?.toString() || undefined}
-          submissionId={submission.id}
-          points={points!}
-          contentId={submission.contentId}
-          studentId={studentId}
-        />
+        isGraded ? (
+          <GradeStudentForm
+            grade={submission.grade?.toString() || undefined}
+            submissionId={submission.id}
+            points={points!}
+            contentId={submission.contentId}
+            studentId={studentId}
+          />
+        ) : (
+          <p className="text-sm">Grading not required</p>
+        )
       ) : (
         <p className="text-sm">No submission</p>
       )}

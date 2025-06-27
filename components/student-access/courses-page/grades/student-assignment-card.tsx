@@ -13,6 +13,7 @@ const StudentAssignmentCard = async ({
   id,
   courseId,
   points,
+  isGraded,
 }: StudentAssignmentCardProps) => {
   const user = await getOptimisticUser();
   const { success: submission, error: submissionError } =
@@ -38,12 +39,20 @@ const StudentAssignmentCard = async ({
           {title}
         </Button>
       </Link>
-      {submission.grade != null ? (
-        <p className="text-sm">
-          {submission.grade} out of {points} points
-        </p>
+      {submission ? (
+        isGraded ? (
+          submission.grade != null ? (
+            <p className="text-sm">
+              {submission.grade} out of {points} points
+            </p>
+          ) : (
+            <p className="text-sm">Not yet graded</p>
+          )
+        ) : (
+          <p className="text-sm">Grading not required</p>
+        )
       ) : (
-        <p className="text-sm">Not yet graded</p>
+        <p className="text-sm">No submission yet</p>
       )}
     </Card>
   );

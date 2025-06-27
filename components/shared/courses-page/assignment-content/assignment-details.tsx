@@ -10,6 +10,7 @@ const AssignmentDetails = async ({
   points,
   maxAttempts,
   submissionType,
+  isGraded,
 }: AssignmentDetailsProps) => {
   return (
     <section className={cn("border-b py-8 grid grid-cols-3 gap-8")}>
@@ -28,12 +29,21 @@ const AssignmentDetails = async ({
         </p>
       </div>
       <div>
-        <p className="text-muted-foreground">
-          Points: <span className="text-foreground">{points}</span>
-        </p>
-        <p className="text-muted-foreground">
-          Max attempts: <span className="text-foreground">{maxAttempts}</span>
-        </p>
+        {isGraded ? (
+          <>
+            <p className="text-muted-foreground">
+              Points: <span className="text-foreground">{points}</span>
+            </p>
+            <p className="text-muted-foreground">
+              Max attempts:{" "}
+              <span className="text-foreground">{maxAttempts}</span>
+            </p>
+          </>
+        ) : (
+          <p className="text-muted-foreground">
+            Grading: <span className="text-foreground">Not required</span>
+          </p>
+        )}
       </div>
       <div>
         <p className="text-muted-foreground">

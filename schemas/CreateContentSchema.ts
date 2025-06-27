@@ -72,41 +72,44 @@ export const CreateContentSchema = z
       required_error: "isEdit is required",
       invalid_type_error: "isEdit must be a boolean",
     }),
+    isGraded: z.boolean({
+      invalid_type_error: "isGraded must be a boolean",
+    }).optional(),
   })
   .superRefine((data, ctx) => {
-    if (data.type === "assignment") {
+    if (data.type === "assignment" && (data.isGraded === undefined || data.isGraded === true)) {
       if (data.points === undefined) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: "Points are required for assignments",
+          message: "Points are required for graded assignments",
           path: ["points"],
         });
       }
       if (data.maxAttempts === undefined) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: "Max attempts are required for assignments",
+          message: "Max attempts are required for graded assignments",
           path: ["maxAttempts"],
         });
       }
       if (data.submissionType === undefined) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: "Submission type is required for assignments",
+          message: "Submission type is required for graded assignments",
           path: ["submissionType"],
         });
       }
       if (data.date === undefined) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: "Date is required for assignments",
+          message: "Date is required for graded assignments",
           path: ["date"],
         });
       }
       if (data.date?.from === undefined || data.date?.to === undefined) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: "Both start and end dates are required for assignments",
+          message: "Both start and end dates are required for graded assignments",
           path: ["date"],
         });
       }

@@ -25,6 +25,7 @@ export const createContent = actionClient
       id,
       isPublished,
       isEdit,
+      isGraded,
     } = parsedInput;
     const user = await getOptimisticUser();
 
@@ -42,11 +43,12 @@ export const createContent = actionClient
             startDate: date?.from?.toISOString(),
             endDate: date?.to?.toISOString(),
             submissionType,
-            points,
+            points: isGraded ? points : null,
             maxAttempts,
             id,
             isPublished,
             updatedAt: new Date().toISOString(),
+            isGraded: isGraded,
           });
 
         revalidatePath(
@@ -114,12 +116,13 @@ export const createContent = actionClient
               updatedAt: new Date().toISOString(),
               startDate: date?.from?.toISOString(),
               endDate: date?.to?.toISOString(),
-              submissionType,
-              points,
-              maxAttempts,
+              submissionType: submissionType,
+              points: isGraded ? points : null,
+              maxAttempts: maxAttempts,
               isLocked: false,
               content,
               isPublished,
+              isGraded: isGraded,
             }
           : {
               title: title || "Untitled content",

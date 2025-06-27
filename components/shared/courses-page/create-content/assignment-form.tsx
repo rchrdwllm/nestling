@@ -5,6 +5,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  FormControl,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import {
@@ -26,28 +27,48 @@ import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { useFormContext } from "react-hook-form";
+import { Switch } from "@/components/ui/switch";
 
 const AssignmentForm = () => {
   const form = useFormContext();
+  const isGraded = form.watch("isGraded");
 
   return (
     <>
       <FormField
         control={form.control}
-        name="points"
+        name="isGraded"
         render={({ field }) => (
-          <FormItem>
-            <FormLabel>Points</FormLabel>
-            <Input
-              placeholder="Points"
-              type="number"
-              {...field}
-              onChange={(e) => field.onChange(e.target.valueAsNumber)}
-            />
-            <FormMessage />
+          <FormItem className="flex items-center gap-8">
+            <FormLabel>Grade required?</FormLabel>
+            <FormControl>
+              <Switch
+                defaultChecked={field.value}
+                onCheckedChange={field.onChange}
+                className="[margin-top:_0_!important]"
+              />
+            </FormControl>
           </FormItem>
         )}
       />
+      {isGraded && (
+        <FormField
+          control={form.control}
+          name="points"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Points</FormLabel>
+              <Input
+                placeholder="Points"
+                type="number"
+                {...field}
+                onChange={(e) => field.onChange(e.target.valueAsNumber)}
+              />
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      )}
       <FormField
         control={form.control}
         name="maxAttempts"

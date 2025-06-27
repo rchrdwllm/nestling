@@ -81,9 +81,10 @@ export type Content = {
   createdAt: string;
   updatedAt: string;
   submissionType?: "file" | "text";
-  points?: number;
-  maxAttempts?: number;
+  points?: number | null;
+  maxAttempts?: number | null;
   isPublished: boolean;
+  isGraded?: boolean;
 };
 
 export type Discussion = {
