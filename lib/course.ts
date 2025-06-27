@@ -623,3 +623,35 @@ export const getMostViewedCourses = unstable_cache(
   ["mostViewedCourses"],
   { revalidate: 86400, tags: ["courses"] }
 );
+
+export const getPaginatedCourses = unstable_cache(
+  async (limit: number, lastDocId?: string) => {
+    console.log(
+      `[${new Date().toISOString()}] getPaginatedCourses called with limit=${limit}, lastDocId=${lastDocId}`
+    );
+    try {
+      let query = db
+        .collection("courses")
+        .where("isArchived", "==", false)
+        .orderBy("createdAt", "desc");
+
+      if (lastDocId) {
+        const lastDoc = await db.collection("courses").doc(lastDocId).get();
+        if (lastDoc.exists) {
+          query = query.startAfter(lastDoc);
+        }
+      }
+
+      const snapshot = await query.limit(limit).get();
+      const courses = snapshot.docs.map((doc) => doc.data()) as Course[];
+      const lastVisible = snapshot.docs.length > 0 ? snapshot.docs[snapshot.docs.length - 1].id : undefined;
+
+      return { success: courses, lastVisible };
+    } catch (error) {
+      console.error("Error fetching paginated courses:", error);
+      return { error: "Error fetching paginated courses" };
+    }
+  },
+  ["paginatedCourses"],
+  { revalidate: 7200, tags: ["courses"] }
+);

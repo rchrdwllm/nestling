@@ -1,7 +1,8 @@
 import Courses from "@/components/admin-access/courses-page/courses";
 import CreateCourseBtn from "@/components/shared/courses-page/create-course-btn";
 import ErrorToast from "@/components/ui/error-toast";
-import { getOptimisticUser, getUnarchivedInstructors } from "@/lib/user";
+import { getOptimisticUser, getUnarchivedInstructors, getUnarchivedStudents } from "@/lib/user";
+import { getPaginatedCourses } from "@/lib/course";
 import FadeInWrapper from "@/components/wrappers/fadein-wrapper";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -18,15 +19,29 @@ const AdminCoursesPage = async ({
 
   if (user.role !== "admin") return <Unauthorized />;
 
-  const { success: instructors, error } = await getUnarchivedInstructors();
+  const { success: instructors, error: instructorsError } = await getUnarchivedInstructors();
+  const { success: students, error: studentsError } = await getUnarchivedStudents();
+  const { success: initialCourses, lastVisible: initialLastVisibleDocId, error: coursesError } = await getPaginatedCourses(3);
 
-  if (error || !instructors) {
+  if (instructorsError || !instructors) {
     return (
-      <ErrorToast error={"Error fetching instructors: " + (error || "")} />
+      <ErrorToast error={"Error fetching instructors: " + (instructorsError || "")} />
     );
   }
 
-  console.log("Fetching on the admin side...");
+  if (studentsError || !students) {
+    return (
+      <ErrorToast error={"Error fetching students: " + (studentsError || "")} />
+    );
+  }
+
+  if (coursesError || !initialCourses) {
+    return (
+      <ErrorToast error={"Error fetching courses: " + (coursesError || "")} />
+    );
+  }
+
+  const hasMore = initialCourses.length === 3;
 
   return (
     <FadeInWrapper>
@@ -42,7 +57,13 @@ const AdminCoursesPage = async ({
           </div>
           <hr />
         </div>
-        <Courses />
+        <Courses
+          initialCourses={initialCourses}
+          initialLastVisibleDocId={initialLastVisibleDocId}
+          initialInstructors={instructors}
+          initialStudents={students}
+          hasMore={hasMore}
+        />
       </div>
     </FadeInWrapper>
   );
