@@ -1,48 +1,92 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import CourseCard from "@/components/shared/courses-page/course-card";
 import ErrorToast from "@/components/ui/error-toast";
-import { getAllCourses } from "@/lib/course";
-import { getUnarchivedInstructors, getUnarchivedStudents } from "@/lib/user";
+import { getPaginatedCourses } from "@/lib/course"; // This will be a server action later
+import { Course, User } from "@/types";
+import { Button } from "@/components/ui/button";
 
-const Courses = async () => {
-  const { success: courses, error } = await getAllCourses();
-  const { success: instructors, error: instructorsError } =
-    await getUnarchivedInstructors();
-  const { success: students, error: studentsError } =
-    await getUnarchivedStudents();
+interface CoursesProps {
+  initialCourses: Course[];
+  initialLastVisibleDocId?: string;
+  initialInstructors: User[];
+  initialStudents: User[];
+  hasMore: boolean;
+}
 
-  if (
-    error ||
-    !courses ||
-    !instructors ||
-    instructorsError ||
-    !students ||
-    studentsError
-  ) {
-    return (
-      <ErrorToast
-        error={
-          "Error fetching courses: " + error ||
-          "Error fetching instructors: " + instructorsError ||
-          "Error fetching students: " + studentsError
-        }
-      />
-    );
+const Courses = ({
+  initialCourses,
+  initialLastVisibleDocId,
+  initialInstructors,
+  initialStudents,
+  hasMore,
+}: CoursesProps) => {
+  const [courses, setCourses] = useState<Course[]>(initialCourses);
+  const [lastVisibleDocId, setLastVisibleDocId] = useState<string | undefined>(
+    initialLastVisibleDocId
+  );
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [currentHasMore, setCurrentHasMore] = useState(hasMore);
+
+  const fetchMoreCourses = async () => {
+    setLoading(true);
+    try {
+      const {
+        success: fetchedCourses,
+        lastVisible,
+        error: coursesError,
+      } = await getPaginatedCourses(8, lastVisibleDocId);
+
+      if (coursesError) {
+        setError("Error fetching more courses: " + coursesError);
+
+        return;
+      }
+
+      setCourses((prevCourses) => [...prevCourses, ...(fetchedCourses || [])]);
+      setLastVisibleDocId(lastVisible);
+      setCurrentHasMore(
+        (fetchedCourses && fetchedCourses.length === 3) || false
+      );
+    } catch (err: any) {
+      setError(err.message || "An unexpected error occurred");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (error) {
+    return <ErrorToast error={error} />;
   }
 
   return (
-    <section className="gap-8 grid grid-cols-4">
-      {!courses.length ? (
-        <p className="text-muted-foreground">No courses found</p>
-      ) : (
-        courses.map((course) => (
-          <CourseCard
-            key={course.id}
-            {...course}
-            isAdmin
-            instructors={instructors}
-            students={students}
-          />
-        ))
+    <section className="flex flex-col gap-8">
+      <div className="gap-8 grid grid-cols-4">
+        {!courses.length && !loading ? (
+          <p className="text-muted-foreground">No courses found</p>
+        ) : (
+          courses.map((course) => (
+            <CourseCard
+              key={course.id}
+              {...course}
+              isAdmin
+              instructors={initialInstructors}
+              students={initialStudents}
+            />
+          ))
+        )}
+      </div>
+      {currentHasMore && (
+        <Button
+          variant="ghost"
+          className="mx-auto w-max"
+          onClick={fetchMoreCourses}
+          disabled={loading}
+        >
+          {loading ? "Loading..." : "Load More"}
+        </Button>
       )}
     </section>
   );

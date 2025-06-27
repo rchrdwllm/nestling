@@ -623,3 +623,86 @@ export const getMostViewedCourses = unstable_cache(
   ["mostViewedCourses"],
   { revalidate: 86400, tags: ["courses"] }
 );
+
+export const getPaginatedCourses = unstable_cache(
+  async (limit: number, lastDocId?: string) => {
+    console.log(
+      `[${new Date().toISOString()}] getPaginatedCourses called with limit=${limit}, lastDocId=${lastDocId}`
+    );
+    try {
+      let query = db
+        .collection("courses")
+        .where("isArchived", "==", false)
+        .orderBy("createdAt", "desc");
+
+      if (lastDocId) {
+        const lastDoc = await db.collection("courses").doc(lastDocId).get();
+        if (lastDoc.exists) {
+          query = query.startAfter(lastDoc);
+        }
+      }
+
+      const snapshot = await query.limit(limit).get();
+      const courses = snapshot.docs.map((doc) => doc.data()) as Course[];
+      const lastVisible = snapshot.docs.length > 0 ? snapshot.docs[snapshot.docs.length - 1].id : undefined;
+
+      return { success: courses, lastVisible };
+    } catch (error) {
+      console.error("Error fetching paginated courses:", error);
+      return { error: "Error fetching paginated courses" };
+    }
+  },
+  ["paginatedCourses"],
+  { revalidate: 7200, tags: ["courses"] }
+);
+
+export const getPaginatedInstructorCourses = unstable_cache(
+  async (instructorId: string, limit: number, lastDocId?: string) => {
+    console.log(
+      `[${new Date().toISOString()}] getPaginatedInstructorCourses called for instructorId=${instructorId}, limit=${limit}, lastDocId=${lastDocId}`
+    );
+    try {
+      let instructorCoursesQuery = db
+        .collection("users")
+        .doc(instructorId)
+        .collection("courses")
+        .orderBy("createdAt", "desc");
+
+      if (lastDocId) {
+        const lastDoc = await db.collection("users").doc(instructorId).collection("courses").doc(lastDocId).get();
+        if (lastDoc.exists) {
+          instructorCoursesQuery = instructorCoursesQuery.startAfter(lastDoc);
+        }
+      }
+
+      const instructorCoursesSnapshot = await instructorCoursesQuery.limit(limit).get();
+      const courseIds = instructorCoursesSnapshot.docs.map((doc) => doc.id);
+
+      if (courseIds.length === 0) {
+        return { success: [], lastVisible: undefined };
+      }
+
+      const courses: Course[] = [];
+      // Firestore 'in' query limit is 10
+      for (let i = 0; i < courseIds.length; i += 10) {
+        const batch = courseIds.slice(i, i + 10);
+        const coursesQuery = await db
+          .collection("courses")
+          .where("id", "in", batch)
+          .where("isArchived", "==", false) // Only fetch unarchived courses
+          .get();
+
+        courses.push(...coursesQuery.docs.map((doc) => doc.data() as Course));
+      }
+
+      const lastVisible = instructorCoursesSnapshot.docs.length > 0 ? instructorCoursesSnapshot.docs[instructorCoursesSnapshot.docs.length - 1].id : undefined;
+
+      return { success: courses, lastVisible };
+    } catch (error) {
+      console.error("Error fetching paginated instructor courses:", error);
+      return { error: "Error fetching paginated instructor courses" };
+    }
+  },
+  ["paginatedInstructorCourses"],
+  { revalidate: 7200, tags: ["courses"] }
+);
