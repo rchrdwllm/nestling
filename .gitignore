@@ -10,6 +10,7 @@
 !.yarn/releases
 !.yarn/versions
 /todo.md
+/GEMINI.md
 /service-account.json
 
 # testing

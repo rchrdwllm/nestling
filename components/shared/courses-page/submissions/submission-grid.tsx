@@ -94,7 +94,7 @@ const SubmissionGrid = async ({
             </div>
           </ScrollArea>
         </div>
-        {latestAttempt && studentId && (
+        {content.isGraded && latestAttempt && studentId && (
           <GradeSubmissionForm
             studentId={studentId}
             contentId={contentId}
@@ -106,10 +106,12 @@ const SubmissionGrid = async ({
             isMultipleAttempts={content.maxAttempts! > 1}
           />
         )}
-        <GenerateSubmissionReport
-          contentId={content.id}
-          contentTitle={content.title}
-        />
+        {content.isGraded && (
+          <GenerateSubmissionReport
+            contentId={content.id}
+            contentTitle={content.title}
+          />
+        )}
       </div>
     </div>
   );

@@ -17,6 +17,7 @@ const AssignmentDetails = async ({
   submissionType,
   id,
   submissionsLength,
+  isGraded,
 }: AssignmentDetailsProps) => {
   const user = await getOptimisticUser();
   const { success: submissions, error } = await getStudentAssignmentSubmission(
@@ -60,12 +61,20 @@ const AssignmentDetails = async ({
         </p>
       </div>
       <div>
-        <p className="text-muted-foreground">
-          Points: <span className="text-foreground">{points}</span>
-        </p>
-        <p className="text-muted-foreground">
-          Max attempts: <span className="text-foreground">{maxAttempts}</span>
-        </p>
+        {isGraded ? (
+          <>
+            <p className="text-muted-foreground">
+              Points: <span className="text-foreground">{points}</span>
+            </p>
+            <p className="text-muted-foreground">
+              Max attempts: <span className="text-foreground">{maxAttempts}</span>
+            </p>
+          </>
+        ) : (
+          <p className="text-muted-foreground">
+            Grading: <span className="text-foreground">Not required</span>
+          </p>
+        )}
       </div>
       <div>
         <p className="text-muted-foreground">

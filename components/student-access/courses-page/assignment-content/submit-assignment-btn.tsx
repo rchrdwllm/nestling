@@ -38,7 +38,7 @@ type SubmitAssignmentBtnProps = {
   contentId: string;
   submissionType: string;
   submissionsLength: number;
-  maxAttempts?: number;
+  maxAttempts?: number | null;
 };
 
 const SubmitAssignmentBtn = ({
