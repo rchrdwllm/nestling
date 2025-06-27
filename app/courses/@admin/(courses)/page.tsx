@@ -21,7 +21,7 @@ const AdminCoursesPage = async ({
 
   const { success: instructors, error: instructorsError } = await getUnarchivedInstructors();
   const { success: students, error: studentsError } = await getUnarchivedStudents();
-  const { success: initialCourses, lastVisible: initialLastVisibleDocId, error: coursesError } = await getPaginatedCourses(3);
+  const { success: initialCourses, lastVisible: initialLastVisibleDocId, error: coursesError } = await getPaginatedCourses(8);
 
   if (instructorsError || !instructors) {
     return (

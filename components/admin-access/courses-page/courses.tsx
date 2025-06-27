@@ -37,7 +37,7 @@ const Courses = ({
         success: fetchedCourses,
         lastVisible,
         error: coursesError,
-      } = await getPaginatedCourses(3, lastVisibleDocId);
+      } = await getPaginatedCourses(8, lastVisibleDocId);
 
       if (coursesError) {
         setError("Error fetching more courses: " + coursesError);
