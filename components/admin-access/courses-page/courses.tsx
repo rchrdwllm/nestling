@@ -57,6 +57,10 @@ const Courses = ({
     }
   };
 
+  useEffect(() => {
+    setCourses(initialCourses);
+  }, [initialCourses]);
+
   if (error) {
     return <ErrorToast error={error} />;
   }
