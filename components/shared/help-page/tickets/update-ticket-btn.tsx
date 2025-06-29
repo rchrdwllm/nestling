@@ -7,13 +7,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { ticketStatuses } from "@/constants/ticket";
 import { updateTicket } from "@/server/actions/update-ticket";
 import { useAction } from "next-safe-action/hooks";
 import { toast } from "sonner";
 
 type UpdateTicketBtnProps = {
   ticketId: string;
-  ticketStatus: "open" | "in-progress" | "closed";
+  ticketStatus: "open" | "in-progress" | "closed" | "re-opened";
 };
 
 const UpdateTicketBtn = ({ ticketId, ticketStatus }: UpdateTicketBtnProps) => {
@@ -38,7 +39,7 @@ const UpdateTicketBtn = ({ ticketId, ticketStatus }: UpdateTicketBtnProps) => {
       onValueChange={(value) => {
         execute({
           ticketId,
-          status: value as "open" | "in-progress" | "closed",
+          status: value as "open" | "in-progress" | "closed" | "re-opened",
         });
       }}
       disabled={isExecuting}
@@ -47,33 +48,17 @@ const UpdateTicketBtn = ({ ticketId, ticketStatus }: UpdateTicketBtnProps) => {
         <SelectValue />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="open">
-          <div className="flex items-center gap-2">
-            <div
-              style={{ backgroundColor: "#fb923c" }}
-              className="size-2 rounded-full"
-            ></div>
-            <span>Open</span>
-          </div>
-        </SelectItem>
-        <SelectItem value="in-progress">
-          <div className="flex items-center gap-2">
-            <div
-              style={{ backgroundColor: "#fcd34d" }}
-              className="size-2 rounded-full"
-            ></div>
-            <span>In progress</span>
-          </div>
-        </SelectItem>
-        <SelectItem value="closed">
-          <div className="flex items-center gap-2">
-            <div
-              style={{ backgroundColor: "#4ade80" }}
-              className="size-2 rounded-full"
-            ></div>
-            <span>Closed</span>
-          </div>
-        </SelectItem>
+        {ticketStatuses.map((status) => (
+          <SelectItem key={status.value} value={status.value}>
+            <div className="flex items-center gap-2">
+              <div
+                style={{ backgroundColor: status.color }}
+                className="rounded-full size-2"
+              ></div>
+              <span>{status.name}</span>
+            </div>
+          </SelectItem>
+        ))}
       </SelectContent>
     </Select>
   );
