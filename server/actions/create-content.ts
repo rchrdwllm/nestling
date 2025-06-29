@@ -48,7 +48,7 @@ export const createContent = actionClient
             id,
             isPublished,
             updatedAt: new Date().toISOString(),
-            isGraded: isGraded,
+            isGraded,
           });
 
         revalidatePath(
@@ -122,7 +122,7 @@ export const createContent = actionClient
               isLocked: false,
               content,
               isPublished,
-              isGraded: isGraded,
+              isGraded,
             }
           : {
               title: title || "Untitled content",

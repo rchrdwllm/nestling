@@ -80,6 +80,7 @@ const CreateContentForm = ({
         to: contentData?.endDate ? new Date(contentData.endDate) : undefined,
       },
       submissionType: contentData?.submissionType || "text",
+      isGraded: contentData?.isGraded || false,
     },
   });
   const { execute, isExecuting } = useAction(createContent, {
