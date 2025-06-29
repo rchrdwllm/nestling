@@ -69,39 +69,28 @@ export const getAvailableCourses = unstable_cache(
       `[${new Date().toISOString()}] getAvailableCourses called for studentId=${studentId}`
     );
     try {
-      // Get enrolled course IDs
-      const enrolledCoursesSnapshot = await db
-        .collection("users")
-        .doc(studentId)
-        .collection("enrolledCourses")
-        .where("accessEnabled", "==", true)
-        .get();
+      const [allCoursesSnapshot, enrolledCoursesSnapshot] = await Promise.all([
+        db.collection("courses").where("isArchived", "==", false).get(),
+        db
+          .collection("users")
+          .doc(studentId)
+          .collection("enrolledCourses")
+          .where("accessEnabled", "==", true)
+          .get(),
+      ]);
+
+      const allCourses = allCoursesSnapshot.docs.map(
+        (doc) => doc.data() as Course
+      );
       const enrolledCourseIds = enrolledCoursesSnapshot.docs.map(
         (doc) => doc.id
       );
 
-      // If no enrolled courses, just return all unarchived courses
-      if (enrolledCourseIds.length === 0) {
-        const snapshot = await db
-          .collection("courses")
-          .where("isArchived", "==", false)
-          .get();
-        const courses = snapshot.docs.map((doc) => doc.data()) as Course[];
-        return { success: courses };
-      }
+      // Filter out enrolled courses
+      const availableCourses = allCourses.filter(
+        (course) => !enrolledCourseIds.includes(course.id)
+      );
 
-      const availableCourses: Course[] = [];
-      for (let i = 0; i < enrolledCourseIds.length; i += 10) {
-        const batch = enrolledCourseIds.slice(i, i + 10);
-        const snapshot = await db
-          .collection("courses")
-          .where("isArchived", "==", false)
-          .where("id", "not-in", batch)
-          .get();
-        availableCourses.push(
-          ...snapshot.docs.map((doc) => doc.data() as Course)
-        );
-      }
       return { success: availableCourses };
     } catch (error) {
       console.error("Error fetching available courses:", error);
