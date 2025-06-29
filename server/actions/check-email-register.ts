@@ -76,7 +76,7 @@ export const checkEmailRegister = async (
     await db.collection("users").doc(id).set(newUser);
     await db.collection("registeredEmails").doc(email).delete();
 
-    revalidateTag("users");
+    revalidateTag("user");
     revalidateTag("registeredEmails");
 
     return { success: newUser };
