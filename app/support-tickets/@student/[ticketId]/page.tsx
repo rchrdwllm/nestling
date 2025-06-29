@@ -5,6 +5,7 @@ import { getTicketReplies } from "@/lib/ticket-reply";
 import TicketReplyCard from "@/components/shared/help-page/tickets/ticket-reply-card";
 import { getOptimisticUser } from "@/lib/user";
 import Unauthorized from "@/components/ui/unauthorized";
+import CreateReplyBtn from "@/components/shared/help-page/tickets/create-reply-btn";
 
 const TicketPage = async ({
   params,
@@ -43,6 +44,9 @@ const TicketPage = async ({
       </div>
       <section className="flex flex-col gap-4">
         <TicketDetails ticket={ticket} />
+        {(ticket.status !== "closed" || ticket.isArchived) && (
+          <CreateReplyBtn ticketId={ticket.id} />
+        )}
         {!ticketReplies.length
           ? null
           : ticketReplies.map((reply) => (

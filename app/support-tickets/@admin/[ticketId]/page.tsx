@@ -56,14 +56,14 @@ const TicketPage = async ({
       </div>
       <section className="flex flex-col gap-4">
         <TicketDetails ticket={ticket} />
+        {(ticket.status !== "closed" || !ticket.isArchived) && (
+          <CreateReplyBtn ticketId={ticket.id} />
+        )}
         {!ticketReplies.length
           ? null
           : ticketReplies.map((reply) => (
               <TicketReplyCard key={reply.id} {...reply} />
             ))}
-        {(ticket.status !== "closed" || ticket.isArchived) && (
-          <CreateReplyBtn ticketId={ticket.id} />
-        )}
         {ticket.status === "closed" && (
           <p className="py-20 text-muted-foreground text-sm text-center">
             This ticket has been closed
