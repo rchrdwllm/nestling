@@ -2,6 +2,7 @@ export const ticketStatuses = [
   { id: 1, name: "Open", value: "open", color: "#fb923c" },
   { id: 2, name: "In Progress", value: "in-progress", color: "#fcd34d" },
   { id: 3, name: "Closed", value: "closed", color: "#4ade80" },
+  { id: 4, name: "Re-opened", value: "re-opened", color: "#0284c7" },
 ];
 
 export const ticketPriorities = [

@@ -90,6 +90,28 @@ export const getClosedTickets = unstable_cache(
   { revalidate: 60 * 60, tags: ["tickets"] }
 );
 
+export const getReOpenedTickets = unstable_cache(
+  async () => {
+    try {
+      const ticketsRef = await db
+        .collection("tickets")
+        .where("status", "==", "re-opened")
+        .where("isArchived", "==", false)
+        .orderBy("createdAt", "desc")
+        .get();
+      const tickets = ticketsRef.docs.map((doc) => doc.data()) as Ticket[];
+
+      return { success: tickets };
+    } catch (error) {
+      console.error("Error fetching closed tickets:", error);
+
+      return { error };
+    }
+  },
+  ["closedTickets"],
+  { revalidate: 60 * 60, tags: ["tickets"] }
+);
+
 export const getArchivedTickets = unstable_cache(
   async () => {
     try {

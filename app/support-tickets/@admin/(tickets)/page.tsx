@@ -2,6 +2,7 @@ import ArchivedTickets from "@/components/admin-access/help-page/archived-ticket
 import ClosedTickets from "@/components/admin-access/help-page/closed-tickets";
 import InProgressTickets from "@/components/admin-access/help-page/in-progress-tickets";
 import OpenTickets from "@/components/admin-access/help-page/open-tickets";
+import ReOpenedTickets from "@/components/admin-access/help-page/re-opened-tickets";
 import Searcher from "@/components/shared/search/general-search/searcher";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Unauthorized from "@/components/ui/unauthorized";
@@ -37,6 +38,9 @@ const Tickets = async ({
           <TabsTrigger className="w-full" value="closed">
             Closed tickets
           </TabsTrigger>
+          <TabsTrigger className="w-full" value="re-opened">
+            Re-opened tickets
+          </TabsTrigger>
           <TabsTrigger className="w-full" value="archived">
             Archived tickets
           </TabsTrigger>
@@ -49,6 +53,9 @@ const Tickets = async ({
         </TabsContent>
         <TabsContent value="closed">
           <ClosedTickets />
+        </TabsContent>
+        <TabsContent value="re-opened">
+          <ReOpenedTickets />
         </TabsContent>
         <TabsContent value="archived">
           <ArchivedTickets />
