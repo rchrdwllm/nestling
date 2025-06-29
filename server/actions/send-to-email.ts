@@ -5,7 +5,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 export const sendPasswordResetToken = async (email: string, token: string) => {
   const { data, error } = await resend.emails.send({
-    from: "Nestling <onboarding@resend.dev>",
+    from: "Nestling <nestling@nestling.institute>",
     to: [email],
     subject: "Nestling - Password Reset",
     html: `<h1>Reset your password</h1>
