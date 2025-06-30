@@ -14,6 +14,7 @@ import UpcomingTasks from "@/components/admin-access/dashboard-page/upcoming-tas
 import { getOptimisticUser } from "@/lib/user";
 import Unauthorized from "@/components/ui/unauthorized";
 import CurrentDate from "@/components/shared/current-date";
+import BackupBtn from "@/components/admin-access/dashboard-page/backup-btn";
 
 const AdminDashboardPage = async ({
   searchParams,
@@ -52,9 +53,12 @@ const AdminDashboardPage = async ({
       <Searcher query={query} page={page} tab={tab} />
       <div className="flex flex-col gap-8 p-6">
         <div className="flex flex-col gap-4">
-          <div className="flex items-center gap-6">
-            <h1 className="font-semibold text-3xl">Admin Dashboard</h1>
-            <CurrentDate />
+          <div className="flex justify-between items-center">
+            <div className="flex items-center gap-6">
+              <h1 className="font-semibold text-3xl">Admin Dashboard</h1>
+              <CurrentDate />
+            </div>
+            <BackupBtn />
           </div>
           <hr />
         </div>

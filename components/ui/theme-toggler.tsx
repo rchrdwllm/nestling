@@ -16,9 +16,9 @@ const ThemeToggler = () => {
   return (
     <div
       onClick={(e) => handleThemeChange(e)}
-      className="w-full flex items-center justify-between"
+      className="flex justify-between items-center w-full"
     >
-      <div className="flex gap-2 items-center">
+      <div className="flex items-center gap-2">
         {theme === "dark" ? (
           <Sun className="w-4 h-4" />
         ) : (
@@ -27,7 +27,7 @@ const ThemeToggler = () => {
         <span>{theme.charAt(0).toUpperCase() + theme.slice(1)} mode</span>
       </div>
       <Switch
-        checked={theme !== "dark"}
+        checked={theme === "dark"}
         onClick={(e) => handleThemeChange(e)}
       />
     </div>
