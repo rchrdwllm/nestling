@@ -30,7 +30,22 @@ const SignOutBtn = () => {
         fetch("/api/revalidate", {
           method: "POST",
           body: JSON.stringify({
-            tags: ["courses", "students", "contents", "modules"],
+            tags: [
+              "courses",
+              "students",
+              "contents",
+              "modules",
+              "user",
+              "projects",
+              "announcements",
+              "notifications",
+              "assignments",
+              "discussions",
+              "monthlyActivities",
+              "tasks",
+              "submissions",
+              "tickets",
+            ],
           }),
         });
 
@@ -58,7 +73,7 @@ const SignOutBtn = () => {
         <Button
           variant="ghost"
           size="sm"
-          className="items-center h-[unset] px-2 py-[6px] font-normal justify-start flex gap-2 w-full text-primary hover:text-primary"
+          className="flex justify-start items-center gap-2 px-2 py-[6px] w-full h-[unset] font-normal text-primary hover:text-primary"
         >
           <LogOut className="w-4 h-4" />
           <span>Log out</span>
