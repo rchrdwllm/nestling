@@ -31,13 +31,7 @@ const ReadNotifsSection = ({
       setNotifs([]);
       setNewLastDocId(null);
     } else {
-      setNotifs((prev) => {
-        const existingIds = new Set(prev.map((notif) => notif.id));
-        return [
-          ...prev,
-          ...notifications.filter((notif) => !existingIds.has(notif.id)),
-        ];
-      });
+      setNotifs(notifications);
     }
   }, [notifications]);
 

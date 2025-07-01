@@ -86,7 +86,7 @@ const DiscussionPage = async ({
                 Posted on{" "}
                 <DateDisplay
                   date={discussion.createdAt}
-                  outputFormat="MMMM, d 'at' h:mm a"
+                  outputFormat="M d 'at' h:mm a"
                 />{" "}
                 by{" "}
                 <span>

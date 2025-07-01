@@ -36,33 +36,33 @@ const TicketDetails = async ({ ticket }: TicketDetailsProps) => {
   }
 
   return (
-    <Card className="p-6 flex flex-col gap-4">
+    <Card className="flex flex-col gap-4 p-6">
       <div className="flex items-center gap-4">
         {ticketOwner.image ? (
           <Avatar className="size-10">
             <AvatarImage src={ticketOwner.image} className="object-cover" />
             <AvatarFallback>
-              <div className="group flex items-center justify-center size-10 bg-muted rounded-full transition-colors hover:bg-primary">
-                <p className="text-sm font-semibold transition-colors group-hover:text-primary-foreground">
+              <div className="group flex justify-center items-center bg-muted hover:bg-primary rounded-full size-10 transition-colors">
+                <p className="font-semibold group-hover:text-primary-foreground text-sm transition-colors">
                   {ticketOwner.name![0]}
                 </p>
               </div>
             </AvatarFallback>
           </Avatar>
         ) : (
-          <div className="group flex items-center justify-center size-10 bg-muted rounded-full transition-colors hover:bg-primary">
-            <p className="text-sm font-semibold transition-colors group-hover:text-primary-foreground">
+          <div className="group flex justify-center items-center bg-muted hover:bg-primary rounded-full size-10 transition-colors">
+            <p className="font-semibold group-hover:text-primary-foreground text-sm transition-colors">
               {ticketOwner.name![0]}
             </p>
           </div>
         )}
         <div>
-          <h1 className="text-xl font-semibold">{ticket.title}</h1>
-          <p className="text-sm text-muted-foreground">
+          <h1 className="font-semibold text-xl">{ticket.title}</h1>
+          <p className="text-muted-foreground text-sm">
             Opened on{" "}
             <DateDisplay
               date={ticket.createdAt}
-              outputFormat="MMMM, d 'at' h:mm a"
+              outputFormat="MMMM d 'at' h:mm a"
             />{" "}
             by{" "}
             <span>
@@ -75,8 +75,8 @@ const TicketDetails = async ({ ticket }: TicketDetailsProps) => {
           </p>
         </div>
       </div>
-      <div className="ml-14 flex flex-col gap-4">
-        <div className="flex gap-2 items-center">
+      <div className="flex flex-col gap-4 ml-14">
+        <div className="flex items-center gap-2">
           <Badge style={{ backgroundColor: ticketStatus.color }}>
             {ticketStatus.name}
           </Badge>

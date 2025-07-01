@@ -46,6 +46,10 @@ const UnreadNotifsSection = ({
     setHasMoreNotifs(hasMore ?? false);
   }, [lastDocId, hasMore]);
 
+  useEffect(() => {
+    setNotifs(notifications);
+  }, [notifications]);
+
   const handleFetchMore = async () => {
     if (newLastDocId) {
       if (isLoading) return;

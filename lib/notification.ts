@@ -42,8 +42,8 @@ export const getUnreadNotifs = unstable_cache(
       return { error };
     }
   },
-  ["userId", "limit", "lastDocId"],
-  { revalidate: 60 * 60, tags: ["notifications"] }
+  ["unread-notifs"],
+  { tags: ["notifications"] }
 );
 
 export const getReadNotifs = unstable_cache(
@@ -84,6 +84,6 @@ export const getReadNotifs = unstable_cache(
       return { error };
     }
   },
-  ["userId", "limit", "lastDocId"],
-  { revalidate: 60 * 60, tags: ["notifications"] }
+  ["read-notifs"],
+  { tags: ["notifications"] }
 );
