@@ -22,7 +22,7 @@ export const getCourseModules = unstable_cache(
     }
   },
   ["modules"],
-  { revalidate: 3600 }
+  { revalidate: 3600, tags: ["modules"] }
 );
 
 export const getUnarchivedCourseModules = unstable_cache(
@@ -46,7 +46,7 @@ export const getUnarchivedCourseModules = unstable_cache(
     }
   },
   ["modules"],
-  { revalidate: 3600 }
+  { revalidate: 3600, tags: ["modules"] }
 );
 
 export const getArchivedCourseModules = unstable_cache(
@@ -70,7 +70,7 @@ export const getArchivedCourseModules = unstable_cache(
     }
   },
   ["modules"],
-  { revalidate: 3600 }
+  { revalidate: 3600, tags: ["modules"] }
 );
 
 export const getPublishedCourseModules = unstable_cache(
@@ -95,7 +95,7 @@ export const getPublishedCourseModules = unstable_cache(
     }
   },
   ["modules"],
-  { revalidate: 3600 }
+  { revalidate: 3600, tags: ["modules"] }
 );
 
 export const getModule = unstable_cache(
@@ -112,7 +112,7 @@ export const getModule = unstable_cache(
     }
   },
   ["module"],
-  { revalidate: 3600 }
+  { revalidate: 3600, tags: ["modules"] }
 );
 
 export const getModuleTitles = unstable_cache(
@@ -140,5 +140,5 @@ export const getModuleTitles = unstable_cache(
     }
   },
   ["moduleNames"],
-  { revalidate: 3600 }
+  { revalidate: 3600, tags: ["modules"] }
 );
