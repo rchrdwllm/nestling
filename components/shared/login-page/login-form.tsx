@@ -98,19 +98,19 @@ const LoginForm = ({ role, setStep }: LoginFormProps) => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.5, ease: easings.easeOutExpo }}
-      className="flex flex-col items-center w-full gap-8"
+      transition={{ duration: 0.5, ease: easings.easeOutExpo as any }}
+      className="flex flex-col items-center gap-8 w-full"
     >
       <div>
         <h1 className="font-semibold text-2xl text-center">Welcome back!</h1>
-        <p className="text-muted-foreground w-2/3 text-center mx-auto text-sm">
+        <p className="mx-auto w-2/3 text-muted-foreground text-sm text-center">
           Log in to your account to continue using Nestling
         </p>
       </div>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(handleSubmit)}
-          className="w-full max-w-[300px] flex flex-col gap-4"
+          className="flex flex-col gap-4 w-full max-w-[300px]"
         >
           <FormField
             control={form.control}
@@ -139,7 +139,7 @@ const LoginForm = ({ role, setStep }: LoginFormProps) => {
                   <button
                     type="button"
                     onClick={() => setShowPassword((v) => !v)}
-                    className="absolute right-3 top-1 -translate-y-1/8 text-muted-foreground"
+                    className="top-1 right-3 absolute text-muted-foreground -translate-y-1/8"
                     tabIndex={-1}
                   >
                     {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -149,7 +149,7 @@ const LoginForm = ({ role, setStep }: LoginFormProps) => {
                     <Button
                       type="button"
                       variant="link"
-                      className="text-muted-foreground hover:text-primary text-xs px-3"
+                      className="px-3 text-muted-foreground hover:text-primary text-xs"
                     >
                       Forgot password?
                     </Button>
@@ -158,7 +158,7 @@ const LoginForm = ({ role, setStep }: LoginFormProps) => {
               );
             }}
           />
-          <div className="max-w-[300px] w-full flex gap-4">
+          <div className="flex gap-4 w-full max-w-[300px]">
             <Button
               className="w-full"
               onClick={() => setStep(1)}
