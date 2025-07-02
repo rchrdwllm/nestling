@@ -85,9 +85,6 @@ const AdminDashboardPage = async ({
             <UpcomingTasks />
           </article>
         </div>
-        <div className="flex flex-col gap-4">
-          <UserEventLogs />
-        </div>
       </div>
     </FadeInWrapper>
   );

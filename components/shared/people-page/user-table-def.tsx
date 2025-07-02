@@ -26,7 +26,7 @@ export const userTableCols: ColumnDef<User>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Name
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          <ArrowUpDown className="ml-2 w-4 h-4" />
         </Button>
       );
     },
@@ -38,7 +38,7 @@ export const userTableCols: ColumnDef<User>[] = [
 
       return (
         <Link href={`/profile?userId=${userId}`}>
-          <Button className="p-0 text-foreground font-medium" variant="link">
+          <Button className="p-0 font-medium text-foreground" variant="link">
             {fullName}
           </Button>
         </Link>
@@ -54,7 +54,7 @@ export const userTableCols: ColumnDef<User>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Email
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          <ArrowUpDown className="ml-2 w-4 h-4" />
         </Button>
       );
     },
@@ -63,7 +63,7 @@ export const userTableCols: ColumnDef<User>[] = [
 
       return (
         <div className="flex items-center gap-2">
-          <Mail className="h-4 w-4 text-muted-foreground" />
+          <Mail className="w-4 h-4 text-muted-foreground" />
           <span className="text-sm">{email}</span>
         </div>
       );
@@ -77,8 +77,8 @@ export const userTableCols: ColumnDef<User>[] = [
 
       return (
         <div className="flex items-center gap-2">
-          <Phone className="h-4 w-4 text-muted-foreground" />
-          <span className="text-sm font-mono">{contactNumber}</span>
+          <Phone className="w-4 h-4 text-muted-foreground" />
+          <span className="font-mono text-sm">{contactNumber}</span>
         </div>
       );
     },
@@ -91,8 +91,8 @@ export const userTableCols: ColumnDef<User>[] = [
 
       return (
         <div className="flex items-center gap-2">
-          <MapPin className="h-4 w-4 text-muted-foreground" />
-          <span className="text-sm max-w-[200px] truncate">{address}</span>
+          <MapPin className="w-4 h-4 text-muted-foreground" />
+          <span className="max-w-[200px] text-sm truncate">{address}</span>
         </div>
       );
     },
@@ -106,7 +106,7 @@ export const userTableCols: ColumnDef<User>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Joined
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          <ArrowUpDown className="ml-2 w-4 h-4" />
         </Button>
       );
     },
@@ -119,7 +119,7 @@ export const userTableCols: ColumnDef<User>[] = [
         day: "numeric",
       });
 
-      return <span className="text-sm font-mono">{formattedDate}</span>;
+      return <span className="font-mono text-sm">{formattedDate}</span>;
     },
   },
 ];
@@ -135,7 +135,7 @@ export const userColsWithArchive: ColumnDef<User>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Name
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          <ArrowUpDown className="ml-2 w-4 h-4" />
         </Button>
       );
     },
@@ -147,7 +147,7 @@ export const userColsWithArchive: ColumnDef<User>[] = [
 
       return (
         <Link href={`/profile?userId=${userId}`}>
-          <Button className="p-0 text-foreground font-medium" variant="link">
+          <Button className="p-0 font-medium text-foreground" variant="link">
             {fullName}
           </Button>
         </Link>
@@ -163,7 +163,7 @@ export const userColsWithArchive: ColumnDef<User>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Email
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          <ArrowUpDown className="ml-2 w-4 h-4" />
         </Button>
       );
     },
@@ -172,7 +172,7 @@ export const userColsWithArchive: ColumnDef<User>[] = [
 
       return (
         <div className="flex items-center gap-2">
-          <Mail className="h-4 w-4 text-muted-foreground" />
+          <Mail className="w-4 h-4 text-muted-foreground" />
           <span className="text-sm">{email}</span>
         </div>
       );
@@ -186,8 +186,8 @@ export const userColsWithArchive: ColumnDef<User>[] = [
 
       return (
         <div className="flex items-center gap-2">
-          <Phone className="h-4 w-4 text-muted-foreground" />
-          <span className="text-sm font-mono">{contactNumber}</span>
+          <Phone className="w-4 h-4 text-muted-foreground" />
+          <span className="font-mono text-sm">{contactNumber}</span>
         </div>
       );
     },
@@ -200,8 +200,8 @@ export const userColsWithArchive: ColumnDef<User>[] = [
 
       return (
         <div className="flex items-center gap-2">
-          <MapPin className="h-4 w-4 text-muted-foreground" />
-          <span className="text-sm max-w-[200px] truncate">{address}</span>
+          <MapPin className="w-4 h-4 text-muted-foreground" />
+          <span className="max-w-[200px] text-sm truncate">{address}</span>
         </div>
       );
     },
@@ -215,7 +215,7 @@ export const userColsWithArchive: ColumnDef<User>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Joined
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          <ArrowUpDown className="ml-2 w-4 h-4" />
         </Button>
       );
     },
@@ -228,16 +228,7 @@ export const userColsWithArchive: ColumnDef<User>[] = [
         day: "numeric",
       });
 
-      return <span className="text-sm font-mono">{formattedDate}</span>;
-    },
-  },
-  {
-    accessorKey: "isArchived",
-    header: "Archived",
-    cell: ({ row }) => {
-      const isArchived = row.getValue("isArchived") as boolean;
-
-      return <span className="text-sm">{isArchived ? "Yes" : "No"}</span>;
+      return <span className="font-mono text-sm">{formattedDate}</span>;
     },
   },
   {
@@ -273,7 +264,7 @@ export const userColsWithArchive: ColumnDef<User>[] = [
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button notAnimated variant="ghost" className="h-8 w-8 p-0">
+            <Button notAnimated variant="ghost" className="p-0 w-8 h-8">
               <span className="sr-only">Open menu</span>
               <MoreHorizontal />
             </Button>

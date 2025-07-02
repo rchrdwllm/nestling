@@ -5,10 +5,13 @@ import SystemEvents from "./system-events";
 
 const UserEventLogs = () => {
   return (
-    <div className="flex flex-col gap-4">
-      <h1 className="text-xl font-semibold">User events log</h1>
+    <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-4">
+        <h1 className="font-semibold text-3xl">Event Logs</h1>
+        <hr />
+      </div>
       <Tabs defaultValue="authentication" className="w-full">
-        <TabsList className="w-full mb-2">
+        <TabsList className="mb-2 w-full">
           <TabsTrigger className="w-full" value="authentication">
             Authentication events
           </TabsTrigger>

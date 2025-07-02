@@ -13,6 +13,7 @@ import {
   LayoutDashboard,
   Search,
   Tag,
+  Terminal,
 } from "lucide-react";
 import { ForwardRefExoticComponent, RefAttributes } from "react";
 
@@ -170,6 +171,11 @@ export const adminSidebarItems: SidebarItem[] = [
     label: "Notifications",
     href: "/notifications",
     Icon: Bell,
+  },
+  {
+    label: "Logs",
+    href: "/logs",
+    Icon: Terminal,
   },
   {
     label: "About",

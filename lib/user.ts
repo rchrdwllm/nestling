@@ -264,3 +264,37 @@ export const getAllAdmins = unstable_cache(
   ["allAdmins"],
   { revalidate: 60 * 60 * 24, tags: ["user", "admins"] }
 );
+
+export const getArchivedUsers = unstable_cache(
+  async () => {
+    console.log(`[${new Date().toISOString()}] getArchivedUsers called`);
+    try {
+      const usersSnapshot = await db
+        .collection("users")
+        .where("isArchived", "==", true)
+        .get();
+      const aesKey = process.env.AES_ENCRYPTION_KEY;
+
+      if (!aesKey) {
+        return {
+          error:
+            "Failed to decrypt user information. AES encryption key not found.",
+        };
+      }
+
+      const users = usersSnapshot.docs.map((doc) => ({
+        ...doc.data(),
+        contactNumber: decryptData(doc.data().contactNumber, aesKey),
+        address: decryptData(doc.data().address, aesKey),
+      })) as User[];
+
+      return { success: users };
+    } catch (error) {
+      console.error(error);
+
+      return { error: JSON.stringify(error) };
+    }
+  },
+  ["allArchivedUsers"],
+  { revalidate: 60 * 60 * 24, tags: ["user", "archived"] }
+);

@@ -1,8 +1,9 @@
 import {
-  getAllStudents,
-  getAllInstructors,
-  getAllAdmins,
   getOptimisticUser,
+  getArchivedUsers,
+  getUnarchivedStudents,
+  getUnarchivedInstructors,
+  getUnarchivedAdmins,
 } from "@/lib/user";
 import ErrorToast from "@/components/ui/error-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -11,7 +12,7 @@ import {
   userColsWithArchive,
   userTableCols,
 } from "@/components/shared/people-page/user-table-def";
-import { Users, GraduationCap, Shield, CircleDashed } from "lucide-react";
+import { Users, GraduationCap, Shield, CircleDashed, Box } from "lucide-react";
 import FadeInWrapper from "@/components/wrappers/fadein-wrapper";
 import { getRegisteredEmails } from "@/lib/registered-email";
 import RegisteredTable from "@/components/admin-access/people-page/registered-table";
@@ -30,14 +31,17 @@ const AdminPeoplePage = async ({
 
   if (user.role !== "admin") return <Unauthorized />;
 
-  const { success: students, error: studentsError } = await getAllStudents();
+  const { success: students, error: studentsError } =
+    await getUnarchivedStudents();
   const { success: instructors, error: instructorsError } =
-    await getAllInstructors();
-  const { success: admins, error: adminsError } = await getAllAdmins();
+    await getUnarchivedInstructors();
+  const { success: admins, error: adminsError } = await getUnarchivedAdmins();
   const { success: registeredEmails, error: registeredEmailsError } =
     await getRegisteredEmails();
+  const { success: archivedUsers, error: archivedUsersError } =
+    await getArchivedUsers();
 
-  if (studentsError || instructorsError || adminsError) {
+  if (studentsError || instructorsError || adminsError || archivedUsersError) {
     return (
       <ErrorToast
         error={
@@ -48,7 +52,7 @@ const AdminPeoplePage = async ({
     );
   }
 
-  if (!students || !instructors || !admins) {
+  if (!students || !instructors || !admins || !archivedUsers) {
     return <ErrorToast error="No user data available." />;
   }
 
@@ -72,7 +76,7 @@ const AdminPeoplePage = async ({
           <hr />
         </div>
         <Tabs defaultValue="students" className="space-y-6">
-          <TabsList className="grid grid-cols-4 w-full">
+          <TabsList className="grid grid-cols-5 w-full">
             <TabsTrigger value="students" className="flex items-center gap-2">
               <Users className="w-4 h-4" />
               Students ({students.length})
@@ -91,6 +95,10 @@ const AdminPeoplePage = async ({
             <TabsTrigger value="registered" className="flex items-center gap-2">
               <CircleDashed className="w-4 h-4" />
               Registered Emails ({registeredEmails.length})
+            </TabsTrigger>
+            <TabsTrigger value="archived" className="flex items-center gap-2">
+              <Box className="w-4 h-4" />
+              Archived Users ({archivedUsers.length})
             </TabsTrigger>
           </TabsList>
           <TabsContent value="students" className="space-y-4">
@@ -151,6 +159,22 @@ const AdminPeoplePage = async ({
             <RegisteredTable
               columns={registeredTableCols}
               data={registeredEmails}
+            />
+          </TabsContent>
+          <TabsContent value="archived" className="space-y-4">
+            <div className="flex flex-col gap-2">
+              <h2 className="font-semibold text-xl">Archived</h2>
+              <p className="text-muted-foreground">
+                All archived users in the system
+              </p>
+            </div>
+            <UserTable
+              columns={
+                user.role === "admin" ? userColsWithArchive : userTableCols
+              }
+              data={archivedUsers}
+              searchPlaceholder="Search archived users by name..."
+              showUsersExport
             />
           </TabsContent>
         </Tabs>
