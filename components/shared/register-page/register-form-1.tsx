@@ -50,19 +50,19 @@ const RegisterForm1 = ({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.5, ease: easings.easeOutExpo }}
-      className="flex flex-col items-center w-full gap-8"
+      transition={{ duration: 0.5, ease: easings.easeOutExpo as any }}
+      className="flex flex-col items-center gap-8 w-full"
     >
       <div>
         <h1 className="font-semibold text-2xl text-center">
           Welcome to Nestling!
         </h1>
-        <p className="text-muted-foreground w-2/3 text-center mx-auto text-sm">
+        <p className="mx-auto w-2/3 text-muted-foreground text-sm text-center">
           Create your account to get started
         </p>
       </div>
       <Form {...form}>
-        <form className="w-full max-w-[300px] flex flex-col gap-4">
+        <form className="flex flex-col gap-4 w-full max-w-[300px]">
           <FormField
             control={form.control}
             name="firstName"

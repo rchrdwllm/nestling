@@ -17,7 +17,7 @@ const RoleSelector = ({ setRole, setStep }: RoleSelectorProps) => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.5, ease: easings.easeOutExpo }}
+      transition={{ duration: 0.5, ease: easings.easeOutExpo as any }}
       className="flex flex-col items-center gap-8"
     >
       <div

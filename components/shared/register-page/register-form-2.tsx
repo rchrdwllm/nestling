@@ -95,21 +95,21 @@ const RegisterForm2 = ({ setStep, role, details }: RegisterForm2Props) => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.5, ease: easings.easeOutExpo }}
-      className="flex flex-col items-center w-full gap-8"
+      transition={{ duration: 0.5, ease: easings.easeOutExpo as any }}
+      className="flex flex-col items-center gap-8 w-full"
     >
       <div>
         <h1 className="font-semibold text-2xl text-center">
           Welcome to Nestling!
         </h1>
-        <p className="text-muted-foreground w-2/3 text-center mx-auto text-sm">
+        <p className="mx-auto w-2/3 text-muted-foreground text-sm text-center">
           Create your account to get started
         </p>
       </div>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(handleSubmit)}
-          className="w-full max-w-[300px] flex flex-col gap-4"
+          className="flex flex-col gap-4 w-full max-w-[300px]"
         >
           <FormField
             control={form.control}
@@ -135,7 +135,7 @@ const RegisterForm2 = ({ setStep, role, details }: RegisterForm2Props) => {
                 <button
                   type="button"
                   onClick={() => setShowPassword((v) => !v)}
-                  className="absolute right-3 top-1 -translate-y-0 text-muted-foreground"
+                  className="top-1 right-3 absolute text-muted-foreground -translate-y-0"
                   tabIndex={-1}
                 >
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -158,16 +158,20 @@ const RegisterForm2 = ({ setStep, role, details }: RegisterForm2Props) => {
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword((v) => !v)}
-                  className="absolute right-3 top-1 -translate-y-0 text-muted-foreground"
+                  className="top-1 right-3 absolute text-muted-foreground -translate-y-0"
                   tabIndex={-1}
                 >
-                  {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  {showConfirmPassword ? (
+                    <EyeOff size={18} />
+                  ) : (
+                    <Eye size={18} />
+                  )}
                 </button>
                 <FormMessage />
               </FormItem>
             )}
           />
-          <div className="max-w-[300px] w-full flex gap-4">
+          <div className="flex gap-4 w-full max-w-[300px]">
             <Button
               className="w-full"
               onClick={() => setStep(2)}
