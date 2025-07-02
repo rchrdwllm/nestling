@@ -41,6 +41,10 @@ async function seedModules() {
 
     for (const [index, module] of modulesData.entries()) {
       try {
+        if (module.courseId !== "e23a04e4-fc8c-407a-b3d8-04fcc2ccf221") {
+          return;
+        }
+
         // First, upload the module document
         await modulesCollection.doc(module.id).set(module);
         console.log(
@@ -55,13 +59,13 @@ async function seedModules() {
           .collection("courses");
 
         const courseDocumentData = {
-          courseId: "39860f2f-e5ee-43ef-8a70-7824820832b6",
+          courseId: "e23a04e4-fc8c-407a-b3d8-04fcc2ccf221",
           moduleId: module.id,
           createdAt: new Date().toISOString(),
         };
 
         await coursesSubcollection
-          .doc("39860f2f-e5ee-43ef-8a70-7824820832b6")
+          .doc("e23a04e4-fc8c-407a-b3d8-04fcc2ccf221")
           .set(courseDocumentData);
         console.log(
           `   📁 Created subcollection "courses" with course document for module "${module.title}"`
@@ -84,7 +88,7 @@ async function seedModules() {
     console.log(`❌ Failed uploads: ${errorCount}`);
     console.log(`📝 Total modules: ${modulesData.length}`);
     console.log(
-      `📁 Each module has a "courses" subcollection with course document ID: 39860f2f-e5ee-43ef-8a70-7824820832b6`
+      `📁 Each module has a "courses" subcollection with course document ID: e23a04e4-fc8c-407a-b3d8-04fcc2ccf221`
     );
   } catch (error) {
     console.error("❌ Error during modules upload:", error);
@@ -116,6 +120,10 @@ async function seedModulesBatch() {
     const modulesCollection = db.collection("modules");
 
     modulesData.forEach((module: any, index: number) => {
+      if (module.courseId !== "e23a04e4-fc8c-407a-b3d8-04fcc2ccf221") {
+        return;
+      }
+
       // Add module document to batch
       const moduleDocRef = modulesCollection.doc(module.id);
       batch.set(moduleDocRef, module);
@@ -123,9 +131,9 @@ async function seedModulesBatch() {
       // Add course document to subcollection in batch
       const courseDocRef = moduleDocRef
         .collection("courses")
-        .doc("39860f2f-e5ee-43ef-8a70-7824820832b6");
+        .doc("e23a04e4-fc8c-407a-b3d8-04fcc2ccf221");
       batch.set(courseDocRef, {
-        courseId: "39860f2f-e5ee-43ef-8a70-7824820832b6",
+        courseId: "e23a04e4-fc8c-407a-b3d8-04fcc2ccf221",
       });
 
       console.log(
@@ -145,7 +153,7 @@ async function seedModulesBatch() {
       "📁 Each module has been added to the 'modules' collection with a 'courses' subcollection."
     );
     console.log(
-      "🔗 Each subcollection contains a course document with ID: 39860f2f-e5ee-43ef-8a70-7824820832b6"
+      "🔗 Each subcollection contains a course document with ID: e23a04e4-fc8c-407a-b3d8-04fcc2ccf221"
     );
   } catch (error) {
     console.error("❌ Error during batch modules upload:", error);
@@ -155,7 +163,7 @@ async function seedModulesBatch() {
 async function addModulesToCourse() {
   try {
     const modulesData = JSON.parse(fs.readFileSync(modulesFilePath, "utf-8"));
-    const courseId = "39860f2f-e5ee-43ef-8a70-7824820832b6";
+    const courseId = "e23a04e4-fc8c-407a-b3d8-04fcc2ccf221";
     const courseDocRef = db.collection("courses").doc(courseId);
     const modulesSubcollection = courseDocRef.collection("modules");
 

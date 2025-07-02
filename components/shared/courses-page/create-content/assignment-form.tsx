@@ -118,7 +118,6 @@ const AssignmentForm = () => {
               </PopoverTrigger>
               <PopoverContent className="p-0 w-auto" align="start">
                 <Calendar
-                  initialFocus
                   mode="range"
                   defaultMonth={field.value?.from}
                   selected={field.value}

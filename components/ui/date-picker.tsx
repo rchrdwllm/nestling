@@ -27,11 +27,11 @@ const DatePicker = ({ field }: DatePickerProps) => {
             ) : (
               <span>Pick a date</span>
             )}
-            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+            <CalendarIcon className="opacity-50 ml-auto w-4 h-4" />
           </Button>
         </FormControl>
       </PopoverTrigger>
-      <PopoverContent className="w-auto p-0" align="start">
+      <PopoverContent className="p-0 w-auto" align="start">
         <Calendar
           mode="single"
           selected={field.value}
@@ -39,7 +39,6 @@ const DatePicker = ({ field }: DatePickerProps) => {
           disabled={(date) =>
             date > new Date() || date < new Date("1900-01-01")
           }
-          initialFocus
         />
       </PopoverContent>
     </Popover>

@@ -44,6 +44,18 @@ async function seedContents() {
             content.title
           }' uploaded to contents collection`
         );
+
+        await db
+          .collection("modules")
+          .doc(content.moduleId)
+          .collection("contents")
+          .doc(content.id)
+          .set({
+            contentId: content.id,
+            createdAt: new Date().toISOString(),
+            moduleId: content.moduleId,
+          });
+
         successCount++;
       } catch (error) {
         console.error(

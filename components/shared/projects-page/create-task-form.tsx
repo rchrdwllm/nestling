@@ -360,7 +360,6 @@ const CreateTaskForm = ({
                     mode="single"
                     selected={field.value}
                     onSelect={field.onChange}
-                    initialFocus
                   />
                 </PopoverContent>
               </Popover>
@@ -402,7 +401,6 @@ const CreateTaskForm = ({
                       const startDate = form.getValues("startDate");
                       return startDate && date < startDate;
                     }}
-                    initialFocus
                   />
                 </PopoverContent>
               </Popover>
